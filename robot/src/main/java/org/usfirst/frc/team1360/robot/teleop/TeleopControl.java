@@ -11,9 +11,6 @@ public class TeleopControl {
 	{
 		this.components = new ArrayList<TeleopComponent>(); //Create an array with the current instances of Drive, Gear, Intake, Climber.
 		this.components.add(TeleopDrive.getInstance());
-		this.components.add(TeleopGear.getInstance());
-		this.components.add(TeleopIntake.getInstance());
-		this.components.add(TeleopClimber.getInstance());
 	}
 	
 	public static TeleopControl getInstance() //Get the current instance of TeleopControl. If none exists, make one.

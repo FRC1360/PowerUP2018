@@ -11,7 +11,6 @@ public enum DriverConfig {
 		@Override
 		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
 		{
-			boolean shift = humanInput.getRacingShifter();
 			
 			boolean deadzone = Math.abs(humanInput.getRacingTurn()) < 0.2;
 			if (deadzone)
@@ -50,10 +49,7 @@ public enum DriverConfig {
 				robotOutput.arcadeDrive(humanInput.getRacingThrottle(), turn);
 			}
 			
-			if (shift != lastShift)
-				robotOutput.shiftSpeed(currentState = !currentState);
-			
-			lastShift = shift;
+
 		}
 	},
 	
@@ -68,12 +64,7 @@ public enum DriverConfig {
 				turn = 0;
 			
 			robotOutput.arcadeDrive(-humanInput.getHaloThrottle(), turn);
-			boolean shift = humanInput.getHaloShifter();
 			
-			if (shift != lastShift)
-				robotOutput.shiftSpeed(currentState = !currentState);
-			
-			lastShift = shift;
 		}
 	},
 	
@@ -93,12 +84,6 @@ public enum DriverConfig {
 				right = 0;
 			
 			robotOutput.tankDrive(left, right);
-			boolean shift = humanInput.getTankShifter();
-			
-			if(shift != lastShift)
-				robotOutput.shiftSpeed(currentState = !currentState);
-			
-			lastShift = shift;
 		}
 		
 	},
@@ -115,12 +100,6 @@ public enum DriverConfig {
 				turn = 0;
 			
 			robotOutput.arcadeDrive(humanInput.getArcadeThrottle(), turn);
-			boolean shift = humanInput.getArcadeShifter();
-			
-			if(shift != lastShift)
-				robotOutput.shiftSpeed(currentState = !currentState);
-			
-			lastShift = shift;
 		}
 		
 	},
@@ -137,15 +116,10 @@ public enum DriverConfig {
 			
 			robotOutput.tankDrive(left, right);
 			
-			if (shift != lastShift)
-				robotOutput.shiftSpeed(currentState = !currentState);
-			
-			lastShift = shift;
+
 		}
 	};
 	
-	private static boolean lastShift = false;
-	private static boolean currentState = false;
 	private static OrbitPID driveController = new OrbitPID(0.1, 0.00005, 0.01, 0.5);
 	private static boolean lastDeadzone = false;
 	

@@ -1,1 +1,8 @@
 /.metadata/
+.gradle
+*/build
+*/.classpath
+*/.settings
+*.ipr
+*.iws
+*/*.iml

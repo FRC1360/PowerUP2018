@@ -6,3 +6,5 @@
 *.ipr
 *.iws
 */*.iml
+.project
+*/.project

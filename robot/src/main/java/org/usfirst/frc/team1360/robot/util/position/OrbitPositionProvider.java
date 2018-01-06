@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1360.position;
 
-public interface PositionProvider {
+public interface OrbitPositionProvider {
 	double getX();
 	double getY();
 	double getA();
@@ -14,7 +14,7 @@ public interface PositionProvider {
 		reset(0, 0, 0);
 	}
 	
-	default Position getPosition() {
+	default OrbitPosition getPosition() {
 		synchronized (this) {
 			return new Position(getX(), getY(), getA());
 		}

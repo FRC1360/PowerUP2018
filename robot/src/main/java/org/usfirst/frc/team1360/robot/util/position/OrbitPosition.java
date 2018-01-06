@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1360.position;
 
-public final class Position implements Cloneable {
+public final class OrbitPosition implements Cloneable {
 	private double x; // X-coordinate (inches, right from center of driver station = positive)
 	private double y; // Y-coordinate (inches, forward from driver station wall = positive)
 	private double a; // Angle (radians, clockwise from forward = positive)

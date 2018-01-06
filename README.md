@@ -9,7 +9,7 @@ Note: If you followed installation instructions for navx correctly you should se
 
 ## Getting Started
 ```
-git clone https://github.com/FRC1360/Steamworks2017.git
+git clone https://github.com/FRC1360/PowerUP2018.git
 cd Steamworks2017/Steamworks
 ```
 

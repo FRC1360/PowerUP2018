@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1360.robot.auto.util;
+package org.usfirst.frc.team1360.robot.util;
 
 import edu.wpi.first.wpilibj.DriverStation;
 

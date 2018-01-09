@@ -4,7 +4,6 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	private final T base;
 	private volatile T state;
 	private volatile Object arg;
-	private volatile Context context;
 	private volatile RunThread thread;
 	
 	public OrbitStateMachine(T baseState) {
@@ -67,7 +66,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		public void run() {
 			while (true)
 				try {
-					state.run(context);
+					state.run(new Context());
 					return;
 				} catch (NextStateException e) {
 					synchronized (OrbitStateMachine.this) {

@@ -14,7 +14,11 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		thread.start();
 	}
 	
-	private synchronized void set(T state) throws InterruptedException {
+	public synchronized T getState() {
+		return state;
+	}
+	
+	public synchronized void setState(T state) throws InterruptedException {
 		if (thread.isAlive()) {
 			thread.interrupt();
 			thread.join();

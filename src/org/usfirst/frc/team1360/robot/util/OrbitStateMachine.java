@@ -18,17 +18,22 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		return state;
 	}
 	
-	public synchronized void setState(T state) throws InterruptedException {
+	public synchronized Object getArg() {
+		return arg;
+	}
+	
+	public synchronized void setState(T state, Object arg) throws InterruptedException {
 		if (thread.isAlive()) {
 			thread.interrupt();
 			thread.join();
 		}
+		this.arg = arg;
 		thread = new RunThread();
 		thread.start();
 	}
 	
-	private void reset() throws InterruptedException {
-		set(base);
+	public void reset() throws InterruptedException {
+		setState(base);
 	}
 	
 	@SuppressWarnings("serial")

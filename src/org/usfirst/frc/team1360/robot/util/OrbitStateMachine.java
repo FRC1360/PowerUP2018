@@ -65,7 +65,9 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 					state.run(context);
 					return;
 				} catch (NextStateException e) {
-					state = (T) e.getNextState();
+					synchronized (OrbitStateMachine.this) {
+						state = (T) e.getNextState();
+					}
 				} catch (InterruptedException e) {
 					return;
 				} catch (Throwable t) {

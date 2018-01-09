@@ -59,6 +59,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 			thread.interrupt();
 			thread.join();
 		}
+		this.state = state;
 		this.arg = arg;
 		thread = new RunThread();
 		thread.start();

@@ -104,7 +104,15 @@ public class HumanInput {
 		return driver1.getMainTrigger() || driver2.getMainTrigger();
 	}
 	
-
+    public boolean getOperatorClamp()
+    {
+    	return operator.getAButton();
+    }
+    
+    public double getOperatorSpeed() 
+    {
+    	return operator.getY(Hand.kLeft);
+    }
 
 	//TODO Operator Controls
 	

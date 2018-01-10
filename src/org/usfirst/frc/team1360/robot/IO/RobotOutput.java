@@ -6,6 +6,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotOutput {
 	//TODO Add Victors
+	private Victor leftIntake;
+	private Victor rightIntake;
+	private Solenoid intakeClamp;
+	
+	
+	
 
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
@@ -14,7 +20,10 @@ public class RobotOutput {
 	private RobotOutput()
 	{
 		//TODO Add Victor and Solenoid Declarations Here
-		//private Victor intakeLeft
+		leftIntake = new Victor(0);
+		rightIntake = new Victor(0);
+		intakeClamp = new Solenoid(0);
+		
 	}
 	
 	public static RobotOutput getInstance() // Return instance of RobotOutpu; create if it doesn't exist
@@ -27,6 +36,16 @@ public class RobotOutput {
 		return instance;
 	}
 
+	public void setIntake(double speed) {
+		leftIntake.set(speed);
+		rightIntake.set(speed);
+	}
+	
+	public void setClamp(boolean clamp) {
+		intakeClamp.set(clamp);
+		
+	}
+	
 	public void setDriveLeft(double speed)
 	{
 		//TODO populate
@@ -84,4 +103,6 @@ public class RobotOutput {
 	{
 		//TODO Populate
 	}
+
+
 }

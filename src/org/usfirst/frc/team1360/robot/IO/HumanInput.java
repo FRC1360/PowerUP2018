@@ -104,10 +104,21 @@ public class HumanInput {
 	{
 		return driverLeft.getTrigger() || driverRight.getTrigger();
 	}
+	//---------operator controls-------
 	
+	
+	// controls whether clamp is open or closed
+    public boolean getOperatorClamp()
+    {
+    		return operator.getAButton();
+    }
+    
+    //controls speed of intake wheels
+    public double getOperatorSpeed() 
+    {
+    		return operator.getY(Hand.kLeft);
+    }
 
-
-	//TODO Operator Controls
 	
 
 }

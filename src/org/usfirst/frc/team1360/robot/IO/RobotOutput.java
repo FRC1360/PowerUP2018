@@ -14,6 +14,7 @@ public class RobotOutput {
 	private RobotOutput()
 	{
 		//TODO Add Victor and Solenoid Declarations Here
+		//private Victor intakeLeft
 	}
 	
 	public static RobotOutput getInstance() // Return instance of RobotOutpu; create if it doesn't exist

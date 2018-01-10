@@ -1,12 +1,18 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
+/**
+ * @author Dorian Knight
+ * @author Michelle Adams
+ * @author Medina Colabrese
+ */
+
 import org.usfirst.frc.team1360.robot.IO.HumanInput;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 
 
 
 public class TeleopIntake implements TeleopComponent {
-
+    //defines human input and robot output
 	private static TeleopIntake instance;
 	private HumanInput humanInput;
 	private RobotOutput robotOutput;
@@ -28,13 +34,15 @@ public class TeleopIntake implements TeleopComponent {
 	
 	
 	@Override
+	//allows the operator to control the intake wheels and the intake clamp
 	public void calculate() {
 		// TODO Auto-generated method stub
-    robotOutput.setClamp(humanInput.getOperatorClamp());
+    robotOutput.setClamp(humanInput.getOperatorClamp());  //
     robotOutput.setIntake(humanInput.getOperatorSpeed());
 	}
 
 	@Override
+	//disable method for shutting down the intake
 	public void disable() {
 		// TODO Auto-generated method stub
         robotOutput.setIntake(0);

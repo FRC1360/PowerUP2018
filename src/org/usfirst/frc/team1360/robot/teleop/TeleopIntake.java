@@ -1,5 +1,4 @@
 package org.usfirst.frc.team1360.robot.teleop;
-
 /**
  * @author Dorian Knight
  * @author Michelle Adams
@@ -17,14 +16,14 @@ public class TeleopIntake implements TeleopComponent {
 	private HumanInput humanInput;
 	private RobotOutput robotOutput;
 	
-	private TeleopIntake() //Define access to HumanInput and RobotOutput from TeleopDrive. Also determine what the driver selection is and add it to Robot.
+	private TeleopIntake() //Define access to HumanInput and RobotOutput from TeleopIntake. Also determine what the driver selection is and add it to Robot.
 	{
 		humanInput = HumanInput.getInstance();
 		robotOutput = RobotOutput.getInstance();
 	}
 
 	
-	public static TeleopIntake getInstance() //Get the current instance of TeleopDrive. If none exists, make one.
+	public static TeleopIntake getInstance() //Get the current instance of TeleopIntake. If none exists, make one.
 	{
 		if (instance == null)
 			instance = new TeleopIntake();
@@ -36,15 +35,13 @@ public class TeleopIntake implements TeleopComponent {
 	@Override
 	//allows the operator to control the intake wheels and the intake clamp
 	public void calculate() {
-		// TODO Auto-generated method stub
-    robotOutput.setClamp(humanInput.getOperatorClamp());  //
-    robotOutput.setIntake(humanInput.getOperatorSpeed());
+		robotOutput.setClamp(humanInput.getOperatorClamp());  //
+		robotOutput.setIntake(humanInput.getOperatorSpeed());
 	}
 
 	@Override
 	//disable method for shutting down the intake
 	public void disable() {
-		// TODO Auto-generated method stub
         robotOutput.setIntake(0);
         robotOutput.setClamp(false);
     

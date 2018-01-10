@@ -1,5 +1,4 @@
 package org.usfirst.frc.team1360.robot.IO;
-import org.usfirst.frc.team1360.robot.util.LogitechAttack3Joystick;
 import org.usfirst.frc.team1360.robot.util.LogitechExtremeJoystick;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -13,16 +12,16 @@ public class HumanInput {
 	// Joysticks
 	private XboxController driver;
 	private XboxController operator;
-	private LogitechAttack3Joystick driverLeft;
-	private LogitechAttack3Joystick driverRight;
+	private LogitechExtremeJoystick driver1;
+	private LogitechExtremeJoystick driver2;
 
 	
 	private HumanInput()									//Constructor to initialize fields
 	{
 		this.driver = new XboxController(0);					//Driver Xbox on USB Port 0 on DS
 		this.operator = new XboxController(1);					//Operator Xbox on USB Port 1 on DS
-		this.driverLeft = new LogitechAttack3Joystick(2);
-		this.driverRight = new LogitechAttack3Joystick(3);
+		this.driver1 = new LogitechExtremeJoystick(2);
+		this.driver2 = new LogitechExtremeJoystick(3);
 	}
 	
 	public static HumanInput getInstance()					//Return intance of HumanInput; create if it doesn't exist
@@ -92,17 +91,17 @@ public class HumanInput {
 	//TODO Change to WPILIB Logitech class
 	public double getLeftJoystickThrottle()
 	{
-		return -driverLeft.getY();
+		return -driver1.getY();
 	}
 	
 	public double getRightJoystickThrottle()
 	{
-		return -driverRight.getY();
+		return -driver2.getY();
 	}
 	
 	public boolean getJoystickShift()
 	{
-		return driverLeft.getTrigger() || driverRight.getTrigger();
+		return driver1.getMainTrigger() || driver2.getMainTrigger();
 	}
 	
 

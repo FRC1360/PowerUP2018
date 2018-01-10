@@ -11,18 +11,9 @@ public class RobotOutput {
 	
 	private static  RobotOutput instance;
 	
-	private Victor driveLeftFront;
-	private Victor driveLeftBack;
-	private Victor driveRightFront;
-	private Victor driveRightBack;
-	
 	private RobotOutput()
 	{
 		//TODO Add Victor and Solenoid Declarations Here
-		driveLeftFront = new Victor(0);
-		driveLeftBack = new Victor(1);
-		driveRightFront = new Victor(2);
-		driveRightBack = new Victor(3);
 	}
 	
 	public static RobotOutput getInstance() // Return instance of RobotOutpu; create if it doesn't exist
@@ -40,8 +31,6 @@ public class RobotOutput {
 		//TODO populate
 		
 		SmartDashboard.putNumber("Left Voltage", -speed);
-		driveLeftFront.set(-speed);
-		driveLeftBack.set(-speed);
 	}
 	
 	public void setDriveRight(double speed)
@@ -49,15 +38,11 @@ public class RobotOutput {
 		//TODO populate
 		
 		SmartDashboard.putNumber("Right Voltage", speed);
-		driveRightFront.set(speed);
-		driveRightBack.set(speed);
 	}
 	
 	public void tankDrive(double left, double right) // Basic tank drive helper
 	{
 		//TODO populate
-		setDriveRight(right);
-		setDriveLeft(left);
 	}
 	
 	public void arcadeDrive(double speed, double turn) // Arcade drive algorithm that filters turn

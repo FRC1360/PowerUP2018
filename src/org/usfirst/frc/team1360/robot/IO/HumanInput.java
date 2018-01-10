@@ -51,7 +51,9 @@ public class HumanInput {
 	{
 		return this.driver.getXButton();
 	}
-	
+	public boolean getRacingShift() {
+		return this.driver.getYButton();
+	}
 	//------------Halo--------------
 	public double getHaloThrottle()
 	{
@@ -61,6 +63,9 @@ public class HumanInput {
 	public double getHaloTurn()
 	{
 		return this.driver.getX(Hand.kRight);
+	}
+	public boolean getHaloShift() {
+		return this.driver.getYButton();
 	}
 	
 	//-----------Single-Stick Arcade------------
@@ -72,6 +77,9 @@ public class HumanInput {
 	public double getArcadeTurn()
 	{
 		return this.driver.getX(Hand.kLeft);
+	}
+	public boolean getArcadeShift() {
+		return this.driver.getYButton();
 	}
 	
 	
@@ -85,7 +93,9 @@ public class HumanInput {
 	{
 		return this.driver.getY(Hand.kRight);
 	}
-	
+	public boolean getTankShift() {
+		return this.driver.getYButton();
+	}
 	
 	//----------Logitech Controls------
 	//TODO Change to WPILIB Logitech class

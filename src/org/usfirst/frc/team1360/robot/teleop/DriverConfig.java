@@ -37,8 +37,6 @@ public enum DriverConfig {
 			double turn = humanInput.getRacingTurn();
 			boolean change = humanInput.getRacingDampen();
 			
-			robotOutput.shiftGear(humanInput.getRacingShift());
-			
 			if(Math.abs(turn) < 0.2)
 				turn = 0;
 			
@@ -66,7 +64,7 @@ public enum DriverConfig {
 				turn = 0;
 			
 			robotOutput.arcadeDrive(-humanInput.getHaloThrottle(), turn);
-			robotOutput.shiftGear(humanInput.getHaloShift());
+			
 		}
 	},
 	
@@ -86,7 +84,6 @@ public enum DriverConfig {
 				right = 0;
 			
 			robotOutput.tankDrive(left, right);
-			robotOutput.shiftGear(humanInput.getTankShift());
 		}
 		
 	},
@@ -103,7 +100,6 @@ public enum DriverConfig {
 				turn = 0;
 			
 			robotOutput.arcadeDrive(humanInput.getArcadeThrottle(), turn);
-			robotOutput.shiftGear(humanInput.getArcadeShift());
 		}
 		
 	},
@@ -114,11 +110,11 @@ public enum DriverConfig {
 		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
 		{
 			double left = humanInput.getLeftJoystickThrottle();
-			double right = humanInput.getRightJoystickThrottle();
 			
+			double right = humanInput.getRightJoystickThrottle();
+			boolean shift = humanInput.getJoystickShift();
 			
 			robotOutput.tankDrive(left, right);
-			robotOutput.shiftGear(humanInput.getJoystickShift());
 			
 
 		}

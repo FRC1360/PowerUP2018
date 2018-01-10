@@ -5,37 +5,18 @@ import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotOutput {
-	
-	private Victor leftDrive1;
-	private Victor leftDrive2;
-	private Victor leftDrive3;
-	private Victor rightDrive1;
-	private Victor rightDrive2;
-	private Victor rightDrive3;
-	private Solenoid driveShift;
-	
+	//TODO Add Victors
+
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
 	private static  RobotOutput instance;
 	
-	private RobotOutput() //Instantiates all motors and solenoid
+	private RobotOutput()
 	{
-		
-		//TODO Add Victor port numbers
-		leftDrive1 = new Victor(0);
-		leftDrive2 = new Victor(0);
-		leftDrive3 = new Victor(0);
-		rightDrive1 = new Victor(0);
-		rightDrive2 = new Victor(0);
-		rightDrive3 = new Victor(0);
-		driveShift = new Solenoid(0);
-		
-		leftDrive1.setInverted(true);
-		leftDrive2.setInverted(true);
-		leftDrive3.setInverted(true);
+		//TODO Add Victor and Solenoid Declarations Here
 	}
 	
-	public static RobotOutput getInstance() // Return instance of RobotOutput; create if it doesn't exist
+	public static RobotOutput getInstance() // Return instance of RobotOutpu; create if it doesn't exist
 	{
 		if (instance == null)
 		{
@@ -44,33 +25,24 @@ public class RobotOutput {
 		
 		return instance;
 	}
-	public void shiftGear(boolean shift) {
-		driveShift.set(shift);
-	}
-	public void setDriveLeft(double speed) //Set speed of left motors
+
+	public void setDriveLeft(double speed)
 	{
+		//TODO populate
 		
-		leftDrive1.set(speed);
-		leftDrive2.set(speed);
-		leftDrive3.set(speed);
 		SmartDashboard.putNumber("Left Voltage", -speed);
 	}
 	
-	public void setDriveRight(double speed) //Set speed of right motors
+	public void setDriveRight(double speed)
 	{
+		//TODO populate
 		
-		rightDrive1.set(speed);
-		rightDrive1.set(speed);
-		rightDrive1.set(speed);
 		SmartDashboard.putNumber("Right Voltage", speed);
 	}
 	
 	public void tankDrive(double left, double right) // Basic tank drive helper
 	{
-		
-		setDriveLeft(left);
-		setDriveRight(right);
-		
+		//TODO populate
 	}
 	
 	public void arcadeDrive(double speed, double turn) // Arcade drive algorithm that filters turn
@@ -106,18 +78,9 @@ public class RobotOutput {
 		tankDrive(left, right);
 	}
 	
-	
+
 	public void stopAll() // Stops all motors and resets all solenoids
 	{
-		
-		leftDrive1.set(0);
-		leftDrive2.set(0);
-		leftDrive3.set(0);
-		rightDrive1.set(0);
-		rightDrive2.set(0);
-		rightDrive3.set(0);
-		driveShift.set(false);
-		
+		//TODO Populate
 	}
-	
 }

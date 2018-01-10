@@ -116,7 +116,6 @@ public enum DriverConfig {
 			
 			robotOutput.tankDrive(left, right);
 			
-
 		}
 	};
 	

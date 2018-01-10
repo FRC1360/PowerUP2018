@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team1360.robot;
 
+import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +25,8 @@ public class Robot extends TimedRobot {
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
+	
+	private TeleopControl teleopControl;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -33,6 +37,8 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+		
+		teleopControl = TeleopControl.getInstance();
 	}
 
 	/**
@@ -74,7 +80,9 @@ public class Robot extends TimedRobot {
 	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void teleopPeriodic() {
+	public void teleopPeriodic()
+	{
+		teleopControl.runCycle();
 	}
 
 	/**

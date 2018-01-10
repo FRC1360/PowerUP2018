@@ -8,7 +8,7 @@ public class TeleopDrive implements TeleopComponent {
 	private static TeleopDrive instance;
 	private HumanInput humanInput;
 	private RobotOutput robotOutput;
-	private DriverConfig cfg = DriverConfig.RACING; //RACING MODE. 
+	private DriverConfig cfg = DriverConfig.JOYSTICKTANK; //TANK MODE w/ dual joysticks. 
 	
 	private TeleopDrive() //Define access to HumanInput and RobotOutput from TeleopDrive. Also determine what the driver selection is and add it to Robot.
 	{

@@ -110,15 +110,15 @@ public class HumanInput {
 	// controls whether clamp is open or closed
     public boolean getOperatorClamp()
     {
-    	return operator.getAButton();
+    		return operator.getAButton();
     }
+    
     //controls speed of intake wheels
     public double getOperatorSpeed() 
     {
-    	return operator.getY(Hand.kLeft);
+    		return operator.getY(Hand.kLeft);
     }
 
-	//TODO Operator Controls
 	
 
 }

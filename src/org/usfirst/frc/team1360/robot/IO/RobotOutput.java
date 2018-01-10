@@ -43,7 +43,6 @@ public class RobotOutput {
 	
 	public void setClamp(boolean clamp) {
 		intakeClamp.set(clamp);
-		
 	}
 	
 	public void setDriveLeft(double speed)

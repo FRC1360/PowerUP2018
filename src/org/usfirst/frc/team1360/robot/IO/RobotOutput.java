@@ -36,6 +36,7 @@ public class RobotOutput {
 		return instance;
 	}
 
+	
 	public void setIntake(double speed) {
 		leftIntake.set(speed);
 		rightIntake.set(speed);

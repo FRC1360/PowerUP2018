@@ -56,6 +56,7 @@ public class RobotOutput {
   
 	public void setDriveLeft(double speed) //Set speed of left motors
 
+	
 	public void setIntake(double speed) {
 		leftIntake.set(speed);
 		rightIntake.set(speed);

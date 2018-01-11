@@ -19,12 +19,12 @@ public final class Singleton {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Class<T> clazz) {
+		SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
+		if (see != null) {
+			return (T) get(see.value());
+		}
 		return (T) objects.computeIfAbsent(clazz, c -> {
 			try {
-				SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
-				if (see != null) {
-					return get(see.value());
-				}
 				while (true) {
 					SingletonType type = c.getAnnotation(SingletonType.class);
 					if (type != null) {

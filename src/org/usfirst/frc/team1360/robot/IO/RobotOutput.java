@@ -53,7 +53,7 @@ public class RobotOutput {
 	public void shiftGear(boolean shift) {
 		driveShift.set(shift);
 	}
-  
+
 
 	
 	public void setIntake(double speed) {

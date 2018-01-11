@@ -17,9 +17,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class SensorInput {
-
-	private static SensorInput instance;				//Fields of class SensorInput
+public class SensorInput implements SensorInputProvider {
 	
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
 	private AHRS ahrs; // NavX interface
@@ -80,16 +78,6 @@ public class SensorInput {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public static SensorInput getInstance()				// Return SensorInput instance; create if it does not exist
-	{
-		if (instance == null)
-		{
-			instance = new SensorInput();
-		}
-		
-		return instance;
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX

@@ -109,5 +109,9 @@ public class HumanInput {
 
 	//TODO Operator Controls
 	
+	public double getElevator()
+	{
+		return this.operator.getY(Hand.kLeft);
+	}
 
 }

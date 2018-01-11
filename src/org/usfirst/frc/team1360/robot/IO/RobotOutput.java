@@ -25,6 +25,10 @@ public class RobotOutput {
 		
 		return instance;
 	}
+	
+	public void setElevatorMotor() {
+		//TODO Populate 
+	}
 
 	public void setDriveLeft(double speed)
 	{

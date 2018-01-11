@@ -10,6 +10,7 @@ import org.usfirst.frc.team1360.robot.Robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -24,6 +25,10 @@ public class SensorInput {
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
 	private AHRS ahrs; // NavX interface
 	
+	private Encoder elevatorEnc;
+	private DigitalInput bottomSwitch;
+	private DigitalInput topSwitch;
+	
 	// Drive PID values
 	public static final double driveP = 0.1;
 	public static final double driveI = 0.00005;
@@ -36,6 +41,10 @@ public class SensorInput {
 	private SensorInput()								//Constructor to initialize fields  
 	{
 		PDP = new PowerDistributionPanel();
+		
+		elevatorEnc = new Encoder(0,0);
+		bottomSwitch = new DigitalInput(0); // change ports as needed
+		topSwitch = new DigitalInput(1); //change ports as needed
 
 		ahrsThread = new Thread(() ->
 		{
@@ -90,6 +99,24 @@ public class SensorInput {
 		}
 		
 		return instance;
+	}
+	public boolean getBottomSwitch() 
+	{
+		return bottomSwitch.get();
+	}
+	public boolean getTopSwitch() 
+	{
+		return topSwitch.get();
+	}
+	
+	public int getElevatorTick() 
+	{
+		return elevatorEnc.get();
+	}
+	
+	public double getElevatorVelocity() 
+	{
+		return elevatorEnc.getRate();
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX

@@ -188,6 +188,16 @@ public class HumanInput implements HumanInputProvider {
     		return operator.getY(Hand.kLeft);
     }
 
-	
+	//-----------Auto Selection-----------
+	@Override
+	public boolean getAutoInc() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
+	@Override
+	public boolean getAutoDec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

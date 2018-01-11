@@ -44,7 +44,6 @@ public class RobotOutput implements RobotOutputProvider {
 	public void shiftGear(boolean shift) {
 		driveShift.set(shift);
 	}
-
 	
 	public void setIntake(double speed) {
 		leftIntake.set(speed);

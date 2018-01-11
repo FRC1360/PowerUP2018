@@ -11,4 +11,6 @@ public interface RobotOutputProvider {
 	void arcadeDrivePID(double speed, double turn);
 	void shiftGear(boolean shift);
 	void stopAll();
+	void setClamp(boolean clamp);
+	void setIntake(double speed);
 }

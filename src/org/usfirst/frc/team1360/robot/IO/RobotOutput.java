@@ -26,7 +26,7 @@ public class RobotOutput {
 		return instance;
 	}
 	
-	public void setElevatorMotor() {
+	public void setElevatorMotor(double motorValue) {
 		//TODO Populate 
 	}
 

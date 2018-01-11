@@ -4,6 +4,9 @@ public interface IntakeProvider{
 	
 	void setPosition(int position);
 	
+	int getPosition();
+	
+	
 	
 	
 }

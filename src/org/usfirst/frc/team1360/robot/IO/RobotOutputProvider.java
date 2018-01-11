@@ -9,6 +9,6 @@ public interface RobotOutputProvider {
 	void tankDrive(double left, double right);
 	void arcadeDrive(double speed, double turn);
 	void arcadeDrivePID(double speed, double turn);
-	void shiftSpeed(boolean shift);
+	void shiftGear(boolean shift);
 	void stopAll();
 }

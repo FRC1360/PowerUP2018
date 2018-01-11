@@ -126,4 +126,46 @@ public class SensorInput implements SensorInputProvider {
 	{
 		this.resetAHRS();
 	}
+
+	@Override
+	public int getLeftDriveEncoder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getRightDriveEncoder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getLeftEncoderVelocity() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getRightEncoderVelocity() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void resetLeftEncoder() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resetRightEncoder() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void calculate() {
+		// TODO Auto-generated method stub
+		
+	}
 }

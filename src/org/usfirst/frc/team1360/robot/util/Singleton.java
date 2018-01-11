@@ -11,14 +11,11 @@ public final class Singleton {
 	public static <T> T get(Class<T> clazz) {
 		return (T) objects.computeIfAbsent(clazz, c -> {
 			try {
-				return c.getConstructor().newInstance();
+				SingletonType annotation = c.getAnnotation(SingletonType.class);
+				return (annotation == null ? c : annotation.type()).getConstructor().newInstance();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		});
-	}
-	
-	public static <T> boolean register(Class<T> clazz, T object) {
-		return objects.putIfAbsent(clazz, object) == object;
 	}
 }

@@ -49,13 +49,15 @@ public class Elevator implements ElevatorProvider{
 		STATE_BOTTOM {
 
 			@Override
-			public void run(OrbitStateMachineContext<ElevatorState> context, Object arg) throws InterruptedException {
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
 				RobotOutput.getInstance().setElevatorMotor(0);
 				
 			
 				
 			}
+
+
 			
 		},
 		

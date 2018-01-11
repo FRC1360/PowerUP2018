@@ -14,12 +14,12 @@ public final class Singleton {
 				while (true) {
 					SingletonType type = c.getAnnotation(SingletonType.class);
 					if (type != null) {
-						c = type.type();
+						c = type.value();
 						continue;
 					}
 					SingletonStatic _static = c.getAnnotation(SingletonStatic.class);
 					if (_static != null)
-						return c.getMethod(_static.name()).invoke(null);
+						return c.getMethod(_static.value()).invoke(null);
 					break;
 				}
 				return c.getConstructor().newInstance();

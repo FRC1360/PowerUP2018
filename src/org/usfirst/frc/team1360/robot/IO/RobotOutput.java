@@ -12,7 +12,10 @@ public class RobotOutput {
 	private Victor rightDrive1;
 	private Victor rightDrive2;
 	private Victor rightDrive3;
+	private Victor leftIntake;
+	private Victor rightIntake;
 	private Solenoid driveShift;
+	private Solenoid intakeClamp;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
@@ -20,7 +23,6 @@ public class RobotOutput {
 	
 	private RobotOutput() //Instantiates all motors and solenoid
 	{
-		
 		//TODO Add Victor port numbers
 		leftDrive1 = new Victor(0);
 		leftDrive2 = new Victor(0);
@@ -28,7 +30,10 @@ public class RobotOutput {
 		rightDrive1 = new Victor(0);
 		rightDrive2 = new Victor(0);
 		rightDrive3 = new Victor(0);
+		leftIntake = new Victor(0);
+		rightIntake = new Victor(0);
 		driveShift = new Solenoid(0);
+		intakeClamp = new Solenoid(0);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
@@ -44,10 +49,23 @@ public class RobotOutput {
 		
 		return instance;
 	}
+  
 	public void shiftGear(boolean shift) {
 		driveShift.set(shift);
 	}
+  
 	public void setDriveLeft(double speed) //Set speed of left motors
+
+	public void setIntake(double speed) {
+		leftIntake.set(speed);
+		rightIntake.set(speed);
+	}
+	
+	public void setClamp(boolean clamp) {
+		intakeClamp.set(clamp);
+	}
+	
+	public void setDriveLeft(double speed)
 	{
 		
 		leftDrive1.set(speed);
@@ -119,5 +137,4 @@ public class RobotOutput {
 		driveShift.set(false);
 		
 	}
-	
 }

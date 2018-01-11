@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1360.robot.IO;
 import org.usfirst.frc.team1360.robot.util.LogitechAttack3Joystick;
-import org.usfirst.frc.team1360.robot.util.LogitechExtremeJoystick;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
@@ -114,10 +113,21 @@ public class HumanInput {
 	{
 		return driverLeft.getTrigger() || driverRight.getTrigger();
 	}
+	//---------operator controls-------
 	
+	
+	// controls whether clamp is open or closed
+    public boolean getOperatorClamp()
+    {
+    		return operator.getAButton();
+    }
+    
+    //controls speed of intake wheels
+    public double getOperatorSpeed() 
+    {
+    		return operator.getY(Hand.kLeft);
+    }
 
-
-	//TODO Operator Controls
 	
 
 }

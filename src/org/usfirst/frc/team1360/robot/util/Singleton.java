@@ -11,8 +11,18 @@ public final class Singleton {
 	public static <T> T get(Class<T> clazz) {
 		return (T) objects.computeIfAbsent(clazz, c -> {
 			try {
-				SingletonType annotation = c.getAnnotation(SingletonType.class);
-				return (annotation == null ? c : annotation.type()).getConstructor().newInstance();
+				while (true) {
+					SingletonType type = c.getAnnotation(SingletonType.class);
+					if (type != null) {
+						c = type.type();
+						continue;
+					}
+					SingletonStatic _static = c.getAnnotation(SingletonStatic.class);
+					if (_static != null)
+						return c.getMethod(_static.name()).invoke(null);
+					break;
+				}
+				return c.getConstructor().newInstance();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

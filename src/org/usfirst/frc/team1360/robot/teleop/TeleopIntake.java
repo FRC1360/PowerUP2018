@@ -35,8 +35,7 @@ public class TeleopIntake implements TeleopComponent {
 	@Override
 	//allows the operator to control the intake wheels and the intake clamp
 	public void calculate() {
-		robotOutput.setClamp(humanInput.getOperatorClamp());  //
-		robotOutput.setIntake(humanInput.getOperatorSpeed());
+		
 	}
 
 	@Override

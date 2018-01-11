@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1360.robot.subsystem;
+etpackage org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
@@ -53,7 +53,7 @@ public class Intake implements IntakeProvider {
 	private OrbitStateMachine<IntakeState> machine = new OrbitStateMachine<IntakeState>(IntakeState.IDLE);
 	
 	@Override
-	public void setPosition(int position) {
+	public void setPosition(double position) {
 		// TODO Auto-generated method stub
 		
 	    if (position==INTAKE) {

@@ -3,8 +3,8 @@ package org.usfirst.frc.team1360.robot.auto;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.usfirst.frc.team1360.robot.auto.providers.RobotOutputProvider;
-import org.usfirst.frc.team1360.robot.auto.providers.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 
 public abstract class AutonRoutine extends Thread {
 	private final String name;

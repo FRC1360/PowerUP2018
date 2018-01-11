@@ -6,6 +6,7 @@ package org.usfirst.frc.team1360.robot.teleop;
  */
 
 import org.usfirst.frc.team1360.robot.IO.HumanInput;
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.teleop.TeleopComponent;
 
@@ -13,7 +14,7 @@ import org.usfirst.frc.team1360.robot.teleop.TeleopComponent;
 public class TeleopIntake implements TeleopComponent {
     //defines human input and robot output
 	private static TeleopIntake instance;
-	private HumanInput humanInput;
+	private HumanInputProvider humanInput;
 	private RobotOutput robotOutput;
 	
 	private TeleopIntake() //Define access to HumanInput and RobotOutput from TeleopIntake. Also determine what the driver selection is and add it to Robot.

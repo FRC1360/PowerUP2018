@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
-import org.usfirst.frc.team1360.robot.IO.HumanInput;
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
@@ -9,7 +9,7 @@ public enum DriverConfig {
 	RACING 
 	{
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutput robotOutput, HumanInputProvider humanInput)
 		{
 			
 			boolean deadzone = Math.abs(humanInput.getRacingTurn()) < 0.2;
@@ -58,7 +58,7 @@ public enum DriverConfig {
 	HALO 
 	{
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutput robotOutput, HumanInputProvider humanInput)
 		{
 			double turn = humanInput.getHaloTurn();
 			
@@ -74,7 +74,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutput robotOutput, HumanInputProvider humanInput)
 		{
 			double left = humanInput.getTankLeft();
 			double right = humanInput.getTankRight();
@@ -95,7 +95,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput) 
+		public void calculate(RobotOutput robotOutput, HumanInputProvider humanInput) 
 		{
 			double turn = humanInput.getArcadeTurn();
 			
@@ -111,7 +111,7 @@ public enum DriverConfig {
 	JOYSTICKTANK
 	{
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutput robotOutput, HumanInputProvider humanInput)
 		{
 			double left = humanInput.getLeftJoystickThrottle();
 			double right = humanInput.getRightJoystickThrottle();
@@ -127,5 +127,5 @@ public enum DriverConfig {
 	private static OrbitPID driveController = new OrbitPID(0.1, 0.00005, 0.01, 0.5);
 	private static boolean lastDeadzone = false;
 	
-	public abstract void calculate(RobotOutput robotOutput, HumanInput humanInput);
+	public abstract void calculate(RobotOutput robotOutput, HumanInputProvider humanInput);
 }

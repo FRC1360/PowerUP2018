@@ -1,13 +1,14 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
 import org.usfirst.frc.team1360.robot.IO.HumanInput;
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.teleop.TeleopComponent;
 
 public class TeleopDrive implements TeleopComponent {
 	
 	private static TeleopDrive instance;
-	private HumanInput humanInput;
+	private HumanInputProvider humanInput;
 	private RobotOutput robotOutput;
 	private DriverConfig cfg = DriverConfig.RACING; //RACING MODE. 
 	

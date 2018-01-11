@@ -7,6 +7,7 @@ package org.usfirst.frc.team1360.robot.IO;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
+@SingletonSee(SensorInputProvider.class)
 public class SensorInput implements SensorInputProvider {
 	
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw

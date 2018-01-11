@@ -1,9 +1,12 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
 	
 	private Victor leftDrive1;

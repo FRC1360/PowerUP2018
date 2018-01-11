@@ -11,6 +11,10 @@ public final class Singleton {
 	public static <T> T get(Class<T> clazz) {
 		return (T) objects.computeIfAbsent(clazz, c -> {
 			try {
+				SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
+				if (see != null) {
+					return get(see.value());
+				}
 				while (true) {
 					SingletonType type = c.getAnnotation(SingletonType.class);
 					if (type != null) {

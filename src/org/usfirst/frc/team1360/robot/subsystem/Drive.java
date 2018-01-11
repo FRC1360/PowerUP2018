@@ -9,5 +9,10 @@ public class Drive implements DriveProvider {
 	public void tankDrive(double left, double right) {
 		robotOutput.tankDrive(left, right);
 	}
+	
+	@Override
+	public void shift(boolean shift) {
+		robotOutput.shiftGear(true);
+	}
 
 }

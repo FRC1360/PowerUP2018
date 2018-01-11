@@ -71,8 +71,10 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	
 	@Override
 	public synchronized void stop() {
-		if (isRunning())
+		if (isRunning()) {
 			future.cancel(false);
+			future = null;
+		}
 	}
 	
 	public synchronized boolean isRunning() {

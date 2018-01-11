@@ -32,6 +32,7 @@ public class TeleopDrive implements TeleopComponent {
 
 	public void disable() {
 		robotOutput.tankDrive(0, 0);
+		robotOutput.shiftGear(false);
 	}
 
 }

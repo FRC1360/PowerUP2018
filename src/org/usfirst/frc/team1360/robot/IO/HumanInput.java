@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1360.robot.IO;
 import org.usfirst.frc.team1360.robot.util.LogitechAttack3Joystick;
-import org.usfirst.frc.team1360.robot.util.LogitechExtremeJoystick;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;

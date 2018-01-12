@@ -1,4 +1,4 @@
-etpackage org.usfirst.frc.team1360.robot.subsystem;
+package org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;

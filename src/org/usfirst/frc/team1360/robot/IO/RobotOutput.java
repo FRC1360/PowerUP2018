@@ -1,10 +1,13 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class RobotOutput {
+@SingletonSee(RobotOutputProvider.class)
+public class RobotOutput implements RobotOutputProvider {
 	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
@@ -18,8 +21,6 @@ public class RobotOutput {
 	private Solenoid intakeClamp;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
-	
-	private static  RobotOutput instance;
 	
 	private RobotOutput() //Instantiates all motors and solenoid
 	{
@@ -39,21 +40,10 @@ public class RobotOutput {
 		leftDrive2.setInverted(true);
 		leftDrive3.setInverted(true);
 	}
-	
-	public static RobotOutput getInstance() // Return instance of RobotOutput; create if it doesn't exist
-	{
-		if (instance == null)
-		{
-			instance = new RobotOutput();
-		}
-		
-		return instance;
-	}
   
 	public void shiftGear(boolean shift) {
 		driveShift.set(shift);
 	}
-
 	
 	public void setIntake(double speed) {
 		leftIntake.set(speed);

@@ -13,6 +13,7 @@ public class Elevator implements ElevatorProvider{
 
 SensorInput sensorInput = SensorInput.getInstance();
 	
+	final  int TopTarget = 1001;
 	static double ElevatorSpeed;
 	
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{

@@ -1,10 +1,7 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
-import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
-import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
-import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class DrivePIDEncoder extends AutonRoutine {
 	private double target;
@@ -21,8 +18,6 @@ public class DrivePIDEncoder extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-		RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		pid.SetSetpoint(target);
 		encoderLimit += sensorInput.getRightDriveEncoder();
 		robotOutput.arcadeDrivePID(speed, 0);
@@ -40,6 +35,6 @@ public class DrivePIDEncoder extends AutonRoutine {
 	@Override
 	protected void overrideCore()
 	{
-		Singleton.get(RobotOutputProvider.class).tankDrive(0, 0);
+		robotOutput.tankDrive(0, 0);
 	}
 }

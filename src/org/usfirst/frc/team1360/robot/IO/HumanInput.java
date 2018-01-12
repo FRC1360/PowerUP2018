@@ -1,12 +1,14 @@
 package org.usfirst.frc.team1360.robot.IO;
 import org.usfirst.frc.team1360.robot.util.LogitechAttack3Joystick;
-import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 
-@SingletonSee(HumanInputProvider.class)
-public class HumanInput implements HumanInputProvider {
+
+
+public class HumanInput {
+	private static HumanInput instance;
+
 	// Joysticks
 	private XboxController driver;
 	private XboxController operator;
@@ -46,142 +48,78 @@ public class HumanInput implements HumanInputProvider {
 	//Driver Controls
 	
 	//---------Racing--------------
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getRacingThrottle()
-	 */
-	@Override
 	public double getRacingThrottle()
 	{
 		return this.driver.getTriggerAxis(Hand.kRight) - this.driver.getTriggerAxis(Hand.kLeft); 
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getRacingTurn()
-	 */
-	@Override
 	public double getRacingTurn()
 	{
 		return this.driver.getX(Hand.kLeft);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getRacingDampen()
-	 */
-	@Override
 	public boolean getRacingDampen()
 	{
 		return this.driver.getXButton();
 	}
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getRacingShift()
-	 */
-	@Override
 	public boolean getRacingShift() {
 		return this.driver.getYButton();
 	}
 	//------------Halo--------------
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getHaloThrottle()
-	 */
-	@Override
 	public double getHaloThrottle()
 	{
 		return this.driver.getY(Hand.kLeft);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getHaloTurn()
-	 */
-	@Override
 	public double getHaloTurn()
 	{
 		return this.driver.getX(Hand.kRight);
 	}
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getHaloShift()
-	 */
-	@Override
 	public boolean getHaloShift() {
 		return this.driver.getYButton();
 	}
 	
 	//-----------Single-Stick Arcade------------
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getArcadeThrottle()
-	 */
-	@Override
 	public double getArcadeThrottle()
 	{
 		return this.driver.getY(Hand.kLeft);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getArcadeTurn()
-	 */
-	@Override
 	public double getArcadeTurn()
 	{
 		return this.driver.getX(Hand.kLeft);
 	}
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getArcadeShift()
-	 */
-	@Override
 	public boolean getArcadeShift() {
 		return this.driver.getYButton();
 	}
 	
 	
 	//----------Tank Controls---------
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getTankLeft()
-	 */
-	@Override
 	public double getTankLeft()
 	{
 		return this.driver.getY(Hand.kLeft);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getTankRight()
-	 */
-	@Override
 	public double getTankRight()
 	{
 		return this.driver.getY(Hand.kRight);
 	}
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getTankShift()
-	 */
-	@Override
 	public boolean getTankShift() {
 		return this.driver.getYButton();
 	}
 	
 	//----------Logitech Controls------
 	//TODO Change to WPILIB Logitech class
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getLeftJoystickThrottle()
-	 */
-	@Override
 	public double getLeftJoystickThrottle()
 	{
 		return -driverLeft.getY();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getRightJoystickThrottle()
-	 */
-	@Override
 	public double getRightJoystickThrottle()
 	{
 		return -driverRight.getY();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getJoystickShift()
-	 */
-	@Override
 	public boolean getJoystickShift()
 	{
 		return driverLeft.getTrigger() || driverRight.getTrigger();
@@ -190,43 +128,17 @@ public class HumanInput implements HumanInputProvider {
 	
 	
 	// controls whether clamp is open or closed
-    /* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorClamp()
-	 */
-    @Override
-	public boolean getOperatorClamp()
+    public boolean getOperatorClamp()
     {
     		return operator.getAButton();
     }
     
     //controls speed of intake wheels
-    /* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorSpeed()
-	 */
-    @Override
-	public double getOperatorSpeed() 
+    public double getOperatorSpeed() 
     {
     		return operator.getY(Hand.kLeft);
     }
 
-	//-----------Auto Selection-----------
-	@Override
-	public boolean getAutoInc() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean getAutoDec() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	//TODO Operator Controls
 	
-	public double getElevator()
-	{
-		return this.operator.getY(Hand.kLeft);
-	}
 
 }

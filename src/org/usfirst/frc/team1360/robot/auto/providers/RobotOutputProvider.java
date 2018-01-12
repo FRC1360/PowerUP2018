@@ -13,6 +13,4 @@ public interface RobotOutputProvider {
 	void outtake(boolean release);
 	void climb(double speed);
 	void stopAll();
-	void setClamp(boolean clamp);
-	void setIntake(double speed);
 }

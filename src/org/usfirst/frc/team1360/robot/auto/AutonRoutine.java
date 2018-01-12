@@ -9,10 +9,18 @@ import org.usfirst.frc.team1360.robot.auto.providers.SensorInputProvider;
 public abstract class AutonRoutine extends Thread {
 	private final String name;
 	private final long timeout;
+	protected static RobotOutputProvider robotOutput;
+	protected static SensorInputProvider sensorInput;
 	
 	private final ArrayList<AutonRoutine> queue = new ArrayList<>();
 	private static final HashMap<String, AutonRoutine> map = new HashMap<>();
 	private boolean done;
+	
+	public static void configure(RobotOutputProvider robotOutput, SensorInputProvider sensorInput)
+	{
+		AutonRoutine.robotOutput = robotOutput;
+		AutonRoutine.sensorInput = sensorInput;
+	}
 	
 	public AutonRoutine(String name, long timeout)
 	{

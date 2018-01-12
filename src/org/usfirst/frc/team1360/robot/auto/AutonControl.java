@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.auto.providers.SelectionProvider;
 import org.usfirst.frc.team1360.robot.auto.routines.DriveToBaseline;
 
 public class AutonControl {
-	private static HumanInputProvider provider;
+	private static SelectionProvider provider;
 	public static ArrayList<AutonRoutine> routines = new ArrayList<>();
 	private static int selectedIndex = 0;
 	private static boolean lastInc = false;
@@ -23,7 +23,7 @@ public class AutonControl {
 		routines.add(new DriveToBaseline());
 	}
 	
-	public static void configure(HumanInputProvider provider)
+	public static void configure(SelectionProvider provider)
 	{
 		AutonControl.provider = provider;
 	}

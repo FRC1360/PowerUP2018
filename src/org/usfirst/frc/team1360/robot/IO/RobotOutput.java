@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class RobotOutput implements RobotOutputProvider {
+public class RobotOutput {
 	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
@@ -19,7 +19,6 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
-	private static RobotOutput instance;
 	
 	private RobotOutput() //Instantiates all motors and solenoid
 	{
@@ -38,18 +37,6 @@ public class RobotOutput implements RobotOutputProvider {
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
 		leftDrive3.setInverted(true);
-	}
-	
-
-	
-	public static RobotOutput getInstance()	//Return intance of HumanInput; create if it doesn't exist
-	{
-		if (instance == null)
-		{
-			instance = new RobotOutput();
-		}
-		
-		return instance;
 	}
   
 	public void shiftGear(boolean shift) {

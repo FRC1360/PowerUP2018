@@ -11,50 +11,18 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 
 public class Elevator implements ElevatorProvider{
 
+SensorInput sensorInput = SensorInput.getInstance();
 	
-	
-	public final static int MIDDLE_TARGET = 500;
-	public final static int TOP_TARGET = 1000;
-	
-	
-	@Override
-	public void goToTarget(double target, Consumer<String> onError) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stayAtTarget(int target) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void disable() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stayAtTop() {
-		// TODO Auto-generated method stub
-		
-	}
-	static OrbitStateMachine<ElevatorState> ElevatorStateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.STATE_BOTTOM);
-	
+	static double ElevatorSpeed;
 	
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
 		
-		STATE_BOTTOM {
+		STATE_IDLE {
 
 			@Override
-			public void run(OrbitStateMachineContext<ElevatorState> context, Object arg) throws InterruptedException {
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
 				RobotOutput.getInstance().setElevatorMotor(0);
-				
-			
-				
 			}
 			
 		},
@@ -64,12 +32,14 @@ public class Elevator implements ElevatorProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
+				
 				int target = (int) context.getArg();
+				
 				if (SensorInput.getInstance().getElevatorTick() > target)
 				{
 					RobotOutput.getInstance().setElevatorMotor(0.5);
 				}
-				if (SensorInput.getInstance().getElevatorTick() < target)
+				if (SensorInput.getInstance().getElevatorTick() <= target)
 				{
 					ElevatorStateMachine.setState(STATE_HOLD, target);
 				}
@@ -100,15 +70,87 @@ public class Elevator implements ElevatorProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
+				int target = (int) context.getArg();
 				
+				if (SensorInput.getInstance().getElevatorTick() > target)
+				{
+					RobotOutput.getInstance().setElevatorMotor(-0.5);
+				}
+				if (SensorInput.getInstance().getElevatorTick() <= target)
+				{
+					ElevatorStateMachine.setState(STATE_HOLD, target);
+				}
+			}	
 			}
 			
 		};
 
 		
-}
+
+
+	static OrbitStateMachine<ElevatorState> ElevatorStateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.STATE_IDLE);
+
+	@Override
+	public void goToTarget(double target, Consumer<String> onError) {
+		// TODO Auto-generated method stub
+		if (sensorInput.getElevatorTick() > target) 
+		{
+			try {
+				ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, target);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if (sensorInput.getElevatorTick() <= target) {
+			
+			try {
+				ElevatorStateMachine.setState(ElevatorState.STATE_RISING, target);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void goToBottom() {
+		// TODO Auto-generated method stub
+		if (ElevatorStateMachine.getState() != ElevatorState.STATE_IDLE) 
+		{
+			try {
+				ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, 5);
+				if (sensorInput.getElevatorTick() < 10) 
+				{
+					ElevatorStateMachine.setState(ElevatorState.STATE_IDLE);
+				}
+			} catch (InterruptedException e) {e.printStackTrace();}
+		}
+	}
+
+
+	@Override
+	public void goToTop() {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, 1000);
+		} catch (InterruptedException e) {e.printStackTrace();}
+		if ( sensorInput.getTopSwitch() == true ) {
+			RobotOutput.getInstance().setElevatorMotor(-0.05);
+		}
+		
+		
+		
+	}
+
+	@Override
+	public void setspeed(double speed) {
+		// TODO Auto-generated method stub
+		ElevatorSpeed = speed;
+	}
 
 
 	
 	
 }
+

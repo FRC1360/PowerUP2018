@@ -5,11 +5,15 @@ import java.util.function.Consumer;
 public interface ElevatorProvider {
 	void goToTarget(double target, Consumer<String> onError);
 	
-	void stayAtTarget(int target);
 	
-	void disable();
 	
-	void stayAtTop();
+	void goToBottom();
+	
+	void goToTop();
+	
+	void setspeed(double speed);
+	
+	
 	
 	
 }

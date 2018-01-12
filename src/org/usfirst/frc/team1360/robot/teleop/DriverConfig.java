@@ -1,15 +1,17 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
-import org.usfirst.frc.team1360.robot.IO.HumanInput;
-import org.usfirst.frc.team1360.robot.IO.RobotOutput;
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public enum DriverConfig {
 	RACING 
 	{
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
 		{
 			
 			boolean deadzone = Math.abs(humanInput.getRacingTurn()) < 0.2;
@@ -19,11 +21,11 @@ public enum DriverConfig {
 				
 				if (!lastDeadzone || Math.abs(speed) < 0.01)
 				{
-					driveController.SetSetpoint(SensorInput.getInstance().getAHRSYaw());
+					driveController.SetSetpoint(Singleton.get(SensorInputProvider.class).getAHRSYaw());
 				}
 				
 
-				driveController.SetInput(SensorInput.getInstance().getAHRSYaw());
+				driveController.SetInput(Singleton.get(SensorInputProvider.class).getAHRSYaw());
 				driveController.CalculateError();
 					
 				robotOutput.arcadeDrivePID(speed, Math.abs(speed) * driveController.GetOutput());
@@ -36,6 +38,8 @@ public enum DriverConfig {
 			
 			double turn = humanInput.getRacingTurn();
 			boolean change = humanInput.getRacingDampen();
+			
+			robotOutput.shiftGear(humanInput.getRacingShift());
 			
 			if(Math.abs(turn) < 0.2)
 				turn = 0;
@@ -56,7 +60,7 @@ public enum DriverConfig {
 	HALO 
 	{
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
 		{
 			double turn = humanInput.getHaloTurn();
 			
@@ -64,7 +68,7 @@ public enum DriverConfig {
 				turn = 0;
 			
 			robotOutput.arcadeDrive(-humanInput.getHaloThrottle(), turn);
-			
+			robotOutput.shiftGear(humanInput.getHaloShift());
 		}
 	},
 	
@@ -72,7 +76,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
 		{
 			double left = humanInput.getTankLeft();
 			double right = humanInput.getTankRight();
@@ -84,6 +88,7 @@ public enum DriverConfig {
 				right = 0;
 			
 			robotOutput.tankDrive(left, right);
+			robotOutput.shiftGear(humanInput.getTankShift());
 		}
 		
 	},
@@ -92,7 +97,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput) 
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput) 
 		{
 			double turn = humanInput.getArcadeTurn();
 			
@@ -100,6 +105,7 @@ public enum DriverConfig {
 				turn = 0;
 			
 			robotOutput.arcadeDrive(humanInput.getArcadeThrottle(), turn);
+			robotOutput.shiftGear(humanInput.getArcadeShift());
 		}
 		
 	},
@@ -107,14 +113,14 @@ public enum DriverConfig {
 	JOYSTICKTANK
 	{
 		@Override
-		public void calculate(RobotOutput robotOutput, HumanInput humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
 		{
 			double left = humanInput.getLeftJoystickThrottle();
-			
 			double right = humanInput.getRightJoystickThrottle();
-			boolean shift = humanInput.getJoystickShift();
+			
 			
 			robotOutput.tankDrive(left, right);
+			robotOutput.shiftGear(humanInput.getJoystickShift());
 			
 
 		}
@@ -123,5 +129,5 @@ public enum DriverConfig {
 	private static OrbitPID driveController = new OrbitPID(0.1, 0.00005, 0.01, 0.5);
 	private static boolean lastDeadzone = false;
 	
-	public abstract void calculate(RobotOutput robotOutput, HumanInput humanInput);
+	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput);
 }

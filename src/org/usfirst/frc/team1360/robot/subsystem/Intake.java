@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
+import javax.management.openmbean.SimpleType;
+
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
@@ -17,30 +19,33 @@ public class Intake implements IntakeProvider {
 		
 		INTAKE
 		{
+			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				RobotOutput.getInstance().setClamp(false);
-		    	RobotOutput.getInstance().setIntake(1);
+				robotOutput.setClamp(false);
+				robotOutput.setIntake(1);
 			}
 			
 		},
 		CLOSED
 		{
+			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				RobotOutput.getInstance().setClamp(true);
-		    	RobotOutput.getInstance().setIntake(0);
+				robotOutput.setClamp(true);
+		    		robotOutput.setIntake(0);
 			}
 		},
 		IDLE
 		{
+			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				RobotOutput.getInstance().setClamp(false);
-		    	RobotOutput.getInstance().setIntake(0);
+				robotOutput.setClamp(false);
+		    		robotOutput.setIntake(0);
 			}
 		};
 		

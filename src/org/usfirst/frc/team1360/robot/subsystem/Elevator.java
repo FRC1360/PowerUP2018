@@ -3,7 +3,9 @@ package org.usfirst.frc.team1360.robot.subsystem;
 import java.util.function.Consumer;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.teleop.ElevatorTeleop;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
@@ -19,11 +21,12 @@ SensorInput sensorInput = SensorInput.getInstance();
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
 		
 		STATE_IDLE {
-
+			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+			
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				RobotOutput.getInstance().setElevatorMotor(0);
+				robotOutput.setElevatorMotor(0);
 			}
 
 
@@ -35,7 +38,7 @@ SensorInput sensorInput = SensorInput.getInstance();
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				RobotOutput robotOutput = Singleton.get(RobotOutput.class);
+				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 				
 				int target = (int) context.getArg();
 				
@@ -60,8 +63,8 @@ SensorInput sensorInput = SensorInput.getInstance();
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				RobotOutput robotOutput = Singleton.get(RobotOutput.class);
-				SensorInput sensorInput = Singleton.get(SensorInput.class);
+				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+				SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 				
 				int target = (int) context.getArg();
 				
@@ -94,7 +97,8 @@ SensorInput sensorInput = SensorInput.getInstance();
 		
 	
 		STATE_DESCENDING{
-
+			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+			
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
@@ -102,7 +106,7 @@ SensorInput sensorInput = SensorInput.getInstance();
 				
 				if (SensorInput.getInstance().getElevatorTick() > target)
 				{
-					RobotOutput.getInstance().setElevatorMotor(-0.5);
+					robotOutput.setElevatorMotor(-0.5);
 				}
 				if (SensorInput.getInstance().getElevatorTick() <= target)
 				{

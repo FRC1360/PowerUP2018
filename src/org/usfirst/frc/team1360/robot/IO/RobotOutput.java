@@ -54,6 +54,7 @@ public class RobotOutput implements RobotOutputProvider {
 		intakeClamp.set(clamp);
 	}
 	
+	@Override
 	public void setElevatorMotor(double motorValue) {
 		//TODO Populate 
 	}

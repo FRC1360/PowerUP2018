@@ -21,4 +21,6 @@ public interface SensorInputProvider {
 	void resetPivotEncoder();
 	void calculate();
 	void reset();
+	int getElevatorTick();
+	boolean getTopSwitch();
 }

@@ -12,16 +12,6 @@ public class HumanInput implements HumanInputProvider {
 	private XboxController operator;
 	private LogitechAttack3Joystick driverLeft;
 	private LogitechAttack3Joystick driverRight;
-		
-	public static HumanInput getInstance()	//Return intance of HumanInput; create if it doesn't exist
-	{
-		if (instance == null)
-		{
-			instance = new HumanInput();
-		}
-		
-		return instance;
-	}
 	
 	private HumanInput()									//Constructor to initialize fields
 	{

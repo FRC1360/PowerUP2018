@@ -15,4 +15,6 @@ public interface RobotOutputProvider {
 	void stopAll();
 	void setClamp(boolean clamp);
 	void setIntake(double speed);
+	void shiftGear(boolean joystickShift);
+	void setElevatorMotor(double d);
 }

@@ -7,8 +7,6 @@
 
 package org.usfirst.frc.team1360.robot;
 
-import org.usfirst.frc.team1360.robot.util.SingletonStatic;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,22 +18,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
-@SingletonStatic
 public class Robot extends TimedRobot {
-	private static Robot instance;
-	
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
-	
-	public Robot() {
-		instance = this;
-	}
-	
-	public static Robot getInstance() {
-		return instance;
-	}
 
 	/**
 	 * This function is run when the robot is first started up and should be

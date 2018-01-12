@@ -7,10 +7,12 @@ package org.usfirst.frc.team1360.robot.IO;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
+import org.usfirst.frc.team1360.robot.auto.providers.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -22,6 +24,10 @@ public class SensorInput implements SensorInputProvider {
 	
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
 	private AHRS ahrs; // NavX interface
+	
+	private Encoder elevatorEnc;
+	private DigitalInput bottomSwitch;
+	private DigitalInput topSwitch;
 	
 	// Drive PID values
 	public static final double driveP = 0.1;
@@ -35,6 +41,10 @@ public class SensorInput implements SensorInputProvider {
 	private SensorInput()								//Constructor to initialize fields  
 	{
 		PDP = new PowerDistributionPanel();
+		
+		elevatorEnc = new Encoder(0,0);
+		bottomSwitch = new DigitalInput(0); // change ports as needed
+		topSwitch = new DigitalInput(1); //change ports as needed
 
 		ahrsThread = new Thread(() ->
 		{
@@ -79,6 +89,25 @@ public class SensorInput implements SensorInputProvider {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public boolean getBottomSwitch() 
+	{
+		return bottomSwitch.get();
+	}
+	public boolean getTopSwitch() 
+	{
+		return topSwitch.get();
+	}
+	
+	public int getElevatorTick() 
+	{
+		return elevatorEnc.get();
+	}
+	
+	public double getElevatorVelocity() 
+	{
+		return elevatorEnc.getRate();
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX
@@ -166,6 +195,34 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public void calculate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public double getClimberFrontCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public double getClimberBackCurrent() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public int getPivotEncoder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public void resetPivotEncoder() {
 		// TODO Auto-generated method stub
 		
 	}

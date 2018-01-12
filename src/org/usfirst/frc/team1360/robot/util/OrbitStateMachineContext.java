@@ -14,8 +14,17 @@ public interface OrbitStateMachineContext<T extends OrbitStateMachineState<T>> {
 	Object getArg();
 	
 	/**
-	 * Go to next state (does not return)
-	 * @param state
+	 * Go to the next state (does not return)
+	 * @param state The next state
+	 * @param arg The state argument
 	 */
-	void nextState(T state);
+	void nextState(T state, Object arg);
+	
+	/**
+	 * Go to next state (does not return)
+	 * @param state The next state
+	 */
+	default void nextState(T state) {
+		nextState(state, null);
+	}
 }

@@ -8,12 +8,12 @@ import org.usfirst.frc.team1360.robot.teleop.ElevatorTeleop;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class Elevator implements ElevatorProvider{
 
 SensorInput sensorInput = SensorInput.getInstance();
 	
-	final  int TopTarget = 1001;
 	static double ElevatorSpeed;
 	
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
@@ -35,16 +35,22 @@ SensorInput sensorInput = SensorInput.getInstance();
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
+				RobotOutput robotOutput = Singleton.get(RobotOutput.class);
 				
 				int target = (int) context.getArg();
 				
-				if (SensorInput.getInstance().getElevatorTick() > target)
+				if (SensorInput.getInstance().getElevatorTick() < target)
 				{
-					RobotOutput.getInstance().setElevatorMotor(0.5);
+					robotOutput.setElevatorMotor(0.5);
 				}
-				if (SensorInput.getInstance().getElevatorTick() <= target)
+				if (SensorInput.getInstance().getElevatorTick() >= target)
 				{
-					ElevatorStateMachine.setState(STATE_HOLD, target);
+					if (target == 1000) {
+						ElevatorStateMachine.setState(STATE_HOLD, 1001);
+					}
+					else {
+						ElevatorStateMachine.setState(STATE_HOLD, target);
+					}
 				}
 			}
 			
@@ -54,14 +60,33 @@ SensorInput sensorInput = SensorInput.getInstance();
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
+				RobotOutput robotOutput = Singleton.get(RobotOutput.class);
+				SensorInput sensorInput = Singleton.get(SensorInput.class);
+				
 				int target = (int) context.getArg();
-				if (SensorInput.getInstance().getElevatorTick() > target )
-				{
-					RobotOutput.getInstance().setElevatorMotor(-0.1);
+				
+				if (target == 1001) {
+					if ( SensorInput.getInstance().getTopSwitch() == true)
+					{
+						robotOutput.setElevatorMotor(-0.05);
+					}
+					else 
+					{
+						robotOutput.setElevatorMotor(0.05);
+					}
 				}
-				else 
-				{
-					RobotOutput.getInstance().setElevatorMotor(0.1);
+				
+			
+				
+				else {
+					if (SensorInput.getInstance().getElevatorTick() > target )
+					{
+						robotOutput.setElevatorMotor(-0.1);
+					}
+					else 
+					{
+						robotOutput.setElevatorMotor(0.1);
+					}
 				}
 			}
 			
@@ -81,7 +106,9 @@ SensorInput sensorInput = SensorInput.getInstance();
 				}
 				if (SensorInput.getInstance().getElevatorTick() <= target)
 				{
-					ElevatorStateMachine.setState(STATE_HOLD, target);
+					if(target == 0) {ElevatorStateMachine.setState(STATE_IDLE);}
+					
+					else {ElevatorStateMachine.setState(STATE_HOLD, target);}
 				}
 			}	
 			}
@@ -122,11 +149,7 @@ SensorInput sensorInput = SensorInput.getInstance();
 		if (ElevatorStateMachine.getState() != ElevatorState.STATE_IDLE) 
 		{
 			try {
-				ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, 5);
-				if (sensorInput.getElevatorTick() < 10) 
-				{
-					ElevatorStateMachine.setState(ElevatorState.STATE_IDLE);
-				}
+				ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, 0);
 			} catch (InterruptedException e) {e.printStackTrace();}
 		}
 	}
@@ -138,12 +161,6 @@ SensorInput sensorInput = SensorInput.getInstance();
 		try {
 			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, 1000);
 		} catch (InterruptedException e) {e.printStackTrace();}
-		if ( sensorInput.getTopSwitch() == true ) {
-			RobotOutput.getInstance().setElevatorMotor(-0.05);
-		}
-		
-		
-		
 	}
 
 	@Override
@@ -153,7 +170,5 @@ SensorInput sensorInput = SensorInput.getInstance();
 	}
 
 
-	
-	
 }
 

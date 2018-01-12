@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.auto.providers.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -20,7 +21,7 @@ public class RobotOutput implements RobotOutputProvider {
 	private Solenoid driveShift;
 	private Solenoid intakeClamp;
 	
-	private final double TURN_WEIGHT_FACTOR = 0.2;
+	private final double TURN_WEIGHT_FACTOR = 0.2;	
 	
 	private RobotOutput() //Instantiates all motors and solenoid
 	{
@@ -54,6 +55,10 @@ public class RobotOutput implements RobotOutputProvider {
 		intakeClamp.set(clamp);
 	}
 	
+	public void setElevatorMotor(double motorValue) {
+		//TODO Populate 
+	}
+
 	public void setDriveLeft(double speed)
 	{
 		
@@ -124,6 +129,42 @@ public class RobotOutput implements RobotOutputProvider {
 		rightDrive2.set(0);
 		rightDrive3.set(0);
 		driveShift.set(false);
+		
+	}
+
+	@Override
+	public void pivotGear(double speed) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fineAdjustGearMech(boolean pivot) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void intakeGear(double speed) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void shiftSpeed(boolean shift) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void outtake(boolean release) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void climb(double speed) {
+		// TODO Auto-generated method stub
 		
 	}
 }

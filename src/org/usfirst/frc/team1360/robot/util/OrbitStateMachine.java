@@ -110,7 +110,8 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		}
 
 		@Override
-		public void nextState(T state) {
+		public void nextState(T state, Object arg) {
+			OrbitStateMachine.this.arg = arg;
 			throw new NextStateException(state);
 		}
 	}

@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.auto.providers.SensorInputProvider;
 
 public final class DriveEncoderPositionProvider implements OrbitPositionProvider {
 	private final ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1);

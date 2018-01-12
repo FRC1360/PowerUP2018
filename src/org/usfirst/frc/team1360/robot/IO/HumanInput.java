@@ -14,9 +14,7 @@ public class HumanInput {
 	private XboxController operator;
 	private LogitechAttack3Joystick driverLeft;
 	private LogitechAttack3Joystick driverRight;
-	
-	private static HumanInput instance;
-	
+		
 	public static HumanInput getInstance()	//Return intance of HumanInput; create if it doesn't exist
 	{
 		if (instance == null)
@@ -33,16 +31,6 @@ public class HumanInput {
 		this.operator = new XboxController(1);					//Operator Xbox on USB Port 1 on DS
 		this.driverLeft = new LogitechAttack3Joystick(2);
 		this.driverRight = new LogitechAttack3Joystick(3);
-	}
-	
-	public static HumanInput getInstance()					//Return intance of HumanInput; create if it doesn't exist
-	{
-		if (instance == null)
-		{
-			instance = new HumanInput();
-		}
-		
-		return instance;
 	}
 	
 	//Driver Controls

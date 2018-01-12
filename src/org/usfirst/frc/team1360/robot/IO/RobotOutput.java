@@ -19,6 +19,8 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
+	private static RobotOutput instance;
+	
 	private RobotOutput() //Instantiates all motors and solenoid
 	{
 		//TODO Add Victor port numbers
@@ -36,6 +38,18 @@ public class RobotOutput implements RobotOutputProvider {
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
 		leftDrive3.setInverted(true);
+	}
+	
+
+	
+	public static RobotOutput getInstance()	//Return intance of HumanInput; create if it doesn't exist
+	{
+		if (instance == null)
+		{
+			instance = new RobotOutput();
+		}
+		
+		return instance;
 	}
   
 	public void shiftGear(boolean shift) {

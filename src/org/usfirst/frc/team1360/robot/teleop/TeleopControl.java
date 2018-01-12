@@ -10,8 +10,8 @@ public class TeleopControl {
 	private TeleopControl()
 	{
 		this.components = new ArrayList<TeleopComponent>(); //Create an array with the current instances of Drive, Gear, Intake, Climber.
+
 		this.components.add(Singleton.get(TeleopDrive.class));
-		this.components.add(Singleton.get(TeleopIntake.class));
 	}
 	
 	public void runCycle() //Run every tick. Executes calculate for each component.

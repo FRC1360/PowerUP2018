@@ -12,7 +12,6 @@ public class HumanInput implements HumanInputProvider {
 	private XboxController operator;
 	private LogitechAttack3Joystick driverLeft;
 	private LogitechAttack3Joystick driverRight;
-
 	
 	private HumanInput()									//Constructor to initialize fields
 	{
@@ -200,4 +199,12 @@ public class HumanInput implements HumanInputProvider {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	//TODO Operator Controls
+	
+	public double getElevator()
+	{
+		return this.operator.getY(Hand.kLeft);
+	}
+
 }

@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.usfirst.frc.team1360.robot.auto.providers.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 
 public final class DriveEncoderPositionProvider implements OrbitPositionProvider {
 	private final ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1);
@@ -71,8 +71,10 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	
 	@Override
 	public synchronized void stop() {
-		if (isRunning())
+		if (isRunning()) {
 			future.cancel(false);
+			future = null;
+		}
 	}
 	
 	public synchronized boolean isRunning() {

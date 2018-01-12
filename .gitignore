@@ -5,9 +5,11 @@
 */.settings
 *.ipr
 *.iws
+*.eml
 */*.iml
 */.project
 bin/
 */.DS_Store
 build/
 dist/
+.idea

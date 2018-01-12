@@ -7,6 +7,7 @@ package org.usfirst.frc.team1360.robot.IO;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -17,10 +18,8 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
-public class SensorInput {
-
-	private static SensorInput instance;				//Fields of class SensorInput
+@SingletonSee(SensorInputProvider.class)
+public class SensorInput implements SensorInputProvider {
 	
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
 	private AHRS ahrs; // NavX interface
@@ -91,6 +90,7 @@ public class SensorInput {
 		}
 	}
 	
+
 	public static SensorInput getInstance()				// Return SensorInput instance; create if it does not exist
 	{
 		if (instance == null)
@@ -164,5 +164,47 @@ public class SensorInput {
 	public void reset() // Reset NavX and encoders
 	{
 		this.resetAHRS();
+	}
+
+	@Override
+	public int getLeftDriveEncoder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getRightDriveEncoder() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getLeftEncoderVelocity() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getRightEncoderVelocity() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void resetLeftEncoder() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resetRightEncoder() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void calculate() {
+		// TODO Auto-generated method stub
+		
 	}
 }

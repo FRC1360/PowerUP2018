@@ -5,7 +5,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.usfirst.frc.team1360.robot.auto.providers.SelectionProvider;
-import org.usfirst.frc.team1360.robot.auto.routines.DriveToBaseline;
+import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 
 public class AutonControl {
 	private static SelectionProvider provider;
@@ -20,7 +20,7 @@ public class AutonControl {
 	
 	static
 	{
-		routines.add(new DriveToBaseline());
+		routines.add(new CrossBaseline("Cross Baseline", 0));
 	}
 	
 	public static void configure(SelectionProvider provider)

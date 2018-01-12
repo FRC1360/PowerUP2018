@@ -24,6 +24,8 @@ SensorInput sensorInput = SensorInput.getInstance();
 				// TODO Auto-generated method stub
 				RobotOutput.getInstance().setElevatorMotor(0);
 			}
+
+
 			
 		},
 		

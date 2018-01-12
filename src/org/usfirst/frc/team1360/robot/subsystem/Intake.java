@@ -1,13 +1,17 @@
 etpackage org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
+import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
+@SingletonSee(IntakeProvider.class)
 public class Intake implements IntakeProvider {
 	
-	private RobotOutput robotOutput = RobotOutput.getInstance();
+	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
 	private static enum IntakeState implements OrbitStateMachineState<IntakeState>{
 		

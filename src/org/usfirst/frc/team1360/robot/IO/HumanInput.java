@@ -202,10 +202,17 @@ public class HumanInput implements HumanInputProvider {
 	}
 
 	//TODO Operator Controls
-	
+	// Operator Controls
 	public double getElevator()
 	{
 		return this.operator.getY(Hand.kLeft);
+	}
+	
+	public double deadzone(double Input, double deadzone) {
+		if (Math.abs(Input) < deadzone) {
+			return Input;
+		}
+		return 0;
 	}
 
 }

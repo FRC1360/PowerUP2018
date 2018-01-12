@@ -102,19 +102,27 @@ SensorInput sensorInput = SensorInput.getInstance();
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				int target = (int) context.getArg();
-				
-				if (SensorInput.getInstance().getElevatorTick() > target)
-				{
-					robotOutput.setElevatorMotor(-0.5);
-				}
-				if (SensorInput.getInstance().getElevatorTick() <= target)
-				{
-					if(target == 0) {ElevatorStateMachine.setState(STATE_IDLE);}
+				if (context.getArg() instanceof Double) {
+					double speed = Double.doublevalue(context.getArg());
 					
-					else {ElevatorStateMachine.setState(STATE_HOLD, target);}
+				
 				}
-			}	
+				else {
+				
+					int target = (int) context.getArg();
+				
+					if (SensorInput.getInstance().getElevatorTick() > target)
+					{
+						robotOutput.setElevatorMotor(-0.5);
+					}
+					if (SensorInput.getInstance().getElevatorTick() <= target)
+					{
+						if(target == 0) {ElevatorStateMachine.setState(STATE_IDLE);}
+						
+						else {ElevatorStateMachine.setState(STATE_HOLD, target);}
+					}
+				}	
+			}
 			}
 			
 		};
@@ -163,6 +171,7 @@ SensorInput sensorInput = SensorInput.getInstance();
 	public void goToTop() {
 		// TODO Auto-generated method stub
 		try {
+			
 			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, 1000);
 		} catch (InterruptedException e) {e.printStackTrace();}
 	}

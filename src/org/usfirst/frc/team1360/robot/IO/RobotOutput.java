@@ -1,10 +1,13 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class RobotOutput {
+@SingletonSee(RobotOutputProvider.class)
+public class RobotOutput implements RobotOutputProvider {
 	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
@@ -54,8 +57,6 @@ public class RobotOutput {
 	public void shiftGear(boolean shift) {
 		driveShift.set(shift);
 	}
-
-
 	
 	public void setIntake(double speed) {
 		leftIntake.set(speed);
@@ -66,6 +67,10 @@ public class RobotOutput {
 		intakeClamp.set(clamp);
 	}
 	
+	public void setElevatorMotor(double motorValue) {
+		//TODO Populate 
+	}
+
 	public void setDriveLeft(double speed)
 	{
 		

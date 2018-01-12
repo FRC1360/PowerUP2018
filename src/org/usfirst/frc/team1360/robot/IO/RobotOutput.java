@@ -54,6 +54,10 @@ public class RobotOutput implements RobotOutputProvider {
 		intakeClamp.set(clamp);
 	}
 	
+	public void setElevatorMotor(double motorValue) {
+		//TODO Populate 
+	}
+
 	public void setDriveLeft(double speed)
 	{
 		

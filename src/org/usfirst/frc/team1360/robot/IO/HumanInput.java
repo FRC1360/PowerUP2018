@@ -200,4 +200,12 @@ public class HumanInput implements HumanInputProvider {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	//TODO Operator Controls
+	
+	public double getElevator()
+	{
+		return this.operator.getY(Hand.kLeft);
+	}
+
 }

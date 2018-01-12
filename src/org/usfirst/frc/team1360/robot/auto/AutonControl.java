@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.usfirst.frc.team1360.robot.auto.providers.SelectionProvider;
-import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.auto.routines.DriveToBaseline;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class AutonControl {
-	private static SelectionProvider provider;
 	public static ArrayList<AutonRoutine> routines = new ArrayList<>();
 	private static int selectedIndex = 0;
 	private static boolean lastInc = false;
@@ -23,15 +23,12 @@ public class AutonControl {
 		routines.add(new CrossBaseline("Cross Baseline", 0));
 	}
 	
-	public static void configure(SelectionProvider provider)
-	{
-		AutonControl.provider = provider;
-	}
-	
 	public static void select()
 	{
-		boolean inc = provider.getAutoInc();
-		boolean dec = provider.getAutoDec();
+		HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
+		
+		boolean inc = humanInput.getAutoInc();
+		boolean dec = humanInput.getAutoDec();
 		
 		if (inc && !lastInc && selectedIndex < routines.size() - 1)
 		{

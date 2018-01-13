@@ -7,7 +7,7 @@ package org.usfirst.frc.team1360.robot.IO;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
-import org.usfirst.frc.team1360.robot.auto.providers.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -200,30 +200,4 @@ public class SensorInput implements SensorInputProvider {
 	}
 
 
-	@Override
-	public double getClimberFrontCurrent() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public double getClimberBackCurrent() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int getPivotEncoder() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public void resetPivotEncoder() {
-		// TODO Auto-generated method stub
-		
-	}
 }

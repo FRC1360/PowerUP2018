@@ -5,8 +5,8 @@ import org.usfirst.frc.team1360.robot.util.GetFMS;
 
 public class SwitchMiddle extends AutonRoutine {
 
-	public SwitchMiddle(String name, long timeout) {
-		super(name, timeout);
+	public SwitchMiddle() {
+		super("Switch (middle)", 0);
 		// TODO Auto-generated constructor stub
 	}
 

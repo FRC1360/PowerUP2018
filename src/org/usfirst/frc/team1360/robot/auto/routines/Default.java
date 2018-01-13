@@ -4,8 +4,8 @@ import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 
 public class Default extends AutonRoutine {
 
-	public Default(String name, long timeout) {
-		super(name, timeout);
+	public Default() {
+		super("Default", 0);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -5,8 +5,8 @@ import org.usfirst.frc.team1360.robot.util.GetFMS;
 
 public class SwitchRight extends AutonRoutine{
 
-	public SwitchRight(String name, long timeout) {
-		super(name, timeout);
+	public SwitchRight() {
+		super("Switch (right)", 0);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -33,11 +33,11 @@ public class AutonControl {
 	{
 		routines.clear();
 		routines.add(new Demo());
-		routines.add(new CrossBaseline("Cross Baseline", 0));
-		routines.add(new Default("Do Nothing", 1));
-		routines.add(new SwitchLeft("Left Auto Scale", 2));
-		routines.add(new SwitchMiddle("Middle Auto Switch", 3));
-		routines.add(new SwitchRight("Right Auto Scale", 4));
+		routines.add(new CrossBaseline());
+		routines.add(new Default());
+		routines.add(new SwitchLeft());
+		routines.add(new SwitchMiddle());
+		routines.add(new SwitchRight());
 	}
 	
 	public static void select()

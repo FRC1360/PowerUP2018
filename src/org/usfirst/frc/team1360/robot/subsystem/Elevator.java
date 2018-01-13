@@ -129,7 +129,7 @@ public class Elevator implements ElevatorProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				
+			while (true) {	
 				if (context.getArg() instanceof Double) {
 					
 					double speed = (Double) context.getArg();
@@ -152,6 +152,7 @@ public class Elevator implements ElevatorProvider{
 						else {ElevatorStateMachine.setState(STATE_HOLD, target);}
 					}
 				}	
+			}
 			}
 		};
 		

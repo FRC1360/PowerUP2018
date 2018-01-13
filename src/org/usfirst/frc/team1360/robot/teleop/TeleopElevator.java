@@ -22,7 +22,7 @@ public class TeleopElevator implements TeleopComponent {
 	@Override
 	public void disable() {
 		// TODO Auto-generated method stub
-		elevator.set
+		elevator.setidle();
 	}
 
 	@Override

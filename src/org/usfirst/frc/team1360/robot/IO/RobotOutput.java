@@ -131,6 +131,4 @@ public class RobotOutput implements RobotOutputProvider {
 		driveShift.set(false);
 		
 	}
-
-
 }

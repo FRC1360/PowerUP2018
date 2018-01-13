@@ -26,6 +26,12 @@ public class AutonControl {
 	
 	static
 	{
+		setup();
+	}
+	
+	private static void setup()
+	{
+		routines.clear();
 		routines.add(new Demo());
 		routines.add(new CrossBaseline("Cross Baseline", 0));
 		routines.add(new Default("Do Nothing", 1));
@@ -100,6 +106,7 @@ public class AutonControl {
 		});
 		autoThreads.clear();
 		scheduler.shutdownNow();
+		setup();
 	}
 	
 	public static void schedule(AutonRunnable runnable, long period)

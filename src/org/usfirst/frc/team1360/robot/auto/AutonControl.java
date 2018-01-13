@@ -7,10 +7,13 @@ import java.util.concurrent.TimeUnit;
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 import org.usfirst.frc.team1360.robot.auto.routines.Default;
+import org.usfirst.frc.team1360.robot.auto.routines.Demo;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchLeft;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchMiddle;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchRight;
+import org.usfirst.frc.team1360.robot.auto.routines.Test;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 public class AutonControl {
 	public static ArrayList<AutonRoutine> routines = new ArrayList<>();
@@ -24,11 +27,19 @@ public class AutonControl {
 	
 	static
 	{
-		routines.add(new CrossBaseline("Cross Baseline", 0));
-		routines.add(new Default("Do Nothing", 1));
-		routines.add(new SwitchLeft("Left Auto Scale", 2));
-		routines.add(new SwitchMiddle("Middle Auto Switch", 3));
-		routines.add(new SwitchRight("Right Auto Scale", 4));
+		setup();
+	}
+	
+	private static void setup()
+	{
+		routines.clear();
+		routines.add(new Test());
+		routines.add(new Demo());
+		routines.add(new CrossBaseline());
+		routines.add(new Default());
+		routines.add(new SwitchLeft());
+		routines.add(new SwitchMiddle());
+		routines.add(new SwitchRight());
 	}
 	
 	public static void select()
@@ -79,7 +90,9 @@ public class AutonControl {
 		startTime = System.currentTimeMillis();
 		if (selectedIndex < routines.size())
 		{
-			routines.get(selectedIndex).runNow("");
+			AutonRoutine routine = routines.get(selectedIndex);
+			Singleton.get(LogProvider.class).write("Starting auto: " + routine.toString());
+			routine.runNow("");
 		}
 	}
 	
@@ -95,6 +108,7 @@ public class AutonControl {
 		});
 		autoThreads.clear();
 		scheduler.shutdownNow();
+		setup();
 	}
 	
 	public static void schedule(AutonRunnable runnable, long period)

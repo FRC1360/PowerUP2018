@@ -11,7 +11,7 @@ import org.usfirst.frc.team1360.robot.util.SingletonStatic;
 
 @SingletonStatic("configure")
 @SingletonSee(OrbitPositionProvider.class)
-public final class DriveEncoderPositionProvider implements OrbitPositionProvider {
+public final class HybridPositionProvider implements OrbitPositionProvider {
 	private final ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1);
 	private final SensorInputProvider sensorInput;
 	
@@ -28,12 +28,12 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	private volatile double y;
 	private volatile double a;
 	
-	public static DriveEncoderPositionProvider configure()
+	public static HybridPositionProvider configure()
 	{
-		return new DriveEncoderPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+		return new HybridPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
 	}
 	
-	public DriveEncoderPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {
+	public HybridPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {
 		this.sensorInput = Singleton.get(SensorInputProvider.class);
 		this.period = period;
 		this.driveWidth = driveWidth;
@@ -44,7 +44,7 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 		scheduler.prestartAllCoreThreads();
 	}
 	
-	public DriveEncoderPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation) {
+	public HybridPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation) {
 		this(period, driveWidth, wheelDiameter, gearRatio, ticksPerRotation, 0, 0, 0);
 	}
 	
@@ -55,7 +55,8 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 		double dl = (left - lastLeft) * inchesPerTick;
 		double dr = (right - lastRight) * inchesPerTick;
 		
-		double da = (dl - dr) / driveWidth;
+//		double da = (dl - dr) / driveWidth;
+		double da = sensorInput.getAHRSYaw() * Math.PI / 180 - a;
 		double da2 = 0.5 * da;
 		
 		double d;

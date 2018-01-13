@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
-import javax.management.openmbean.SimpleType;
-
-import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;

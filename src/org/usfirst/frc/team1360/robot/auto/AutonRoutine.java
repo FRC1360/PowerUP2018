@@ -5,6 +5,9 @@ import java.util.HashMap;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 public abstract class AutonRoutine extends Thread {
 	private final String name;
@@ -13,6 +16,11 @@ public abstract class AutonRoutine extends Thread {
 	private final ArrayList<AutonRoutine> queue = new ArrayList<>();
 	private static final HashMap<String, AutonRoutine> map = new HashMap<>();
 	private boolean done;
+	
+	protected LogProvider log = Singleton.get(LogProvider.class);
+	protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+	protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+	protected OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
 	
 	public AutonRoutine(String name, long timeout)
 	{

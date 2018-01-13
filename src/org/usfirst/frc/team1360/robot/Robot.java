@@ -36,8 +36,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		sensorInput = Singleton.get(SensorInputProvider.class);
-		sensorInput.resetLeftEncoder();
-		sensorInput.resetRightEncoder();
+		sensorInput.reset();
 		position = Singleton.get(OrbitPositionProvider.class);
 		position.start();
 	}
@@ -64,6 +63,11 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
+		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("X", position.getX());
+		SmartDashboard.putNumber("Y", position.getY());
+		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
 	}
 
 	@Override

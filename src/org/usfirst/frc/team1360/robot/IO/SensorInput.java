@@ -159,6 +159,8 @@ public class SensorInput implements SensorInputProvider {
 	public void reset() // Reset NavX and encoders
 	{
 		this.resetAHRS();
+		this.resetLeftEncoder();
+		this.resetRightEncoder();
 	}
 
 	@Override

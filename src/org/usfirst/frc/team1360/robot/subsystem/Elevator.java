@@ -212,6 +212,12 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
+	public void Sethold(int target, int seconds) {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_HOLD, target);
+		} catch (InterruptedException e) {e.printStackTrace();}
+	}
 	@Override
 	public void setrising(int target) {
 		// TODO Auto-generated method stub

@@ -2,6 +2,7 @@ package org.usfirst.frc.team1360.robot.subsystem;
 
 import java.util.function.Consumer;
 
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
@@ -40,7 +41,8 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
 				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-				
+				Elevator elevatorclass = Singleton.get(Elevator.class);
+				while (ElevatorStateMachine.getState() == ElevatorState.STATE_RISING) {
 				if (context.getArg() instanceof Double) {
 					
 					double speed = (Double) context.getArg();
@@ -62,9 +64,11 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 						}
 						else {
 							ElevatorStateMachine.setState(STATE_HOLD, target);
+							
 						}
 					}
-				}	
+				}
+				}
 				}
 			
 		},
@@ -75,6 +79,10 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 				// TODO Auto-generated method stub
 				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 				SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+				HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
+				
+				while (humanInput.deadzone(humanInput.getElevator()) == 0) {
+				
 				int target = 0;
 				boolean StayAtTop = false;
 				
@@ -101,6 +109,7 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 			
 				
 				else {
+					
 					if (sensorInput.getElevatorTick() > target )
 					{
 						robotOutput.setElevatorMotor(-0.05);
@@ -109,6 +118,7 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 					{
 						robotOutput.setElevatorMotor(0.05);
 					}
+				}
 				}
 			}
 			
@@ -212,11 +222,19 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
-	public void Sethold(int target, int seconds) {
+	public void Sethold(int target, int millisec) {
 		// TODO Auto-generated method stub
-		try {
-			ElevatorStateMachine.setState(ElevatorState.STATE_HOLD, target);
-		} catch (InterruptedException e) {e.printStackTrace();}
+		int currenttime = 0;
+		while(currenttime <= millisec) {
+			
+			try {
+				ElevatorStateMachine.setState(ElevatorState.STATE_HOLD, target);
+			} catch (InterruptedException e) {e.printStackTrace();}
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {e.printStackTrace();}
+			currenttime++;
+		}
 	}
 	@Override
 	public void setrising(int target) {
@@ -249,6 +267,23 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 			ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, target);
 		} catch (InterruptedException e) {e.printStackTrace();}
 	}
+
+	@Override
+	public void sethold(int target, int millisec) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setidle()  {
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_IDLE);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
 
 }

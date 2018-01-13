@@ -15,6 +15,8 @@ public interface ElevatorProvider {
 	
 	void Sethold(int target);
 	
+	void sethold(int target, int millisec);
+	
 	void setrising(int target);
 	
 	void setrising(double speed);
@@ -22,4 +24,6 @@ public interface ElevatorProvider {
 	void setdescending(double speed);
 	
 	void setdescending(int target);
+	
+	void setidle();
 }

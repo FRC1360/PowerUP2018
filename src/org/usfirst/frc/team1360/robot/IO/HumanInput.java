@@ -215,4 +215,10 @@ public class HumanInput implements HumanInputProvider {
 		return 0;
 	}
 
+	@Override
+	public double deadzone(double Input) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

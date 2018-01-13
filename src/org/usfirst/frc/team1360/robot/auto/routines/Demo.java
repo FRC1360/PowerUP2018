@@ -25,6 +25,8 @@ public final class Demo extends AutonRoutine {
 //		robotOutput.setDriveRight(0.0);
 		robotOutput.arcadeDrivePID(0.5, 0);
 		while (position.getY() < 60) Thread.sleep(10);
+		robotOutput.arcadeDrivePID(0, 0);
+		Thread.sleep(1000);
 		robotOutput.arcadeDrivePID(0, 0.5);
 		while (position.getA() < Math.PI / 2) Thread.sleep(10);
 		robotOutput.arcadeDrivePID(0, 0);

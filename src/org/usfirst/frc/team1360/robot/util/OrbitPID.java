@@ -1,101 +1,56 @@
-	package org.usfirst.frc.team1360.robot.util;
+package org.usfirst.frc.team1360.robot.util;
 
 public class OrbitPID {
+	private double kP, kI, kD, kIInner, kIOuter, minOut, maxOut;
+	private double integral;
+	private double lastInput;
+	private long lastTime;
 	
-	private double P;
-	private double I;
-	private double D;
-	private double errorEps;
-
-	private double Error;
-	
-	private double Input;
-	private double Output;
-	private double Setpoint;
-	
-	private long PreviousTime;
-
-	private double ErrorSum;
-	private double PError;
-	private double IError;
-	private double DError;
-	
-	private double previousSetpoint;
-	
-	public OrbitPID(double constantP, double constantI, double constantD, double constantEps)
-	{
-		this.P = constantP;
-		this.I = constantI;
-		this.D = constantD;
-		this.errorEps = constantEps;
+	public OrbitPID(double kP, double kI, double kD) {
+		this(kP, kI, kD, Double.NaN, Double.NaN, Double.NaN, Double.NaN);
 	}
-
-	public void SetConstants(double constantP, double constantI, double constantD)
-	{
-		this.P = constantP;
-		this.I = constantI;
-		this.D = constantD;
+	
+	public OrbitPID(double kP, double kI, double kD, double kIInner, double kIOuter, double minOut, double maxOut) {
+		configure(kP, kI, kD, kIInner, kIOuter, minOut, maxOut);
 	}
-
-	public void SetP(double constantP) { this.P = constantP; }
-	public double GetP() { return P; }
-
-	public void SetI(double constantI) { this.I = constantI; }
-	public double GetI() { return I; }
-
-	public void SetD(double constantD) { this.D = constantD; }
-	public double GetD() { return D; }
 	
-	public void SetEps(double constantEps) {this.errorEps = constantEps;}
-	public double GetEps() {return errorEps;}
-	
-	public void SetInput(double input) { this.Input = input; }
-	public double GetInput() { return Input; }
-	
-	public double GetOutput() { return Output; }
-	
-	public void SetSetpoint(double setpoint)
-	{ 
-		this.Setpoint = setpoint; 
-		if(this.Setpoint != this.previousSetpoint)
-		{
-			IError = 0;
-		}
-		this.previousSetpoint = this.Setpoint;
+	public void configure(double kP, double kI, double kD, double kIInner, double kIOuter, double minOut, double maxOut) {
+		this.kP = kP;
+		this.kI = kI;
+		this.kD = kD;
+		this.kIInner = kIInner;
+		this.kIOuter = kIOuter;
+		this.minOut = minOut;
+		this.maxOut = maxOut;
+		this.lastInput = Double.NaN;
+		this.lastTime = -1;
 	}
-	public double GetSetpoint() { return Setpoint; }
 	
-	public double GetError() { return Error; }
-	
-	public void CalculateError()
-	{
-		// Source: http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
-		long CurrentTime = System.currentTimeMillis();
-		double TimeSinceLastCalculate = (double)(CurrentTime - PreviousTime);
+	public double calculate(double target, double input) {
+		double error = target - input;
+		long time = System.nanoTime();
 		
-		// Compute the error components for the P, I, and D terms.
-		PError = Setpoint - Input;
+		double out = kP * error;
 		
-		if((Math.abs(PError)< this.errorEps))
+		if (lastTime != -1)
 		{
-			IError = IError * 1;
+			long dt = time - lastTime;
+			if (kI != 0 && (kIInner == Double.NaN || Math.abs(error) >= kIInner) && (kIOuter == Double.NaN || Math.abs(error) <= kIOuter)) {
+				integral += error * dt;
+				out += kI * integral;
+			}
+			out += kD * (input - lastInput) / dt;
 		}
-		else if(PError > 0)
-		{
-			IError = IError + Math.min((PError * TimeSinceLastCalculate), 10);
-		}
-		else
-		{
-			IError = IError + Math.max((PError * TimeSinceLastCalculate), -10);
-		}
-		DError = (PError - Error) / TimeSinceLastCalculate;
 		
-		// Compute the output.
-		Output = P * PError + I * IError + D * DError;
+		lastInput = input;
+		lastTime = time;
 		
-		Error = PError;
-		PreviousTime = CurrentTime;
+		if (Math.abs(out) < minOut)
+			out = 0;
+		else if (Math.abs(out) > maxOut)
+			out = Math.copySign(maxOut, out);
 		
+		return out;
 	}
 }
  

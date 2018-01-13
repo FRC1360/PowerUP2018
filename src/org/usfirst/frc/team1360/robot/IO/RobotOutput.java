@@ -23,28 +23,31 @@ public class RobotOutput implements RobotOutputProvider {
 	private Solenoid intakeClamp;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
+	
 	private LogProvider log;
 	
-	private RobotOutput() //Instantiates all motors and solenoid
+	public RobotOutput() //Instantiates all motors and solenoid
 	{
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
 		//TODO Add Victor port numbers
 		leftDrive1 = new Victor(0);
-		leftDrive2 = new Victor(0);
-		leftDrive3 = new Victor(0);
-		rightDrive1 = new Victor(0);
-		rightDrive2 = new Victor(0);
-		rightDrive3 = new Victor(0);
-		leftIntake = new Victor(0);
-		rightIntake = new Victor(0);
-		driveShift = new Solenoid(0);
-		intakeClamp = new Solenoid(0);
+		leftDrive2 = new Victor(1);
+		leftDrive3 = new Victor(5);
+		rightDrive1 = new Victor(2);
+		rightDrive2 = new Victor(3);
+		rightDrive3 = new Victor(4);
+		leftIntake = new Victor(6);
+		rightIntake = new Victor(7);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
 		leftDrive3.setInverted(true);
+		log.write("Done motors");
+		
+		driveShift = new Solenoid(0);
+		intakeClamp = new Solenoid(1);
 		log.write("Done RobotOutput");
 	}
   
@@ -69,19 +72,21 @@ public class RobotOutput implements RobotOutputProvider {
 
 	public void setDriveLeft(double speed)
 	{
-		
+		log.write("LEFT " + speed);
+		SmartDashboard.putNumber("DL", speed);
 		leftDrive1.set(speed);
 		leftDrive2.set(speed);
-		leftDrive3.set(speed);
+//		leftDrive3.set(speed);
 		SmartDashboard.putNumber("Left Voltage", -speed);
 	}
 	
 	public void setDriveRight(double speed) //Set speed of right motors
 	{
-		
+		log.write("RIGHT " + speed);
+		SmartDashboard.putNumber("DR", speed);
 		rightDrive1.set(speed);
 		rightDrive1.set(speed);
-		rightDrive1.set(speed);
+//		rightDrive1.set(speed);
 		SmartDashboard.putNumber("Right Voltage", speed);
 	}
 	

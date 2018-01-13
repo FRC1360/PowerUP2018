@@ -19,27 +19,34 @@ public final class Singleton {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Class<T> clazz) {
-		SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
-		if (see != null) {
-			return (T) get(see.value());
-		}
-		return (T) objects.computeIfAbsent(clazz, c -> {
-			try {
-				while (true) {
-					SingletonType type = c.getAnnotation(SingletonType.class);
-					if (type != null) {
-						c = type.value();
-						continue;
-					}
-					SingletonStatic _static = c.getAnnotation(SingletonStatic.class);
-					if (_static != null)
-						return c.getMethod(_static.value()).invoke(null);
-					break;
-				}
-				return c.getConstructor().newInstance();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+		synchronized (objects) {
+			SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
+			if (see != null) {
+				return (T) get(see.value());
 			}
-		});
+			return (T) objects.computeIfAbsent(clazz, c -> {
+				try {
+					while (true) {
+						System.out.println(c.getCanonicalName());
+						SingletonType type = c.getAnnotation(SingletonType.class);
+						if (type != null) {
+							c = type.value();
+							continue;
+						}
+						SingletonStatic _static = c.getAnnotation(SingletonStatic.class);
+						if (_static != null)
+							return c.getMethod(_static.value()).invoke(null);
+						break;
+					}
+					return c.getConstructor().newInstance();
+				} catch (Exception e) {
+					Throwable t = e.getCause();
+					if (t != null)
+						t.printStackTrace();
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			});	
+		}
 	}
 }

@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.util.SingletonType;
+
+@SingletonType(SensorInput.class)
 public interface SensorInputProvider {
 	double getAHRSYaw();
 	double getAHRSPitch();

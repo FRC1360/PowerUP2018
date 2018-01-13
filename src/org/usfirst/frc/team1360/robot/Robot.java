@@ -7,6 +7,12 @@
 
 package org.usfirst.frc.team1360.robot;
 
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.auto.AutonControl;
+import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.SingletonStatic;
+import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,11 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
+@SingletonStatic
 public class Robot extends TimedRobot {
-	private static final String kDefaultAuto = "Default";
-	private static final String kCustomAuto = "My Auto";
-	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
+	private SensorInputProvider sensorInput;
+	private OrbitPositionProvider position;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -30,9 +35,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		m_chooser.addDefault("Default Auto", kDefaultAuto);
-		m_chooser.addObject("My Auto", kCustomAuto);
-		SmartDashboard.putData("Auto choices", m_chooser);
+		sensorInput = Singleton.get(SensorInputProvider.class);
+		sensorInput.reset();
+		position = Singleton.get(OrbitPositionProvider.class);
+		position.start();
 	}
 
 	/**
@@ -48,10 +54,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autoSelected = m_chooser.getSelected();
-		// m_autoSelected = SmartDashboard.getString("Auto Selector",
-		// 		kDefaultAuto);
-		System.out.println("Auto selected: " + m_autoSelected);
+//		position.start();
+		AutonControl.start();
 	}
 
 	/**
@@ -59,22 +63,42 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		switch (m_autoSelected) {
-			case kCustomAuto:
-				// Put custom auto code here
-				break;
-			case kDefaultAuto:
-			default:
-				// Put default auto code here
-				break;
-		}
+		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
+		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("X", position.getX());
+		SmartDashboard.putNumber("Y", position.getY());
+		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
 	}
 
+	@Override
+	public void teleopInit() {
+		AutonControl.stop();
+//		position.stop();
+	}
+	
 	/**
 	 * This function is called periodically during operator control.
 	 */
 	@Override
 	public void teleopPeriodic() {
+		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
+		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+	}
+	
+	@Override
+	public void disabledInit() {
+		AutonControl.stop();
+//		position.stop();
+	}
+	
+	@Override
+	public void disabledPeriodic() {
+		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
+		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("X", position.getX());
+		SmartDashboard.putNumber("Y", position.getY());
+		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		AutonControl.select();
 	}
 
 	/**

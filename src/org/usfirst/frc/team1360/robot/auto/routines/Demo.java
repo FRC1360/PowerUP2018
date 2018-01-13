@@ -1,12 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
-import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
-import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.DrivePIDEncoder;
-import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
-import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 public final class Demo extends AutonRoutine {
 	public Demo() {

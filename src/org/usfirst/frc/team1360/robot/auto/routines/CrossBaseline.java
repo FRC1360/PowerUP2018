@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.DrivePIDEncoder;
 
 public class CrossBaseline extends AutonRoutine{
 
@@ -14,7 +13,7 @@ public class CrossBaseline extends AutonRoutine{
 	protected void runCore() throws InterruptedException 
 	{
 		//Drive Forward until Baseline broken
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+//		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
 
 		
 		

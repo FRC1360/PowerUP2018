@@ -14,39 +14,31 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class Elevator implements ElevatorProvider{
-
-SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-	
-	static double ElevatorSpeed;
-	
+	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+	private static double ElevatorSpeed;
 	
 	public static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
 		//sets motors to 0
 		STATE_IDLE {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				// TODO Auto-generated method stub
-				robotOutput.setElevatorMotor(0);
+				// TODO Auto-generated method stub				robotOutput.setElevatorMotor(0);
 			}
-
-
-			
 		},
 		
 		STATE_RISING {
-/*
- * (non-Javadoc)
- * @see org.usfirst.frc.team1360.robot.util.OrbitStateMachineState#run(org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext)
- * 
- * used when rising to a target, in autor
- * can be passed a double for speed, in teleop.
- * runs while the state is unchanged, state can be changed outside of rising state,
- * state is also changed to hold when target is reached, with the target passed to hold
- */
+			/*
+			 * (non-Javadoc)
+			 * @see org.usfirst.frc.team1360.robot.util.OrbitStateMachineState#run(org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext)
+			 * 
+			 * used when rising to a target, in autor
+			 * can be passed a double for speed, in teleop.
+			 * runs while the state is unchanged, state can be changed outside of rising state,
+			 * state is also changed to hold when target is reached, with the target passed to hold
+			 */
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				// TODO Auto-generated method stub
-				while (ElevatorStateMachine.getState() == ElevatorState.STATE_RISING) {
+				while (true) {
 				if (context.getArg() instanceof Double) {
 					
 					double speed = (Double) context.getArg();
@@ -161,13 +153,13 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 					}
 				}	
 			}
-			};
+		};
 		
 		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		protected Elevator elevatorclass = Singleton.get(Elevator.class);
 			
-		};
+	};
 
 		
 

@@ -98,6 +98,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		AutonControl.select();
 	}
 
 	/**

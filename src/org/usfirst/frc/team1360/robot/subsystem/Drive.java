@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
-import org.usfirst.frc.team1360.robot.auto.providers.RobotOutputProvider;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class Drive implements DriveProvider {

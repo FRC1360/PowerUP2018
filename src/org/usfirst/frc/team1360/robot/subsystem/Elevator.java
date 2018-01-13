@@ -129,30 +129,27 @@ public class Elevator implements ElevatorProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-			while (true) {	
-				if (context.getArg() instanceof Double) {
-					
-					double speed = (Double) context.getArg();
-					
-					robotOutput.setElevatorMotor(speed);
-				
-				}
-				else {
-				
-					int target = (int) context.getArg();
-				
-					if (sensorInput.getElevatorTick() > target)
-					{
-						robotOutput.setElevatorMotor(-0.5);
-					}
-					if (sensorInput.getElevatorTick() <= target)
-					{
-						if(target == 0) {ElevatorStateMachine.setState(STATE_IDLE);}
+				while (true) {	
+					if (context.getArg() instanceof Double) {
+						double speed = (Double) context.getArg();
 						
-						else {ElevatorStateMachine.setState(STATE_HOLD, target);}
+						robotOutput.setElevatorMotor(speed);
 					}
-				}	
-			}
+					else {
+						int target = (int) context.getArg();
+					
+						if (sensorInput.getElevatorTick() > target)
+						{
+							robotOutput.setElevatorMotor(-0.5);
+						}
+						if (sensorInput.getElevatorTick() <= target)
+						{
+							if(target == 0) {ElevatorStateMachine.setState(STATE_IDLE);}
+							
+							else {ElevatorStateMachine.setState(STATE_HOLD, target);}
+						}
+					}	
+				}
 			}
 		};
 		

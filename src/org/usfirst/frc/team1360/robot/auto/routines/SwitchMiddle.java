@@ -22,32 +22,28 @@ public class SwitchMiddle extends AutonRoutine {
 		
 		if(fms.plateLeft(0)) {
 		
-		//Pivot a little counterclockwise
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Drive Forward
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Pivot a little clockwise
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Drive a little forward
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Release Cube
-		
-
-		
+			//Pivot a little counterclockwise
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Drive Forward
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Pivot a little clockwise
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Drive a little forward
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Release Cube
 			
 		} else {
-		
-		
-		//Pivot a little clockwise
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Drive Forward
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Pivot a little counterclockwise
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Drive a little forward
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Release Cube
-		
+			
+			//Pivot a little clockwise
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Drive Forward
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Pivot a little counterclockwise
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Drive a little forward
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Release Cube
+			
 		}
 	}
 

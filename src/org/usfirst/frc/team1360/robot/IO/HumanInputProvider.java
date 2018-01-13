@@ -57,7 +57,7 @@ public interface HumanInputProvider {
 
 	double getElevator();
 
-	double deadzone(double Input);
+	double deadzone(double Input, double deadzone);
 
 	
 

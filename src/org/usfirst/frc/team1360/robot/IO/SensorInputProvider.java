@@ -22,5 +22,5 @@ public interface SensorInputProvider {
 	void reset();
 	int getElevatorTick();
 	boolean getTopSwitch();
-	
+	boolean getBottomSwtich();
 }

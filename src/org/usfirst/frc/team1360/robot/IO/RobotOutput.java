@@ -54,6 +54,7 @@ public class RobotOutput implements RobotOutputProvider {
 		intakeClamp.set(clamp);
 	}
 	
+	//set the speed of the elevator motors
 	@Override
 	public void setElevatorMotor(double motorValue) {
 		//TODO Populate 

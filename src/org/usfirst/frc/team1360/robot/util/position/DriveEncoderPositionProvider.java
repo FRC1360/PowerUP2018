@@ -5,7 +5,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.SingletonStatic;
 
+@SingletonStatic("configure")
+@SingletonSee(OrbitPositionProvider.class)
 public final class DriveEncoderPositionProvider implements OrbitPositionProvider {
 	private final ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1);
 	private final SensorInputProvider sensorInput;
@@ -23,8 +28,13 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	private volatile double y;
 	private volatile double a;
 	
-	public DriveEncoderPositionProvider(SensorInputProvider sensorInput, int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {
-		this.sensorInput = sensorInput;
+	public static DriveEncoderPositionProvider configure()
+	{
+		return new DriveEncoderPositionProvider(10_000, 30.5, 4.0, 22.0 / 16.0, 250);
+	}
+	
+	public DriveEncoderPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {
+		this.sensorInput = Singleton.get(SensorInputProvider.class);
 		this.period = period;
 		this.driveWidth = driveWidth;
 		this.inchesPerTick = Math.PI * wheelDiameter * gearRatio / ticksPerRotation;
@@ -34,8 +44,8 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 		scheduler.prestartAllCoreThreads();
 	}
 	
-	public DriveEncoderPositionProvider(SensorInputProvider sensorInput, int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation) {
-		this(sensorInput, period, driveWidth, wheelDiameter, gearRatio, ticksPerRotation, 0, 0, 0);
+	public DriveEncoderPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation) {
+		this(period, driveWidth, wheelDiameter, gearRatio, ticksPerRotation, 0, 0, 0);
 	}
 	
 	private synchronized void loop() {

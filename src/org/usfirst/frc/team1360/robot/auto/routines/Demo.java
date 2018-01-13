@@ -22,15 +22,21 @@ public final class Demo extends AutonRoutine {
 		LogProvider log = Singleton.get(LogProvider.class);
 		RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-		log.write("Left");
-		sensorInput.resetLeftEncoder();
-		robotOutput.setDriveLeft(0.2);
-		while (sensorInput.getLeftDriveEncoder() < 1818) Thread.sleep(10);
-		robotOutput.setDriveLeft(0);
-		log.write("Right");
-		sensorInput.resetRightEncoder();
-		robotOutput.setDriveRight(0.2);
-		while (sensorInput.getRightDriveEncoder() < 1818) Thread.sleep(10);
-		robotOutput.setDriveRight(0.0);
+//		log.write("Left");
+//		sensorInput.resetLeftEncoder();
+//		robotOutput.setDriveLeft(0.2);
+//		while (sensorInput.getLeftDriveEncoder() < 1818) Thread.sleep(10);
+//		robotOutput.setDriveLeft(0);
+//		log.write("Right");
+//		sensorInput.resetRightEncoder();
+//		robotOutput.setDriveRight(0.2);
+//		while (sensorInput.getRightDriveEncoder() < 1818) Thread.sleep(10);
+//		robotOutput.setDriveRight(0.0);
+		OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
+		robotOutput.arcadeDrivePID(0.5, 0);
+		while (position.getY() < 60) Thread.sleep(10);
+		robotOutput.arcadeDrivePID(0, 0.5);
+		while (position.getA() < Math.PI / 2) Thread.sleep(10);
+		robotOutput.arcadeDrivePID(0, 0);
 	}
 }

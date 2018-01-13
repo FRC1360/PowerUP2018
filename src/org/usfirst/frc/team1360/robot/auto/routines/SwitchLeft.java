@@ -21,13 +21,12 @@ public class SwitchLeft extends AutonRoutine{
 		//Extend Elevator
 		
 		if(fms.plateLeft(0)) {
-
-		//Pivot to the Right
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Drive a little forward
-		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
-		//Release Cube
-		
+			//Pivot to the Right
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Drive a little forward
+			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+			//Release Cube
+			
 		} else if(fms.plateLeft(1)) {
 			//Extend Elevator More
 			//Drive Forward
@@ -38,12 +37,10 @@ public class SwitchLeft extends AutonRoutine{
 			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
 			//Release Cube
 			
-			
 		} else { 
 			//Do Nothing
 		}
-		
-		
+	
 	}
 
 }

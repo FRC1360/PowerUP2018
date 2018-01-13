@@ -21,7 +21,6 @@ public class SwitchMiddle extends AutonRoutine {
 		//Extend Elevator
 		
 		if(fms.plateLeft(0)) {
-		
 			//Pivot a little counterclockwise
 			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
 			//Drive Forward
@@ -33,7 +32,6 @@ public class SwitchMiddle extends AutonRoutine {
 			//Release Cube
 			
 		} else {
-			
 			//Pivot a little clockwise
 			new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
 			//Drive Forward

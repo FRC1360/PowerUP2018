@@ -23,8 +23,6 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	public static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
 		//sets motors to 0
 		STATE_IDLE {
-			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-			
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
@@ -48,8 +46,6 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-				Elevator elevatorclass = Singleton.get(Elevator.class);
 				while (ElevatorStateMachine.getState() == ElevatorState.STATE_RISING) {
 				if (context.getArg() instanceof Double) {
 					
@@ -61,11 +57,11 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 				else {
 					int target = (int) context.getArg();
 				
-					if (SensorInput.getInstance().getElevatorTick() < target)
+					if (sensorInput.getElevatorTick() < target)
 					{
 						robotOutput.setElevatorMotor(0.5);
 					}
-					if (SensorInput.getInstance().getElevatorTick() >= target)
+					if (sensorInput.getElevatorTick() >= target)
 					{
 						if (target == 1000) {
 							ElevatorStateMachine.setState(STATE_HOLD, new Boolean(true));
@@ -89,11 +85,7 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
-				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-				SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-				HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
-				
-				while (humanInput.deadzone(humanInput.getElevator(), 0.1) == 0) {
+				while (true) {
 				
 				int target = 0;
 				boolean StayAtTop = false;
@@ -142,8 +134,6 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	 * sets state to hold when target is reached or idle if target was 0
 	 */
 		STATE_DESCENDING{
-			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-			
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				// TODO Auto-generated method stub
@@ -159,11 +149,11 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 				
 					int target = (int) context.getArg();
 				
-					if (SensorInput.getInstance().getElevatorTick() > target)
+					if (sensorInput.getElevatorTick() > target)
 					{
 						robotOutput.setElevatorMotor(-0.5);
 					}
-					if (SensorInput.getInstance().getElevatorTick() <= target)
+					if (sensorInput.getElevatorTick() <= target)
 					{
 						if(target == 0) {ElevatorStateMachine.setState(STATE_IDLE);}
 						
@@ -171,7 +161,11 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 					}
 				}	
 			}
-			}
+			};
+		
+		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+		protected Elevator elevatorclass = Singleton.get(Elevator.class);
 			
 		};
 

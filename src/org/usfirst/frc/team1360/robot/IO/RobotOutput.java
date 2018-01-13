@@ -46,12 +46,12 @@ public class RobotOutput implements RobotOutputProvider {
 		driveShift.set(shift);
 	}
 	
-	public void setIntake(double speed) {
+	public void setIntake(double speed) {  // sets the speed of the rollers
 		leftIntake.set(speed);
 		rightIntake.set(speed);
 	}
 	
-	public void setClamp(boolean clamp) {
+	public void setClamp(boolean clamp) {  //sets whether the clamp is on or off
 		intakeClamp.set(clamp);
 	}
 	

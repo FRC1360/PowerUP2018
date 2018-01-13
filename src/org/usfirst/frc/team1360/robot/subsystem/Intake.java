@@ -14,7 +14,7 @@ public class Intake implements IntakeProvider {
 	
 	private static enum IntakeState implements OrbitStateMachineState<IntakeState>{
 		
-		INTAKE
+		INTAKE 	//clamp open and rollers running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
@@ -25,7 +25,7 @@ public class Intake implements IntakeProvider {
 			}
 			
 		},
-		CLOSED
+		CLOSED	//clamp closed and rollers not running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
@@ -35,7 +35,7 @@ public class Intake implements IntakeProvider {
 		    		robotOutput.setIntake(0);
 			}
 		},
-		IDLE
+		IDLE  //clamp open rollers not running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
@@ -54,7 +54,7 @@ public class Intake implements IntakeProvider {
 	public final int INTAKE = 0;
 	public final int CLOSED = 1;
 	
-	private int intakePosition = 2;
+	private int intakePosition = 2;   //starts in idle
 	
 	private OrbitStateMachine<IntakeState> machine = new OrbitStateMachine<IntakeState>(IntakeState.IDLE);
 	
@@ -62,7 +62,7 @@ public class Intake implements IntakeProvider {
 	public void setPosition(double position) {
 		// TODO Auto-generated method stub
 		
-	    if (position==INTAKE) {
+	    if (position==INTAKE) {  //keeps intake in given state (if already in idle the intake will stay in idle)
 	    	
 	    	intakePosition = INTAKE;
 	    	try {
@@ -94,7 +94,7 @@ public class Intake implements IntakeProvider {
 	}
 	
 	@Override 
-	public int getPosition(){
+	public int getPosition(){	// getter method for the state machine
 		return intakePosition;
 	}
 }

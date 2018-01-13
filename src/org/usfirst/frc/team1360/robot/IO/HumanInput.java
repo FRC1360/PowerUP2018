@@ -172,7 +172,7 @@ public class HumanInput implements HumanInputProvider {
 	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorClamp()
 	 */
     @Override
-	public boolean getOperatorClamp()
+	public boolean getOperatorClamp()	// getter method for clamp open or closed
     {
     		return operator.getAButton();
     }
@@ -182,7 +182,7 @@ public class HumanInput implements HumanInputProvider {
 	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorSpeed()
 	 */
     @Override
-	public double getOperatorSpeed() 
+	public double getOperatorSpeed() //getter method for intake roller speed
     {
     		return operator.getY(Hand.kLeft);
     }
@@ -202,7 +202,7 @@ public class HumanInput implements HumanInputProvider {
 
 	//TODO Operator Controls
 	
-	public double getElevator()
+	public double getElevator()	// getter method for the elevator
 	{
 		return this.operator.getY(Hand.kLeft);
 	}

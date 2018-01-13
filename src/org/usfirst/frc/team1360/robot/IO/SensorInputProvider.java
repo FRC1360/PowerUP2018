@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1360.robot.auto.providers;
+package org.usfirst.frc.team1360.robot.IO;
 
 public interface SensorInputProvider {
 	double getAHRSYaw();
@@ -9,18 +9,12 @@ public interface SensorInputProvider {
 	double getAHRSVelocityX();
 	double getAHRSVelocityY();
 	void resetAHRS();
-	double getClimberFrontCurrent();
-	double getClimberBackCurrent();
 	int getLeftDriveEncoder();
 	int getRightDriveEncoder();
-	int getPivotEncoder();
 	double getLeftEncoderVelocity();
 	double getRightEncoderVelocity();
 	void resetLeftEncoder();
 	void resetRightEncoder();
-	void resetPivotEncoder();
 	void calculate();
 	void reset();
-	int getElevatorTick();
-	boolean getTopSwitch();
 }

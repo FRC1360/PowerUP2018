@@ -1,7 +1,8 @@
 package org.usfirst.frc.team1360.robot.IO;
 
-import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
@@ -24,7 +25,12 @@ public class RobotOutput implements RobotOutputProvider {
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
 	
 	private RobotOutput() //Instantiates all motors and solenoid
+	private LogProvider log;
+	
 	{
+		log = Singleton.get(LogProvider.class);
+		log.write("Instantiating RobotOutput");
+		
 		//TODO Add Victor port numbers
 		leftDrive1 = new Victor(0);
 		leftDrive2 = new Victor(0);
@@ -40,6 +46,7 @@ public class RobotOutput implements RobotOutputProvider {
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
 		leftDrive3.setInverted(true);
+		log.write("Done RobotOutput");
 	}
   
 	public void shiftGear(boolean shift) {

@@ -13,7 +13,13 @@ public interface ElevatorProvider {
 	
 	void setspeed(double speed);
 	
+	void Sethold(int target);
 	
+	void setrising(int target);
 	
+	void setrising(double speed);
 	
+	void setdescending(double speed);
+	
+	void setdescending(int target);
 }

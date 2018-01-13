@@ -58,7 +58,7 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 					if (SensorInput.getInstance().getElevatorTick() >= target)
 					{
 						if (target == 1000) {
-							ElevatorStateMachine.setState(STATE_HOLD, 1001);
+							ElevatorStateMachine.setState(STATE_HOLD, new Boolean(true));
 						}
 						else {
 							ElevatorStateMachine.setState(STATE_HOLD, target);
@@ -75,12 +75,21 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 				// TODO Auto-generated method stub
 				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 				SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+				int target = 0;
+				boolean StayAtTop = false;
 				
-				int target = (int) context.getArg();
+			
+					if (context.getArg() instanceof Boolean) {
+						StayAtTop = (Boolean) context.getArg();
+					}
+					
+					else {target = (int) context.getArg();}
 				
-				if (target == 1001) {
-					if ( sensorInput.getTopSwitch() == true)
-					{
+				
+				
+				
+				if (StayAtTop ==  true) {
+					if ( sensorInput.getTopSwitch() == true){
 						robotOutput.setElevatorMotor(-0.05);
 					}
 					else 
@@ -94,11 +103,11 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 				else {
 					if (sensorInput.getElevatorTick() > target )
 					{
-						robotOutput.setElevatorMotor(-0.1);
+						robotOutput.setElevatorMotor(-0.05);
 					}
 					else 
 					{
-						robotOutput.setElevatorMotor(0.1);
+						robotOutput.setElevatorMotor(0.05);
 					}
 				}
 			}
@@ -193,6 +202,46 @@ SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	public void setspeed(double speed) {
 		// TODO Auto-generated method stub
 		ElevatorSpeed = speed;
+	}
+
+	@Override
+	public void Sethold(int target) {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_HOLD, target);
+		} catch (InterruptedException e) {e.printStackTrace();}
+	}
+
+	@Override
+	public void setrising(int target) {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, target);
+		} catch (InterruptedException e) {e.printStackTrace();}
+	}
+
+	@Override
+	public void setrising(double speed) {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, speed);
+		} catch (InterruptedException e) {e.printStackTrace();}
+	}
+
+	@Override
+	public void setdescending(double speed) {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, speed);
+		} catch (InterruptedException e) {e.printStackTrace();}
+	}
+
+	@Override
+	public void setdescending(int target) {
+		// TODO Auto-generated method stub
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, target);
+		} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
 

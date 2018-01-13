@@ -7,10 +7,12 @@ package org.usfirst.frc.team1360.robot.IO;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -23,6 +25,12 @@ public class SensorInput implements SensorInputProvider {
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
 	private AHRS ahrs; // NavX interface
 	
+	private Encoder leftDriveEnc;
+	private Encoder rightDriveEnc;
+	private Encoder elevatorEnc;
+	private DigitalInput bottomSwitch;
+	private DigitalInput topSwitch;
+	
 	// Drive PID values
 	public static final double driveP = 0.1;
 	public static final double driveI = 0.00005;
@@ -32,9 +40,15 @@ public class SensorInput implements SensorInputProvider {
 	private double[] ahrsValues = new double[7]; // Array to store data from NavX: yaw, pitch, roll, x acceleration (world frame), y acceleration (world frame), x velocity (local frame), y velocity (local frame)
 	private ConcurrentLinkedQueue<Runnable> ahrsThreadDispatchQueue = new ConcurrentLinkedQueue<>(); // Queue code to be run on ahrsThread
 	
-	private SensorInput()								//Constructor to initialize fields  
+	public SensorInput()								//Constructor to initialize fields  
 	{
 		PDP = new PowerDistributionPanel();
+		
+		leftDriveEnc = new Encoder(3, 2);
+		rightDriveEnc = new Encoder(0, 1);
+		elevatorEnc = new Encoder(4, 5);
+		bottomSwitch = new DigitalInput(6); // change ports as needed
+		topSwitch = new DigitalInput(7); //change ports as needed
 
 		ahrsThread = new Thread(() ->
 		{
@@ -79,6 +93,25 @@ public class SensorInput implements SensorInputProvider {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public boolean getBottomSwitch() 
+	{
+		return bottomSwitch.get();
+	}
+	public boolean getTopSwitch() 
+	{
+		return topSwitch.get();
+	}
+	
+	public int getElevatorTick() 
+	{
+		return elevatorEnc.get();
+	}
+	
+	public double getElevatorVelocity() 
+	{
+		return elevatorEnc.getRate();
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX
@@ -126,18 +159,18 @@ public class SensorInput implements SensorInputProvider {
 	public void reset() // Reset NavX and encoders
 	{
 		this.resetAHRS();
+		this.resetLeftEncoder();
+		this.resetRightEncoder();
 	}
 
 	@Override
 	public int getLeftDriveEncoder() {
-		// TODO Auto-generated method stub
-		return 0;
+		return leftDriveEnc.get();
 	}
 
 	@Override
 	public int getRightDriveEncoder() {
-		// TODO Auto-generated method stub
-		return 0;
+		return rightDriveEnc.get();
 	}
 
 	@Override
@@ -154,14 +187,12 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public void resetLeftEncoder() {
-		// TODO Auto-generated method stub
-		
+		leftDriveEnc.reset();
 	}
 
 	@Override
 	public void resetRightEncoder() {
-		// TODO Auto-generated method stub
-		
+		rightDriveEnc.reset();
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
-import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
@@ -21,14 +21,10 @@ public enum DriverConfig {
 				
 				if (!lastDeadzone || Math.abs(speed) < 0.01)
 				{
-					driveController.SetSetpoint(Singleton.get(SensorInputProvider.class).getAHRSYaw());
+					target = Singleton.get(SensorInputProvider.class).getAHRSYaw();
 				}
 				
-
-				driveController.SetInput(Singleton.get(SensorInputProvider.class).getAHRSYaw());
-				driveController.CalculateError();
-					
-				robotOutput.arcadeDrivePID(speed, Math.abs(speed) * driveController.GetOutput());
+				robotOutput.arcadeDrivePID(speed, Math.abs(speed) * driveController.calculate(target, Singleton.get(SensorInputProvider.class).getAHRSYaw()));
 			}
 			else
 			{
@@ -126,8 +122,9 @@ public enum DriverConfig {
 		}
 	};
 	
-	private static OrbitPID driveController = new OrbitPID(0.1, 0.00005, 0.01, 0.5);
+	private static OrbitPID driveController = new OrbitPID(0.1, 0.00005, 0.01);
 	private static boolean lastDeadzone = false;
+	private static double target = 0;
 	
 	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput);
 }

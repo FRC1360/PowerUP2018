@@ -11,6 +11,7 @@ import org.usfirst.frc.team1360.robot.auto.routines.Demo;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchLeft;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchMiddle;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchRight;
+import org.usfirst.frc.team1360.robot.auto.routines.Test;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
@@ -32,6 +33,7 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
+		routines.add(new Test());
 		routines.add(new Demo());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());

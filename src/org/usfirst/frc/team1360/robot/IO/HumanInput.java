@@ -12,9 +12,8 @@ public class HumanInput implements HumanInputProvider {
 	private XboxController operator;
 	private LogitechAttack3Joystick driverLeft;
 	private LogitechAttack3Joystick driverRight;
-
 	
-	private HumanInput()									//Constructor to initialize fields
+	public HumanInput()									//Constructor to initialize fields
 	{
 		this.driver = new XboxController(0);					//Driver Xbox on USB Port 0 on DS
 		this.operator = new XboxController(1);					//Operator Xbox on USB Port 1 on DS

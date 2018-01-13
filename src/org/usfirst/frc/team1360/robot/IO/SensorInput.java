@@ -7,6 +7,7 @@ package org.usfirst.frc.team1360.robot.IO;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
+import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -90,21 +91,8 @@ public class SensorInput implements SensorInputProvider {
 		}
 	}
 	
-
-	public static SensorInput getInstance()				// Return SensorInput instance; create if it does not exist
+	public boolean getBottomSwitch() 
 	{
-		if (instance == null)
-		{
-			instance = new SensorInput();
-		}
-		
-		return instance;
-	}
-	
-	@Override
-	//returns switch sensor at bottom of elevator
-	public boolean getBottomSwtich() {
-		// TODO Auto-generated method stub
 		return bottomSwitch.get();
 	}
 	//returns switch sensor at top of elevator

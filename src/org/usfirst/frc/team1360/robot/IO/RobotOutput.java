@@ -23,10 +23,9 @@ public class RobotOutput implements RobotOutputProvider {
 	private Solenoid intakeClamp;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
-	
-	private RobotOutput() //Instantiates all motors and solenoid
 	private LogProvider log;
 	
+	private RobotOutput() //Instantiates all motors and solenoid
 	{
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");

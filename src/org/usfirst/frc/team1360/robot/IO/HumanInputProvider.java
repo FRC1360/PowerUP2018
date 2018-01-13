@@ -55,4 +55,10 @@ public interface HumanInputProvider {
 
 	boolean getAutoDec();
 
+	double getElevator();
+
+	double deadzone(double Input, double deadzone);
+
+	
+
 }

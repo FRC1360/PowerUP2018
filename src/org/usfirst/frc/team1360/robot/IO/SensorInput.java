@@ -99,16 +99,17 @@ public class SensorInput implements SensorInputProvider {
 	{
 		return bottomSwitch.get();
 	}
+	//returns switch sensor at top of elevator
 	public boolean getTopSwitch() 
 	{
 		return topSwitch.get();
 	}
-	
+	//return current encoder tick
 	public int getElevatorTick() 
 	{
 		return elevatorEnc.get();
 	}
-	
+	//returns speed of elevator
 	public double getElevatorVelocity() 
 	{
 		return elevatorEnc.getRate();

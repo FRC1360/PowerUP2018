@@ -25,12 +25,12 @@ public final class Demo extends AutonRoutine {
 		SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		log.write("Left");
 		sensorInput.resetLeftEncoder();
-		robotOutput.setDriveLeft(0.5);
+		robotOutput.setDriveLeft(0.2);
 		while (sensorInput.getLeftDriveEncoder() < 1818) Thread.sleep(10);
 		robotOutput.setDriveLeft(0);
 		log.write("Right");
 		sensorInput.resetRightEncoder();
-		robotOutput.setDriveRight(0.5);
+		robotOutput.setDriveRight(0.2);
 		while (sensorInput.getRightDriveEncoder() < 1818) Thread.sleep(10);
 		robotOutput.setDriveRight(0.0);
 	}

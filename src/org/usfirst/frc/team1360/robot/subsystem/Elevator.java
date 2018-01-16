@@ -15,7 +15,7 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class Elevator implements ElevatorProvider{
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-	private static double ElevatorSpeed;
+	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
 	public static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
 		//sets motors to 0
@@ -151,6 +151,13 @@ public class Elevator implements ElevatorProvider{
 					}	
 				}
 			}
+		},
+		
+		STATE_MANUAL {
+			@Override
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				// Add something here to prevent the elevator from powering above max or below min positions
+			}
 		};
 		
 		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
@@ -210,8 +217,8 @@ public class Elevator implements ElevatorProvider{
 	//sets the speed of the elevator(not used at all currently)
 	@Override
 	public void setspeed(double speed) {
-		// TODO Auto-generated method stub
-		ElevatorSpeed = speed;
+		if (ElevatorStateMachine.getState() == ElevatorState.STATE_MANUAL)
+			robotOutput.setElevatorMotor(speed);
 	}
 //elevator hovers at (passed)target
 	@Override
@@ -252,22 +259,6 @@ public class Elevator implements ElevatorProvider{
 			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, target);
 		} catch (InterruptedException e) {e.printStackTrace();}
 	}
-	//elevator rises at the speed that is passed
-	@Override
-	public void setrising(double speed) {
-		// TODO Auto-generated method stub
-		try {
-			ElevatorStateMachine.setState(ElevatorState.STATE_RISING, speed);
-		} catch (InterruptedException e) {e.printStackTrace();}
-	}
-	//elevator descends at (passed) speed
-	@Override
-	public void setdescending(double speed) {
-		// TODO Auto-generated method stub
-		try {
-			ElevatorStateMachine.setState(ElevatorState.STATE_DESCENDING, speed);
-		} catch (InterruptedException e) {e.printStackTrace();}
-	}
 	//elevator descends to (passed)target 
 	//elevator holds at target afterwards
 	@Override
@@ -296,8 +287,14 @@ public class Elevator implements ElevatorProvider{
 		// TODO Auto-generated method stub
 		return ElevatorStateMachine.getState();
 	}
-
-
-
+	@Override
+	public void startManual() {
+		try {
+			ElevatorStateMachine.setState(ElevatorState.STATE_MANUAL);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
 

@@ -21,11 +21,9 @@ public interface ElevatorProvider {
 	
 	void setrising(int target);
 	
-	void setrising(double speed);
-	
-	void setdescending(double speed);
-	
 	void setdescending(int target);
+	
+	void startManual();
 	
 	void setidle();
 

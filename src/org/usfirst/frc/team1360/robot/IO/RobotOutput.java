@@ -83,7 +83,7 @@ public class RobotOutput implements RobotOutputProvider {
 		log.write("RIGHT " + speed);
 		SmartDashboard.putNumber("DR", speed);
 		rightDrive1.set(speed);
-		rightDrive1.set(speed);
+		rightDrive2.set(speed);
 //		rightDrive1.set(speed);
 		SmartDashboard.putNumber("Right Voltage", speed);
 	}

@@ -6,8 +6,6 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
-import org.usfirst.frc.team1360.robot.subsystem.Elevator;
-import org.usfirst.frc.team1360.robot.subsystem.Elevator.ElevatorState;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
@@ -39,7 +37,7 @@ public class TeleopElevator implements TeleopComponent {
 		
 		if (speed == 0)
 		{
-			if (elevator.getState() != ElevatorState.STATE_HOLD)
+			if (!elevator.isHolding())
 			{
 				elevator.sethold(sensorInput.getElevatorTick());
 			}

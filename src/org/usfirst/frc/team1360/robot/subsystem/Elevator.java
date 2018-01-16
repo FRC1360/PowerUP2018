@@ -17,7 +17,7 @@ public class Elevator implements ElevatorProvider{
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
-	public static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
+	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState>{
 		//sets motors to 0
 		STATE_IDLE {
 			@Override
@@ -250,6 +250,11 @@ public class Elevator implements ElevatorProvider{
 			e.printStackTrace();
 		}
 	}
+	//returns true if in the holding state
+	@Override
+	public boolean isHolding() {
+		return ElevatorStateMachine.getState() == ElevatorState.STATE_HOLD;
+	}
 	//sets the elevator to rise to the (passed)target
 	//elevator holds at target afterwards
 	@Override
@@ -279,13 +284,6 @@ public class Elevator implements ElevatorProvider{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	//returns current state of State Machine
-	@Override
-	public ElevatorState getState() {
-		// TODO Auto-generated method stub
-		return ElevatorStateMachine.getState();
 	}
 	@Override
 	public void startManual() {

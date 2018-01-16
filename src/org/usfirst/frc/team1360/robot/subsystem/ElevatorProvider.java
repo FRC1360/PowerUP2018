@@ -2,8 +2,6 @@ package org.usfirst.frc.team1360.robot.subsystem;
 
 import java.util.function.Consumer;
 
-import org.usfirst.frc.team1360.robot.subsystem.Elevator.ElevatorState;
-
 public interface ElevatorProvider {
 	void goToTarget(double target, Consumer<String> onError);
 	
@@ -19,6 +17,8 @@ public interface ElevatorProvider {
 	
 	void sethold(int target, int millisec);
 	
+	boolean isHolding();
+	
 	void setrising(int target);
 	
 	void setdescending(int target);
@@ -26,6 +26,4 @@ public interface ElevatorProvider {
 	void startManual();
 	
 	void setidle();
-
-	ElevatorState getState();
 }

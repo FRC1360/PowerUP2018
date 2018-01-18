@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 public final class ArcToTarget extends AutonRoutine {
 	private double xs;
@@ -20,6 +21,7 @@ public final class ArcToTarget extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
+		OrbitPID pid = new OrbitPID(1.0, 0.0, 0.0);
 		double dx = x - xs;
 		double dy = y - ys;
 		double lineAngle = Math.atan2(dx, dy);
@@ -36,5 +38,6 @@ public final class ArcToTarget extends AutonRoutine {
 		double angleYSO = startAngle + Math.copySign(Math.PI / 2, da); // angle between +y axis, start, origin
 		double xOrigin = xs + r * Math.sin(angleYSO);
 		double yOrigin = ys + r * Math.cos(angleYSO);
+		double pidTarget = -Math.log(r);
 	}
 }

@@ -32,18 +32,18 @@ public class RobotOutput implements RobotOutputProvider {
 		log.write("Instantiating RobotOutput");
 		
 		//TODO Add Victor port numbers
-		leftDrive1 = new Victor(0);
-		leftDrive2 = new Victor(1);
-		leftDrive3 = new Victor(5);
-		rightDrive1 = new Victor(2);
-		rightDrive2 = new Victor(3);
-		rightDrive3 = new Victor(4);
+		leftDrive1 = new Victor(2);
+		leftDrive2 = new Victor(3);
+//		leftDrive3 = new Victor(5);
+		rightDrive1 = new Victor(0);
+		rightDrive2 = new Victor(1);
+//		rightDrive3 = new Victor(4);
 		leftIntake = new Victor(6);
 		rightIntake = new Victor(7);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
-		leftDrive3.setInverted(true);
+//		leftDrive3.setInverted(true);
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);

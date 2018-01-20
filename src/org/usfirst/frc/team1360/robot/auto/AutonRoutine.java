@@ -50,7 +50,18 @@ public abstract class AutonRoutine extends Thread {
 		}
 		else
 		{
-			runCore();
+			try
+			{
+				runCore();
+			}
+			catch (InterruptedException e)
+			{
+				throw e;
+			}
+			catch (Throwable t)
+			{
+				log.write(t.toString());
+			}
 		}
 		done = true;
 		synchronized(this)
@@ -164,9 +175,9 @@ public abstract class AutonRoutine extends Thread {
 				done = true;
 			}
 		}
-		catch (InterruptedException e)
+		catch (Throwable t)
 		{
-			e.printStackTrace();
+			log.write(t.toString());
 		}
 	}
 	

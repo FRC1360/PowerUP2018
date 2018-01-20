@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
 		sensorInput.reset();
 		position = Singleton.get(OrbitPositionProvider.class);
 		position.start();
+		position.reset();
 	}
 
 	/**
@@ -83,6 +84,9 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("X", position.getX());
+		SmartDashboard.putNumber("Y", position.getY());
+		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
 	}
 	
 	@Override

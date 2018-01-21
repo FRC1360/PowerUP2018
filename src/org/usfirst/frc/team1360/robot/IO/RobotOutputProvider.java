@@ -4,9 +4,7 @@ import org.usfirst.frc.team1360.robot.util.SingletonType;
 
 @SingletonType(RobotOutput.class)
 public interface RobotOutputProvider {
-	final int FREE = 0;
-	final int OPEN = 1;
-	final int CLOSED = 2;
+
 	
 	void setDriveLeft(double speed);
 	void setDriveRight(double speed);

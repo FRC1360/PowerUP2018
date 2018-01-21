@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
@@ -10,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
+	
+	private IntakeProvider intake;
 	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
@@ -29,6 +32,8 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
+		intake = Singleton.get(IntakeProvider.class);
+		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
@@ -63,15 +68,15 @@ public class RobotOutput implements RobotOutputProvider {
 	}
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off
-		if(clamp == this.FREE)	{
+		if(clamp == intake.FREE)	{
 			intakeClamp1.set(true);
 			intakeClamp2.set(true);
 		}
-		else if(clamp == this.CLOSED)	{
+		else if(clamp == intake.CLOSED)	{
 			intakeClamp1.set(true);
 			intakeClamp2.set(false);
 		}
-		else if(clamp == this.OPEN)	{
+		else if(clamp == intake.OPEN)	{
 			intakeClamp1.set(false);
 			intakeClamp2.set(true);
 		}

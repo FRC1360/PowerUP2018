@@ -3,7 +3,9 @@ package org.usfirst.frc.team1360.robot.teleop;
 import java.util.ArrayList;
 import org.usfirst.frc.team1360.robot.teleop.TeleopComponent;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
+@SingletonSee(TeleopControl.class)
 public class TeleopControl {
 	private ArrayList<TeleopComponent> components;
 	

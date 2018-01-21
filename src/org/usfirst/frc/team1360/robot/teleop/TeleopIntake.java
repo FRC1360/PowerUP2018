@@ -5,7 +5,6 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
-@SingletonSee(TeleopIntake.class)
 public class TeleopIntake implements TeleopComponent {
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	private HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);

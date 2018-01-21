@@ -4,7 +4,9 @@ import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.teleop.TeleopComponent;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
+@SingletonSee(TeleopDrive.class)
 public class TeleopDrive implements TeleopComponent {
 	private DriverConfig cfg = DriverConfig.RACING; //RACING MODE.
 	

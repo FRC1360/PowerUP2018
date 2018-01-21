@@ -14,35 +14,35 @@ public class Intake implements IntakeProvider {
 	
 	private static enum IntakeState implements OrbitStateMachineState<IntakeState>{
 		
-		INTAKE 	//clamp open and rollers running
+		INTAKE 	//clamp free and rollers running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				robotOutput.setClamp(false);
+				robotOutput.setClamp(robotOutput.FREE);
 				robotOutput.setIntake(1);
 			}
 			
 		},
-		CLOSED	//clamp closed and rollers not running
+		IDLE	//clamp closed and rollers not running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				robotOutput.setClamp(true);
-		    		robotOutput.setIntake(0);
+				robotOutput.setClamp(robotOutput.CLOSED);
+		    	robotOutput.setIntake(0);
 			}
 		},
-		IDLE  //clamp open rollers not running
+		OPEN  //clamp open rollers not running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				robotOutput.setClamp(false);
-		    		robotOutput.setIntake(0);
+				robotOutput.setClamp(robotOutput.OPEN);
+		    	robotOutput.setIntake(0);
 			}
 		};
 		
@@ -52,7 +52,7 @@ public class Intake implements IntakeProvider {
 	
 	public final int IDLE = 2;
 	public final int INTAKE = 0;
-	public final int CLOSED = 1;
+	public final int OPEN = 1;
 	
 	private int intakePosition = 2;   //starts in idle
 	
@@ -71,11 +71,11 @@ public class Intake implements IntakeProvider {
 				e.printStackTrace();
 			}
 	    }
-	    else if(position==CLOSED) 
+	    else if(position==OPEN) 
 	    {
-	    	intakePosition = CLOSED;
+	    	intakePosition = OPEN;
 	    	try {
-				machine.setState(IntakeState.CLOSED);
+				machine.setState(IntakeState.OPEN);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

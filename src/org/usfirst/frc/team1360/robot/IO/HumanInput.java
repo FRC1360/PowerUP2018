@@ -172,9 +172,9 @@ public class HumanInput implements HumanInputProvider {
 	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorClamp()
 	 */
     @Override
-	public boolean getOperatorClamp()	// getter method for clamp open or closed
+	public double getOperatorIntake()	// getter method for clamp open or closed
     {
-    		return operator.getAButton();
+    		return operator.getTriggerAxis(Hand.kRight);
     }
     
     //controls speed of intake wheels
@@ -205,6 +205,11 @@ public class HumanInput implements HumanInputProvider {
 	public double getElevator()	// getter method for the elevator
 	{
 		return this.operator.getY(Hand.kLeft);
+	}
+
+	@Override
+	public boolean getOperatorClamp() {
+		return operator.getBumper(Hand.kLeft);
 	}
 
 }

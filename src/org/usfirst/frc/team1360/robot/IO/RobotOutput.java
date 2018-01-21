@@ -20,7 +20,8 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor leftIntake;
 	private Victor rightIntake;
 	private Solenoid driveShift;
-	private Solenoid intakeClamp;
+	private Solenoid intakeClamp1;
+	private Solenoid intakeClamp2;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
 	
@@ -47,7 +48,8 @@ public class RobotOutput implements RobotOutputProvider {
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
-		intakeClamp = new Solenoid(1);
+		intakeClamp1 = new Solenoid(1);
+		intakeClamp2 = new Solenoid(2);
 		log.write("Done RobotOutput");
 	}
   
@@ -60,8 +62,19 @@ public class RobotOutput implements RobotOutputProvider {
 		rightIntake.set(speed);
 	}
 	
-	public void setClamp(boolean clamp) {  //sets whether the clamp is on or off
-		intakeClamp.set(clamp);
+	public void setClamp(int clamp) {  //sets whether the clamp is on or off
+		if(clamp == this.FREE)	{
+			intakeClamp1.set(true);
+			intakeClamp2.set(true);
+		}
+		else if(clamp == this.CLOSED)	{
+			intakeClamp1.set(true);
+			intakeClamp2.set(false);
+		}
+		else if(clamp == this.OPEN)	{
+			intakeClamp1.set(false);
+			intakeClamp2.set(true);
+		}
 	}
 	
 	public void setElevatorMotor(double motorValue) {

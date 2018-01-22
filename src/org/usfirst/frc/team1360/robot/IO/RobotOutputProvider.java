@@ -4,6 +4,8 @@ import org.usfirst.frc.team1360.robot.util.SingletonType;
 
 @SingletonType(RobotOutput.class)
 public interface RobotOutputProvider {
+
+	
 	void setDriveLeft(double speed);
 	void setDriveRight(double speed);
 	void tankDrive(double left, double right);
@@ -11,7 +13,7 @@ public interface RobotOutputProvider {
 	void arcadeDrivePID(double speed, double turn);
 	void shiftGear(boolean shift);
 	void stopAll();
-	void setClamp(boolean clamp);
+	void setClamp(int clamp); 
 	void setIntake(double speed);
 	void setElevatorMotor(double motorValue);
 }

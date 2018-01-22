@@ -44,7 +44,10 @@ public interface HumanInputProvider {
 	boolean getJoystickShift();
 	//---------operator controls-------
 
-	// controls whether clamp is open or closed
+	// controls whether intake is on or off
+	double getOperatorIntake();
+	
+	// controls whether intake is clamping or not
 	boolean getOperatorClamp();
 
 	//controls speed of intake wheels

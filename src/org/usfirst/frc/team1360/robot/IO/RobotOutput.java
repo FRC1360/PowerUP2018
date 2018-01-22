@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
 	
+	private IntakeProvider intake;
+	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
 	private Victor leftDrive3;
@@ -20,7 +23,8 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor leftIntake;
 	private Victor rightIntake;
 	private Solenoid driveShift;
-	private Solenoid intakeClamp;
+	private Solenoid intakeClamp1;
+	private Solenoid intakeClamp2;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
 	
@@ -28,6 +32,8 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
+		intake = Singleton.get(IntakeProvider.class);
+		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
@@ -47,7 +53,8 @@ public class RobotOutput implements RobotOutputProvider {
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
-		intakeClamp = new Solenoid(1);
+		intakeClamp1 = new Solenoid(1);
+		intakeClamp2 = new Solenoid(2);
 		log.write("Done RobotOutput");
 	}
   
@@ -55,13 +62,24 @@ public class RobotOutput implements RobotOutputProvider {
 		driveShift.set(shift);
 	}
 	
-	public void setIntake(double speed) {
+	public void setIntake(double speed) {  // sets the speed of the rollers
 		leftIntake.set(speed);
 		rightIntake.set(speed);
 	}
 	
-	public void setClamp(boolean clamp) {
-		intakeClamp.set(clamp);
+	public void setClamp(int clamp) {  //sets whether the clamp is on or off
+		if(clamp == intake.FREE)	{
+			intakeClamp1.set(true);
+			intakeClamp2.set(true);
+		}
+		else if(clamp == intake.CLOSED)	{
+			intakeClamp1.set(true);
+			intakeClamp2.set(false);
+		}
+		else if(clamp == intake.OPEN)	{
+			intakeClamp1.set(false);
+			intakeClamp2.set(true);
+		}
 	}
 	
 	public void setElevatorMotor(double motorValue) {

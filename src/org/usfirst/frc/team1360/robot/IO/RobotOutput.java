@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
 	
-	private IntakeProvider intake;
+
 	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
@@ -32,7 +32,6 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
-		intake = Singleton.get(IntakeProvider.class);
 		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
@@ -68,15 +67,15 @@ public class RobotOutput implements RobotOutputProvider {
 	}
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off
-		if(clamp == intake.FREE)	{
+		if(clamp == IntakeProvider.FREE)	{
 			intakeClamp1.set(true);
 			intakeClamp2.set(true);
 		}
-		else if(clamp == intake.CLOSED)	{
+		else if(clamp == IntakeProvider.CLOSED)	{
 			intakeClamp1.set(true);
 			intakeClamp2.set(false);
 		}
-		else if(clamp == intake.OPEN)	{
+		else if(clamp == IntakeProvider.OPEN)	{
 			intakeClamp1.set(false);
 			intakeClamp2.set(true);
 		}

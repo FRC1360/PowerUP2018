@@ -8,7 +8,7 @@ import org.usfirst.frc.team1360.robot.util.SingletonSee;
 public class TeleopControl {
 	private ArrayList<TeleopComponent> components;
 	
-	private TeleopControl()
+	public TeleopControl()
 	{
 		this.components = new ArrayList<TeleopComponent>(); //Create an array with the current instances of Drive, Gear, Intake, Climber.
 

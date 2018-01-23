@@ -42,8 +42,6 @@ public class Robot extends TimedRobot {
 		sensorInput = Singleton.get(SensorInputProvider.class);
 		sensorInput.reset();
 		position = Singleton.get(OrbitPositionProvider.class);
-		position.start();
-		position.reset();
 	}
 
 	/**
@@ -59,8 +57,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-//		position.start();
+		position.start();
 		AutonControl.start();
+		
+		sensorInput.reset();
+		position.start();
+		position.reset(0,0,0);
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		AutonControl.stop();
-//		position.stop();
+		position.stop();
 	}
 	
 	@Override
@@ -108,7 +110,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
-		AutonControl.select();
 	}
 
 	/**

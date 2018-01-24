@@ -43,8 +43,10 @@ public class RobotOutput implements RobotOutputProvider {
 		rightDrive1 = new Victor(0);
 		rightDrive2 = new Victor(1);
 //		rightDrive3 = new Victor(4);
-		leftIntake = new Victor(6);
-		rightIntake = new Victor(7);
+		leftIntake = new Victor(4);
+		rightIntake = new Victor(5);
+		
+		leftIntake.setInverted(true);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
@@ -68,16 +70,16 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off
 		if(clamp == IntakeProvider.FREE)	{
-			intakeClamp1.set(true);
+			intakeClamp1.set(false);
 			intakeClamp2.set(true);
 		}
 		else if(clamp == IntakeProvider.CLOSED)	{
 			intakeClamp1.set(true);
-			intakeClamp2.set(false);
+			intakeClamp2.set(true);
 		}
 		else if(clamp == IntakeProvider.OPEN)	{
 			intakeClamp1.set(false);
-			intakeClamp2.set(true);
+			intakeClamp2.set(false);
 		}
 	}
 	

@@ -15,7 +15,7 @@ public final class TempFileLog implements LogProvider {
 
 	@Override
 	public void write(String msg) {
-		file.println(msg);
+		file.println(String.format("[%d] %s", System.currentTimeMillis(), msg));
 		file.flush();
 	}
 }

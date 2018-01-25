@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.util.GetFMS;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
@@ -21,6 +22,7 @@ public abstract class AutonRoutine extends Thread {
 	protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	protected OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
+	protected GetFMS fms = Singleton.get(GetFMS.class);
 	
 	public AutonRoutine(String name, long timeout)
 	{
@@ -50,7 +52,18 @@ public abstract class AutonRoutine extends Thread {
 		}
 		else
 		{
-			runCore();
+			try
+			{
+				runCore();
+			}
+			catch (InterruptedException e)
+			{
+				throw e;
+			}
+			catch (Throwable t)
+			{
+				log.write(t.toString());
+			}
 		}
 		done = true;
 		synchronized(this)
@@ -164,9 +177,9 @@ public abstract class AutonRoutine extends Thread {
 				done = true;
 			}
 		}
-		catch (InterruptedException e)
+		catch (Throwable t)
 		{
-			e.printStackTrace();
+			log.write(t.toString());
 		}
 	}
 	

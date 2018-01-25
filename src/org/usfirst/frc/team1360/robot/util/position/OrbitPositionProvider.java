@@ -2,7 +2,8 @@ package org.usfirst.frc.team1360.robot.util.position;
 
 import org.usfirst.frc.team1360.robot.util.SingletonType;
 
-@SingletonType(HybridPositionProvider.class)
+//@SingletonType(PushUpdateHybridPositionProvider.class)
+@SingletonType(DriveEncoderPositionProvider.class)
 public interface OrbitPositionProvider {
 	double getX();
 	double getY();

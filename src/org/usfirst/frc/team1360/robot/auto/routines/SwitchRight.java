@@ -12,7 +12,6 @@ public class SwitchRight extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-	GetFMS fms = new GetFMS();
 		
 		//Drive Forward
 //		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();

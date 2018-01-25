@@ -9,6 +9,7 @@ package org.usfirst.frc.team1360.robot;
 
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
+import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 	private SensorInputProvider sensorInput;
 	private OrbitPositionProvider position;
+	private TeleopControl teleopControl;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -35,10 +37,11 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		teleopControl = Singleton.get(TeleopControl.class);
+		
 		sensorInput = Singleton.get(SensorInputProvider.class);
 		sensorInput.reset();
 		position = Singleton.get(OrbitPositionProvider.class);
-		position.start();
 	}
 
 	/**
@@ -54,8 +57,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-//		position.start();
+		position.start();
 		AutonControl.start();
+		
+		sensorInput.reset();
+		position.start();
+		position.reset(0,0,0);
 	}
 
 	/**
@@ -83,12 +90,17 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("X", position.getX());
+		SmartDashboard.putNumber("Y", position.getY());
+		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		
+		teleopControl.runCycle();
 	}
 	
 	@Override
 	public void disabledInit() {
 		AutonControl.stop();
-//		position.stop();
+		position.stop();
 	}
 	
 	@Override
@@ -98,7 +110,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
-		AutonControl.select();
 	}
 
 	/**

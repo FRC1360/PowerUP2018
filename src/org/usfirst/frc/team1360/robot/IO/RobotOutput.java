@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.IO;
 
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
 	
+
+	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
 	private Victor leftDrive3;
@@ -20,7 +23,8 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor leftIntake;
 	private Victor rightIntake;
 	private Solenoid driveShift;
-	private Solenoid intakeClamp;
+	private Solenoid intakeClamp1;
+	private Solenoid intakeClamp2;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
 	
@@ -28,26 +32,30 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
+		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
 		//TODO Add Victor port numbers
-		leftDrive1 = new Victor(0);
-		leftDrive2 = new Victor(1);
-		leftDrive3 = new Victor(5);
-		rightDrive1 = new Victor(2);
-		rightDrive2 = new Victor(3);
-		rightDrive3 = new Victor(4);
-		leftIntake = new Victor(6);
-		rightIntake = new Victor(7);
+		leftDrive1 = new Victor(2);
+		leftDrive2 = new Victor(3);
+//		leftDrive3 = new Victor(5);
+		rightDrive1 = new Victor(0);
+		rightDrive2 = new Victor(1);
+//		rightDrive3 = new Victor(4);
+		leftIntake = new Victor(4);
+		rightIntake = new Victor(5);
+		
+		leftIntake.setInverted(true);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
-		leftDrive3.setInverted(true);
+//		leftDrive3.setInverted(true);
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
-		intakeClamp = new Solenoid(1);
+		intakeClamp1 = new Solenoid(1);
+		intakeClamp2 = new Solenoid(2);
 		log.write("Done RobotOutput");
 	}
   
@@ -55,13 +63,24 @@ public class RobotOutput implements RobotOutputProvider {
 		driveShift.set(shift);
 	}
 	
-	public void setIntake(double speed) {
+	public void setIntake(double speed) {  // sets the speed of the rollers
 		leftIntake.set(speed);
 		rightIntake.set(speed);
 	}
 	
-	public void setClamp(boolean clamp) {
-		intakeClamp.set(clamp);
+	public void setClamp(int clamp) {  //sets whether the clamp is on or off
+		if(clamp == IntakeProvider.FREE)	{
+			intakeClamp1.set(false);
+			intakeClamp2.set(true);
+		}
+		else if(clamp == IntakeProvider.CLOSED)	{
+			intakeClamp1.set(true);
+			intakeClamp2.set(true);
+		}
+		else if(clamp == IntakeProvider.OPEN)	{
+			intakeClamp1.set(false);
+			intakeClamp2.set(false);
+		}
 	}
 	
 	//set the speed of the elevator motors
@@ -85,7 +104,7 @@ public class RobotOutput implements RobotOutputProvider {
 		log.write("RIGHT " + speed);
 		SmartDashboard.putNumber("DR", speed);
 		rightDrive1.set(speed);
-		rightDrive1.set(speed);
+		rightDrive2.set(speed);
 //		rightDrive1.set(speed);
 		SmartDashboard.putNumber("Right Voltage", speed);
 	}

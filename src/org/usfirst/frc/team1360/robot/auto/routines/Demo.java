@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.auto.drive.ArcToTarget;
+import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 public final class Demo extends AutonRoutine {
 	public Demo() {
@@ -23,12 +25,21 @@ public final class Demo extends AutonRoutine {
 //		robotOutput.setDriveRight(0.2);
 //		while (sensorInput.getRightDriveEncoder() < 1818) Thread.sleep(10);
 //		robotOutput.setDriveRight(0.0);
-		robotOutput.arcadeDrivePID(0.5, 0);
-		while (position.getY() < 60) Thread.sleep(10);
-		robotOutput.arcadeDrivePID(0, 0);
-		Thread.sleep(1000);
-		robotOutput.arcadeDrivePID(0, 0.5);
-		while (position.getA() < Math.PI / 2) Thread.sleep(10);
-		robotOutput.arcadeDrivePID(0, 0);
+		
+		
+//		robotOutput.arcadeDrivePID(0.5, 0);
+//		while (position.getY() < 60) Thread.sleep(10);
+//		robotOutput.arcadeDrivePID(0, 0);
+//		Thread.sleep(1000);
+		
+		//new ArcToTarget(10000, 0, 0, 72, 72, 0, 0.1);
+		
+//		robotOutput.arcadeDrive(0.5, 0.0);
+//		while(position.getY() < 72) Thread.sleep(10);
+//		robotOutput.arcadeDrive(0.0, 0.0);
+		
+		new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
+		Thread.sleep(10000);
+		
 	}
 }

@@ -6,6 +6,7 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.SingletonType;
 
 @SingletonSee(IntakeProvider.class)
 public class Intake implements IntakeProvider {
@@ -14,35 +15,35 @@ public class Intake implements IntakeProvider {
 	
 	private static enum IntakeState implements OrbitStateMachineState<IntakeState>{
 		
-		INTAKE
+		INTAKE 	//clamp free and rollers running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				robotOutput.setClamp(false);
+				robotOutput.setClamp(FREE);
 				robotOutput.setIntake(1);
 			}
 			
 		},
-		CLOSED
+		IDLE	//clamp closed and rollers not running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				robotOutput.setClamp(true);
-		    		robotOutput.setIntake(0);
+				robotOutput.setClamp(CLOSED);
+		    	robotOutput.setIntake(0);
 			}
 		},
-		IDLE
+		RELEASE  //clamp open rollers not running
 		{
 			RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 			@Override
 			public void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException
 			{
-				robotOutput.setClamp(false);
-		    		robotOutput.setIntake(0);
+				robotOutput.setClamp(OPEN);
+		    	robotOutput.setIntake(0);
 			}
 		};
 		
@@ -50,11 +51,8 @@ public class Intake implements IntakeProvider {
 		public abstract void run(OrbitStateMachineContext<IntakeState> context) throws InterruptedException;
 	}
 	
-	public final int IDLE = 2;
-	public final int INTAKE = 0;
-	public final int CLOSED = 1;
 	
-	private int intakePosition = 2;
+	private int intakePosition = 2;   //starts in idle
 	
 	private OrbitStateMachine<IntakeState> machine = new OrbitStateMachine<IntakeState>(IntakeState.IDLE);
 	
@@ -62,7 +60,7 @@ public class Intake implements IntakeProvider {
 	public void setPosition(double position) {
 		// TODO Auto-generated method stub
 		
-	    if (position==INTAKE) {
+	    if (position==INTAKE) {  //keeps intake in given state (if already in idle the intake will stay in idle)
 	    	
 	    	intakePosition = INTAKE;
 	    	try {
@@ -71,11 +69,11 @@ public class Intake implements IntakeProvider {
 				e.printStackTrace();
 			}
 	    }
-	    else if(position==CLOSED) 
+	    else if(position==RELEASE) 
 	    {
-	    	intakePosition = CLOSED;
+	    	intakePosition = RELEASE;
 	    	try {
-				machine.setState(IntakeState.CLOSED);
+				machine.setState(IntakeState.RELEASE);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -94,7 +92,17 @@ public class Intake implements IntakeProvider {
 	}
 	
 	@Override 
-	public int getPosition(){
+	public int getPosition(){	// getter method for the state machine
 		return intakePosition;
+	}
+
+	@Override
+	public void setClamp(int clamp) {
+		robotOutput.setClamp(clamp);
+	}
+
+	@Override
+	public void setIntake(double speed) {
+		robotOutput.setIntake(speed);
 	}
 }

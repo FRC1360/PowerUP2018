@@ -11,6 +11,7 @@ import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.ITimestampedDataSubscriber;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -150,9 +151,19 @@ public class SensorInput implements SensorInputProvider {
 		return ahrsValues[6];
 	}
 	
+	public void addAHRSCallback(ITimestampedDataSubscriber callback, Object context)
+	{
+		ahrsThreadDispatchQueue.add(() -> ahrs.registerCallback(callback, context));
+	}
+	
+	public void removeAHRSCallback(ITimestampedDataSubscriber callback)
+	{
+		ahrsThreadDispatchQueue.add(() -> ahrs.deregisterCallback(callback));
+	}
+	
 	public synchronized void resetAHRS() // Queue operation to reset NavX
 	{
-		ahrsThreadDispatchQueue.add(ahrs::reset);
+		ahrsThreadDispatchQueue.add(ahrs::zeroYaw);
 	}
 	
 

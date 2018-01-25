@@ -38,7 +38,7 @@ public final class Demo extends AutonRoutine {
 //		while(position.getY() < 72) Thread.sleep(10);
 //		robotOutput.arcadeDrive(0.0, 0.0);
 		
-		new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
+		new ArcToTarget(10000, 0, 0, 150, 150, 0, 1).runUntilFinish();
 		Thread.sleep(10000);
 		
 	}

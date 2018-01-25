@@ -26,7 +26,8 @@ public final class ArcToTarget extends AutonRoutine {
 	@Override
 	protected void runCore() throws InterruptedException {
 		log.write(String.format("ArcToTarget (%f, %f | %f) -> (%f, %f)", xs, ys, startAngle, x, y));
-		OrbitPID pid = new OrbitPID(1.0, 0.0, 0.0);
+		OrbitPID pidR = new OrbitPID(1.0, 0.0, 0.0);
+		OrbitPID pidA = new OrbitPID(1.0, 0.0, 0.0);
 		double dx = x - xs;
 		double dy = y - ys;
 		double lineAngle = Math.atan2(dx, dy);
@@ -58,6 +59,7 @@ public final class ArcToTarget extends AutonRoutine {
 			Thread.sleep(10);
 			double _x = position.getX() - xOrigin;
 			double _y = position.getY() - yOrigin;
+			double a = position.getA();
 			rl2 = _x * _x + _y * _y;
 			rl = Math.sqrt(rl2);
 			al = (Math.atan2(_x, _y) - startAngle + Math.PI / 2) % (Math.PI * 2);
@@ -65,7 +67,7 @@ public final class ArcToTarget extends AutonRoutine {
 			int dr = sensorInput.getRightDriveEncoder() - rLast;
 			if (dl == 0 || dr == 0)
 				continue;
-			output = neutral + pid.calculate(neutral + Math.copySign(Math.log(Math.abs((r - rl) / r)), da), Math.log((double) dl / dr));
+			output = neutral + Math.copySign(pidR.calculate(r, rl), da) + pidA.calculate(startAngle + al, a);
 			lLast += dl;
 			rLast += rl;
 			log.write(String.format("ArcToTarget %d %d | %f,%f | %f", dl, dr, rl, al * 180 / Math.PI, output));

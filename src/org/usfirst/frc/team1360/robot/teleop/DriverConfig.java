@@ -13,43 +13,21 @@ public enum DriverConfig {
 		@Override
 		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
 		{
-			
-			boolean deadzone = Math.abs(humanInput.getRacingTurn()) < 0.2;
-			if (deadzone)
-			{
-				double speed = humanInput.getRacingThrottle();
-				
-				if (!lastDeadzone || Math.abs(speed) < 0.01)
-				{
-					target = Singleton.get(SensorInputProvider.class).getAHRSYaw();
-				}
-				
-				robotOutput.arcadeDrivePID(speed, Math.abs(speed) * driveController.calculate(target, Singleton.get(SensorInputProvider.class).getAHRSYaw()));
-			}
-			else
-			{
-				robotOutput.arcadeDrive(humanInput.getRacingThrottle(), humanInput.getRacingTurn());
-			}
-			lastDeadzone = deadzone;
-			
+			double speed = humanInput.getRacingThrottle();
 			double turn = humanInput.getRacingTurn();
 			boolean change = humanInput.getRacingDampen();
-			
-			robotOutput.shiftGear(humanInput.getRacingShift());
-			
+
 			if(Math.abs(turn) < 0.2)
 				turn = 0;
 			
 			if(change)
 			{
-				robotOutput.arcadeDrive(humanInput.getRacingThrottle() / 2, turn / 2);	
-			}
-			else
-			{
-				robotOutput.arcadeDrive(humanInput.getRacingThrottle(), turn);
+				speed = speed / 2;
+				turn = turn / 2;
 			}
 			
-
+			robotOutput.arcadeDrive(speed, turn);
+			robotOutput.shiftGear(humanInput.getRacingShift());
 		}
 	},
 	

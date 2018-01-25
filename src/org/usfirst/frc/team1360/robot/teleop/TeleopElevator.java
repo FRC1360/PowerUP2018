@@ -1,15 +1,9 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
-import org.usfirst.frc.team1360.robot.IO.HumanInput;
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
-import org.usfirst.frc.team1360.robot.IO.RobotOutput;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
-import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
-import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
-import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
-import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopElevator implements TeleopComponent {
@@ -23,7 +17,7 @@ public class TeleopElevator implements TeleopComponent {
 	@Override
 	public void disable() {
 		// TODO Auto-generated method stub
-		elevator.setidle();
+		elevator.setIdle();
 		lastSpeed = 0;
 	}
 /*checks the input of operator's right controller*with deadzone) and applies that to the motors.
@@ -39,14 +33,14 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if (!elevator.isHolding())
 			{
-				elevator.sethold(sensorInput.getElevatorTick());
+				elevator.hold();
 			}
 		}
 		else
 		{
 			if (lastSpeed == 0)
 				elevator.startManual();
-			elevator.setspeed(speed);
+			elevator.setManualSpeed(speed);
 		}
 		lastSpeed = speed;
 	}	

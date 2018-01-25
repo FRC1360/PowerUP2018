@@ -1,29 +1,20 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
-import java.util.function.Consumer;
+import org.usfirst.frc.team1360.robot.util.SingletonType;
 
+@SingletonType(Elevator.class)
 public interface ElevatorProvider {
-	void goToTarget(double target, Consumer<String> onError);
+	public static final int POS_TOP = 1360;
+	public static final int POS_BOTTOM = 1360;
 	
-	
-	
-	void goToBottom();
-	
-	void goToTop();
-	
-	void setspeed(double speed);
-	
-	void sethold(int target);
-	
-	void sethold(int target, int millisec);
-	
+	boolean goToTarget(int target);
+	boolean upToTarget(int target);
+	boolean downToTarget(int target);
+	boolean goToTop();
+	boolean goToBottom();
+	boolean setManualSpeed(double speed);
+	boolean hold();
 	boolean isHolding();
-	
-	void setrising(int target);
-	
-	void setdescending(int target);
-	
-	void startManual();
-	
-	void setidle();
+	boolean startManual();
+	boolean setIdle();
 }

@@ -1,7 +1,5 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
-import org.usfirst.frc.team1360.robot.IO.RobotOutput;
-import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.SingletonType;
 
 @SingletonType(Intake.class)

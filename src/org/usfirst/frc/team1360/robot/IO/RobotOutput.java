@@ -83,6 +83,8 @@ public class RobotOutput implements RobotOutputProvider {
 		}
 	}
 	
+	//set the speed of the elevator motors
+	@Override
 	public void setElevatorMotor(double motorValue) {
 		//TODO Populate 
 	}

@@ -24,4 +24,8 @@ public interface SensorInputProvider {
 	void resetRightEncoder();
 	void calculate();
 	void reset();
+	int getElevatorTick();
+	double getElevatorVelocity();
+	boolean getTopSwitch();
+	boolean getBottomSwitch();
 }

@@ -2,6 +2,8 @@ package org.usfirst.frc.team1360.robot.IO;
 
 import org.usfirst.frc.team1360.robot.util.SingletonType;
 
+import com.kauailabs.navx.frc.ITimestampedDataSubscriber;
+
 @SingletonType(SensorInput.class)
 public interface SensorInputProvider {
 	double getAHRSYaw();
@@ -11,6 +13,8 @@ public interface SensorInputProvider {
 	double getAHRSWorldLinearAccelY();
 	double getAHRSVelocityX();
 	double getAHRSVelocityY();
+	void addAHRSCallback(ITimestampedDataSubscriber callback, Object context);
+	void removeAHRSCallback(ITimestampedDataSubscriber callback);
 	void resetAHRS();
 	int getLeftDriveEncoder();
 	int getRightDriveEncoder();

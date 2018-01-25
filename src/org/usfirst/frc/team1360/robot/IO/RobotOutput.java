@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
 	
-	private IntakeProvider intake;
+
 	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
@@ -32,24 +32,25 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
-		intake = Singleton.get(IntakeProvider.class);
 		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
 		//TODO Add Victor port numbers
-		leftDrive1 = new Victor(0);
-		leftDrive2 = new Victor(1);
-		leftDrive3 = new Victor(5);
-		rightDrive1 = new Victor(2);
-		rightDrive2 = new Victor(3);
-		rightDrive3 = new Victor(4);
-		leftIntake = new Victor(6);
-		rightIntake = new Victor(7);
+		leftDrive1 = new Victor(2);
+		leftDrive2 = new Victor(3);
+//		leftDrive3 = new Victor(5);
+		rightDrive1 = new Victor(0);
+		rightDrive2 = new Victor(1);
+//		rightDrive3 = new Victor(4);
+		leftIntake = new Victor(4);
+		rightIntake = new Victor(5);
+		
+		leftIntake.setInverted(true);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
-		leftDrive3.setInverted(true);
+//		leftDrive3.setInverted(true);
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
@@ -68,17 +69,17 @@ public class RobotOutput implements RobotOutputProvider {
 	}
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off
-		if(clamp == intake.FREE)	{
-			intakeClamp1.set(true);
-			intakeClamp2.set(true);
-		}
-		else if(clamp == intake.CLOSED)	{
-			intakeClamp1.set(true);
-			intakeClamp2.set(false);
-		}
-		else if(clamp == intake.OPEN)	{
+		if(clamp == IntakeProvider.FREE)	{
 			intakeClamp1.set(false);
 			intakeClamp2.set(true);
+		}
+		else if(clamp == IntakeProvider.CLOSED)	{
+			intakeClamp1.set(true);
+			intakeClamp2.set(true);
+		}
+		else if(clamp == IntakeProvider.OPEN)	{
+			intakeClamp1.set(false);
+			intakeClamp2.set(false);
 		}
 	}
 	

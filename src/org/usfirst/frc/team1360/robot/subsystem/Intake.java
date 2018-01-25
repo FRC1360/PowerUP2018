@@ -6,6 +6,7 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.SingletonType;
 
 @SingletonSee(IntakeProvider.class)
 public class Intake implements IntakeProvider {

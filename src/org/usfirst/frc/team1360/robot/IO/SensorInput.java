@@ -26,11 +26,18 @@ public class SensorInput implements SensorInputProvider {
 	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
 	private AHRS ahrs; // NavX interface
 	
+	//Drive
 	private Encoder leftDriveEnc;
 	private Encoder rightDriveEnc;
+	
+	//Elevator
 	private Encoder elevatorEnc;
 	private DigitalInput bottomSwitch;
 	private DigitalInput topSwitch;
+	
+	//Arm
+	private DigitalInput armTopSwitch;
+	private Encoder armEnc;
 	
 	// Drive PID values
 	public static final double driveP = 0.1;
@@ -50,6 +57,9 @@ public class SensorInput implements SensorInputProvider {
 		elevatorEnc = new Encoder(4, 5);
 		bottomSwitch = new DigitalInput(6); // change ports as needed
 		topSwitch = new DigitalInput(7); //change ports as needed
+		
+		armTopSwitch = new DigitalInput(8);
+		armEnc = new Encoder(9, 10);
 
 		ahrsThread = new Thread(() ->
 		{
@@ -210,5 +220,25 @@ public class SensorInput implements SensorInputProvider {
 	public void calculate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean getArmSwitch() {
+		return armTopSwitch.get();
+	}
+
+	@Override
+	public int getArmEncoder() {
+		return armEnc.get();
+	}
+
+	@Override
+	public double getArmEncoderVelocity() {
+		return armEnc.getRate();
+	}
+
+	@Override
+	public void resetArmEncoder() {
+		armEnc.reset();
 	}
 }

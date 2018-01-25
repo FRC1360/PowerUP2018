@@ -97,9 +97,5 @@ public enum DriverConfig {
 		}
 	};
 	
-	private static OrbitPID driveController = new OrbitPID(0.1, 0.00005, 0.01);
-	private static boolean lastDeadzone = false;
-	private static double target = 0;
-	
 	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput);
 }

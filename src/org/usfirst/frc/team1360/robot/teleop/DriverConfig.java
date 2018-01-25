@@ -89,11 +89,8 @@ public enum DriverConfig {
 		@Override
 		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
 		{
-			double left = humanInput.getLeftJoystickThrottle();
-			double right = humanInput.getRightJoystickThrottle();
 			
-			
-			robotOutput.tankDrive(left, right);
+			robotOutput.tankDrive(humanInput.getLeftJoystickThrottle(), humanInput.getRightJoystickThrottle());
 			robotOutput.shiftGear(humanInput.getJoystickShift());
 			
 

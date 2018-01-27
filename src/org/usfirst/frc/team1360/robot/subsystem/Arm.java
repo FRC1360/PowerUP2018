@@ -101,7 +101,16 @@ public class Arm implements ArmProvider{
 	
 	private OrbitStateMachine<ArmState> stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
 	
-	
+	@Override
+	public boolean idle() {
+		try {
+			stateMachine.setState(ArmState.IDLE);
+			return true;
+		} catch (InterruptedException e) {
+			log.write(e.toString());
+			return false;
+		}
+	}
 
 	@Override
 	public boolean goToPosition(int position) {

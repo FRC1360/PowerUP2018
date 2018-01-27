@@ -95,6 +95,20 @@ public enum DriverConfig {
 			
 
 		}
+	},
+	
+	CHEESYDRIVE
+	{
+		@Override
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		{
+			robotOutput.cheesyDrive(humanInput.getCheesyThrottle(),
+					humanInput.getCheesyTurn(),
+					humanInput.getCheesyQuickTurn(),
+					humanInput.getCheesyShift());
+			robotOutput.shiftGear(humanInput.getCheesyShift());
+		}
+		
 	};
 	
 	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput);

@@ -213,6 +213,11 @@ public class HumanInput implements HumanInputProvider {
     		return operator.getY(Hand.kLeft);
     }
 
+	@Override
+	public double getArm() {
+		return operator.getY(Hand.kRight);
+	}
+
 	//-----------Auto Selection-----------
 	@Override
 	public boolean getAutoInc() {
@@ -231,7 +236,7 @@ public class HumanInput implements HumanInputProvider {
 	//returns left joystick of elevator of operator controller
 	public double getElevator()
 	{
-		return this.operator.getY(Hand.kRight);
+		return this.operator.getX(Hand.kRight);
 	}
 	//returns input after comparing to deadzone
 	public double deadzone(double Input, double deadzone) {

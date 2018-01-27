@@ -13,7 +13,7 @@ public final class TeleopArm implements TeleopComponent {
 	
 	@Override
 	public void calculate() {
-		double speed = humanInput.deadzone(humanInput.getElevator(), 0.1);
+		double speed = humanInput.deadzone(humanInput.getArm(), 0.1);
 		
 		if (speed == 0)
 		{

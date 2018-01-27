@@ -58,6 +58,8 @@ public interface HumanInputProvider {
 
 	//controls speed of intake wheels
 	double getOperatorSpeed();
+	
+	double getArm();
 
 	//-----------Auto Selection-----------
 	boolean getAutoInc();

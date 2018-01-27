@@ -6,6 +6,8 @@ public interface ArmProvider {
 	public static final int POS_BOTTOM = 1360;
 	
 	boolean idle();
+	boolean hold(int position);
+	boolean isHolding();
 	boolean goToTop();
 	boolean goToMiddle();
 	boolean goToPosition(int position);

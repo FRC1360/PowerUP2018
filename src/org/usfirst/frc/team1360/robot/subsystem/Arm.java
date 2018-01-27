@@ -111,6 +111,22 @@ public class Arm implements ArmProvider{
 			return false;
 		}
 	}
+	
+	@Override
+	public boolean hold(int position) {
+		try {
+			stateMachine.setState(ArmState.HOLD, position);
+			return true;
+		} catch (InterruptedException e) {
+			log.write(e.toString());
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean isHolding() {
+		return stateMachine.getState() == ArmState.HOLD;
+	}
 
 	@Override
 	public boolean goToPosition(int position) {

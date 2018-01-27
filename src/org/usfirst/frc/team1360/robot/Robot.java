@@ -14,6 +14,7 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
+import org.usfirst.frc.team1360.robot.teleop.TeleopArm;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
 import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);
+		Singleton.configure(TeleopArm.class);
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();

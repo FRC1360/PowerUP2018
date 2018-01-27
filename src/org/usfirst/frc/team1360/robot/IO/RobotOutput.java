@@ -22,6 +22,7 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor rightDrive3;
 	private Victor leftIntake;
 	private Victor rightIntake;
+	private Victor arm;
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
@@ -45,12 +46,15 @@ public class RobotOutput implements RobotOutputProvider {
 //		rightDrive3 = new Victor(4);
 		leftIntake = new Victor(4);
 		rightIntake = new Victor(5);
+		arm = new Victor(6);
 		
 		leftIntake.setInverted(true);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
 //		leftDrive3.setInverted(true);
+		
+		
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
@@ -162,5 +166,10 @@ public class RobotOutput implements RobotOutputProvider {
 		rightDrive3.set(0);
 		driveShift.set(false);
 		
+	}
+
+	@Override
+	public void setArm(double speed) {
+		arm.set(speed);
 	}
 }

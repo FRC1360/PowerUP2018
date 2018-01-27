@@ -136,6 +136,32 @@ public class HumanInput implements HumanInputProvider {
 		return this.driver.getYButton();
 	}
 	
+	//----------Cheesy Drive Controls----------
+
+	@Override
+	public double getCheesyThrottle() {
+		// TODO Auto-generated method stub
+		return driver.getY(Hand.kLeft);
+	}
+
+	@Override
+	public double getCheesyTurn() {
+		// TODO Auto-generated method stub
+		return driver.getX(Hand.kRight);
+	}
+
+	@Override
+	public boolean getCheesyShift() {
+		// TODO Auto-generated method stub
+		return driver.getBumper(Hand.kLeft);
+	}
+
+	@Override
+	public boolean getCheesyQuickTurn() {
+		// TODO Auto-generated method stub
+		return driver.getBumper(Hand.kRight);
+	}
+	
 	//----------Logitech Controls------
 	//TODO Change to WPILIB Logitech class
 	/* (non-Javadoc)
@@ -219,5 +245,4 @@ public class HumanInput implements HumanInputProvider {
 	public boolean getOperatorClamp() {
 		return operator.getBumper(Hand.kLeft);
 	}
-
 }

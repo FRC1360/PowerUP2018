@@ -34,6 +34,15 @@ public interface HumanInputProvider {
 	double getTankRight();
 
 	boolean getTankShift();
+	
+	//----------Cheesy Drive Controls----------
+	double getCheesyThrottle();
+	
+	double getCheesyTurn();
+	
+	boolean getCheesyShift();
+	
+	boolean getCheesyQuickTurn();
 
 	//----------Logitech Controls------
 	//TODO Change to WPILIB Logitech class

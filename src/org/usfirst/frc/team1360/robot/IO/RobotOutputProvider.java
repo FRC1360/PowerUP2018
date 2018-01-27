@@ -16,4 +16,6 @@ public interface RobotOutputProvider {
 	void setClamp(int clamp); 
 	void setIntake(double speed);
 	void setElevatorMotor(double motorValue);
+	void cheesyDrive(double speed, double turn, boolean quickturn, boolean highgear);
+	double handleDeadzone(double val, double deadzone);
 }

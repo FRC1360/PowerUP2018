@@ -20,40 +20,24 @@ public final class Singleton {
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Class<T> clazz) {
 		synchronized (objects) {
-			//System.out.printf("getting class: %s%n", clazz.getCanonicalName());
-			SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
-			if (see != null) {
-				//System.out.printf("getting: %s%n", see.value());
-				return (T) get(see.value());
-			}
-			
-			//System.out.printf("isCached: %s%n", "" +objects.containsKey(clazz));
-			return (T) objects.computeIfAbsent(clazz, c -> {
-				try {
-					while (true) {
-						//System.out.printf("getting type from: %s%n", c.getCanonicalName());
-						SingletonType type = c.getAnnotation(SingletonType.class);
-						if (type != null) {
-							//System.out.printf("type: %s%n", type.value());
-							c = type.value();
-							continue;
-						}
-						SingletonStatic _static = c.getAnnotation(SingletonStatic.class);
-						if (_static != null) {
-							//System.out.printf("static: %s%n", _static.value());
-							return c.getMethod(_static.value()).invoke(null);
-						}
-						break;
-					}
-					return c.getConstructor().newInstance();
-				} catch (Exception e) {
-					Throwable t = e.getCause();
-					if (t != null)
-						t.printStackTrace();
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-			});	
+			SingletonSee see = clazz.getAnnotation(SingletonSee.class);
+			return (T) objects.get(see == null ? clazz : see.value());
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T configure(Class<T> clazz) {
+		SingletonStatic _static = clazz.getAnnotation(SingletonStatic.class);
+		try {
+			return configure(clazz, _static == null ? clazz.getConstructor().newInstance() : (T) clazz.getMethod(_static.value()).invoke(null));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static <T> T configure(Class<T> clazz, T value) {
+		SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
+		objects.put(see == null ? clazz : see.value(), value);
+		return value;
 	}
 }

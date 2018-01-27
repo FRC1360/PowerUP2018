@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1360.robot.IO;
 
-import org.usfirst.frc.team1360.robot.util.SingletonType;
-
-@SingletonType(RobotOutput.class)
 public interface RobotOutputProvider {
 
 	void clearStickyFaults();

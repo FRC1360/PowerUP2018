@@ -141,7 +141,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getCheesyThrottle() {
 		// TODO Auto-generated method stub
-		return driver.getY(Hand.kLeft);
+		return -driver.getY(Hand.kLeft);
 	}
 
 	@Override

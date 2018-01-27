@@ -26,8 +26,8 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
-	private final double CHEESY_SPEED_DEADZONE = 0.02;
-	private final double CHEESY_TURN_DEADZONE = 0.02;
+	private final double CHEESY_SPEED_DEADZONE = 0.1;
+	private final double CHEESY_TURN_DEADZONE = 0.1;
 	private final double CHEESY_SENSITIVITY_HIGH = 0.75;
 	private final double CHEESY_SENSITIVITY_LOW = 0.75;
 	private double oldTurn, quickStopAccumulator;
@@ -159,7 +159,7 @@ public class RobotOutput implements RobotOutputProvider {
 		double turnNonLinearity;
 		
 		turn = handleDeadzone(turn, CHEESY_TURN_DEADZONE);
-		speed = handleDeadzone(turn, CHEESY_TURN_DEADZONE);
+		speed = handleDeadzone(speed, CHEESY_SPEED_DEADZONE);
 		
 		double negInertia = turn - oldTurn;
 		oldTurn = turn;
@@ -208,7 +208,7 @@ public class RobotOutput implements RobotOutputProvider {
 			{
 				if(Math.abs(turn) > 0.65)
 				{
-					negInertiaScalar = 3.5;
+					negInertiaScalar = 5.0;
 				}
 				else
 				{
@@ -221,7 +221,7 @@ public class RobotOutput implements RobotOutputProvider {
 		double negInertiaPower = negInertia * negInertiaScalar;
 		negInertiaAccumulator += negInertiaPower;
 		
-		turn = turn + negInertiaPower;
+		turn = turn + negInertiaAccumulator;
 		if(negInertiaAccumulator > 1)
 		{
 			negInertiaAccumulator -= 1;
@@ -261,11 +261,11 @@ public class RobotOutput implements RobotOutputProvider {
 		{
 			overPower = 0.0;
 			angularPower = Math.abs(speed) * turn * sensitivity - quickStopAccumulator;
-			if(quickStopAccumulator > 0)
+			if(quickStopAccumulator > 1)
 			{
 				quickStopAccumulator -= 1;
 			}
-			else if (quickStopAccumulator < 0)
+			else if (quickStopAccumulator < -1)
 			{
 				quickStopAccumulator += 1;
 			}
@@ -307,7 +307,7 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public double handleDeadzone(double val, double deadzone)
 	{
-		return (Math.abs(val) < Math.abs(deadzone)) ? val : 0.0;
+		return (Math.abs(val) > Math.abs(deadzone)) ? val : 0.0;
 	}
 	
 	//Limits the given input to the given magnitude

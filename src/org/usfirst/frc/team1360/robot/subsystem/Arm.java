@@ -10,6 +10,8 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 @SingletonSee(ArmProvider.class)
 public class Arm implements ArmProvider{
 	
@@ -172,15 +174,25 @@ public class Arm implements ArmProvider{
 	}
 	
 	public double safety(double power)	{
-		if(sensorInput.getArmSwitch() && power > 0) {
-			return 0;
+		if (Math.abs(sensorInput.getArmEncoderVelocity()) < 5)
+		{
+			if (power > 0.25)
+				power = 0.25;
+			if (power < -0.25)
+				power = -0.25;
 		}
-		else if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
-			return 0;
-		}
-		else {
-			return power;
-		}
+		SmartDashboard.putNumber("Arm vel", sensorInput.getArmEncoderVelocity());
+		SmartDashboard.putNumber("ARM", power);
+		return power;
+//		if(sensorInput.getArmSwitch() && power > 0) {
+//			return 0;
+//		}
+//		else if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
+//			return 0;
+//		}
+//		else {
+//			return power;
+//		}
 	}
 
 	@Override

@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
-import org.usfirst.frc.team1360.robot.util.SingletonType;
-
-@SingletonType(Elevator.class)
 public interface ElevatorProvider {
 	public static final int POS_TOP = 1360;
 	public static final int POS_BOTTOM = 1360;

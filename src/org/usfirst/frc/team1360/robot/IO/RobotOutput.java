@@ -7,6 +7,7 @@ import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.hal.PDPJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(RobotOutputProvider.class)
@@ -26,6 +27,7 @@ public class RobotOutput implements RobotOutputProvider {
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
+	private PDPJNI pdp;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;	
 	
@@ -33,6 +35,7 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
+		pdp = new PDPJNI();
 		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
@@ -61,6 +64,11 @@ public class RobotOutput implements RobotOutputProvider {
 		intakeClamp1 = new Solenoid(1);
 		intakeClamp2 = new Solenoid(2);
 		log.write("Done RobotOutput");
+	}
+	
+	@Override
+	public void clearStickyFaults() {
+		pdp.clearPDPStickyFaults(0);
 	}
   
 	public void shiftGear(boolean shift) {

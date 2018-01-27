@@ -72,7 +72,7 @@ public class Arm implements ArmProvider{
 		HOLD{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				OrbitPID arm = new OrbitPID(1.0, 0.0, 0.0);
+				OrbitPID arm = new OrbitPID(0.01, 0.0, 0.0);
 				
 				if(!(context.getArg() instanceof Integer)) {
 					log.write("No Hold Position Provided to Arm.Hold");

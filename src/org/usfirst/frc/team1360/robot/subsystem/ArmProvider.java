@@ -1,16 +1,16 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
+import org.usfirst.frc.team1360.robot.util.SingletonType;
+
+@SingletonType(ArmProvider.class)
 public interface ArmProvider {
 
-	void goToTop();
+	public static final int POS_MIDDLE = 1360;
+	public static final int POS_BOTTOM = 1360;
 	
-	void goToMiddle();
-	
+	boolean goToTop();
+	boolean goToMiddle();
 	boolean goToPosition(int position);
-	
-	int getPosition();
-	
-	void setSpeed(double speed);
-	
-	void startManual();
+	boolean setSpeed(double speed);
+	boolean startManual();
 }

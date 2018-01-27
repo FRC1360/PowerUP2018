@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team1360.robot;
 
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonStatic
 public class Robot extends TimedRobot {
 	private SensorInputProvider sensorInput;
+	private RobotOutputProvider robotOutput;
 	private OrbitPositionProvider position;
 	private TeleopControl teleopControl;
 
@@ -37,7 +39,11 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		
 		teleopControl = Singleton.get(TeleopControl.class);
+		robotOutput = Singleton.get(RobotOutputProvider.class);
+		robotOutput.clearStickyFaults();
+		
 		
 		sensorInput = Singleton.get(SensorInputProvider.class);
 		sensorInput.reset();

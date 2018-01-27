@@ -7,13 +7,12 @@ import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.hal.PDPJNI;
+import edu.wpi.first.wpilibj.hal.SolenoidJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
-	
-
-	
 	private Victor leftDrive1;
 	private Victor leftDrive2;
 	private Victor leftDrive3;
@@ -33,7 +32,6 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
-		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
@@ -61,6 +59,12 @@ public class RobotOutput implements RobotOutputProvider {
 		intakeClamp1 = new Solenoid(1);
 		intakeClamp2 = new Solenoid(2);
 		log.write("Done RobotOutput");
+	}
+	
+	@Override
+	public void clearStickyFaults() {
+		PDPJNI.clearPDPStickyFaults(0);
+		SolenoidJNI.clearAllPCMStickyFaults(0);
 	}
   
 	public void shiftGear(boolean shift) {

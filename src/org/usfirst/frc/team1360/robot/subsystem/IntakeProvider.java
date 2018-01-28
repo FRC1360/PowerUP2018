@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
-import org.usfirst.frc.team1360.robot.util.SingletonType;
-
-@SingletonType(Intake.class)
 public interface IntakeProvider{    // setting up intake interface	
     final int FREE = 0;
 	final int OPEN = 1;

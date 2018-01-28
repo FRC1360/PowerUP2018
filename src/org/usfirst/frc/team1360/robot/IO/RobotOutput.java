@@ -7,13 +7,13 @@ import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.hal.PDPJNI;
+import edu.wpi.first.wpilibj.hal.SolenoidJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
-	
-
-	
+  
 	private Victor leftDrive1;
 	private Victor leftDrive2;
 	private Victor leftDrive3;
@@ -22,17 +22,23 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor rightDrive3;
 	private Victor leftIntake;
 	private Victor rightIntake;
+	private Victor arm;
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
 	
-	private final double TURN_WEIGHT_FACTOR = 0.2;	
+	private final double TURN_WEIGHT_FACTOR = 0.2;
+	
+	private final double CHEESY_SPEED_DEADZONE = 0.1;
+	private final double CHEESY_TURN_DEADZONE = 0.1;
+	private final double CHEESY_SENSITIVITY_HIGH = 0.75;
+	private final double CHEESY_SENSITIVITY_LOW = 0.75;
+	private double oldTurn, quickStopAccumulator;
 	
 	private LogProvider log;
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
-		
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
@@ -45,18 +51,27 @@ public class RobotOutput implements RobotOutputProvider {
 //		rightDrive3 = new Victor(4);
 		leftIntake = new Victor(4);
 		rightIntake = new Victor(5);
+		arm = new Victor(6);
 		
 		leftIntake.setInverted(true);
 		
 		leftDrive1.setInverted(true);
 		leftDrive2.setInverted(true);
 //		leftDrive3.setInverted(true);
+		
+		
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
 		intakeClamp1 = new Solenoid(1);
 		intakeClamp2 = new Solenoid(2);
 		log.write("Done RobotOutput");
+	}
+	
+	@Override
+	public void clearStickyFaults() {
+		PDPJNI.clearPDPStickyFaults(0);
+		SolenoidJNI.clearAllPCMStickyFaults(0);
 	}
   
 	public void shiftGear(boolean shift) {
@@ -150,6 +165,167 @@ public class RobotOutput implements RobotOutputProvider {
 		tankDrive(left, right);
 	}
 	
+	public void cheesyDrive(double speed, double turn, boolean quickturn, boolean highgear)
+	{
+		double turnNonLinearity;
+		
+		turn = handleDeadzone(turn, CHEESY_TURN_DEADZONE);
+		speed = handleDeadzone(speed, CHEESY_SPEED_DEADZONE);
+		
+		double negInertia = turn - oldTurn;
+		oldTurn = turn;
+		
+		if(highgear)
+		{
+			turnNonLinearity = 0.6;
+			turn = Math.sin(Math.PI / 2.0 * turnNonLinearity * turn)
+					/ Math.sin(Math.PI / 2.0 * turnNonLinearity);
+			turn = Math.sin(Math.PI / 2.0 * turnNonLinearity * turn)
+					/ Math.sin(Math.PI / 2.0 * turnNonLinearity);
+		} 
+		else
+		{
+			turnNonLinearity = 0.5;
+			turn = Math.sin(Math.PI / 2.0 * turnNonLinearity * turn)
+					/ Math.sin(Math.PI / 2.0 * turnNonLinearity);
+			turn = Math.sin(Math.PI / 2.0 * turnNonLinearity * turn)
+					/ Math.sin(Math.PI / 2.0 * turnNonLinearity);
+			turn = Math.sin(Math.PI / 2.0 * turnNonLinearity * turn)
+					/ Math.sin(Math.PI / 2.0 * turnNonLinearity);
+		}
+		
+		double leftPwm, rightPwm, overPower;
+		double sensitivity;
+		
+		double angularPower;
+		double linearPower;
+		
+		//Negative Inertia
+		double negInertiaAccumulator = 0.0;
+		double negInertiaScalar;
+		
+		if(highgear)
+		{
+			negInertiaScalar = 5.0;
+			sensitivity = CHEESY_SENSITIVITY_HIGH;
+		}
+		else
+		{
+			if(turn * negInertia > 0)
+			{
+				negInertiaScalar = 2.5;
+			}
+			else
+			{
+				if(Math.abs(turn) > 0.65)
+				{
+					negInertiaScalar = 5.0;
+				}
+				else
+				{
+					negInertiaScalar = 3.0;
+				}
+			}
+			sensitivity = CHEESY_SENSITIVITY_LOW;
+		}
+		
+		double negInertiaPower = negInertia * negInertiaScalar;
+		negInertiaAccumulator += negInertiaPower;
+		
+		turn = turn + negInertiaAccumulator;
+		if(negInertiaAccumulator > 1)
+		{
+			negInertiaAccumulator -= 1;
+		}
+		else if(negInertiaAccumulator < -1)
+		{
+			negInertiaAccumulator += 1;
+		}
+		else
+		{
+			negInertiaAccumulator = 0;
+		}
+		linearPower = speed;
+		
+		//Quick Turn
+		if(quickturn)
+		{
+			if(Math.abs(linearPower) < 0.2)
+			{
+				double alpha = 0.1;
+				quickStopAccumulator = (1 - alpha) * quickStopAccumulator + alpha * limit(turn, 1.0) * 5;
+			}
+			
+			overPower = 1.0;
+			
+			if(highgear)
+			{
+				sensitivity = 1.0;
+			}
+			else 
+			{
+				sensitivity = 1.0;
+			}
+			angularPower = turn;
+		}
+		else
+		{
+			overPower = 0.0;
+			angularPower = Math.abs(speed) * turn * sensitivity - quickStopAccumulator;
+			if(quickStopAccumulator > 1)
+			{
+				quickStopAccumulator -= 1;
+			}
+			else if (quickStopAccumulator < -1)
+			{
+				quickStopAccumulator += 1;
+			}
+			else
+			{
+				quickStopAccumulator = 0.0;
+			}
+		}
+		
+		rightPwm = leftPwm = linearPower;
+		leftPwm += angularPower;
+		rightPwm -= angularPower;
+		
+		if(leftPwm > 1.0)
+		{
+			rightPwm -= overPower * (leftPwm - 1.0);
+			leftPwm = 1.0;
+		}
+		else if(rightPwm > 1.0)
+		{
+			leftPwm -= overPower * (rightPwm - 1.0);
+			rightPwm = 1.0;
+		}
+		else if(leftPwm < -1.0)
+		{
+			rightPwm += overPower * (-1.0 - leftPwm);
+			leftPwm = -1.0;
+		}
+		else if(rightPwm < -1.0)
+		{
+			leftPwm += overPower * (-1.0 - rightPwm);
+			rightPwm = -1.0;
+		}
+		
+		setDriveLeft(leftPwm);
+		setDriveRight(rightPwm);
+	}
+	
+	
+	public double handleDeadzone(double val, double deadzone)
+	{
+		return (Math.abs(val) > Math.abs(deadzone)) ? val : 0.0;
+	}
+	
+	//Limits the given input to the given magnitude
+	public double limit(double v, double limit) {
+	    return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
+	}
+	
 	
 	public void stopAll() // Stops all motors and resets all solenoids
 	{
@@ -162,5 +338,10 @@ public class RobotOutput implements RobotOutputProvider {
 		rightDrive3.set(0);
 		driveShift.set(false);
 		
+	}
+
+	@Override
+	public void setArm(double speed) {
+		arm.set(speed);
 	}
 }

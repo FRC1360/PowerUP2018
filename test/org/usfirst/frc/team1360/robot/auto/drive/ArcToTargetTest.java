@@ -22,6 +22,8 @@ import org.mockito.stubbing.Answer;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.Riolog;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPosition;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
@@ -44,12 +46,17 @@ public class ArcToTargetTest {
 
     @Before
     public void setUp() throws Exception {
+        Singleton.configure(Riolog.class);
+
+        //register mocked inout and output
         Singleton.configure(RobotOutputProvider.class, robotOutput);
         Singleton.configure(SensorInputProvider.class, sensorInput);
+        
         position = Singleton.configure(DriveEncoderPositionProvider.class);
 
         driveTrain = new DriveTrain(position);
 
+        //this records output values in order to convert into encoder rotations
         doAnswer(driveTrain.tankDrive()).when(robotOutput).tankDrive(anyDouble(), anyDouble());
 
         doAnswer(driveTrain.getLeftDriveEncoder()).when(sensorInput).getLeftDriveEncoder();
@@ -157,8 +164,6 @@ public class ArcToTargetTest {
                         start = now();
                         path.add(position.getPosition());
                     }
-
-                    System.out.printf("x:%.2f, y:%.2f %n", position.getX(), position.getY());
 
                     Thread.sleep(1);
                 }

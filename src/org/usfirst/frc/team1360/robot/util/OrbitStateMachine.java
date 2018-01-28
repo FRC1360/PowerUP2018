@@ -75,7 +75,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	
 	/**
 	 * An exception that is thrown to inform RunThread to switch to a different state
-	 * @see Context.nextState
+	 * @see this.Context#nextState
 	 * @author Nick Mertin
 	 */
 	@SuppressWarnings("serial")

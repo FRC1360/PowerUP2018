@@ -34,8 +34,8 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
-		routines.add(new EncoderSwitch());
-		routines.add(new Test());
+		//routines.add(new EncoderSwitch());
+		//routines.add(new Test());
 		routines.add(new Demo());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());

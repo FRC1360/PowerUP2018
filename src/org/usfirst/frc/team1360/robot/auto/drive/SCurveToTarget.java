@@ -17,7 +17,7 @@ public final class SCurveToTarget extends AutonRoutine {
 		this.x = x;
 		this.y = y;
 		this.startAngle = startAngle * Math.PI / 180;
-		this.epsilon = epsilon * epsilon;
+		this.epsilon = epsilon;
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public final class SCurveToTarget extends AutonRoutine {
 		double dy = y - ys;
 		double lineAngle = Math.atan2(dx, dy);
 		double startAngle2 = startAngle + 2 * (lineAngle - startAngle);
-		new ArcToTarget(0, x, y, xCenter, yCenter, startAngle, epsilon).runUntilFinish();
+		new ArcToTarget(0, xs, ys, xCenter, yCenter, startAngle, epsilon).runUntilFinish();
 		new ArcToTarget(0, xCenter, yCenter, x, y, startAngle2, epsilon).runUntilFinish();
 	}
 }

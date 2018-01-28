@@ -7,11 +7,22 @@
 
 package org.usfirst.frc.team1360.robot;
 
+import org.usfirst.frc.team1360.robot.IO.HumanInput;
+import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.IO.RobotOutput;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
+import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
+import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
+import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
+import org.usfirst.frc.team1360.robot.teleop.TeleopIntake;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.TempFileLog;
+import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -27,7 +38,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @SingletonStatic
 public class Robot extends TimedRobot {
+	private LogProvider log;
+	private HumanInputProvider humanInput;
 	private SensorInputProvider sensorInput;
+	private RobotOutputProvider robotOutput;
 	private OrbitPositionProvider position;
 	private TeleopControl teleopControl;
 
@@ -37,11 +51,18 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		teleopControl = Singleton.get(TeleopControl.class);
+		log = Singleton.configure(TempFileLog.class);
+		humanInput = Singleton.configure(HumanInput.class);
+		sensorInput = Singleton.configure(SensorInput.class);
+		robotOutput = Singleton.configure(RobotOutput.class);
+		position = Singleton.configure(DriveEncoderPositionProvider.class);
+		teleopControl = Singleton.configure(TeleopControl.class);
+		Singleton.configure(TeleopDrive.class);
+		Singleton.configure(TeleopIntake.class);
+		Singleton.configure(TeleopElevator.class);
 		
-		sensorInput = Singleton.get(SensorInputProvider.class);
+		robotOutput.clearStickyFaults();
 		sensorInput.reset();
-		position = Singleton.get(OrbitPositionProvider.class);
 	}
 
 	/**

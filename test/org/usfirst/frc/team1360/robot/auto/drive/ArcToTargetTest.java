@@ -22,6 +22,7 @@ import org.mockito.stubbing.Answer;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPosition;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
@@ -43,9 +44,9 @@ public class ArcToTargetTest {
 
     @Before
     public void setUp() throws Exception {
-        Singleton.initialize(RobotOutputProvider.class, robotOutput);
-        Singleton.initialize(SensorInputProvider.class, sensorInput);
-        position = Singleton.get(OrbitPositionProvider.class);
+        Singleton.configure(RobotOutputProvider.class, robotOutput);
+        Singleton.configure(SensorInputProvider.class, sensorInput);
+        position = Singleton.configure(DriveEncoderPositionProvider.class);
 
         driveTrain = new DriveTrain(position);
 

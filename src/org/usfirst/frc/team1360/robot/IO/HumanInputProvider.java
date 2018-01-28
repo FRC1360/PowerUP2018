@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1360.robot.IO;
 
-import org.usfirst.frc.team1360.robot.util.SingletonType;
-
-@SingletonType(HumanInput.class)
 public interface HumanInputProvider {
 
 	//---------Racing--------------
@@ -34,6 +31,15 @@ public interface HumanInputProvider {
 	double getTankRight();
 
 	boolean getTankShift();
+	
+	//----------Cheesy Drive Controls----------
+	double getCheesyThrottle();
+	
+	double getCheesyTurn();
+	
+	boolean getCheesyShift();
+	
+	boolean getCheesyQuickTurn();
 
 	//----------Logitech Controls------
 	//TODO Change to WPILIB Logitech class

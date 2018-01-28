@@ -24,7 +24,7 @@ public final class Singleton {
 			return (T) objects.get(see == null ? clazz : see.value());
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> T configure(Class<T> clazz) {
 		SingletonStatic _static = clazz.getAnnotation(SingletonStatic.class);
@@ -34,9 +34,9 @@ public final class Singleton {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static <T> T configure(Class<T> clazz, T value) {
-		SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
+		SingletonSee see = clazz.getAnnotation(SingletonSee.class);
 		objects.put(see == null ? clazz : see.value(), value);
 		return value;
 	}

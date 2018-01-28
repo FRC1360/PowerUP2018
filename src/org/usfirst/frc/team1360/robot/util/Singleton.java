@@ -56,4 +56,12 @@ public final class Singleton {
 			});	
 		}
 	}
+
+	/**
+	 * This method is used for injecting mocks in unit tests.
+	 * Can be removed when Nick's changes merged.
+	 */
+	public static void initialize(Class<?> interfaceClass, Object instance) {
+		objects.put(interfaceClass, instance);
+	}
 }

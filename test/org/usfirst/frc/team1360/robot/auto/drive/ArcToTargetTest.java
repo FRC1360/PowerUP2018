@@ -1,15 +1,10 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
-import static java.time.Instant.now;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.doAnswer;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -22,7 +17,6 @@ import org.mockito.stubbing.Answer;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.log.Riolog;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPosition;
@@ -31,8 +25,8 @@ import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 @RunWith(MockitoJUnitRunner.class)
 public class ArcToTargetTest {
 
-    private int startX=0, startY=0;
-    private int destX, destY;
+    private double startX = 0, startY = 0;
+    private double destX, destY;
 
     @Mock
     protected RobotOutputProvider robotOutput;
@@ -54,7 +48,7 @@ public class ArcToTargetTest {
         
         position = Singleton.configure(DriveEncoderPositionProvider.class);
 
-        driveTrain = new DriveTrain(position);
+        driveTrain = new DriveTrain();
 
         //this records output values in order to convert into encoder rotations
         doAnswer(driveTrain.tankDrive()).when(robotOutput).tankDrive(anyDouble(), anyDouble());
@@ -62,8 +56,10 @@ public class ArcToTargetTest {
         doAnswer(driveTrain.getLeftDriveEncoder()).when(sensorInput).getLeftDriveEncoder();
         doAnswer(driveTrain.getRightDriveEncoder()).when(sensorInput).getRightDriveEncoder();
 
-        robot =  new Thread(driveTrain);
+        robot = new Thread(driveTrain);
         robot.start();
+        
+        position.start();
     }
 
     @After
@@ -76,15 +72,9 @@ public class ArcToTargetTest {
         destX = 0;
         destY = 50;
 
-        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 0).runUntilFinish();
+        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
-        assertEquals(Arrays.asList(
-                new OrbitPosition(10, 0, 0),
-                new OrbitPosition(20, 0, 0),
-                new OrbitPosition(30, 0, 0),
-                new OrbitPosition(40, 0, 0),
-                new OrbitPosition(50, 0, 0)
-        ), driveTrain.getPath());
+        checkTarget(2);
     }
 
     @Test
@@ -92,15 +82,9 @@ public class ArcToTargetTest {
         destX = 50;
         destY = 50;
 
-        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 0).runUntilFinish();
+        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
-        assertEquals(Arrays.asList(
-                new OrbitPosition(10, 10, 0),
-                new OrbitPosition(20, 20, 0),
-                new OrbitPosition(30, 30, 0),
-                new OrbitPosition(40, 40, 0),
-                new OrbitPosition(50, 50, 0)
-        ), driveTrain.getPath());
+        checkTarget(2);
     }
 
     @Test
@@ -108,32 +92,27 @@ public class ArcToTargetTest {
         destX = -50;
         destY = 50;
 
-        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 0).runUntilFinish();
+        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
-        assertEquals(Arrays.asList(
-                new OrbitPosition(-10, 10, 0),
-                new OrbitPosition(-20, 20, 0),
-                new OrbitPosition(-30, 30, 0),
-                new OrbitPosition(-40, 40, 0),
-                new OrbitPosition(-50, 50, 0)
-        ), driveTrain.getPath());
+        checkTarget(2);
+    }
+    
+    private void checkTarget(double epsilon) {
+    	double dx = destX - position.getX();
+    	double dy = destY - position.getY();
+    	double d = Math.sqrt(dx * dx + dy * dy);
+    	
+    	if (d > epsilon)
+    		fail(String.format("Expected: <%f\"; Actual: %f\"", epsilon, d));
     }
 
     private static class DriveTrain implements Runnable {
 
-        private int leftEncoder;
-        private int rightEncoder;
+        private double leftEncoder;
+        private double rightEncoder;
 
         private double leftMotor;
         private double rightMotor;
-
-        private OrbitPositionProvider position;
-
-        private List<OrbitPosition> path = new ArrayList<>();
-
-        DriveTrain(OrbitPositionProvider position) {
-            this.position = position;
-        }
 
         Answer<Void> tankDrive() {
             return invocation -> {
@@ -146,25 +125,18 @@ public class ArcToTargetTest {
         }
 
         Answer<Integer> getLeftDriveEncoder() {
-            return invocation -> leftEncoder;
+            return invocation -> (int) leftEncoder;
         }
 
         Answer<Integer> getRightDriveEncoder() {
-            return invocation -> rightEncoder;
+            return invocation -> (int) rightEncoder;
         }
 
         @Override
         public void run() {
             try {
-                Instant start = now();
                 while (true) {
                     updateEncoders();
-
-                    if (Duration.between(start, now()).getSeconds()==1) {
-                        start = now();
-                        path.add(position.getPosition());
-                    }
-
                     Thread.sleep(1);
                 }
             } catch (InterruptedException e) {
@@ -172,13 +144,9 @@ public class ArcToTargetTest {
             }
         }
 
-        public List<OrbitPosition> getPath() {
-            return path;
-        }
-
         private void updateEncoders() {
-            leftEncoder += leftMotor * 10;
-            rightEncoder += rightMotor * 10;
+            leftEncoder += leftMotor * 50;
+            rightEncoder += rightMotor * 50;
         }
     }
 }

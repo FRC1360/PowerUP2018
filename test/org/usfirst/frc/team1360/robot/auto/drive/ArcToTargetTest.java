@@ -4,9 +4,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.doAnswer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +16,6 @@ import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.Riolog;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
-import org.usfirst.frc.team1360.robot.util.position.OrbitPosition;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,6 +48,7 @@ public class ArcToTargetTest {
 
         //this records output values in order to convert into encoder rotations
         doAnswer(driveTrain.tankDrive()).when(robotOutput).tankDrive(anyDouble(), anyDouble());
+        doAnswer(driveTrain.arcadeDrivePID()).when(robotOutput).arcadeDrivePID(anyDouble(), anyDouble());
 
         doAnswer(driveTrain.getLeftDriveEncoder()).when(sensorInput).getLeftDriveEncoder();
         doAnswer(driveTrain.getRightDriveEncoder()).when(sensorInput).getRightDriveEncoder();
@@ -72,7 +69,7 @@ public class ArcToTargetTest {
         destX = 0;
         destY = 50;
 
-        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 2).runUntilFinish();
+        new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
         checkTarget(2);
     }
@@ -82,7 +79,7 @@ public class ArcToTargetTest {
         destX = 50;
         destY = 50;
 
-        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 2).runUntilFinish();
+        new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
         checkTarget(2);
     }
@@ -92,7 +89,7 @@ public class ArcToTargetTest {
         destX = -50;
         destY = 50;
 
-        new ArcToTarget(5_000, startX, startY, destX, destY, 0, 2).runUntilFinish();
+        new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
         checkTarget(2);
     }
@@ -119,9 +116,26 @@ public class ArcToTargetTest {
                 //these are values passed to robotOutput.tankDrive(left, right);
                 leftMotor = invocation.getArgument(0);
                 rightMotor = invocation.getArgument(1);
+                
+                System.out.printf("DRIVE %1.4f %1.4f\n", leftMotor, rightMotor);
 
                 return null;
             };
+        }
+        
+        Answer<Void> arcadeDrivePID() {
+        	return invocation -> {
+        		//these are values passed to robotOutput.arcadeDrivePID(throttle, turn);
+        		double throttle = invocation.getArgument(0);
+        		double turn = invocation.getArgument(1);
+        		
+        		leftMotor = throttle + turn;
+        		rightMotor = throttle - turn;
+                
+                System.out.printf("DRIVE %1.4f %1.4f\n", leftMotor, rightMotor);
+                
+                return null;
+        	};
         }
 
         Answer<Integer> getLeftDriveEncoder() {

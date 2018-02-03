@@ -213,6 +213,11 @@ public class HumanInput implements HumanInputProvider {
     		return operator.getY(Hand.kLeft);
     }
 
+	@Override
+	public double getArm() {
+		return operator.getX(Hand.kRight);
+	}
+
 	//-----------Auto Selection-----------
 	@Override
 	public boolean getAutoInc() {
@@ -235,7 +240,7 @@ public class HumanInput implements HumanInputProvider {
 	}
 	//returns input after comparing to deadzone
 	public double deadzone(double Input, double deadzone) {
-		if (Math.abs(Input) < deadzone) {
+		if (Math.abs(Input) > deadzone) {
 			return Input;
 		}
 		return 0;

@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.util.NavxIO;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -59,7 +60,7 @@ public class SensorInput implements SensorInputProvider {
 		topSwitch = new DigitalInput(7); //change ports as needed
 		
 		armTopSwitch = new DigitalInput(8);
-		armEnc = new Encoder(9, 10);
+		armEnc = new Encoder(NavxIO.dio(0), NavxIO.dio(1));
 
 		ahrsThread = new Thread(() ->
 		{

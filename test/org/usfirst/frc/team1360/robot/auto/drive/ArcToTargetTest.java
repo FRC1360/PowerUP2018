@@ -21,7 +21,7 @@ import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 @RunWith(MockitoJUnitRunner.class)
 public class ArcToTargetTest {
 
-    private double startX = 0, startY = 0;
+    private final double startX = 0, startY = 0;
     private double destX, destY;
 
     @Mock
@@ -29,9 +29,8 @@ public class ArcToTargetTest {
     @Mock
     protected SensorInputProvider sensorInput;
 
-    protected OrbitPositionProvider position;
+    protected DriveEncoderPositionProvider position;
 
-    private Thread robot;
     private DriveTrain driveTrain;
 
     @Before
@@ -44,7 +43,7 @@ public class ArcToTargetTest {
         
         position = Singleton.configure(DriveEncoderPositionProvider.class);
 
-        driveTrain = new DriveTrain();
+        driveTrain = new DriveTrain(position.getInchesPerTick());
 
         //this records output values in order to convert into encoder rotations
         doAnswer(driveTrain.tankDrive()).when(robotOutput).tankDrive(anyDouble(), anyDouble());
@@ -53,15 +52,13 @@ public class ArcToTargetTest {
         doAnswer(driveTrain.getLeftDriveEncoder()).when(sensorInput).getLeftDriveEncoder();
         doAnswer(driveTrain.getRightDriveEncoder()).when(sensorInput).getRightDriveEncoder();
 
-        robot = new Thread(driveTrain);
-        robot.start();
-        
         position.start();
     }
 
     @After
     public void tearDown() throws Exception {
-        robot.interrupt();
+        position.stop();
+        position.reset(0, 0, 0);
     }
 
     @Test
@@ -103,21 +100,34 @@ public class ArcToTargetTest {
     		fail(String.format("Expected: <%f\"; Actual: %f\"", epsilon, d));
     }
 
-    private static class DriveTrain implements Runnable {
+    private static class DriveTrain {
+        private static final double MAX_SPEED_LOW = 102; //inches per second
+        private static final double MAX_SPEED_TOP = 192; //inches per second
 
-        private double leftEncoder;
-        private double rightEncoder;
+        private double inchesPerTick;
+
+        private double leftEncoder = 0;
+        private double rightEncoder = 0;
 
         private double leftMotor;
         private double rightMotor;
+
+        private long lastUpdateTimestamp;
+
+        DriveTrain(double inchesPerTick) {
+            this.inchesPerTick = inchesPerTick;
+            this.lastUpdateTimestamp = System.currentTimeMillis();
+        }
 
         Answer<Void> tankDrive() {
             return invocation -> {
                 //these are values passed to robotOutput.tankDrive(left, right);
                 leftMotor = invocation.getArgument(0);
                 rightMotor = invocation.getArgument(1);
+
+                updateEncoders();
                 
-                System.out.printf("DRIVE %1.4f %1.4f\n", leftMotor, rightMotor);
+                System.out.printf("tankDRIVE %1.4f->%1.4f %1.4f->%1.4f\n", leftMotor, leftEncoder, rightMotor, rightEncoder);
 
                 return null;
             };
@@ -129,10 +139,12 @@ public class ArcToTargetTest {
         		double throttle = invocation.getArgument(0);
         		double turn = invocation.getArgument(1);
         		
-        		leftMotor = throttle + turn;
-        		rightMotor = throttle - turn;
-                
-                System.out.printf("DRIVE %1.4f %1.4f\n", leftMotor, rightMotor);
+        		leftMotor = throttle + turn/2;
+        		rightMotor = throttle - turn/2;
+
+                updateEncoders();
+
+                System.out.printf("arcadeDRIVE %1.4f %1.4f\n", leftMotor, rightMotor);
                 
                 return null;
         	};
@@ -146,21 +158,13 @@ public class ArcToTargetTest {
             return invocation -> (int) rightEncoder;
         }
 
-        @Override
-        public void run() {
-            try {
-                while (true) {
-                    updateEncoders();
-                    Thread.sleep(1);
-                }
-            } catch (InterruptedException e) {
-                //exit
-            }
-        }
-
         private void updateEncoders() {
-            leftEncoder += leftMotor * 50;
-            rightEncoder += rightMotor * 50;
+            long now = System.currentTimeMillis();
+            long travelTime = (now - lastUpdateTimestamp); //in seconds
+            lastUpdateTimestamp = now;
+
+            leftEncoder += (leftMotor * MAX_SPEED_LOW) * travelTime * inchesPerTick;
+            rightEncoder += (rightMotor * MAX_SPEED_LOW) * travelTime * inchesPerTick;
         }
     }
 }

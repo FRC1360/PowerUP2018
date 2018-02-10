@@ -53,14 +53,17 @@ public class SensorInput implements SensorInputProvider {
 	{
 		PDP = new PowerDistributionPanel();
 		
-		leftDriveEnc = new Encoder(3, 2);
-		rightDriveEnc = new Encoder(0, 1);
+		leftDriveEnc = new Encoder(0, 1);
+		rightDriveEnc = new Encoder(2, 3);
 		elevatorEnc = new Encoder(4, 5);
+//		armEnc = new Encoder(6, 7);
+
 		bottomSwitch = new DigitalInput(6); // change ports as needed
 		topSwitch = new DigitalInput(7); //change ports as needed
 		
 		armTopSwitch = new DigitalInput(8);
-		armEnc = new Encoder(NavxIO.dio(0), NavxIO.dio(1));
+//		solDriveEnc = new Encoder(0);
+		armEnc = new Encoder(NavxIO.dio(1), NavxIO.dio(2));
 
 		ahrsThread = new Thread(() ->
 		{

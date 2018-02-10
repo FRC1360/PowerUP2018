@@ -14,6 +14,11 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
+import org.usfirst.frc.team1360.robot.subsystem.Arm;
+import org.usfirst.frc.team1360.robot.subsystem.Drive;
+import org.usfirst.frc.team1360.robot.subsystem.Elevator;
+import org.usfirst.frc.team1360.robot.subsystem.Intake;
+import org.usfirst.frc.team1360.robot.teleop.TeleopArm;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
 import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
@@ -56,10 +61,15 @@ public class Robot extends TimedRobot {
 		sensorInput = Singleton.configure(SensorInput.class);
 		robotOutput = Singleton.configure(RobotOutput.class);
 		position = Singleton.configure(DriveEncoderPositionProvider.class);
-		teleopControl = Singleton.configure(TeleopControl.class);
+		Singleton.configure(Drive.class);
+		Singleton.configure(Intake.class);
+		Singleton.configure(Elevator.class);
+		Singleton.configure(Arm.class);
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);
+		Singleton.configure(TeleopArm.class);
+		teleopControl = Singleton.configure(TeleopControl.class);
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();

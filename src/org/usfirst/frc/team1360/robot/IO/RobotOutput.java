@@ -14,15 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonSee(RobotOutputProvider.class)
 public class RobotOutput implements RobotOutputProvider {
   
-	private Victor leftDrive1;
-	private Victor leftDrive2;
-	private Victor leftDrive3;
-	private Victor rightDrive1;
-	private Victor rightDrive2;
-	private Victor rightDrive3;
+	private Victor leftDrive;
+	private Victor rightDrive;
 	private Victor leftIntake;
 	private Victor rightIntake;
-	private Victor arm;
+	private Victor arm1;
+	private Victor arm2;
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
@@ -42,24 +39,20 @@ public class RobotOutput implements RobotOutputProvider {
 		log = Singleton.get(LogProvider.class);
 		log.write("Instantiating RobotOutput");
 		
-		//TODO Add Victor port numbers
-		leftDrive1 = new Victor(2);
-		leftDrive2 = new Victor(3);
-//		leftDrive3 = new Victor(5);
-		rightDrive1 = new Victor(0);
-		rightDrive2 = new Victor(1);
-//		rightDrive3 = new Victor(4);
-		leftIntake = new Victor(4);
-		rightIntake = new Victor(5);
-		arm = new Victor(6);
-		
+		leftDrive = new Victor(0);
+		leftDrive.setInverted(true);
+		rightDrive = new Victor(1);
+
+//		elevatorLeft = new Victor(2);
+//		elevatorRight = new Victor(3);
+
+		arm1 = new Victor(4);
+		arm2 = new Victor(5);
+
+		leftIntake = new Victor(6);
 		leftIntake.setInverted(true);
-		
-		leftDrive1.setInverted(true);
-		leftDrive2.setInverted(true);
-//		leftDrive3.setInverted(true);
-		
-		
+		rightIntake = new Victor(7);
+
 		log.write("Done motors");
 		
 		driveShift = new Solenoid(0);
@@ -108,9 +101,7 @@ public class RobotOutput implements RobotOutputProvider {
 	{
 		log.write("LEFT " + speed);
 		SmartDashboard.putNumber("DL", speed);
-		leftDrive1.set(speed);
-		leftDrive2.set(speed);
-//		leftDrive3.set(speed);
+		leftDrive.set(speed);
 		SmartDashboard.putNumber("Left Voltage", -speed);
 	}
 	
@@ -118,9 +109,7 @@ public class RobotOutput implements RobotOutputProvider {
 	{
 		log.write("RIGHT " + speed);
 		SmartDashboard.putNumber("DR", speed);
-		rightDrive1.set(speed);
-		rightDrive2.set(speed);
-//		rightDrive1.set(speed);
+		rightDrive.set(speed);
 		SmartDashboard.putNumber("Right Voltage", speed);
 	}
 	
@@ -330,18 +319,15 @@ public class RobotOutput implements RobotOutputProvider {
 	public void stopAll() // Stops all motors and resets all solenoids
 	{
 		
-		leftDrive1.set(0);
-		leftDrive2.set(0);
-		leftDrive3.set(0);
-		rightDrive1.set(0);
-		rightDrive2.set(0);
-		rightDrive3.set(0);
+		leftDrive.set(0);
+		rightDrive.set(0);
 		driveShift.set(false);
 		
 	}
 
 	@Override
 	public void setArm(double speed) {
-		arm.set(speed);
+		arm1.set(speed);
+		arm2.set(speed);
 	}
 }

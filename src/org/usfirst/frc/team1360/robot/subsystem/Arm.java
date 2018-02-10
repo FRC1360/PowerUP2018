@@ -10,6 +10,8 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 @SingletonSee(ArmProvider.class)
 public class Arm implements ArmProvider{
 	
@@ -72,7 +74,7 @@ public class Arm implements ArmProvider{
 		HOLD{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				OrbitPID arm = new OrbitPID(1.0, 0.0, 0.0);
+				OrbitPID arm = new OrbitPID(0.01, 0.0, 0.0);
 				
 				if(!(context.getArg() instanceof Integer)) {
 					log.write("No Hold Position Provided to Arm.Hold");
@@ -101,7 +103,32 @@ public class Arm implements ArmProvider{
 	
 	private OrbitStateMachine<ArmState> stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
 	
+	@Override
+	public boolean idle() {
+		try {
+			stateMachine.setState(ArmState.IDLE);
+			return true;
+		} catch (InterruptedException e) {
+			log.write(e.toString());
+			return false;
+		}
+	}
 	
+	@Override
+	public boolean hold(int position) {
+		try {
+			stateMachine.setState(ArmState.HOLD, position);
+			return true;
+		} catch (InterruptedException e) {
+			log.write(e.toString());
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean isHolding() {
+		return stateMachine.getState() == ArmState.HOLD;
+	}
 
 	@Override
 	public boolean goToPosition(int position) {
@@ -147,15 +174,25 @@ public class Arm implements ArmProvider{
 	}
 	
 	public double safety(double power)	{
-		if(sensorInput.getArmSwitch() && power > 0) {
-			return 0;
+		if (Math.abs(sensorInput.getArmEncoderVelocity()) < 5)
+		{
+			if (power > 0.25)
+				power = 0.25;
+			if (power < -0.25)
+				power = -0.25;
 		}
-		else if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
-			return 0;
-		}
-		else {
-			return power;
-		}
+		SmartDashboard.putNumber("Arm vel", sensorInput.getArmEncoderVelocity());
+		SmartDashboard.putNumber("ARM", power);
+		return power;
+//		if(sensorInput.getArmSwitch() && power > 0) {
+//			return 0;
+//		}
+//		else if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
+//			return 0;
+//		}
+//		else {
+//			return power;
+//		}
 	}
 
 	@Override

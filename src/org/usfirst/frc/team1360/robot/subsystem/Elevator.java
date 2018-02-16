@@ -152,7 +152,7 @@ public final class Elevator implements ElevatorProvider {
 	public boolean setManualSpeed(double speed) {
 		synchronized (stateMachine) {
 			if (stateMachine.getState() == ElevatorState.MANUAL) {
-				robotOutput.setElevatorMotor(speed);
+				robotOutput.setElevatorMotor(safety(speed));
 				return true;
 			}
 			return false;

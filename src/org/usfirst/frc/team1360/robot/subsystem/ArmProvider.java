@@ -11,6 +11,6 @@ public interface ArmProvider {
 	boolean goToTop();
 	boolean goToMiddle();
 	boolean goToPosition(int position);
-	boolean setSpeed(double speed);
+	boolean setManualSpeed(double speed);
 	boolean startManual();
 }

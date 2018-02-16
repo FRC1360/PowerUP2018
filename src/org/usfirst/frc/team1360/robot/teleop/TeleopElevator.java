@@ -33,7 +33,7 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if (!elevator.isHolding())
 			{
-				elevator.hold();
+				//elevator.hold();
 			}
 		}
 		else

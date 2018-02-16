@@ -112,12 +112,12 @@ public class SensorInput implements SensorInputProvider {
 	
 	public boolean getBottomSwitch() 
 	{
-		return bottomSwitch.get();
+		return bottomSwitch.get() != true;
 	}
 	//returns switch sensor at top of elevator
 	public boolean getTopSwitch() 
 	{
-		return topSwitch.get();
+		return topSwitch.get() != true;
 	}
 	//return current encoder tick
 	public int getElevatorTick() 

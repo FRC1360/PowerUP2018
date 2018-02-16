@@ -20,6 +20,8 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor rightIntake;
 	private Victor arm1;
 	private Victor arm2;
+	private Victor elevatorLeft;
+	private Victor elevatorRight;
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
@@ -43,8 +45,9 @@ public class RobotOutput implements RobotOutputProvider {
 		leftDrive.setInverted(true);
 		rightDrive = new Victor(1);
 
-//		elevatorLeft = new Victor(2);
-//		elevatorRight = new Victor(3);
+		elevatorLeft = new Victor(2);
+		elevatorRight = new Victor(3);
+		elevatorRight.setInverted(true);
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
@@ -94,7 +97,8 @@ public class RobotOutput implements RobotOutputProvider {
 	//set the speed of the elevator motors
 	@Override
 	public void setElevatorMotor(double motorValue) {
-		//TODO Populate 
+		elevatorRight.set(motorValue);
+		elevatorLeft.set(motorValue);
 	}
 
 	public void setDriveLeft(double speed)

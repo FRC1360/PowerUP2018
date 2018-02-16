@@ -30,10 +30,17 @@ public interface SensorInputProvider {
 	double getArmEncoderVelocity();
 	void resetArmEncoder();
 	
-	void calculate();
-	void reset();
-	int getElevatorTick();
+	//Elevator
+	int getElevatorEncoder();
 	double getElevatorVelocity();
+	void resetElevatorEncoder();
 	boolean getTopSwitch();
 	boolean getBottomSwitch();
+	
+	
+	void calculate();
+	void reset();
+	
+	
+	
 }

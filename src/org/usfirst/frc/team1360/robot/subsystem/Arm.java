@@ -182,7 +182,7 @@ public class Arm implements ArmProvider{
 		if(sensorInput.getArmSwitch() && power < 0) {
 			return 0;
 		}
-		else if(sensorInput.getArmEncoder() >= POS_BOTTOM) {
+		else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power > 0) {
 			return 0;
 		}
 		return power;

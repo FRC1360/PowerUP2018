@@ -19,7 +19,7 @@ public final class TeleopArm implements TeleopComponent {
 		{
 			if (!arm.isHolding())
 			{
-//				arm.hold(sensorInput.getArmEncoder());
+				arm.hold(sensorInput.getArmEncoder());
 				arm.idle();
 			}
 		}

@@ -16,9 +16,6 @@ public enum DriverConfig {
 			double speed = humanInput.getRacingThrottle();
 			double turn = humanInput.getRacingTurn();
 			boolean change = humanInput.getRacingDampen();
-
-			if(Math.abs(turn) < 0.2)
-				turn = 0;
 			
 			if(change)
 			{

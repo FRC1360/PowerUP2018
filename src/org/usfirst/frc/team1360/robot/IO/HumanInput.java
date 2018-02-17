@@ -241,4 +241,11 @@ public class HumanInput implements HumanInputProvider {
 	public boolean getOperatorClamp() {
 		return operator.getBumper(Hand.kLeft);
 	}
+
+	//Returns the angle in degrees of the POV at location X
+	//For example, 0 (at the top) is 0 degrees.  2 is 90 degrees
+	@Override
+	public int getOperatorPOV(int pov) {
+		return this.operator.getPOV(pov);
+	}
 }

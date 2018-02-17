@@ -101,14 +101,16 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public void safety(double power) {
 		log.write("Checking elevator safety on power " + power);
+		
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
-			
 		
 		if (power > 0 && sensorInput.getTopSwitch())
 			robotOutput.setElevatorMotor(0.1);
 		if (power < 0 && sensorInput.getBottomSwitch())
-			robotOutput.setElevatorMotor(-0.1);
+			robotOutput.setElevatorMotor(0);
+		
+		robotOutput.setElevatorMotor(power);
 	}
 	
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached

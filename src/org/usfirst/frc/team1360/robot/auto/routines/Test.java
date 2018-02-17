@@ -3,6 +3,7 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 
 
+
 public final class Test extends AutonRoutine {
 
 	public Test() {
@@ -17,9 +18,13 @@ public final class Test extends AutonRoutine {
 		//position.reset(0, 0, 0);
 		//new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
 		
-		robotOutput.arcadeDrive(1, 0);
-		while (sensorInput.getLeftDriveEncoder() < 1000) System.out.printf("At X Position: %f%n", position.getY());
-		robotOutput.arcadeDrive(0, 0);
-		Thread.sleep(1000);
+		if(elevator.upToTarget(1000))
+			log.write("Finished Elevator Thingy Good");
+		else
+			log.write("Elevator thingy took an L");
+//		elevator.startManual();
+//		elevator.setManualSpeed(0.25);
+
+		Thread.sleep(10000);
 	}
 }

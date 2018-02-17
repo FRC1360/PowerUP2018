@@ -20,6 +20,8 @@ public class RobotOutput implements RobotOutputProvider {
 	private Victor rightIntake;
 	private Victor arm1;
 	private Victor arm2;
+	private Victor elevatorLeft;
+	private Victor elevatorRight;
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
@@ -40,18 +42,19 @@ public class RobotOutput implements RobotOutputProvider {
 		log.write("Instantiating RobotOutput");
 		
 		leftDrive = new Victor(0);
-		leftDrive.setInverted(true);
 		rightDrive = new Victor(1);
+		rightDrive.setInverted(true);
 
-//		elevatorLeft = new Victor(2);
-//		elevatorRight = new Victor(3);
+		elevatorLeft = new Victor(2);
+		elevatorRight = new Victor(3);
+		elevatorLeft.setInverted(true);
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
 
 		leftIntake = new Victor(6);
-		leftIntake.setInverted(true);
 		rightIntake = new Victor(7);
+		rightIntake.setInverted(true);
 
 		log.write("Done motors");
 		
@@ -78,23 +81,27 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off
 		if(clamp == IntakeProvider.FREE)	{
-			intakeClamp1.set(false);
-			intakeClamp2.set(true);
+			intakeClamp1.set(true);
+			intakeClamp2.set(false);
 		}
-		else if(clamp == IntakeProvider.CLOSED)	{
+		else if(clamp == IntakeProvider.OPEN)	{
 			intakeClamp1.set(true);
 			intakeClamp2.set(true);
 		}
-		else if(clamp == IntakeProvider.OPEN)	{
+		else if(clamp == IntakeProvider.CLOSED)	{
 			intakeClamp1.set(false);
 			intakeClamp2.set(false);
 		}
+		//Weird One =
+		//1 = false
+		//2 = true
 	}
 	
 	//set the speed of the elevator motors
 	@Override
 	public void setElevatorMotor(double motorValue) {
-		//TODO Populate 
+		elevatorRight.set(motorValue);
+		elevatorLeft.set(motorValue);
 	}
 
 	public void setDriveLeft(double speed)

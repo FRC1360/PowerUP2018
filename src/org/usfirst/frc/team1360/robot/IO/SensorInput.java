@@ -56,14 +56,14 @@ public class SensorInput implements SensorInputProvider {
 		leftDriveEnc = new Encoder(0, 1);
 		rightDriveEnc = new Encoder(2, 3);
 		elevatorEnc = new Encoder(4, 5);
-//		armEnc = new Encoder(6, 7);
+		armEnc = new Encoder(7, 6);
 
-		bottomSwitch = new DigitalInput(6); // change ports as needed
-		topSwitch = new DigitalInput(7); //change ports as needed
+		bottomSwitch = new DigitalInput(NavxIO.dio(1)); // change ports as needed
+		topSwitch = new DigitalInput(NavxIO.dio(0)); //change ports as needed
 		
-		armTopSwitch = new DigitalInput(8);
+		armTopSwitch = new DigitalInput(NavxIO.dio(2));
 //		solDriveEnc = new Encoder(0);
-		armEnc = new Encoder(NavxIO.dio(1), NavxIO.dio(2));
+//		armEnc = new Encoder(NavxIO.dio(1), NavxIO.dio(2));
 
 		ahrsThread = new Thread(() ->
 		{
@@ -108,26 +108,6 @@ public class SensorInput implements SensorInputProvider {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public boolean getBottomSwitch() 
-	{
-		return bottomSwitch.get();
-	}
-	//returns switch sensor at top of elevator
-	public boolean getTopSwitch() 
-	{
-		return topSwitch.get();
-	}
-	//return current encoder tick
-	public int getElevatorTick() 
-	{
-		return elevatorEnc.get();
-	}
-	//returns speed of elevator
-	public double getElevatorVelocity() 
-	{
-		return elevatorEnc.getRate();
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX
@@ -245,5 +225,31 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public void resetArmEncoder() {
 		armEnc.reset();
+	}
+
+	@Override
+	public int getElevatorEncoder() {
+		return elevatorEnc.get();
+	}
+
+	@Override
+	public void resetElevatorEncoder() {
+		elevatorEnc.reset();
+		
+	}
+
+	@Override
+	public double getElevatorVelocity() {
+		return elevatorEnc.getRate();
+	}
+	
+	@Override
+	public boolean getTopSwitch() {
+		return topSwitch.get() != true;
+	}
+
+	@Override
+	public boolean getBottomSwitch() {
+		return bottomSwitch.get() != true;
 	}
 }

@@ -106,6 +106,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 	}
 
 	@Override
@@ -124,6 +129,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 		
 		teleopControl.runCycle();
 	}
@@ -141,6 +151,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 	}
 
 	/**

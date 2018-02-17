@@ -27,9 +27,7 @@ public enum DriverConfig {
 			}
 			
 			double elevatorHeight = sensorInput.getElevatorEncoder();
-			log.write("Elevator Enc == " + elevatorHeight / 100);
 			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
-			log.write("Multiplier == " + multiplier);
 			
 			speed = speed * multiplier;
 			

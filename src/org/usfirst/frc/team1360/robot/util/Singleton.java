@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1360.robot.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  *
  */
 public final class Singleton {
-	private static final HashMap<Class<?>, Object> objects = new HashMap<>();
+	private static final ConcurrentHashMap<Class<?>, Object> objects = new ConcurrentHashMap<>();
 	private static final ArrayList<Consumer<String>> subscribers = new ArrayList<>();
 	
 	private Singleton() {}
@@ -30,10 +30,8 @@ public final class Singleton {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Class<T> clazz) {
-		synchronized (objects) {
-			SingletonSee see = clazz.getAnnotation(SingletonSee.class);
-			return (T) objects.get(see == null ? clazz : see.value());
-		}
+		SingletonSee see = clazz.getAnnotation(SingletonSee.class);
+		return (T) objects.get(see == null ? clazz : see.value());
 	}
 	
 	@SuppressWarnings("unchecked")

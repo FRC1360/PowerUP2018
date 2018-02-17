@@ -215,7 +215,7 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public boolean getArmSwitch() {
-		return armTopSwitch.get();
+		return !armTopSwitch.get();
 	}
 
 	@Override

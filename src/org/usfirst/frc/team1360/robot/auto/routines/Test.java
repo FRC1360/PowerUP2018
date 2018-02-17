@@ -18,10 +18,24 @@ public final class Test extends AutonRoutine {
 		//position.reset(0, 0, 0);
 		//new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
 		
-		if(elevator.upToTarget(1000))
-			log.write("Finished Elevator Thingy Good");
+		/*if(elevator.upToTarget(1000))
+			log.write("Finished Elevator Up");
 		else
-			log.write("Elevator thingy took an L");
+			log.write("Elevator thingy took an L going Up");
+		
+		if(elevator.downToTarget(500))
+			log.write("Finished Elevator Down");
+		else
+			log.write("RIP Elevator down");*/
+		
+		elevator.upToTarget(1000);
+		
+		while(elevator.isMovingToTarget()) Thread.sleep(10);
+		
+		log.write("Finished");
+		
+		elevator.downToTarget(500);
+		
 //		elevator.startManual();
 //		elevator.setManualSpeed(0.25);
 

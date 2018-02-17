@@ -215,7 +215,7 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public boolean getArmSwitch() {
-		return armTopSwitch.get();
+		return !armTopSwitch.get();
 	}
 
 	@Override
@@ -231,6 +231,11 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public void resetArmEncoder() {
 		armEnc.reset();
+	}
+
+	@Override
+	public double getArmCurrent() {
+		return PDP.getCurrent(4) + PDP.getCurrent(10);
 	}
 
 	@Override
@@ -257,5 +262,10 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public boolean getBottomSwitch() {
 		return bottomSwitch.get() != true;
+	}
+
+	@Override
+	public double getBatteryVoltage() {
+		return PDP.getVoltage();
 	}
 }

@@ -51,6 +51,8 @@ public class RobotOutput implements RobotOutputProvider {
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
+		arm1.setInverted(true);
+		arm2.setInverted(true);
 
 		leftIntake = new Victor(6);
 		rightIntake = new Victor(7);

@@ -44,11 +44,7 @@ public final class Elevator implements ElevatorProvider {
 					pidCalc = pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity());
 					
 					log.write("Trying to power elevator " + Double.toString(pidCalc));
-//					Thread.sleep(10);
-					log.write(elevator == null ? "ELEVATOR IS NULL ABORT ABORT" : elevator.toString());
-					log.write("After safety elevator getting " + Double.toString(elevator.safety(pidCalc)));
-					robotOutput.setElevatorMotor(elevator.safety(pidCalc));
-//					robotOutput.setElevatorMotor(0.5);
+					elevator.safety(pidCalc);
 					Thread.sleep(10);
 				}
 				context.nextState(HOLD);
@@ -67,9 +63,8 @@ public final class Elevator implements ElevatorProvider {
 				OrbitPID pidVel = new OrbitPID(40.0, 0.0, 0.0);
 				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
 				while (sensorInput.getElevatorEncoder() > target) {
-//					robotOutput.setElevatorMotor(elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity())));
-					pidCalc = pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity());
-					robotOutput.setElevatorMotor(elevator.safety(pidCalc));
+          
+					elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity()));
 					Thread.sleep(10);
 				}
 				context.nextState(HOLD);
@@ -79,12 +74,9 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+
 				robotOutput.setElevatorMotor(0.1);
-//				OrbitPID pid = new OrbitPID(1.0, 0.0, 0.0);
-//				while (true) {
-//					robotOutput.setElevatorMotor(elevator.safety(0.05 + pid.calculate(0.0, sensorInput.getElevatorVelocity())));
-//					Thread.sleep(10);
-//				}
+
 			}
 		},
 		
@@ -106,26 +98,17 @@ public final class Elevator implements ElevatorProvider {
 
 	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
 	
-	private double safety(double power) {
+	@Override
+	public void safety(double power) {
 		log.write("Checking elevator safety on power " + power);
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
-		if(sensorInput.getBottomSwitch())
-			log.write("btm switch is on");
-		else
-			log.write("btm switch is off");
-		
-		if(sensorInput.getTopSwitch())
-			log.write("top switch is on");
-		else
-			log.write("top switch is off");
 			
 		
 		if (power > 0 && sensorInput.getTopSwitch())
-			power = 0.1;
+			robotOutput.setElevatorMotor(0.1);
 		if (power < 0 && sensorInput.getBottomSwitch())
-			power = -0.1;
-		return power;
+			robotOutput.setElevatorMotor(-0.1);
 	}
 	
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
@@ -185,7 +168,7 @@ public final class Elevator implements ElevatorProvider {
 	public boolean setManualSpeed(double speed) {
 		synchronized (stateMachine) {
 			if (stateMachine.getState() == ElevatorState.MANUAL) {
-				robotOutput.setElevatorMotor(safety(speed));
+				safety(speed);
 				return true;
 			}
 			return false;

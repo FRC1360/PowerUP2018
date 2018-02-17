@@ -9,7 +9,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.NavxIO;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.ITimestampedDataSubscriber;
@@ -48,6 +50,8 @@ public class SensorInput implements SensorInputProvider {
 	private Thread ahrsThread; // Thread that controls NavX; this is to avoid multiple threads accessing AHRS object, which has caused issues in the past
 	private double[] ahrsValues = new double[7]; // Array to store data from NavX: yaw, pitch, roll, x acceleration (world frame), y acceleration (world frame), x velocity (local frame), y velocity (local frame)
 	private ConcurrentLinkedQueue<Runnable> ahrsThreadDispatchQueue = new ConcurrentLinkedQueue<>(); // Queue code to be run on ahrsThread
+	
+	private LogProvider log;
 	
 	public SensorInput()								//Constructor to initialize fields  
 	{
@@ -108,6 +112,8 @@ public class SensorInput implements SensorInputProvider {
 				e.printStackTrace();
 			}
 		}
+		
+		log = Singleton.get(LogProvider.class);
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX
@@ -234,8 +240,8 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public void resetElevatorEncoder() {
+		log.write("Reset elevator encoder");
 		elevatorEnc.reset();
-		
 	}
 
 	@Override

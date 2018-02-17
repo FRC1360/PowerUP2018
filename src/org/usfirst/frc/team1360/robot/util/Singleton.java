@@ -31,7 +31,10 @@ public final class Singleton {
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Class<T> clazz) {
 		SingletonSee see = clazz.getAnnotation(SingletonSee.class);
-		return (T) objects.get(see == null ? clazz : see.value());
+		if (see != null)
+			push(String.format("Redirect %s -> %s", clazz.getTypeName(), see.value().getTypeName()));
+		T value = (T) objects.get(see == null ? clazz : see.value());
+		return value == null ? see == null ? configure(clazz) : (T) configure(see.value()) : value;
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -27,7 +27,7 @@ public class TeleopElevator implements TeleopComponent {
 	@Override
 	public void calculate() {
 		// TODO Auto-generated method stub
-		double speed = humanInput.deadzone(humanInput.getElevator(), 0.1);
+		double speed = humanInput.getElevator();
 		
 		if (speed == 0)
 		{

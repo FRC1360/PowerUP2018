@@ -6,12 +6,15 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public enum DriverConfig {
 	RACING 
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			double speed = humanInput.getRacingThrottle();
 			double turn = humanInput.getRacingTurn();
@@ -23,6 +26,13 @@ public enum DriverConfig {
 				turn = turn / 2;
 			}
 			
+			double elevatorHeight = sensorInput.getElevatorEncoder();
+			log.write("Elevator Enc == " + elevatorHeight / 100);
+			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
+			log.write("Multiplier == " + multiplier);
+			
+			speed = speed * multiplier;
+			
 			robotOutput.arcadeDrive(speed, turn);
 			robotOutput.shiftGear(humanInput.getRacingShift());
 		}
@@ -31,7 +41,7 @@ public enum DriverConfig {
 	HALO 
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			double turn = humanInput.getHaloTurn();
 			
@@ -47,7 +57,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			double left = humanInput.getTankLeft();
 			double right = humanInput.getTankRight();
@@ -68,7 +78,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput) 
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput) 
 		{
 			double turn = humanInput.getArcadeTurn();
 			
@@ -84,7 +94,7 @@ public enum DriverConfig {
 	JOYSTICKTANK
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			
 			robotOutput.tankDrive(humanInput.getLeftJoystickThrottle(), humanInput.getRightJoystickThrottle());
@@ -97,7 +107,7 @@ public enum DriverConfig {
 	CHEESYDRIVE
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			robotOutput.cheesyDrive(humanInput.getCheesyThrottle(),
 					humanInput.getCheesyTurn(),
@@ -108,5 +118,6 @@ public enum DriverConfig {
 		
 	};
 	
-	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput);
+	protected LogProvider log = Singleton.get(LogProvider.class);
+	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput);
 }

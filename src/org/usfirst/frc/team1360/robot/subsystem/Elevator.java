@@ -97,6 +97,7 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
+	private int topPosOffset = 0;
 	
 	@Override
 	public void safety(double power) {
@@ -105,18 +106,24 @@ public final class Elevator implements ElevatorProvider {
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
 		
+		if(sensorInput.getTopSwitch())
+			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
+		
 		if (power > 0 && sensorInput.getTopSwitch())
 			robotOutput.setElevatorMotor(0.1);
-		
-		else if(/*Math.abs(sensorInput.getElevatorVelocity()) > 200 && */sensorInput.getElevatorEncoder() < 500 && power < 0)
-			robotOutput.setElevatorMotor((-0.002*sensorInput.getElevatorEncoder()));
-		
-		else if(sensorInput.getElevatorVelocity() > 750 && sensorInput.getElevatorEncoder() > 1750)
-			robotOutput.setElevatorMotor(power * 0.25);
 		
 		else if (power < 0 && sensorInput.getBottomSwitch())
 			robotOutput.setElevatorMotor(0);
 		
+		else if(sensorInput.getElevatorEncoder() < POS_BOTTOM + 500 && !sensorInput.getBottomSwitch() && power < 0)
+			robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
+		
+		else if(sensorInput.getElevatorEncoder() > (POS_TOP + topPosOffset) - 500 && !sensorInput.getTopSwitch() && power > 0)
+			if((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.2) 
+				robotOutput.setElevatorMotor(0.2);
+			else
+				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
+
 		else
 			robotOutput.setElevatorMotor(power);
 	}

@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1360.robot.util;
 
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+
 /**
  * An instance of this class represents an asynchronous state machine
  * @author Nick Mertin
@@ -11,6 +13,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	private volatile T state;
 	private volatile Object arg;
 	private volatile RunThread thread;
+	private LogProvider log = Singleton.get(LogProvider.class);
 	
 	/**
 	 * Creates a new state machine
@@ -55,6 +58,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 * @throws InterruptedException In the unlikely event that the current thread is interrupted while waiting for the run thread to complete
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
+		Singleton.get(LogProvider.class).write(String.format("%s -> %s", this.state.toString(), state.toString()));
 		if (thread.isAlive()) {
 			thread.interrupt();
 			thread.join();
@@ -133,9 +137,10 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 						state = (T) e.getNextState();
 					}
 				} catch (InterruptedException e) {
+					log.write("State machine internal run thread interrupted");
 					return;
 				} catch (Throwable t) {
-					t.printStackTrace();
+					log.write(t.toString());
 					return;
 				}
 		}

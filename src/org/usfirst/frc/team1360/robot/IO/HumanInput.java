@@ -39,7 +39,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingTurn()
 	{
-		return deadzone(driver.getX(Hand.kLeft), 0.1);
+		return deadzone(driver.getX(Hand.kLeft), 0.2);
 	}
 	
 	/* (non-Javadoc)

@@ -34,20 +34,21 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 				double pidCalc = 0;
-				OrbitPID pidVel = new OrbitPID(1.0, 0.0, 0.0);
-				//OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
+				OrbitPID pidVel = new OrbitPID(40, 0.0, 0.0);
+				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
 				
 				log.write("target is set to "+ Integer.toString(target));
 				log.write("encoder is at "+ Integer.toString(sensorInput.getElevatorEncoder()));
 				
 				while (sensorInput.getElevatorEncoder() < target) {
-					pidCalc = pidVel.calculate(target, sensorInput.getElevatorEncoder());
+					pidCalc = pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity());
 					
 					log.write("Trying to power elevator " + Double.toString(pidCalc));
-					Thread.sleep(10);
+//					Thread.sleep(10);
+					log.write(elevator == null ? "ELEVATOR IS NULL ABORT ABORT" : elevator.toString());
 					log.write("After safety elevator getting " + Double.toString(elevator.safety(pidCalc)));
-					//robotOutput.setElevatorMotor(elevator.safety(pidCalc));
-					robotOutput.setElevatorMotor(0.5);
+					robotOutput.setElevatorMotor(elevator.safety(pidCalc));
+//					robotOutput.setElevatorMotor(0.5);
 					Thread.sleep(10);
 				}
 				context.nextState(HOLD);
@@ -92,13 +93,17 @@ public final class Elevator implements ElevatorProvider {
 		protected LogProvider log = Singleton.get(LogProvider.class);
 		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-		protected Elevator elevator = Singleton.get(Elevator.class);
-			
+		public static Elevator elevator;
 	};
+	
+	public Elevator() {
+		ElevatorState.elevator = this;
+	}
 
 	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
 	
 	private double safety(double power) {
+		log.write("Checking elevator safety on power " + power);
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
 		if(sensorInput.getBottomSwitch())

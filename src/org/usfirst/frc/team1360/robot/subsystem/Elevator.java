@@ -63,10 +63,13 @@ public final class Elevator implements ElevatorProvider {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
-				OrbitPID pidVel = new OrbitPID(1.0, 0.0, 0.0);
+				double pidCalc = 0;
+				OrbitPID pidVel = new OrbitPID(40.0, 0.0, 0.0);
 				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
 				while (sensorInput.getElevatorEncoder() > target) {
-					robotOutput.setElevatorMotor(elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity())));
+//					robotOutput.setElevatorMotor(elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity())));
+					pidCalc = pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity());
+					robotOutput.setElevatorMotor(elevator.safety(pidCalc));
 					Thread.sleep(10);
 				}
 				context.nextState(HOLD);
@@ -225,6 +228,11 @@ public final class Elevator implements ElevatorProvider {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean isMovingToTarget() {
+		return stateMachine.getState() == ElevatorState.DOWN_TO_TARGET || stateMachine.getState() == ElevatorState.UP_TO_TARGET;
 	}
 }
 

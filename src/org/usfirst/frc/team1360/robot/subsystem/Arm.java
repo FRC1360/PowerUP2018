@@ -2,7 +2,6 @@ package org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
-import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
@@ -10,7 +9,6 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(ArmProvider.class)
 public class Arm implements ArmProvider{
@@ -31,7 +29,7 @@ public class Arm implements ArmProvider{
 				}
 				
 				int target = (Integer) context.getArg();
-				robotOutput.setArm(-1.0);
+				arm.safety(-1.0);
 				
 				while(sensorInput.getArmEncoder() > target)	{
 					Thread.sleep(10);
@@ -51,7 +49,7 @@ public class Arm implements ArmProvider{
 				}
 				
 				int target = (Integer) context.getArg();
-				robotOutput.setArm(1.0);
+				arm.safety(1.0);
 				
 				while(sensorInput.getArmEncoder() < target)	{
 					Thread.sleep(10);
@@ -65,7 +63,7 @@ public class Arm implements ArmProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				while(!sensorInput.getArmSwitch()) {
-					robotOutput.setArm(0.75);
+					arm.safety(0.75);
 					Thread.sleep(10);
 				}
 				sensorInput.resetArmEncoder();
@@ -83,34 +81,29 @@ public class Arm implements ArmProvider{
 		HOLD{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				OrbitPID arm = new OrbitPID(0.01, 0.0, 0.0);
-				
-				if(!(context.getArg() instanceof Integer)) {
-					log.write("No Hold Position Provided to Arm.Hold");
-					context.nextState(IDLE);
-				}
-				
-				while(true) {
-					robotOutput.setArm(arm.calculate((Integer) context.getArg(), sensorInput.getArmEncoder()));
-					Thread.sleep(10);
-				}
-				
+				arm.safety(0);
 			}	
 		},
 		IDLE{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				robotOutput.setArm(0);
+				arm.safety(0);
 			}
 			
 		};
 		
-		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+		
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		protected LogProvider log = Singleton.get(LogProvider.class);
+		public static Arm arm;
+	}
+	
+	public Arm() {
+		ArmState.arm = this;
 	}
 	
 	private OrbitStateMachine<ArmState> stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
+	
 	
 	@Override
 	public boolean idle() {
@@ -175,14 +168,14 @@ public class Arm implements ArmProvider{
 	public boolean setManualSpeed(double speed) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
-				robotOutput.setArm(safety(speed));
+				safety(speed);
 				return true;
 			}
 			return false;
 		}
 	}
 	
-	public double safety(double power)	{
+	public void safety(double power)	{
 		if(sensorInput.getArmSwitch())
 			sensorInput.resetArmEncoder();
 		
@@ -190,14 +183,15 @@ public class Arm implements ArmProvider{
 			cooldown = System.currentTimeMillis() + 500;
 		
 		if (System.currentTimeMillis() < cooldown)
-			return 0;
+			robotOutput.setElevatorMotor(0);
 		
 		if(sensorInput.getArmEncoder() >= POS_TOP && power > 0)
-			return 0;
-		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
-			return 0;
+			robotOutput.setElevatorMotor(0);
 		
-		return power;
+		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
+			robotOutput.setElevatorMotor(0);
+		
+		robotOutput.setElevatorMotor(power);
 	}
 
 	@Override

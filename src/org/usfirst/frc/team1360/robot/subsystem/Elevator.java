@@ -76,11 +76,12 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				OrbitPID pid = new OrbitPID(1.0, 0.0, 0.0);
-				while (true) {
-					robotOutput.setElevatorMotor(elevator.safety(0.05 + pid.calculate(0.0, sensorInput.getElevatorVelocity())));
-					Thread.sleep(10);
-				}
+				robotOutput.setElevatorMotor(0.1);
+//				OrbitPID pid = new OrbitPID(1.0, 0.0, 0.0);
+//				while (true) {
+//					robotOutput.setElevatorMotor(elevator.safety(0.05 + pid.calculate(0.0, sensorInput.getElevatorVelocity())));
+//					Thread.sleep(10);
+//				}
 			}
 		},
 		

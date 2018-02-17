@@ -98,6 +98,7 @@ public final class Elevator implements ElevatorProvider {
 
 	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
 	
+	@Override
 	public void safety(double power) {
 		log.write("Checking elevator safety on power " + power);
 		if(sensorInput.getBottomSwitch())

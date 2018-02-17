@@ -19,6 +19,8 @@ public class Arm implements ArmProvider{
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
+	private long cooldown = 0;
+	
 	private enum ArmState implements OrbitStateMachineState<ArmState>		{
 		DOWN_TO_TARGET{
 			@Override
@@ -28,11 +30,15 @@ public class Arm implements ArmProvider{
 					context.nextState(IDLE);
 				}
 				
-				while(sensorInput.getArmEncoder() < (Integer)context.getArg())	{
-					robotOutput.setArm(1360.0);
+				int target = (Integer) context.getArg();
+				robotOutput.setArm(-1.0);
+				
+				while(sensorInput.getArmEncoder() > target)	{
 					Thread.sleep(10);
 				}
-				context.nextState(HOLD, (Integer)context.getArg());
+				log.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
+				
+				context.nextState(HOLD, target);
 			}
 			
 		},
@@ -44,12 +50,15 @@ public class Arm implements ArmProvider{
 					context.nextState(IDLE);
 				}
 				
-				while(sensorInput.getArmEncoder() > (Integer)context.getArg())	{
-					robotOutput.setArm(1360.0);
+				int target = (Integer) context.getArg();
+				robotOutput.setArm(1.0);
+				
+				while(sensorInput.getArmEncoder() < target)	{
 					Thread.sleep(10);
 				}
+				log.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(HOLD, (Integer)context.getArg());
+				context.nextState(HOLD, target);
 			}
 		},
 		UP_TO_TOP{
@@ -134,10 +143,10 @@ public class Arm implements ArmProvider{
 	public boolean goToPosition(int position) {
 		try {
 			if(sensorInput.getArmEncoder() > position) {
-				stateMachine.setState(ArmState.UP_TO_TARGET, position);
+				stateMachine.setState(ArmState.DOWN_TO_TARGET, position);
 			}
 			else {
-				stateMachine.setState(ArmState.DOWN_TO_TARGET, position);
+				stateMachine.setState(ArmState.UP_TO_TARGET, position);
 			}
 			return true;
 		} catch(InterruptedException e) {
@@ -177,9 +186,15 @@ public class Arm implements ArmProvider{
 		if(sensorInput.getArmSwitch())
 			sensorInput.resetArmEncoder();
 		
-		if(sensorInput.getArmSwitch() && power < 0)
+		if (sensorInput.getArmCurrent() > 200.0)
+			cooldown = System.currentTimeMillis() + 500;
+		
+		if (System.currentTimeMillis() < cooldown)
 			return 0;
-		else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power > 0)
+		
+		if(sensorInput.getArmEncoder() >= POS_TOP && power > 0)
+			return 0;
+		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
 			return 0;
 		
 		return power;

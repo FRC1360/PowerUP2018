@@ -30,7 +30,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingThrottle()
 	{
-		return this.driver.getTriggerAxis(Hand.kRight) - this.driver.getTriggerAxis(Hand.kLeft); 
+		return deadzone(driver.getTriggerAxis(Hand.kRight), 0.1) - deadzone(driver.getTriggerAxis(Hand.kLeft), 0.1); 
 	}
 	
 	/* (non-Javadoc)
@@ -39,7 +39,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingTurn()
 	{
-		return this.driver.getX(Hand.kLeft);
+		return deadzone(driver.getX(Hand.kLeft), 0.1);
 	}
 	
 	/* (non-Javadoc)

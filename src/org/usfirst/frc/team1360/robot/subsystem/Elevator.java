@@ -33,10 +33,21 @@ public final class Elevator implements ElevatorProvider {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
+				double pidCalc = 0;
 				OrbitPID pidVel = new OrbitPID(1.0, 0.0, 0.0);
-				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
+				//OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
+				
+				log.write("target is set to "+ Integer.toString(target));
+				log.write("encoder is at "+ Integer.toString(sensorInput.getElevatorEncoder()));
+				
 				while (sensorInput.getElevatorEncoder() < target) {
-					robotOutput.setElevatorMotor(elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity())));
+					pidCalc = pidVel.calculate(target, sensorInput.getElevatorEncoder());
+					
+					log.write("Trying to power elevator " + Double.toString(pidCalc));
+					Thread.sleep(10);
+					log.write("After safety elevator getting " + Double.toString(elevator.safety(pidCalc)));
+					//robotOutput.setElevatorMotor(elevator.safety(pidCalc));
+					robotOutput.setElevatorMotor(0.5);
 					Thread.sleep(10);
 				}
 				context.nextState(HOLD);
@@ -90,10 +101,20 @@ public final class Elevator implements ElevatorProvider {
 	private double safety(double power) {
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
+		if(sensorInput.getBottomSwitch())
+			log.write("btm switch is on");
+		else
+			log.write("btm switch is off");
 		
-		if (power > 0.1 && sensorInput.getTopSwitch())
+		if(sensorInput.getTopSwitch())
+			log.write("top switch is on");
+		else
+			log.write("top switch is off");
+			
+		
+		if (power > 0 && sensorInput.getTopSwitch())
 			power = 0.1;
-		if (power < -0.1 && sensorInput.getBottomSwitch())
+		if (power < 0 && sensorInput.getBottomSwitch())
 			power = -0.1;
 		return power;
 	}

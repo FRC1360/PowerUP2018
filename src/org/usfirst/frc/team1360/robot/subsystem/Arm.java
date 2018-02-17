@@ -175,16 +175,13 @@ public class Arm implements ArmProvider{
 	
 	public double safety(double power)	{
 		if(sensorInput.getArmSwitch())
-		{
 			sensorInput.resetArmEncoder();
-		}
 		
-		if(sensorInput.getArmSwitch() && power < 0) {
+		if(sensorInput.getArmSwitch() && power < 0)
 			return 0;
-		}
-		else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power > 0) {
+		else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power > 0)
 			return 0;
-		}
+		
 		return power;
 	}
 

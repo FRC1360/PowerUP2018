@@ -58,8 +58,8 @@ public class SensorInput implements SensorInputProvider {
 		elevatorEnc = new Encoder(4, 5);
 		armEnc = new Encoder(7, 6);
 
-		bottomSwitch = new DigitalInput(NavxIO.dio(0)); // change ports as needed
-		topSwitch = new DigitalInput(NavxIO.dio(1)); //change ports as needed
+		bottomSwitch = new DigitalInput(NavxIO.dio(1)); // change ports as needed
+		topSwitch = new DigitalInput(NavxIO.dio(0)); //change ports as needed
 		
 		armTopSwitch = new DigitalInput(NavxIO.dio(2));
 //		solDriveEnc = new Encoder(0);

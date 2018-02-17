@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1360.robot.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 /**
  * Utility class for resolving instances of singleton types
@@ -9,8 +11,17 @@ import java.util.HashMap;
  */
 public final class Singleton {
 	private static final HashMap<Class<?>, Object> objects = new HashMap<>();
+	private static final ArrayList<Consumer<String>> subscribers = new ArrayList<>();
 	
 	private Singleton() {}
+	
+	private static void push(String msg) {
+		synchronized (subscribers) {
+			for (Consumer<String> handler : subscribers) {
+				handler.accept(msg);
+			}
+		}
+	}
 	
 	/**
 	 * Gets the instance of a singleton type
@@ -38,6 +49,13 @@ public final class Singleton {
 	public static <T> T configure(Class<T> clazz, T value) {
 		SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
 		objects.put(see == null ? clazz : see.value(), value);
+		push(String.format("Singleton %s configured as %s by thread %s; total %d", clazz.getTypeName(), value.toString(), Thread.currentThread().getName(), objects.size()));
 		return value;
+	}
+	
+	public static void subscribe(Consumer<String> handler) {
+		synchronized (subscribers) {
+			subscribers.add(handler);
+		}
 	}
 }

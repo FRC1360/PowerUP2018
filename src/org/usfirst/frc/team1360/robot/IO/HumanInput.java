@@ -236,7 +236,7 @@ public class HumanInput implements HumanInputProvider {
 	//returns left joystick of elevator of operator controller
 	public double getElevator()
 	{
-		return -this.operator.getY(Hand.kRight);
+		return deadzone(-operator.getY(Hand.kRight), 0.2);
 	}
 	//returns input after comparing to deadzone
 	public double deadzone(double Input, double deadzone) {

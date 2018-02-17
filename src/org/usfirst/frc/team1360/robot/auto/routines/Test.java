@@ -15,14 +15,14 @@ public final class Test extends AutonRoutine {
 	protected void runCore() throws InterruptedException {
 		
 		//RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-//		new TurnToAngle(0, 90).runUntilFinish();
-		//position.reset(0, 0, 0);
-		//new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
+//		new TurnToAngle(0, 90).runUntilFi
+		elevator.upToTarget(1000);
 		
-//		if(elevator.upToTarget(1000))
-//			log.write("Finished Elevator Thingy Good");
-//		else
-//			log.write("Elevator thingy took an L");
+		while(elevator.isMovingToTarget()) Thread.sleep(10);
+		
+		log.write("Finished");
+		
+		elevator.downToTarget(500);
 //		elevator.startManual();
 //		elevator.setManualSpeed(0.25);
 		

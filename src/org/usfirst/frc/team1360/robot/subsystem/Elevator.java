@@ -119,10 +119,13 @@ public final class Elevator implements ElevatorProvider {
 			robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
 		
 		else if(sensorInput.getElevatorEncoder() > (POS_TOP + topPosOffset) - 500 && !sensorInput.getTopSwitch() && power > 0)
-			if((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.2) 
-				robotOutput.setElevatorMotor(0.2);
+			
+			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
+				robotOutput.setElevatorMotor(0.3);
+				
 			else
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
+		
 
 		else
 			robotOutput.setElevatorMotor(power);

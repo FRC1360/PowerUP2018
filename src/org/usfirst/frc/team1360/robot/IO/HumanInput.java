@@ -215,7 +215,7 @@ public class HumanInput implements HumanInputProvider {
 
 	@Override
 	public double getArm() {
-		return operator.getY(Hand.kLeft);
+		return deadzone(-operator.getY(Hand.kLeft), 0.2);
 	}
 
 	//-----------Auto Selection-----------

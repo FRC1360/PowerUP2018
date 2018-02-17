@@ -4,6 +4,7 @@ public interface ElevatorProvider {
 	public static final int POS_TOP = 2211;//tuned
 	public static final int POS_BOTTOM = 0;
 	
+	void safety(double power);
 	boolean goToTarget(int target);
 	boolean upToTarget(int target);
 	boolean downToTarget(int target);

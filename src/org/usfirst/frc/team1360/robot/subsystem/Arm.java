@@ -175,6 +175,7 @@ public class Arm implements ArmProvider{
 		}
 	}
 	
+	@Override
 	public void safety(double power)	{
 		if(sensorInput.getArmSwitch())
 			sensorInput.resetArmEncoder();
@@ -185,7 +186,7 @@ public class Arm implements ArmProvider{
 		if (System.currentTimeMillis() < cooldown)
 			robotOutput.setElevatorMotor(0);
 		
-		if(sensorInput.getArmEncoder() >= POS_TOP && power > 0)
+		if(sensorInput.getArmEncoder() >= POS_TOP + 5 && power > 0 && !sensorInput.getArmSwitch())
 			robotOutput.setElevatorMotor(0);
 		
 		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)

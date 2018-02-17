@@ -163,7 +163,7 @@ public class Arm implements ArmProvider{
 	}
 
 	@Override
-	public boolean setSpeed(double speed) {
+	public boolean setManualSpeed(double speed) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
 				robotOutput.setArm(safety(speed));
@@ -174,25 +174,15 @@ public class Arm implements ArmProvider{
 	}
 	
 	public double safety(double power)	{
-		if (Math.abs(sensorInput.getArmEncoderVelocity()) < 5)
-		{
-			if (power > 0.25)
-				power = 0.25;
-			if (power < -0.25)
-				power = -0.25;
-		}
-		SmartDashboard.putNumber("Arm vel", sensorInput.getArmEncoderVelocity());
-		SmartDashboard.putNumber("ARM", power);
+		if(sensorInput.getArmSwitch())
+			sensorInput.resetArmEncoder();
+		
+		if(sensorInput.getArmSwitch() && power < 0)
+			return 0;
+		else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power > 0)
+			return 0;
+		
 		return power;
-//		if(sensorInput.getArmSwitch() && power > 0) {
-//			return 0;
-//		}
-//		else if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
-//			return 0;
-//		}
-//		else {
-//			return power;
-//		}
 	}
 
 	@Override

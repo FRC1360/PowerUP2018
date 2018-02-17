@@ -7,7 +7,7 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 public class TeleopDrive implements TeleopComponent {
-	private DriverConfig cfg = DriverConfig.CHEESYDRIVE; //CHEESY MODE.
+	private DriverConfig cfg = DriverConfig.RACING; 
 	
 	public void calculate() 
 	{

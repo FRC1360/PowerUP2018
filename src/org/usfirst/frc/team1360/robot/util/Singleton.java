@@ -43,6 +43,7 @@ public final class Singleton {
 		try {
 			return configure(clazz, _static == null ? clazz.getConstructor().newInstance() : (T) clazz.getMethod(_static.value()).invoke(null));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}

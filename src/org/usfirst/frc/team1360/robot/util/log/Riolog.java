@@ -10,4 +10,5 @@ public final class Riolog implements LogProvider {
 		System.out.println(msg);
 	}
 
+
 }

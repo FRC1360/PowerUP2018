@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
@@ -12,29 +15,60 @@ public class TeleopElevator implements TeleopComponent {
 	HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
 	SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+	
+	private Map<Integer, Integer> positions = new HashMap<Integer, Integer>();
+	{
+		positions.put(0, elevator.FOUR_FOOT);
+		positions.put(1, elevator.FIVE_FOOT);
+		positions.put(2, elevator.SIX_FOOT);
+	}
+	
 	private double lastSpeed = 0;
-	//sets state to idle and turns off motors
+	private boolean heldLastLoop = false;
+	private int position = 0;
+	//0 = 4 foot
+	//1 = 5 foot
+	//2 = 6 foot
+	
 	@Override
 	public void disable() {
 		// TODO Auto-generated method stub
 		elevator.setIdle();
 		lastSpeed = 0;
 	}
-/*checks the input of operator's right controller*with deadzone) and applies that to the motors.
- * It decides whether to set the elevator state to rising or decsending based on direction of joystick (negative or positive)
- * calls the hold state if joystick is 0(and joystick isn't already holding
-*/
+	
+
 	@Override
 	public void calculate() {
 		// TODO Auto-generated method stub
-		double speed = humanInput.deadzone(humanInput.getElevator(), 0.1);
+		double speed = humanInput.getElevator();
+		int preset = humanInput.getOperatorPOV(); 
+		
+		
 		
 		if (speed == 0)
 		{
-			if (!elevator.isHolding())
+			if(preset == 0 && !heldLastLoop)
 			{
-				elevator.hold();
+				if(position < 2) position += 1;
+				elevator.goToTarget(positions.get(position));
+				heldLastLoop = true;
 			}
+			else if(preset == 180 && !heldLastLoop)
+			{
+				if(position > 0) position -= 1;
+				elevator.goToTarget(positions.get(position));
+				heldLastLoop = true;
+			}
+			else if(preset != 180 && preset != 0)
+			{
+				heldLastLoop = false;
+			}
+//			else if (!elevator.isHolding())
+//			{
+//				elevator.hold();
+//			}
+			
 		}
 		else
 		{

@@ -33,19 +33,9 @@ public final class Elevator implements ElevatorProvider {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
-				double pidCalc = 0;
-				OrbitPID pidVel = new OrbitPID(40, 0.0, 0.0);
-				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
-				
-				log.write("target is set to "+ Integer.toString(target));
-				log.write("encoder is at "+ Integer.toString(sensorInput.getElevatorEncoder()));
-				
-				while (sensorInput.getElevatorEncoder() < target) {
-					pidCalc = pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity());
-					
-					log.write("Trying to power elevator " + Double.toString(pidCalc));
-					elevator.safety(pidCalc);
-					Thread.sleep(10);
+
+				while (elevator.dampen(target, 1) ) {
+					Thread.sleep(5);
 				}
 				context.nextState(HOLD);
 			}
@@ -59,13 +49,9 @@ public final class Elevator implements ElevatorProvider {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
-				double pidCalc = 0;
-				OrbitPID pidVel = new OrbitPID(40.0, 0.0, 0.0);
-				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
-				while (sensorInput.getElevatorEncoder() > target) {
-          
-					elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity()));
-					Thread.sleep(10);
+
+				while (elevator.dampen(target, 1) ) {
+					Thread.sleep(5);
 				}
 				context.nextState(HOLD);
 			}
@@ -97,18 +83,66 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
+	private int topPosOffset = 0;
+	
+	@Override
+	public boolean dampen(int position, double power) {
+		if(position < sensorInput.getElevatorEncoder()) {
+//			if(Math.abs(-0.004*(sensorInput.getElevatorEncoder() - position)) < 0.2) 
+//				robotOutput.setElevatorMotor(-0.1);
+//			else {
+				robotOutput.setElevatorMotor((-0.004*Math.abs(power+0.2))*(sensorInput.getElevatorEncoder() - position));
+//			}
+			if(sensorInput.getElevatorEncoder() <= position)
+				return false;
+			else 
+				return true;
+		}
+		else {
+			if(Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
+				robotOutput.setElevatorMotor(0.3);
+			else {
+				robotOutput.setElevatorMotor((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
+			}
+			if(sensorInput.getElevatorEncoder() >= position)
+				return false;
+			else 
+				return true;
+		}
+		
+		
+	}
 	
 	@Override
 	public void safety(double power) {
 		log.write("Checking elevator safety on power " + power);
+		
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
-			
+		
+		if(sensorInput.getTopSwitch())
+			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
 		
 		if (power > 0 && sensorInput.getTopSwitch())
 			robotOutput.setElevatorMotor(0.1);
-		if (power < 0 && sensorInput.getBottomSwitch())
-			robotOutput.setElevatorMotor(-0.1);
+		
+		else if (power < 0 && sensorInput.getBottomSwitch())
+			robotOutput.setElevatorMotor(0);
+		
+		else if(sensorInput.getElevatorEncoder() < POS_BOTTOM + 500 && !sensorInput.getBottomSwitch() && power < 0)
+			robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
+		
+		else if(sensorInput.getElevatorEncoder() > (POS_TOP + topPosOffset) - 500 && !sensorInput.getTopSwitch() && power > 0)
+			
+			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
+				robotOutput.setElevatorMotor(0.3);
+				
+			else
+				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
+		
+
+		else
+			robotOutput.setElevatorMotor(power);
 	}
 	
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached

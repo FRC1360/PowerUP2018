@@ -237,6 +237,7 @@ public class SensorInput implements SensorInputProvider {
 	public double getArmCurrent() {
 		return PDP.getCurrent(4) + PDP.getCurrent(10);
 	}
+	
 
 	@Override
 	public int getElevatorEncoder() {

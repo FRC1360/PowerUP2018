@@ -137,7 +137,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//matchLog.write(String.format("Elevator Enc = %d, Arm Enc = %d", args));
+		matchLog.write(String.format("Elevator Enc = %d, Arm Enc = %d", 
+				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());

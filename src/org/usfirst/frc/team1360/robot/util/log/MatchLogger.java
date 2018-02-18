@@ -15,7 +15,7 @@ public final class MatchLogger implements MatchLogProvider {
 	private DriverStation ds = DriverStation.getInstance();
 	
 	public MatchLogger() throws IOException {
-		file = new PrintStream("/tmp/1360.log"); //change to flash drive
+		file = new PrintStream("/U/1360.log"); 
 		Singleton.subscribe(this::write);
 	}
 	

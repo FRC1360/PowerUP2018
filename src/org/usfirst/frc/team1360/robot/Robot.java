@@ -134,6 +134,9 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+		SmartDashboard.putNumber("AHRS Pitch", sensorInput.getAHRSPitch());
+		
+		log.write("AHRS PITCH == " + sensorInput.getAHRSPitch());
 		
 		teleopControl.runCycle();
 	}

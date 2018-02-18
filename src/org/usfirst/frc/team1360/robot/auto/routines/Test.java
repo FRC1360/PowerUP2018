@@ -1,7 +1,10 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.auto.drive.MoveToTarget;
 import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 
 
 
@@ -14,19 +17,17 @@ public final class Test extends AutonRoutine {
 	@Override
 	protected void runCore() throws InterruptedException {
 		
-		//RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+		RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 //		new TurnToAngle(0, 90).runUntilFi
-		elevator.upToTarget(1000);
+		while(position.getY() <= 60)
+		{
+			log.write("YPOS == " + position.getY());
+			robotOutput.tankDrive(0.15, 0.15);
+			Thread.sleep(10);
+		}
 		
-		while(elevator.isMovingToTarget()) Thread.sleep(10);
-		
-		log.write("Finished");
-		
-		elevator.downToTarget(500);
-//		elevator.startManual();
-//		elevator.setManualSpeed(0.25);
-		
-		arm.goToPosition(ArmProvider.POS_BOTTOM);
+		robotOutput.tankDrive(0, 0);
+//		robotOutput.tankDrive(1, 1);
 
 		Thread.sleep(100000);
 	}

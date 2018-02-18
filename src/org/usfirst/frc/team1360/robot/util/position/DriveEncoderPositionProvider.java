@@ -30,7 +30,8 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	
 	public static DriveEncoderPositionProvider configure()
 	{
-		return new DriveEncoderPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+//		return new DriveEncoderPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+		return new DriveEncoderPositionProvider(1_000, 24.0, 5.0, 3.0 / 1.0, 250);
 	}
 	
 	public DriveEncoderPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {

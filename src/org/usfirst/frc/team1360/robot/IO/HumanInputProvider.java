@@ -61,7 +61,7 @@ public interface HumanInputProvider {
 	double getArm();
 	
 	//Elevator Presets
-	int getOperatorPOV(int pov);
+	int getOperatorPOV();
 
 	//-----------Auto Selection-----------
 	boolean getAutoInc();

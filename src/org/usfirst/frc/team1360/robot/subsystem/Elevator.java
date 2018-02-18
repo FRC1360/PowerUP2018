@@ -33,19 +33,9 @@ public final class Elevator implements ElevatorProvider {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
-				double pidCalc = 0;
-				OrbitPID pidVel = new OrbitPID(40, 0.0, 0.0);
-				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
-				
-				log.write("target is set to "+ Integer.toString(target));
-				log.write("encoder is at "+ Integer.toString(sensorInput.getElevatorEncoder()));
-				
-				while (sensorInput.getElevatorEncoder() < target) {
-					pidCalc = pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity());
-					
-					log.write("Trying to power elevator " + Double.toString(pidCalc));
-					elevator.safety(pidCalc);
-					Thread.sleep(10);
+
+				while (elevator.dampen(target, 1) ) {
+					Thread.sleep(5);
 				}
 				context.nextState(HOLD);
 			}
@@ -59,13 +49,9 @@ public final class Elevator implements ElevatorProvider {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
-				double pidCalc = 0;
-				OrbitPID pidVel = new OrbitPID(40.0, 0.0, 0.0);
-				OrbitPID pidPwr = new OrbitPID(1.0, 0.0, 0.0);
-				while (sensorInput.getElevatorEncoder() > target) {
-          
-					elevator.safety(pidPwr.calculate(pidVel.calculate(target, sensorInput.getElevatorEncoder()), sensorInput.getElevatorVelocity()));
-					Thread.sleep(10);
+
+				while (elevator.dampen(target, 1) ) {
+					Thread.sleep(5);
 				}
 				context.nextState(HOLD);
 			}
@@ -98,6 +84,34 @@ public final class Elevator implements ElevatorProvider {
 
 	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
 	private int topPosOffset = 0;
+	
+	@Override
+	public boolean dampen(int position, double power) {
+		if(position < sensorInput.getElevatorEncoder()) {
+//			if(Math.abs(-0.004*(sensorInput.getElevatorEncoder() - position)) < 0.2) 
+//				robotOutput.setElevatorMotor(-0.1);
+//			else {
+				robotOutput.setElevatorMotor((-0.004*Math.abs(power+0.2))*(sensorInput.getElevatorEncoder() - position));
+//			}
+			if(sensorInput.getElevatorEncoder() <= position)
+				return false;
+			else 
+				return true;
+		}
+		else {
+			if(Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
+				robotOutput.setElevatorMotor(0.3);
+			else {
+				robotOutput.setElevatorMotor((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
+			}
+			if(sensorInput.getElevatorEncoder() >= position)
+				return false;
+			else 
+				return true;
+		}
+		
+		
+	}
 	
 	@Override
 	public void safety(double power) {

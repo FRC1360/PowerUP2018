@@ -4,6 +4,7 @@ import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.ArcToTarget;
 
 
+
 public final class Test extends AutonRoutine {
 
 	public Test() {
@@ -13,13 +14,16 @@ public final class Test extends AutonRoutine {
 	@Override
 	protected void runCore() throws InterruptedException {
 		
-		//RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-//		new TurnToAngle(0, 90).runUntilFinish();
-		//position.reset(0, 0, 0);
-		//new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
+		/*while(position.getY() <= 60)
+		{
+			log.write("YPOS == " + position.getY());
+			robotOutput.tankDrive(0.15, 0.15);
+			Thread.sleep(10);
+		}*/
 		
 		new ArcToTarget(10000, 0, 0, 50, 50, 0, 2).runUntilFinish();;
 		
 		Thread.sleep(1000);
+
 	}
 }

@@ -30,7 +30,8 @@ public final class HybridPositionProvider implements OrbitPositionProvider {
 	
 	public static HybridPositionProvider configure()
 	{
-		return new HybridPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+//		return new HybridPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+		return new HybridPositionProvider(1_000, 24, 5.0, 3.0 / 1.0, 250);
 	}
 	
 	public HybridPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {

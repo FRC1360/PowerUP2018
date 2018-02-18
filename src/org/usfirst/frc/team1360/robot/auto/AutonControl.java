@@ -15,6 +15,7 @@ import org.usfirst.frc.team1360.robot.auto.routines.SwitchRight;
 import org.usfirst.frc.team1360.robot.auto.routines.Test;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 public class AutonControl {
 	public static ArrayList<AutonRoutine> routines = new ArrayList<>();
@@ -35,7 +36,7 @@ public class AutonControl {
 	{
 		routines.clear();
 		//routines.add(new EncoderSwitch());
-		//routines.add(new Test());
+		routines.add(new Test());
 		routines.add(new Demo());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());
@@ -93,6 +94,7 @@ public class AutonControl {
 		if (selectedIndex < routines.size())
 		{
 			AutonRoutine routine = routines.get(selectedIndex);
+			Singleton.get(MatchLogProvider.class).write("Running auto - " + routine.toString());
 			Singleton.get(LogProvider.class).write("Starting auto: " + routine.toString());
 			routine.runNow("");
 		}

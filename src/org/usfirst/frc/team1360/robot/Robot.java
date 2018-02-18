@@ -26,6 +26,8 @@ import org.usfirst.frc.team1360.robot.teleop.TeleopIntake;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
 import org.usfirst.frc.team1360.robot.util.log.TempFileLog;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
@@ -44,6 +46,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonStatic
 public class Robot extends TimedRobot {
 	private LogProvider log;
+	private MatchLogProvider matchLog;
 	private HumanInputProvider humanInput;
 	private SensorInputProvider sensorInput;
 	private RobotOutputProvider robotOutput;
@@ -70,6 +73,10 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopElevator.class);
 		Singleton.configure(TeleopArm.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
+		matchLog = Singleton.configure(MatchLogger.class);
+		
+		
+		matchLog.writeHead();
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
@@ -88,6 +95,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		matchLog.write("----------STARTING AUTO PERIOD----------");
+		
 		position.start();
 		AutonControl.start();
 		
@@ -101,17 +110,26 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		matchLog.write(String.format("X Pos = %d inches, Y Pos = %d inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
+				position.getX(), position.getY(), sensorInput.getLeftDriveEncoder(), sensorInput.getRightDriveEncoder()));
+		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 	}
 
 	@Override
 	public void teleopInit() {
+		matchLog.write("----------STARTING TELEOP PERIOD----------");
+		
 		AutonControl.stop();
-//		position.stop();
 	}
 	
 	/**
@@ -119,17 +137,27 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		matchLog.write(String.format("Elevator Enc = %d, Arm Enc = %d", 
+				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
+		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 		
 		teleopControl.runCycle();
 	}
 	
 	@Override
 	public void disabledInit() {
+		matchLog.write("----------ROBOT DISABLED LOG ENDING----------");
+		
 		AutonControl.stop();
 		position.stop();
 	}
@@ -141,6 +169,11 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 	}
 
 	/**

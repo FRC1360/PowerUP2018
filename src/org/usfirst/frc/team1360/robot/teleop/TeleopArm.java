@@ -19,7 +19,7 @@ public final class TeleopArm implements TeleopComponent {
 		{
 			if (!arm.isHolding())
 			{
-//				arm.hold(sensorInput.getArmEncoder());
+				arm.hold(sensorInput.getArmEncoder());
 				arm.idle();
 			}
 		}
@@ -27,7 +27,7 @@ public final class TeleopArm implements TeleopComponent {
 		{
 			if (lastSpeed == 0)
 				arm.startManual();
-			arm.setSpeed(speed);
+			arm.setManualSpeed(speed);
 		}
 		lastSpeed = speed;
 	}

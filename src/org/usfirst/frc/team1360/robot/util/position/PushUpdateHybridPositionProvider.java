@@ -39,7 +39,8 @@ public final class PushUpdateHybridPositionProvider implements OrbitPositionProv
 	
 	public static PushUpdateHybridPositionProvider configure()
 	{
-		return new PushUpdateHybridPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+//		return new PushUpdateHybridPositionProvider(1_000, 30.5, 4.0, 22.0 / 16.0, 250);
+		return new PushUpdateHybridPositionProvider(1_000, 24.0, 5.0, 3.0 / 1.0, 250);
 	}
 	
 	public PushUpdateHybridPositionProvider(int period, double driveWidth, double wheelDiameter, double gearRatio, int ticksPerRotation, double x, double y, double a) {

@@ -29,11 +29,19 @@ public interface SensorInputProvider {
 	int getArmEncoder();
 	double getArmEncoderVelocity();
 	void resetArmEncoder();
+	double getArmCurrent();
+	
+	//Elevator
+	int getElevatorEncoder();
+	double getElevatorVelocity();
+	void resetElevatorEncoder();
+	boolean getTopSwitch();
+	boolean getBottomSwitch();
+	
 	
 	void calculate();
 	void reset();
-	int getElevatorTick();
-	double getElevatorVelocity();
-	boolean getTopSwitch();
-	boolean getBottomSwitch();
+	
+	double getBatteryVoltage();
+	
 }

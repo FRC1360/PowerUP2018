@@ -30,7 +30,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingThrottle()
 	{
-		return this.driver.getTriggerAxis(Hand.kRight) - this.driver.getTriggerAxis(Hand.kLeft); 
+		return deadzone(driver.getTriggerAxis(Hand.kRight), 0.1) - deadzone(driver.getTriggerAxis(Hand.kLeft), 0.1); 
 	}
 	
 	/* (non-Javadoc)
@@ -39,7 +39,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingTurn()
 	{
-		return this.driver.getX(Hand.kLeft);
+		return deadzone(driver.getX(Hand.kLeft), 0.2);
 	}
 	
 	/* (non-Javadoc)
@@ -202,20 +202,10 @@ public class HumanInput implements HumanInputProvider {
     {
     		return operator.getTriggerAxis(Hand.kRight);
     }
-    
-    //controls speed of intake wheels
-    /* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorSpeed()
-	 */
-    @Override
-	public double getOperatorSpeed() //getter method for intake roller speed
-    {
-    		return operator.getY(Hand.kLeft);
-    }
 
 	@Override
 	public double getArm() {
-		return operator.getX(Hand.kRight);
+		return deadzone(-operator.getY(Hand.kLeft), 0.2);
 	}
 
 	//-----------Auto Selection-----------
@@ -236,8 +226,9 @@ public class HumanInput implements HumanInputProvider {
 	//returns left joystick of elevator of operator controller
 	public double getElevator()
 	{
-		return this.operator.getY(Hand.kRight);
+		return deadzone(-operator.getY(Hand.kRight), 0.2);
 	}
+	
 	//returns input after comparing to deadzone
 	public double deadzone(double Input, double deadzone) {
 		if (Math.abs(Input) > deadzone) {
@@ -249,5 +240,12 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public boolean getOperatorClamp() {
 		return operator.getBumper(Hand.kLeft);
+	}
+
+	//Returns the angle in degrees of the POV at location X
+	//For example, 0 (at the top) is 0 degrees.  2 is 90 degrees
+	@Override
+	public int getOperatorPOV() {
+		return this.operator.getPOV(0);
 	}
 }

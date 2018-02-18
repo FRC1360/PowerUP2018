@@ -16,7 +16,6 @@ public final class MatchLogger implements MatchLogProvider {
 	
 	public MatchLogger() throws IOException {
 		file = new PrintStream("/U/1360.log"); 
-		Singleton.subscribe(this::write);
 	}
 	
 	@Override
@@ -46,7 +45,7 @@ public final class MatchLogger implements MatchLogProvider {
 
 	@Override
 	public void write(String msg) {
-		file.println(String.format("[t = %d] %s", ds.getMatchTime(), msg));
+		file.println(String.format("[t = %f] %s", ds.getMatchTime(), msg));
 		file.flush();
 	}
 	

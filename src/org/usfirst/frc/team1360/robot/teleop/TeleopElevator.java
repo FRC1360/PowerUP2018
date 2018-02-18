@@ -18,9 +18,10 @@ public class TeleopElevator implements TeleopComponent {
 	
 	private Map<Integer, Integer> positions = new HashMap<Integer, Integer>();
 	{
-		positions.put(0, elevator.FOUR_FOOT);
-		positions.put(1, elevator.FIVE_FOOT);
-		positions.put(2, elevator.SIX_FOOT);
+		positions.put(0, elevator.POS_BOTTOM);
+		positions.put(1, elevator.FOUR_FOOT);
+		positions.put(2, elevator.FIVE_FOOT);
+		positions.put(3, elevator.SIX_FOOT);
 	}
 	
 	private double lastSpeed = 0;
@@ -50,7 +51,7 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if(preset == 0 && !heldLastLoop)
 			{
-				if(position < 2) position += 1;
+				if(position < 3) position += 1;
 				elevator.goToTarget(positions.get(position));
 				heldLastLoop = true;
 			}
@@ -64,10 +65,10 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				heldLastLoop = false;
 			}
-//			else if (!elevator.isHolding())
-//			{
-//				elevator.hold();
-//			}
+			if (!elevator.isHolding() && !elevator.isMovingToTarget())
+			{
+				elevator.hold();
+			}
 			
 		}
 		else

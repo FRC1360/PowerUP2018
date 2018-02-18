@@ -60,8 +60,10 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-
-				robotOutput.setElevatorMotor(0.1);
+				if(IS_COMP_BOT)
+					robotOutput.setElevatorMotor(0.05);
+				else
+					robotOutput.setElevatorMotor(0.1);
 
 			}
 		},
@@ -91,7 +93,7 @@ public final class Elevator implements ElevatorProvider {
 //			if(Math.abs(-0.004*(sensorInput.getElevatorEncoder() - position)) < 0.2) 
 //				robotOutput.setElevatorMotor(-0.1);
 //			else {
-				robotOutput.setElevatorMotor((-0.004*Math.abs(power+0.2))*(sensorInput.getElevatorEncoder() - position));
+				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));
 //			}
 			if(sensorInput.getElevatorEncoder() <= position)
 				return false;
@@ -130,7 +132,12 @@ public final class Elevator implements ElevatorProvider {
 			robotOutput.setElevatorMotor(0);
 		
 		else if(sensorInput.getElevatorEncoder() < POS_BOTTOM + 500 && !sensorInput.getBottomSwitch() && power < 0)
-			robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
+			if(-0.002*sensorInput.getElevatorEncoder() < 0.2) 
+				robotOutput.setElevatorMotor(-0.2);
+			else
+				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
+			
+			
 		
 		else if(sensorInput.getElevatorEncoder() > (POS_TOP + topPosOffset) - 500 && !sensorInput.getTopSwitch() && power > 0)
 			

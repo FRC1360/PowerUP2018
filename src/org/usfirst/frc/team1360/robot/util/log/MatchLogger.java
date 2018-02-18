@@ -36,7 +36,7 @@ public final class MatchLogger implements MatchLogProvider {
 //		file.println("Solenoid Channel 2: " + (SolenoidJNI.checkSolenoidChannel(2) ? "ready for launch" : "FAILURE"));
 
 		file.println("PDP Report");
-		file.println("PDP Voltage Draw: " + PDPJNI.getPDPTotalCurrent(0));
+		file.println("PDP Battery Voltage: " + PDPJNI.getPDPTotalCurrent(0));
 		file.println("PDP Current Draw: " + PDPJNI.getPDPTotalCurrent(0));
 		file.println("PDP Temperature: " + PDPJNI.getPDPTemperature(0));
 		
@@ -62,9 +62,10 @@ public final class MatchLogger implements MatchLogProvider {
 //		file.println("Solenoid Channel 2: " + (SolenoidJNI.checkSolenoidChannel(2) ? "ready for launch" : "FAILURE"));
 
 		file.println("PDP Report");
-		file.println("PDP Voltage Draw: " + PDPJNI.getPDPTotalCurrent(0));
+		file.println("PDP Battery Voltage: " + PDPJNI.getPDPTotalCurrent(0));
 		file.println("PDP Current Draw: " + PDPJNI.getPDPTotalCurrent(0));
 		file.println("PDP Temperature: " + PDPJNI.getPDPTemperature(0));
+		file.println("PDP Total Energy Drawn: " + PDPJNI.getPDPTotalEnergy(0));
 		file.flush();
 		file.close();
 	}

@@ -6,16 +6,22 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.hal.PDPJNI;
 import edu.wpi.first.wpilibj.hal.SolenoidJNI;
 
-import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 @SingletonSee(MatchLogProvider.class)
-public final class MatchLogger implements MatchLogProvider {
+public class MatchLogger implements MatchLogProvider {
 	private PrintStream file;
 	private DriverStation ds = DriverStation.getInstance();
 	
 	public MatchLogger() throws IOException {
-		file = new PrintStream("/U/1360.log"); 
+		try {
+			file = new PrintStream("/U/" + ds.getMatchNumber() + "_1360.log"); 
+		}
+		catch(IOException e) {
+			file = new PrintStream("/tmp/Match1360.log"); 
+			file.println("-----------WARNING UNABLE TO WRITE TO USB DRIVE-------------");
+			file.flush();
+		}
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.ArcToTarget;
+import org.usfirst.frc.team1360.robot.auto.drive.SCurveToTarget;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 public final class Demo extends AutonRoutine {
@@ -38,8 +39,13 @@ public final class Demo extends AutonRoutine {
 //		while(position.getY() < 72) Thread.sleep(10);
 //		robotOutput.arcadeDrive(0.0, 0.0);
 		
-		new ArcToTarget(3000, 0, 0, 40, 40, 0, 1).runUntilFinish();
-		Thread.sleep(10000);
+//		new ArcToTarget(10000, 0, 0, 100, 100, 0, 1).runUntilFinish();
+//		Thread.sleep(10000);
+		
+		//new SCurveToTarget(10000, 0, 0, 150, 150, 0, 1).runUntilFinish();
+		new ArcToTarget(10000, 0, 0, -75, 75, 0, 1).runUntilFinish();
+		//new ArcToTarget(10000, 75, 75, 150, 150, 90, 1).runUntilFinish();
+		Thread.sleep(15000);
 		
 	}
 }

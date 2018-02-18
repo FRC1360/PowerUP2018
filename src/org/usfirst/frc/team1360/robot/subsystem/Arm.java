@@ -186,7 +186,7 @@ public class Arm implements ArmProvider{
 		if (System.currentTimeMillis() < cooldown)
 			robotOutput.setArm(0);
 		
-		if(sensorInput.getArmEncoder() >= POS_TOP && power > 0)
+		if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
 			robotOutput.setArm(0);
 		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
 			robotOutput.setArm(0);

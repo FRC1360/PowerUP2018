@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1360.robot.util.position;
 
+import java.util.Objects;
+
 public final class OrbitPosition implements Cloneable {
 	private double x; // X-coordinate (inches, right from center of driver station = positive)
 	private double y; // Y-coordinate (inches, forward from driver station wall = positive)
@@ -32,5 +34,29 @@ public final class OrbitPosition implements Cloneable {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		OrbitPosition that = (OrbitPosition) o;
+		return Double.compare(that.x, x) == 0 &&
+				Double.compare(that.y, y) == 0 &&
+				Double.compare(that.a, a) == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y, a);
+	}
+
+	@Override
+	public String toString() {
+		return "OrbitPosition{" +
+				"x=" + x +
+				", y=" + y +
+				", a=" + a +
+				'}';
 	}
 }

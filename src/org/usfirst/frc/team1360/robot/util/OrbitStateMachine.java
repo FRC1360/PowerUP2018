@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1360.robot.util;
 
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * An instance of this class represents an asynchronous state machine
@@ -14,6 +17,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	private volatile T state;
 	private volatile Object arg;
 	private volatile RunThread thread;
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	private LogProvider log = Singleton.get(LogProvider.class);
 	
 	/**
@@ -60,14 +64,9 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
 		Singleton.get(LogProvider.class).write(String.format("%s -> %s", this.state.toString(), state.toString()));
-		if (thread.isAlive()) {
-			thread.interrupt();
-			thread.join();
-		}
+
 		this.state = state;
 		this.arg = arg;
-		thread = new RunThread();
-		thread.start();
 	}
 	
 	public void kill() {
@@ -122,7 +121,9 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		@Override
 		public void nextState(T state, Object arg) {
 			OrbitStateMachine.this.arg = arg;
+			SmartDashboard.putString("State Machine Running: ", Enum.class.cast(state).name());
 			throw new NextStateException(state);
+			
 		}
 	}
 	
@@ -134,16 +135,20 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
+			matchLogger.write("Starting State Machine Thread " + Thread.currentThread().getName());
+			
 			while (enabled)
 				try {
+					
 					state.run(new Context());
+					matchLogger.write("State Thread Finished " + Thread.currentThread().getName());
 					return;
 				} catch (NextStateException e) {
 					synchronized (OrbitStateMachine.this) {
 						state = (T) e.getNextState();
 					}
 				} catch (InterruptedException e) {
-					log.write("State machine internal run thread interrupted");
+					matchLogger.write("State Machine Ended" + Thread.currentThread().getName());
 					return;
 				} catch (Throwable t) {
 					log.write(t.toString());

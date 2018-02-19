@@ -56,7 +56,9 @@ public class RobotOutput implements RobotOutputProvider {
 
 		leftIntake = new Victor(6);
 		rightIntake = new Victor(7);
-		rightIntake.setInverted(true);
+		//rightIntake.setInverted(true);
+		leftIntake.setInverted(true);
+		//rightIntake.setInverted(true);
 
 		log.write("Done motors");
 		

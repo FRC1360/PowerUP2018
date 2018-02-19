@@ -18,7 +18,6 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	private volatile Object arg;
 	private volatile RunThread thread;
 	private LogProvider log = Singleton.get(LogProvider.class);
-	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	
 	/**
 	 * Creates a new state machine
@@ -135,12 +134,10 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
-			matchLogger.write("Starting New Orbit Statemachine" + Thread.currentThread().getName());
 			
 			while (true)
 				try {
 					state.run(new Context());
-					matchLogger.write("State Ended, New State Assigned" + Thread.currentThread().getName());
 				} catch (NextStateException e) {
 					synchronized (OrbitStateMachine.this) {
 						state = (T) e.getNextState();

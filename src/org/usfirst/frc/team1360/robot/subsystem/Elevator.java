@@ -29,10 +29,8 @@ public final class Elevator implements ElevatorProvider {
 		UP_TO_TARGET {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				matchLogger.write("Switching to UP_TO_TARGET" + context.getArg());
 				
 				if (!(context.getArg() instanceof Integer)) {
-					matchLogger.write("No target provided to ElevatorState.UP_TO_TARGET!");
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
@@ -82,7 +80,6 @@ public final class Elevator implements ElevatorProvider {
 		protected LogProvider log = Singleton.get(LogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		public static Elevator elevator;
-		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	};
 	
 	private OrbitStateMachine<ElevatorState> stateMachine;

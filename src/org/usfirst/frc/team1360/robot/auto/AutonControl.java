@@ -9,6 +9,7 @@ import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 import org.usfirst.frc.team1360.robot.auto.routines.Default;
 import org.usfirst.frc.team1360.robot.auto.routines.Demo;
 import org.usfirst.frc.team1360.robot.auto.routines.EncoderSwitch;
+import org.usfirst.frc.team1360.robot.auto.routines.Switch;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchLeft;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchMiddle;
 import org.usfirst.frc.team1360.robot.auto.routines.SwitchRight;
@@ -36,6 +37,7 @@ public class AutonControl {
 	{
 		routines.clear();
 		//routines.add(new EncoderSwitch());
+		routines.add(new Switch());
 		routines.add(new Test());
 		routines.add(new Demo());
 		routines.add(new CrossBaseline());

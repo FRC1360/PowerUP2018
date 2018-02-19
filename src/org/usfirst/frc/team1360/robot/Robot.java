@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		matchLog.write(String.format("X Pos = %d inches, Y Pos = %d inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
+		matchLog.write(String.format("X Pos = %f inches, Y Pos = %f inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
 				position.getX(), position.getY(), sensorInput.getLeftDriveEncoder(), sensorInput.getRightDriveEncoder()));
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());

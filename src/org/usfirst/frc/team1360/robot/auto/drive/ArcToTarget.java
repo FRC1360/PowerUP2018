@@ -62,17 +62,16 @@ public final class ArcToTarget extends AutonRoutine {
 			double a = position.getA();
 			rl2 = _x * _x + _y * _y;
 			rl = Math.sqrt(rl2);
-			al = (Math.atan2(_x, _y) - startAngle + Math.copySign(Math.PI / 2, da)) % (Math.PI * 2);
+			al = (Math.atan2(_x, _y) - startAngle + Math.PI / 2) % (Math.PI * 2);
 			int dl = sensorInput.getLeftDriveEncoder() - lLast;
 			int dr = sensorInput.getRightDriveEncoder() - rLast;
 			if (dl == 0 || dr == 0)
 				continue;
-			double targetAngle = startAngle + al - pidR.calculate(r, rl) * Math.signum(da);
-			output = neutral + pidA.calculate(targetAngle, a);
+			output = neutral + Math.copySign(pidR.calculate(r, rl), da) + pidA.calculate(startAngle + al, a);
 			lLast += dl;
 			rLast += rl;
-			log.write(String.format("ArcToTarget %d %d | %f | %f,%f | %f", dl, dr, targetAngle * 180 / Math.PI, rl, al * 180 / Math.PI, output));
-		} while ((da > 0 ? al < da : al > da) && rl2 + r2 - 2 * rl * r * Math.cos(da - al) > epsilon);
+			log.write(String.format("ArcToTarget %d %d | %f,%f | %f", dl, dr, rl, al * 180 / Math.PI, output));
+		} while (al < da && rl2 + r2 - 2 * rl * r * Math.cos(da - al) > epsilon);
 		robotOutput.tankDrive(0, 0);
 	}
 	

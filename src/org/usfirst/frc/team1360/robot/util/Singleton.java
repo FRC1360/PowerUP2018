@@ -36,20 +36,19 @@ public final class Singleton {
 		T value = (T) objects.get(see == null ? clazz : see.value());
 		return value == null ? see == null ? configure(clazz) : (T) configure(see.value()) : value;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public static <T> T configure(Class<T> clazz) {
 		SingletonStatic _static = clazz.getAnnotation(SingletonStatic.class);
 		try {
 			return configure(clazz, _static == null ? clazz.getConstructor().newInstance() : (T) clazz.getMethod(_static.value()).invoke(null));
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	public static <T> T configure(Class<T> clazz, T value) {
-		SingletonSee see = clazz.getAnnotation(SingletonSee.class);
+		SingletonSee see = clazz.getAnnotation(SingletonSee.class); 
 		objects.put(see == null ? clazz : see.value(), value);
 		push(String.format("Singleton %s configured as %s by thread %s; total %d", clazz.getTypeName(), value.toString(), Thread.currentThread().getName(), objects.size()));
 		return value;

@@ -17,13 +17,13 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	
 	private final int period;
 	private ScheduledFuture<?> future;
-
+	
 	private final double driveWidth;
 	private final double inchesPerTick;
 	
-	private Integer lastLeft;
-	private Integer lastRight;
-
+	private int lastLeft;
+	private int lastRight;
+	
 	private volatile double x;
 	private volatile double y;
 	private volatile double a;
@@ -39,6 +39,8 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 		this.period = period;
 		this.driveWidth = driveWidth;
 		this.inchesPerTick = Math.PI * wheelDiameter * gearRatio / ticksPerRotation;
+		lastLeft = sensorInput.getLeftDriveEncoder();
+		lastRight = sensorInput.getRightDriveEncoder();
 		reset(x, y, a);
 		scheduler.prestartAllCoreThreads();
 	}
@@ -50,11 +52,6 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	private synchronized void loop() {
 		int left = sensorInput.getLeftDriveEncoder();
 		int right = sensorInput.getRightDriveEncoder();
-
-		if (lastLeft==null || lastRight==null) {
-		    lastLeft = left;
-		    lastRight = right;
-        }
 		
 		double dl = (left - lastLeft) * inchesPerTick;
 		double dr = (right - lastRight) * inchesPerTick;
@@ -72,7 +69,7 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 		x += d * Math.sin(a + da2);
 		y += d * Math.cos(a + da2);
 		a += da;
-
+		
 		lastLeft = left;
 		lastRight = right;
 	}
@@ -109,10 +106,6 @@ public final class DriveEncoderPositionProvider implements OrbitPositionProvider
 	public double getA() {
 		return a;
 	}
-
-	public double getInchesPerTick() {
-	    return this.inchesPerTick;
-    }
 
 	@Override
 	public synchronized void reset(double x, double y, double a) {

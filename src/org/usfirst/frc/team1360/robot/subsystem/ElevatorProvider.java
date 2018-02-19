@@ -10,7 +10,7 @@ public interface ElevatorProvider {
 	
 	public static final int POS_BOTTOM = 0;
 	
-	public static final boolean IS_COMP_BOT = true;
+	public static final boolean IS_COMP_BOT = false;
 	
 	boolean dampen(int position, double power);
 	void safety(double power);

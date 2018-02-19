@@ -12,15 +12,16 @@ public class SweepTurn extends AutonRoutine{
 	private int leftOffset;
 	private int rightOffset;
 	
+	private boolean chain;
 	private boolean left;
 	
 	private final double DRIVE_WIDTH = 24;
 	
-	public SweepTurn(long timeout, double r, boolean leftTurn) {
+	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
 		
 		this.left = leftTurn;
-		
+		this.chain = chain;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
 		
@@ -41,56 +42,37 @@ public class SweepTurn extends AutonRoutine{
 		
 		if(left)
 		{
-			while(sensorInput.getLeftDriveEncoder() - leftOffset < innerEncTicks || sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
-				leftSpeed = pidInner.calculate(innerEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
-				rightSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+			while(/*sensorInput.getLeftDriveEncoder() - leftOffset < innerEncTicks ||*/ sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
 				
-				robotOutput.tankDrive(leftSpeed, rightSpeed);
-				
-				SmartDashboard.putNumber("Left Wheel Speed = ", leftSpeed);
-				SmartDashboard.putNumber("Right Wheel Speed = ", rightSpeed);
-				
-				SmartDashboard.putNumber("Left Enc", sensorInput.getLeftDriveEncoder() - leftOffset);
-				SmartDashboard.putNumber("Right Enc", sensorInput.getRightDriveEncoder() - rightOffset);
-				
-				SmartDashboard.putNumber("Left Target", innerEncTicks);
-				SmartDashboard.putNumber("Right Target", outterEncTicks);
-				
-				
-				//log.write("LEFT: " + leftSpeed + " RIGHT: " + rightSpeed);
-				//log.write("Left Enc: " + (sensorInput.getLeftDriveEncoder() - leftOffset) + " Right Enc: " + (sensorInput.getRightDriveEncoder() - rightOffset));
-			
+				if(chain)
+				{
+					
+					
+				}else {
+					leftSpeed = pidInner.calculate(innerEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
+					rightSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+					
+					robotOutput.tankDrive(leftSpeed, rightSpeed);
+				}
+					
 			}
 		}
 		else
 		{
-			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks || sensorInput.getRightDriveEncoder() - rightOffset < innerEncTicks) {
-				leftSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
-				rightSpeed = pidInner.calculate(innerEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
-				
-				robotOutput.tankDrive(leftSpeed, rightSpeed);
-				
-				SmartDashboard.putNumber("Left Wheel Speed = ", leftSpeed);
-				SmartDashboard.putNumber("Right Wheel Speed = ", rightSpeed);
-				
-				SmartDashboard.putNumber("Left Enc", sensorInput.getLeftDriveEncoder() - leftOffset);
-				SmartDashboard.putNumber("Right Enc", sensorInput.getRightDriveEncoder() - rightOffset);
-				
-				SmartDashboard.putNumber("Left Target", outterEncTicks);
-				SmartDashboard.putNumber("Right Target", innerEncTicks);
-				
-				
-				//SmartDashboard.putData();
-				
-				//log.write("LEFT: " + leftSpeed + " RIGHT: " + rightSpeed);
-				//log.write("Left Enc: " + (sensorInput.getLeftDriveEncoder() - leftOffset) + " Right Enc: " + (sensorInput.getRightDriveEncoder() - rightOffset));
+			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks /*|| sensorInput.getRightDriveEncoder() - rightOffset < innerEncTicks*/) {
+				if(chain)
+				{
+					
+					
+				}else {
+					leftSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
+					rightSpeed = pidInner.calculate(innerEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+					
+					robotOutput.tankDrive(leftSpeed, rightSpeed);
+				}
 			}
 		}
 	}
 	
-	@Override
-	public void overrideCore() {
-		robotOutput.tankDrive(0, 0);
-	}
 
 }

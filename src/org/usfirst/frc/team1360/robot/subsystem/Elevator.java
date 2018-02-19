@@ -80,12 +80,23 @@ public final class Elevator implements ElevatorProvider {
 		public static Elevator elevator;
 	};
 	
+	private OrbitStateMachine<ElevatorState> stateMachine;
+	private int topPosOffset = 0;
+	
 	public Elevator() {
 		ElevatorState.elevator = this;
 	}
 
-	private OrbitStateMachine<ElevatorState> stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
-	private int topPosOffset = 0;
+	@Override
+	public void stop() {
+		stateMachine.kill();
+	}
+	
+	@Override
+	public void start() {
+		stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
+	}
+	
 	
 	@Override
 	public boolean dampen(int position, double power) {
@@ -258,5 +269,7 @@ public final class Elevator implements ElevatorProvider {
 	public boolean isMovingToTarget() {
 		return stateMachine.getState() == ElevatorState.DOWN_TO_TARGET || stateMachine.getState() == ElevatorState.UP_TO_TARGET;
 	}
+	
+	
 }
 

@@ -44,45 +44,39 @@ public class TeleopElevator implements TeleopComponent {
 		// TODO Auto-generated method stub
 		double speed = humanInput.getElevator();
 		int preset = humanInput.getOperatorPOV(); 
-		double pitch = sensorInput.getAHRSPitch();
 		
-		if(Math.abs(pitch) < 0.9)
+		
+		
+		if (speed == 0)
 		{
-			if (speed == 0)
+			if(preset == 0 && !heldLastLoop)
 			{
-				if(preset == 0 && !heldLastLoop)
-				{
-					if(position < 3) position += 1;
-					elevator.goToTarget(positions.get(position));
-					heldLastLoop = true;
-				}
-				else if(preset == 180 && !heldLastLoop)
-				{
-					if(position > 0) position -= 1;
-					elevator.goToTarget(positions.get(position));
-					heldLastLoop = true;
-				}
-				else if(preset != 180 && preset != 0)
-				{
-					heldLastLoop = false;
-				}
-				if (!elevator.isHolding() && !elevator.isMovingToTarget())
-				{
-					elevator.hold();
-				}
-				
+				if(position < 3) position += 1;
+				elevator.goToTarget(positions.get(position));
+				heldLastLoop = true;
 			}
-			else
+			else if(preset == 180 && !heldLastLoop)
 			{
-				if (lastSpeed == 0)
-					elevator.startManual();
-				elevator.setManualSpeed(speed);
+				if(position > 0) position -= 1;
+				elevator.goToTarget(positions.get(position));
+				heldLastLoop = true;
 			}
-			lastSpeed = speed;
+			else if(preset != 180 && preset != 0)
+			{
+				heldLastLoop = false;
+			}
+			if (!elevator.isHolding() && !elevator.isMovingToTarget())
+			{
+				elevator.hold();
+			}
+			
 		}
 		else
 		{
-			elevator.goToTarget(positions.get(0));
+			if (lastSpeed == 0)
+				elevator.startManual();
+			elevator.setManualSpeed(speed);
 		}
+		lastSpeed = speed;
 	}	
 }

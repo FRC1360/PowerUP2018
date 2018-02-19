@@ -6,16 +6,43 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.hal.PDPJNI;
 import edu.wpi.first.wpilibj.hal.SolenoidJNI;
 
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
 @SingletonSee(MatchLogProvider.class)
 public final class MatchLogger implements MatchLogProvider {
 	private PrintStream file;
+	private int frameNumber = 0;
+	private boolean enabled = false;
+	
 	private DriverStation ds = DriverStation.getInstance();
 	
 	public MatchLogger() throws IOException {
-		file = new PrintStream("/U/1360.log"); 
+		try {
+			file = new PrintStream("/U/1360.log"); 
+		} catch(IOException e) {
+			file = new PrintStream("/tmp/Match_1360.log");
+		}
+	}
+	
+	@Override
+	public void startVideoCache() {
+		enabled = true;
+	}
+	
+	@Override
+	public void stopVideoCache() {
+		enabled = false;
+	}
+	
+	@Override
+	public void cacheImage(Mat image) {
+		if(enabled) {
+			Imgcodecs.imwrite("/U/"+frameNumber+".jpg", image);
+			write("frame " + frameNumber);
+		}
 	}
 	
 	@Override
@@ -29,10 +56,7 @@ public final class MatchLogger implements MatchLogProvider {
 		file.println("PCM Report");
 		file.println("PCM Status: " + (SolenoidJNI.getPCMSolenoidVoltageFault(0) ?  "FAILURE" : "ready for launch"));
 		
-		file.println(Integer.toString(SolenoidJNI.getPCMSolenoidBlackList(0)));
-//		file.println("Solenoid Channel 0: " + (SolenoidJNI.checkSolenoidChannel(0) ? "ready for launch" : "FAILURE"));
-//		file.println("Solenoid Channel 1: " + (SolenoidJNI.checkSolenoidChannel(1) ? "ready for launch" : "FAILURE"));
-//		file.println("Solenoid Channel 2: " + (SolenoidJNI.checkSolenoidChannel(2) ? "ready for launch" : "FAILURE"));
+		file.println("PCM Blacklist: " + Integer.toString(SolenoidJNI.getPCMSolenoidBlackList(0)));
 
 		file.println("PDP Report");
 		file.println("PDP Battery Voltage: " + PDPJNI.getPDPTotalCurrent(0));

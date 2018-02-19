@@ -19,12 +19,14 @@ public class DriveToDistance extends AutonRoutine{
 	double x;
 	double y;
 	double targetAngle;
+	boolean chain;
 	
-	public DriveToDistance(long timeout, double x, double y, double A, double eps) {
+	public DriveToDistance(long timeout, double x, double y, double A, double eps, boolean chain) {
 		super("DriveToDistance", timeout);
 		//this.length = length;
 		//this.distance = this.length * this.ticksPerInch;
 
+		this.chain = chain;
 		this.eps = eps;
 		this.targetAngle = Math.toRadians(A);
 		this.x = x;
@@ -38,7 +40,7 @@ public class DriveToDistance extends AutonRoutine{
 	{
 		double dx = x - position.getX();
 		double dy = y - position.getY();
-		
+		double speed;
 		double length = Math.sqrt(dx * dx + dy * dy);
 		double distance = length * this.ticksPerInch;
 		double encoderStartAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
@@ -51,7 +53,13 @@ public class DriveToDistance extends AutonRoutine{
 			double turn = pidAngle.calculate(targetAngle, position.getA());
 			log.write(String.format("ANGLE == %f, PID OUTPUT == %f", position.getA(), turn));
 			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
-			double speed = pidSpeed.calculate(target, encoderAverage);
+			
+			if(chain) {
+				speed = 1;
+			} else {
+				speed = pidSpeed.calculate(target, encoderAverage);
+			}
+			
 			log.write(String.format("SPEED == %f, PID OUTPUT == %f", speed, speed));
 			
 			if(speed > 0.5) speed = 0.5;

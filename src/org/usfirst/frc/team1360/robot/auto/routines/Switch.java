@@ -4,9 +4,7 @@ import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
-import org.usfirst.frc.team1360.robot.util.GetFMS;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Switch extends AutonRoutine{
 
@@ -17,22 +15,29 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		//new Calibrate().run();
+		new Calibrate().run();
 
 		if(fms.plateLeft(0)) {
-			elevator.goToTarget(500);
-			new SweepTurn(10000, 141/4, true).runUntilFinish();
-			new DriveToDistance(10000, -90, position.getY(), -90, 10).runUntilFinish();
-			new SweepTurn(10000, 141/4, false).runUntilFinish();
-			new DriveToDistance(10000, position.getX(), 90, 0, 10).runUntilFinish();
+			elevator.goToTarget(600);
+			new SweepTurn(10000, 141/4, true, true).runUntilFinish();
+			arm.goToPosition(-40);
+			new DriveToDistance(10000, -90, position.getY(), -90, 10, true).runUntilFinish();
+			new SweepTurn(10000, 141/4, false, true).runUntilFinish();
+			new DriveToDistance(10000, position.getX(), 90, 0, 10, false).runUntilFinish();
+			intake.setClamp(intake.FREE);
+			
+			intake.setIntake(-1);
+			Thread.sleep(500);
+			arm.goToTop();
+			Thread.sleep(1000);
 			
 			
 		} else {
 
-			elevator.goToTarget(700);
-			arm.goToPosition(-30);
+			elevator.goToTarget(600);
+			arm.goToPosition(-40);
 
-			new DriveToDistance(10000, 0, 100, 0, 10).runUntilFinish();//96 inches
+			new DriveToDistance(10000, 0, 110, 0, 10, false).runUntilFinish();//96 inches
 	
 			intake.setClamp(intake.FREE);
 			intake.setIntake(-1);

@@ -9,6 +9,7 @@ import org.usfirst.frc.team1360.robot.util.log.LogProvider;
  * @param <T> The state type; see {@link OrbitStateMachineState}
  */
 public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
+	private boolean enabled = true;
 	private final T base;
 	private volatile T state;
 	private volatile Object arg;
@@ -67,6 +68,11 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		this.arg = arg;
 		thread = new RunThread();
 		thread.start();
+	}
+	
+	public void kill() {
+		enabled = false;
+		thread.interrupt();
 	}
 	
 	/**
@@ -128,7 +134,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
-			while (true)
+			while (enabled)
 				try {
 					state.run(new Context());
 					return;
@@ -145,4 +151,6 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 				}
 		}
 	}
+	
+	
 }

@@ -15,8 +15,10 @@ import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
 import org.usfirst.frc.team1360.robot.subsystem.Arm;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.Drive;
 import org.usfirst.frc.team1360.robot.subsystem.Elevator;
+import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.Intake;
 import org.usfirst.frc.team1360.robot.teleop.TeleopArm;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
@@ -46,6 +48,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SingletonStatic
 public class Robot extends TimedRobot {
 	private LogProvider log;
+	private ElevatorProvider elevator;
+	private ArmProvider arm;
 	private MatchLogProvider matchLog;
 	private HumanInputProvider humanInput;
 	private SensorInputProvider sensorInput;
@@ -66,20 +70,23 @@ public class Robot extends TimedRobot {
 		position = Singleton.configure(DriveEncoderPositionProvider.class);
 		Singleton.configure(Drive.class);
 		Singleton.configure(Intake.class);
-		Singleton.configure(Elevator.class);
-		Singleton.configure(Arm.class);
+		elevator = Singleton.configure(Elevator.class);
+		arm = Singleton.configure(Arm.class);
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);
 		Singleton.configure(TeleopArm.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		matchLog = Singleton.configure(MatchLogger.class);
-		
+
 		
 		matchLog.writeHead();
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
+		
+		arm.start();
+		elevator.start();
 	}
 
 	/**
@@ -158,6 +165,8 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 		matchLog.write("----------ROBOT DISABLED LOG ENDING----------");
 		
+		elevator.stop();
+		arm.stop();
 		AutonControl.stop();
 		position.stop();
 	}

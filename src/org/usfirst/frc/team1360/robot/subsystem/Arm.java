@@ -98,11 +98,22 @@ public class Arm implements ArmProvider{
 		public static Arm arm;
 	}
 	
+	private OrbitStateMachine<ArmState> stateMachine;
+	
 	public Arm() {
 		ArmState.arm = this;
 	}
 	
-	private OrbitStateMachine<ArmState> stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
+	
+	@Override
+	public void stop() {
+		stateMachine.kill();
+	}
+	
+	@Override
+	public void start() {
+		stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
+	}
 	
 	
 	@Override

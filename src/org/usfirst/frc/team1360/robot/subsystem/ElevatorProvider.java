@@ -25,4 +25,7 @@ public interface ElevatorProvider {
 	boolean startManual();
 	boolean setIdle();
 	boolean isMovingToTarget();
+	
+	void stop();
+	void start();
 }

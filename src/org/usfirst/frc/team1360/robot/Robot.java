@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		log = Singleton.configure(TempFileLog.class);
+		matchLog = Singleton.configure(MatchLogger.class);
 		humanInput = Singleton.configure(HumanInput.class);
 		sensorInput = Singleton.configure(SensorInput.class);
 		robotOutput = Singleton.configure(RobotOutput.class);
@@ -77,7 +78,7 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopElevator.class);
 		Singleton.configure(TeleopArm.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
-		matchLog = Singleton.configure(MatchLogger.class);
+		
 
 		
 		matchLog.writeHead();
@@ -144,8 +145,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		matchLog.write(String.format("Elevator Enc = %d, Arm Enc = %d", 
-				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
+		//matchLog.write(String.format("Elevator Enc = %d, Arm Enc = %d", 
+				//sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());

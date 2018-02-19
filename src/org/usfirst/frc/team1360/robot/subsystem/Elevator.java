@@ -9,6 +9,7 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 @SingletonSee(ElevatorProvider.class)
 public final class Elevator implements ElevatorProvider {
@@ -20,7 +21,8 @@ public final class Elevator implements ElevatorProvider {
 		//sets motors to 0
 		IDLE {
 			@Override
-			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {		
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {	
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				robotOutput.setElevatorMotor(0);
 			}
 		},
@@ -28,6 +30,7 @@ public final class Elevator implements ElevatorProvider {
 		UP_TO_TARGET {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if (!(context.getArg() instanceof Integer)) {
 					log.write("No target provided to ElevatorState.UP_TO_TARGET!");
 					context.nextState(IDLE);
@@ -44,6 +47,7 @@ public final class Elevator implements ElevatorProvider {
 		DOWN_TO_TARGET {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if (!(context.getArg() instanceof Integer)) {
 					log.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
 					context.nextState(IDLE);
@@ -60,6 +64,7 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if(IS_COMP_BOT)
 					robotOutput.setElevatorMotor(0.05);
 				else
@@ -71,6 +76,7 @@ public final class Elevator implements ElevatorProvider {
 		MANUAL {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 			}
 		};
 		
@@ -78,6 +84,7 @@ public final class Elevator implements ElevatorProvider {
 		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		public static Elevator elevator;
+		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	};
 	
 	private OrbitStateMachine<ElevatorState> stateMachine;

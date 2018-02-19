@@ -8,6 +8,7 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 
 @SingletonSee(ArmProvider.class)
@@ -23,6 +24,7 @@ public class Arm implements ArmProvider{
 		DOWN_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if(!(context.getArg() instanceof Integer)) {
 					log.write("No Down Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
@@ -43,6 +45,7 @@ public class Arm implements ArmProvider{
 		UP_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if(!(context.getArg() instanceof Integer)) {
 					log.write("No Up Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
@@ -62,6 +65,7 @@ public class Arm implements ArmProvider{
 		UP_TO_TOP{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				while(!sensorInput.getArmSwitch()) {
 					arm.safety(0.75);
 					Thread.sleep(10);
@@ -74,25 +78,27 @@ public class Arm implements ArmProvider{
 		MANUAL{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 			}
 			
 		},
 		HOLD{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				arm.safety(0);
 			}	
 		},
 		IDLE{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				arm.safety(0);
 			}
 			
 		};
 		
-		
+		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		protected LogProvider log = Singleton.get(LogProvider.class);
 		public static Arm arm;

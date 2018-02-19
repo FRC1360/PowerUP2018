@@ -74,7 +74,7 @@ public class MatchLogger implements MatchLogProvider {
 
 	@Override
 	public void write(String msg) {
-		file.println(String.format("[t = %d] %s", /*ds.getMatchTime()*/ System.currentTimeMillis(), msg));
+		file.println(String.format("[t = %f] %s", ds.getMatchTime(), msg));
 
 		file.flush();
 	}

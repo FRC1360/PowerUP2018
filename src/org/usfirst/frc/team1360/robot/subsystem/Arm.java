@@ -24,7 +24,6 @@ public class Arm implements ArmProvider{
 		DOWN_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if(!(context.getArg() instanceof Integer)) {
 					log.write("No Down Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
@@ -38,14 +37,13 @@ public class Arm implements ArmProvider{
 				}
 				log.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(HOLD, target);
+				context.nextState(IDLE, target);
 			}
 			
 		},
 		UP_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				if(!(context.getArg() instanceof Integer)) {
 					log.write("No Up Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
@@ -59,49 +57,38 @@ public class Arm implements ArmProvider{
 				}
 				log.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(HOLD, target);
+				context.nextState(IDLE, target);
 			}
 		},
 		UP_TO_TOP{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				while(!sensorInput.getArmSwitch()) {
 					arm.safety(0.75);
 					Thread.sleep(10);
 				}
 				sensorInput.resetArmEncoder();
 				
-				context.nextState(HOLD, 0);
+				context.nextState(IDLE, 0);
 			}	
 		},
 		MANUAL{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting State " + Thread.currentThread().getName());
 			}
-			
-		},
-		HOLD{
-			@Override
-			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting State " + Thread.currentThread().getName());
-				arm.safety(0);
-			}	
 		},
 		IDLE{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting State " + Thread.currentThread().getName());
 				arm.safety(0);
 			}
 			
 		};
 		
-		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		protected LogProvider log = Singleton.get(LogProvider.class);
 		public static Arm arm;
+		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	}
 	
 	private OrbitStateMachine<ArmState> stateMachine;
@@ -134,19 +121,8 @@ public class Arm implements ArmProvider{
 	}
 	
 	@Override
-	public boolean hold(int position) {
-		try {
-			stateMachine.setState(ArmState.HOLD, position);
-			return true;
-		} catch (InterruptedException e) {
-			log.write(e.toString());
-			return false;
-		}
-	}
-	
-	@Override
-	public boolean isHolding() {
-		return stateMachine.getState() == ArmState.HOLD;
+	public boolean isIdle() {
+		return stateMachine.getState() == ArmState.IDLE;
 	}
 
 	@Override

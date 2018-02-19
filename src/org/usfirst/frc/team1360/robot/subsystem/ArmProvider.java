@@ -7,8 +7,7 @@ public interface ArmProvider {
 	
 	void safety(double power);
 	boolean idle();
-	boolean hold(int position);
-	boolean isHolding();
+	boolean isIdle();
 	boolean goToTop();
 	boolean goToMiddle();
 	boolean goToPosition(int position);

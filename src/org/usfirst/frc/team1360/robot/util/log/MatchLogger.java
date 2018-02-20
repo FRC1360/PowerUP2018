@@ -45,8 +45,13 @@ public class MatchLogger implements MatchLogProvider {
 	@Override
 	public void cacheImage(Mat image) {
 		if(enabled) {
-			Imgcodecs.imwrite("/U/"+frameNumber+".jpg", image);
-			write("frame " + frameNumber);
+			try {
+				Imgcodecs.imwrite("/U/"+frameNumber+".jpg", image);
+				write("frame " + frameNumber);
+			} catch(RuntimeException e) {
+				write("frame"+frameNumber+" not saved");
+			}
+
 		}
 	}
 	
@@ -91,7 +96,7 @@ public class MatchLogger implements MatchLogProvider {
 //		file.println("Solenoid Channel 2: " + (SolenoidJNI.checkSolenoidChannel(2) ? "ready for launch" : "FAILURE"));
 
 		file.println("PDP Report");
-		file.println("PDP Battery Voltage: " + PDPJNI.getPDPTotalCurrent(0));
+		file.println("PDP Battery Voltage: " + PDPJNI.getPDPVoltage(0));
 		file.println("PDP Current Draw: " + PDPJNI.getPDPTotalCurrent(0));
 		file.println("PDP Temperature: " + PDPJNI.getPDPTemperature(0));
 		file.println("PDP Total Energy Drawn: " + PDPJNI.getPDPTotalEnergy(0));

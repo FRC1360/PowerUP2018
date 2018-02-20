@@ -17,9 +17,7 @@ public class Calibrate extends AutonRoutine{
 		robotOutput.setArm(0.75);
 		while(!sensorInput.getArmSwitch()) robotOutput.setArm(0.75);
 		sensorInput.resetArmEncoder();
-		robotOutput.setArm(0);
-		
-		
+		robotOutput.setArm(0);	
 	}
 
 }

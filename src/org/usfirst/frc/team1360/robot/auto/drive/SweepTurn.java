@@ -40,14 +40,18 @@ public class SweepTurn extends AutonRoutine{
 		double leftSpeed = 0;
 		double rightSpeed = 0;
 		
+		double innerCircle = radius - 12;
+		double outerCircle = radius + 12;
+		
+		double ratio = outerCircle / innerCircle;
+		
 		if(left)
 		{
 			while(/*sensorInput.getLeftDriveEncoder() - leftOffset < innerEncTicks ||*/ sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
 				
 				if(chain)
 				{
-					
-					
+					robotOutput.tankDrive(0.5, ratio * 0.5 * 1.275);
 				}else {
 					leftSpeed = pidInner.calculate(innerEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
 					rightSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
@@ -62,8 +66,7 @@ public class SweepTurn extends AutonRoutine{
 			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks /*|| sensorInput.getRightDriveEncoder() - rightOffset < innerEncTicks*/) {
 				if(chain)
 				{
-					
-					
+					robotOutput.tankDrive(ratio * 0.5, 0.5);
 				}else {
 					leftSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
 					rightSpeed = pidInner.calculate(innerEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);

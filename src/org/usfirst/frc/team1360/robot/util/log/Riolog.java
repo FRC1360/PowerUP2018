@@ -2,8 +2,8 @@ package org.usfirst.frc.team1360.robot.util.log;
 
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 
-@SingletonSee(LogProvider.class)
-public final class Riolog implements LogProvider {
+@SingletonSee(RioLogProvider.class)
+public final class Riolog implements RioLogProvider {
 
 	@Override
 	public void write(String msg) {

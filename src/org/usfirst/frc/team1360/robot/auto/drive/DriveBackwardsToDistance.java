@@ -8,7 +8,7 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveToDistance extends AutonRoutine{
+public class DriveBackwardsToDistance extends AutonRoutine{
 	
 	double eps;
 	double gearRatio = 3.0 / 1.0;
@@ -21,8 +21,8 @@ public class DriveToDistance extends AutonRoutine{
 	double targetAngle;
 	boolean chain;
 	
-	public DriveToDistance(long timeout, double x, double y, double A, double eps, boolean chain) {
-		super("DriveToDistance", timeout);
+	public DriveBackwardsToDistance(long timeout, double x, double y, double A, double eps, boolean chain) {
+		super("DriveBackwardsToDistance", timeout);
 		//this.length = length;
 		//this.distance = this.length * this.ticksPerInch;
 
@@ -50,7 +50,7 @@ public class DriveToDistance extends AutonRoutine{
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
 		
 		do {
-			double turn = pidAngle.calculate(targetAngle, sensorInput.getAHRSYaw());
+			double turn = pidAngle.calculate(targetAngle, position.getA());
 			matchLogger.write(String.format("ANGLE == %f, PID OUTPUT == %f", sensorInput.getAHRSYaw(), turn));
 			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 			
@@ -63,7 +63,7 @@ public class DriveToDistance extends AutonRoutine{
 			matchLogger.write(String.format("SPEED == %f, PID OUTPUT == %f", speed, speed));
 			
 			if(speed > 0.5) speed = 0.5;
-			robotOutput.arcadeDrive( speed, 1*turn);
+			robotOutput.arcadeDrive( -speed, 1*turn);
 			
 			SmartDashboard.putNumber("Current Distance", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2);
 			SmartDashboard.putNumber("targetDistance", target - eps);

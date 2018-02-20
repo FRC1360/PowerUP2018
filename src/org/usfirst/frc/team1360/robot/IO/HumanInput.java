@@ -211,14 +211,12 @@ public class HumanInput implements HumanInputProvider {
 	//-----------Auto Selection-----------
 	@Override
 	public boolean getAutoInc() {
-		// TODO Auto-generated method stub
-		return false;
+		return operator.getPOV(0) == 0;
 	}
 
 	@Override
 	public boolean getAutoDec() {
-		// TODO Auto-generated method stub
-		return false;
+		return operator.getPOV(0) == 180;
 	}
 
 	//TODO Operator Controls
@@ -246,6 +244,6 @@ public class HumanInput implements HumanInputProvider {
 	//For example, 0 (at the top) is 0 degrees.  2 is 90 degrees
 	@Override
 	public int getOperatorPOV() {
-		return this.operator.getPOV(0);
+		return operator.getPOV(0);
 	}
 }

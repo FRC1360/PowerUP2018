@@ -6,7 +6,7 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -27,9 +27,9 @@ public enum DriverConfig {
 			}
 			
 			double elevatorHeight = sensorInput.getElevatorEncoder();
-			log.write("Elevator Enc == " + elevatorHeight / 100);
+			matchLogger.write("Elevator Enc == " + elevatorHeight / 100);
 			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
-			log.write("Multiplier == " + multiplier);
+			matchLogger.write("Multiplier == " + multiplier);
 			
 			speed = speed * multiplier;
 			
@@ -118,6 +118,6 @@ public enum DriverConfig {
 		
 	};
 	
-	protected LogProvider log = Singleton.get(LogProvider.class);
+	protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput);
 }

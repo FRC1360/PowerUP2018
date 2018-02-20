@@ -25,7 +25,7 @@ public final class ArcToTarget extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		matchLogger.write(String.format("ArcToTarget (%f, %f | %f) -> (%f, %f)", xs, ys, startAngle, x, y));
+		log.write(String.format("ArcToTarget (%f, %f | %f) -> (%f, %f)", xs, ys, startAngle, x, y));
 		OrbitPID pidR = new OrbitPID(1.0, 0.0, 0.0);
 		OrbitPID pidA = new OrbitPID(1.0, 0.0, 0.0);
 		double dx = x - xs;
@@ -46,7 +46,7 @@ public final class ArcToTarget extends AutonRoutine {
 		double xOrigin = xs + r * Math.sin(angleYSO);
 		double yOrigin = ys + r * Math.cos(angleYSO);
 		double neutral = Math.copySign(Math.log((2 * r + DRIVE_WIDTH) / (2 * r - DRIVE_WIDTH)), da);
-		matchLogger.write(String.format("ArcToTarget configured: line=%f da=%f <YSO=%f r=%f origin=(%f, %f)", lineAngle, da, angleYSO, r, xOrigin, yOrigin));
+		log.write(String.format("ArcToTarget configured: line=%f da=%f <YSO=%f r=%f origin=(%f, %f)", lineAngle, da, angleYSO, r, xOrigin, yOrigin));
 		double rl2, rl, al;
 		int lLast = sensorInput.getLeftDriveEncoder();
 		int rLast = sensorInput.getRightDriveEncoder();
@@ -71,7 +71,7 @@ public final class ArcToTarget extends AutonRoutine {
 			output = neutral + pidA.calculate(targetAngle, a);
 			lLast += dl;
 			rLast += rl;
-			matchLogger.write(String.format("ArcToTarget %d %d | %f | %f,%f | %f", dl, dr, targetAngle * 180 / Math.PI, rl, al * 180 / Math.PI, output));
+			log.write(String.format("ArcToTarget %d %d | %f | %f,%f | %f", dl, dr, targetAngle * 180 / Math.PI, rl, al * 180 / Math.PI, output));
 		} while ((da > 0 ? al < da : al > da) && rl2 + r2 - 2 * rl * r * Math.cos(da - al) > epsilon);
 		robotOutput.tankDrive(0, 0);
 	}

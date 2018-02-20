@@ -9,5 +9,4 @@ public interface MatchLogProvider {
 	void close();
 	void startVideoCache();
 	void stopVideoCache();
-	void writeClean(String msg);
 }

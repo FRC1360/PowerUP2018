@@ -11,7 +11,7 @@ import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.GetFMS;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +24,7 @@ public abstract class AutonRoutine extends Thread {
 	private static final HashMap<String, AutonRoutine> map = new HashMap<>();
 	private boolean done;
 	
-	protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+	protected LogProvider log = Singleton.get(LogProvider.class);
 	protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	protected OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
@@ -78,7 +78,7 @@ public abstract class AutonRoutine extends Thread {
 			}
 			catch (Throwable t)
 			{
-				matchLogger.write(t.toString());
+				log.write(t.toString());
 			}
 		}
 		done = true;
@@ -195,7 +195,7 @@ public abstract class AutonRoutine extends Thread {
 		}
 		catch (Throwable t)
 		{
-			matchLogger.write(t.toString());
+			log.write(t.toString());
 		}
 	}
 	

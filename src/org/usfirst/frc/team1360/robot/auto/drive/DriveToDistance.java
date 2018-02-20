@@ -47,11 +47,11 @@ public class DriveToDistance extends AutonRoutine{
 		double target = encoderStartAverage + distance;
 		OrbitPID pidAngle = new OrbitPID(4.7, 0.0025 , 0.1);
 		OrbitPID pidSpeed = new OrbitPID(0.003, 0.1, 0.2); //p = 0.0024
-		matchLogger.write(String.format("START ANGLE == %f", position.getA()));
+		log.write(String.format("START ANGLE == %f", position.getA()));
 		
 		do {
 			double turn = pidAngle.calculate(targetAngle, position.getA());
-			matchLogger.write(String.format("ANGLE == %f, PID OUTPUT == %f", position.getA(), turn));
+			log.write(String.format("ANGLE == %f, PID OUTPUT == %f", position.getA(), turn));
 			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 			
 			if(chain) {
@@ -60,7 +60,7 @@ public class DriveToDistance extends AutonRoutine{
 				speed = pidSpeed.calculate(target, encoderAverage);
 			}
 			
-			matchLogger.write(String.format("SPEED == %f, PID OUTPUT == %f", speed, speed));
+			log.write(String.format("SPEED == %f, PID OUTPUT == %f", speed, speed));
 			
 			if(speed > 0.5) speed = 0.5;
 			robotOutput.arcadeDrive( speed, 1*turn);

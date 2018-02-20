@@ -28,8 +28,10 @@ import org.usfirst.frc.team1360.robot.teleop.TeleopIntake;
 import org.usfirst.frc.team1360.robot.util.OrbitCamera;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
+import org.usfirst.frc.team1360.robot.util.log.TempFileLog;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
@@ -46,6 +48,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @SingletonStatic
 public class Robot extends TimedRobot {
+	private LogProvider log;
 	private ElevatorProvider elevator;
 	private ArmProvider arm;
 	private MatchLogProvider matchLog;
@@ -63,6 +66,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		log = Singleton.configure(TempFileLog.class);
 		matchLog = Singleton.configure(MatchLogger.class);
 		humanInput = Singleton.configure(HumanInput.class);
 		sensorInput = Singleton.configure(SensorInput.class);
@@ -104,7 +108,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		matchLog.writeClean("----------STARTING AUTO PERIOD----------");
+		matchLog.write("----------STARTING AUTO PERIOD----------");
 		matchLog.startVideoCache();
 		
 		position.start();
@@ -122,7 +126,7 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		camera.updateCamera();
 		
-		matchLog.writeClean(String.format("X Pos = %f inches, Y Pos = %f inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
+		matchLog.write(String.format("X Pos = %f inches, Y Pos = %f inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
 				position.getX(), position.getY(), sensorInput.getLeftDriveEncoder(), sensorInput.getRightDriveEncoder()));
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
@@ -152,7 +156,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		matchLog.writeClean(String.format("Elevator Enc = %d, Arm Enc = %d", 
+		matchLog.write(String.format("Elevator Enc = %d, Arm Enc = %d", 
 				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
@@ -171,7 +175,7 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void disabledInit() {
-		matchLog.writeClean("----------ROBOT DISABLED LOG ENDING----------");
+		matchLog.write("----------ROBOT DISABLED LOG ENDING----------");
 		matchLog.stopVideoCache();
 		
 		elevator.stop();

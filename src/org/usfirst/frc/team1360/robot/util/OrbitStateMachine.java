@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.util;
 
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +17,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	private volatile T state;
 	private volatile Object arg;
 	private volatile RunThread thread;
-	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+	private LogProvider log = Singleton.get(LogProvider.class);
 	
 	/**
 	 * Creates a new state machine
@@ -61,7 +62,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 * @throws InterruptedException In the unlikely event that the current thread is interrupted while waiting for the run thread to complete
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
-		Singleton.get(MatchLogProvider.class).write(String.format("%s -> %s", this.state.toString(), state.toString()));
+		Singleton.get(LogProvider.class).write(String.format("%s -> %s", this.state.toString(), state.toString()));
 
 		this.state = state;
 		this.arg = arg;
@@ -144,7 +145,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 				} catch (InterruptedException e) {
 					return;
 				} catch (Throwable t) {
-					matchLogger.write(t.toString());
+					log.write(t.toString());
 					return;
 				}
 		}

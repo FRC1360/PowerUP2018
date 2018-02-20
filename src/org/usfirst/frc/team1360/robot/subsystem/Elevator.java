@@ -8,11 +8,12 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 @SingletonSee(ElevatorProvider.class)
 public final class Elevator implements ElevatorProvider {
-	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+	private LogProvider log = Singleton.get(LogProvider.class);
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
@@ -47,7 +48,7 @@ public final class Elevator implements ElevatorProvider {
 				
 				
 				if (!(context.getArg() instanceof Integer)) {
-					matchLogger.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
+					log.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
@@ -76,7 +77,7 @@ public final class Elevator implements ElevatorProvider {
 			}
 		};
 		
-		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+		protected LogProvider log = Singleton.get(LogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		public static Elevator elevator;
 	};
@@ -129,7 +130,7 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public void safety(double power) {
-		matchLogger.write("Checking elevator safety on power " + power);
+		log.write("Checking elevator safety on power " + power);
 		
 		if(sensorInput.getBottomSwitch())
 			sensorInput.resetElevatorEncoder();
@@ -178,7 +179,7 @@ public final class Elevator implements ElevatorProvider {
 			try {
 				stateMachine.setState(ElevatorState.HOLD);
 			} catch (InterruptedException e) {
-				matchLogger.write(e.toString());
+				log.write(e.toString());
 				return false;
 			}
 		}
@@ -190,7 +191,7 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.UP_TO_TARGET, target);
 		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
+			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -201,7 +202,7 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.DOWN_TO_TARGET, target);
 		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
+			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -233,7 +234,7 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.HOLD);
 		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
+			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -249,7 +250,7 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.MANUAL);
 		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
+			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -260,7 +261,7 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.IDLE);
 		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
+			log.write(e.toString());
 			return false;
 		}
 		return true;

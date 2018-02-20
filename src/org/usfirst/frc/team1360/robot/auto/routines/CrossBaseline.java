@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 
 public class CrossBaseline extends AutonRoutine{
 
@@ -14,9 +12,12 @@ public class CrossBaseline extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
-		new Calibrate().runNow("Calibration");
+		//Drive Forward until Baseline broken
+//		new DrivePIDEncoder(0, 0, 0, 0).runUntilFinish();
+
 		
-		new DriveToDistance(10000, 0, 100, 0, 10, false).runUntilFinish();
+		
+		
 	}
 
 }

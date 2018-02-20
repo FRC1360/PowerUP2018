@@ -131,35 +131,36 @@ public final class Elevator implements ElevatorProvider {
 	public void safety(double power) {
 		matchLogger.write("Checking elevator safety on power " + power);
 		
-		if(sensorInput.getBottomSwitch())
+		if(sensorInput.getBottomSwitch()) {
 			sensorInput.resetElevatorEncoder();
-		
-		if(sensorInput.getTopSwitch())
+			if(power < 0)
+				hold();
+			else
+				robotOutput.setElevatorMotor(power);
+		}
+	
+		else if(sensorInput.getTopSwitch()) {
 			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
+			if(power > 0)
+				hold();
+			else
+				robotOutput.setElevatorMotor(power);
+		}
 		
-		if (power > 0 && sensorInput.getTopSwitch())
-			robotOutput.setElevatorMotor(0.1);
-		
-		else if (power < 0 && sensorInput.getBottomSwitch())
-			robotOutput.setElevatorMotor(0);
-		
-		else if(/*sensorInput.getElevatorEncoder() < POS_BOTTOM + 500 &&*/ !sensorInput.getBottomSwitch() && power < 0  /*&& sensorInput.getElevatorEncoder() < 500*/)
-			if(-0.002*sensorInput.getElevatorEncoder() < 0.2) 
+		else if(power < 0) {
+			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
 				robotOutput.setElevatorMotor(-0.2);
 			else
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
-			
-			
+		}
 		
-		else if(sensorInput.getElevatorEncoder() > (POS_TOP + topPosOffset) - 500 && !sensorInput.getTopSwitch() && power > 0)
-			
+		else if(power > 0) {
 			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
 				robotOutput.setElevatorMotor(0.3);
-				
 			else
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
-		
-
+		}
+	
 		else
 			robotOutput.setElevatorMotor(power);
 	}

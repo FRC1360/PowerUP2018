@@ -14,6 +14,7 @@ public interface ArmProvider {
 	boolean setManualSpeed(double speed);
 	boolean startManual();
 	
+	boolean goingToPosition();
 	void stop();
 	void start();
 }

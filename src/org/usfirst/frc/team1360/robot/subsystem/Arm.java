@@ -169,6 +169,11 @@ public class Arm implements ArmProvider{
 	}
 	
 	@Override
+	public boolean goingToPosition() {
+		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET;
+	}
+	
+	@Override
 	public void safety(double power)	{
 		if(sensorInput.getArmSwitch())
 			sensorInput.resetArmEncoder();

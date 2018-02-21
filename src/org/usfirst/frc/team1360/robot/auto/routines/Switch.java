@@ -15,7 +15,7 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		arm.calibrateBlocking();
+		new Calibrate().runUntilFinish();
 		
 		if(fms.plateLeft(0)) {
 			elevator.goToTarget(700);
@@ -35,7 +35,7 @@ public class Switch extends AutonRoutine{
 			
 			
 		} else {
-
+			
 			elevator.goToTarget(700);
 			arm.goToPosition(-40);
 

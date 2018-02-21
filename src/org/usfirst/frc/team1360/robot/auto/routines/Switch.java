@@ -15,14 +15,15 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		new Calibrate().run();
-
+		new Calibrate().runNow("Calibration");
+		
 		if(fms.plateLeft(0)) {
 			elevator.goToTarget(600);
-			new SweepTurn(10000, 141/4, true, true).runUntilFinish();
+			new SweepTurn(10000, 141/4, true, false).runUntilFinish();
+			waitFor("Calibration", 10000);
 			arm.goToPosition(-40);
-			new DriveToDistance(10000, -90, position.getY(), -90, 10, true).runUntilFinish();
-			new SweepTurn(10000, 141/4, false, true).runUntilFinish();
+			new DriveToDistance(10000, -90, position.getY(), -90, 10, false).runUntilFinish();
+			new SweepTurn(10000, 141/4, false, false).runUntilFinish();
 			new DriveToDistance(10000, position.getX(), 90, 0, 10, false).runUntilFinish();
 			intake.setClamp(intake.FREE);
 			
@@ -49,6 +50,8 @@ public class Switch extends AutonRoutine{
 			Thread.sleep(1000);
 			
 		}
+		
+		Thread.sleep(1000);
 	
 	}
 

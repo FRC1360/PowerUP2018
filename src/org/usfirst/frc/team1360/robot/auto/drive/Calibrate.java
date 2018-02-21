@@ -12,12 +12,7 @@ public class Calibrate extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException
 	{
-		robotOutput.setArm(-1);
-		while(sensorInput.getArmEncoder() < 500) Thread.sleep(10);
-		robotOutput.setArm(0.75);
-		while(!sensorInput.getArmSwitch()) robotOutput.setArm(0.75);
-		sensorInput.resetArmEncoder();
-		robotOutput.setArm(0);	
+		arm.calibrateBlocking();
 	}
 
 }

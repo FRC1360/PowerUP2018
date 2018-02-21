@@ -12,15 +12,21 @@ public class TwoCubeRight extends AutonRoutine{
 	}
 	
 	//SWITCH		SCALE
-	//Right		Right	
-	//Right		Left
-	//Left		Right
+	//Right		Right	switch then scale
+	//Right		Left		switch then scale
+	//Left		Right	
 	//Left		Left
 
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
 		new Calibrate().runNow("Calibration");
+		
+		if(fms.plateLeft(0)) {
+			
+		}
+		
+		
 		
 		
 	}

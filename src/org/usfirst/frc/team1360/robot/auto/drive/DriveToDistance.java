@@ -50,7 +50,7 @@ public class DriveToDistance extends AutonRoutine{
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
 		
 		do {
-			double turn = pidAngle.calculate(targetAngle, sensorInput.getAHRSYaw());
+			double turn = pidAngle.calculate(targetAngle, position.getA());
 			matchLogger.write(String.format("ANGLE == %f, PID OUTPUT == %f", sensorInput.getAHRSYaw(), turn));
 			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 			

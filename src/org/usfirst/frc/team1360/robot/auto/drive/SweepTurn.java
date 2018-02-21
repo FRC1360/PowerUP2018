@@ -47,7 +47,7 @@ public class SweepTurn extends AutonRoutine{
 		
 		if(left)
 		{
-			while(/*sensorInput.getLeftDriveEncoder() - leftOffset < innerEncTicks ||*/ sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
+			while(sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
 				
 				if(chain)
 				{
@@ -63,7 +63,7 @@ public class SweepTurn extends AutonRoutine{
 		}
 		else
 		{
-			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks /*|| sensorInput.getRightDriveEncoder() - rightOffset < innerEncTicks*/) {
+			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks) {
 				if(chain)
 				{
 					robotOutput.tankDrive(ratio * 0.5, 0.5);

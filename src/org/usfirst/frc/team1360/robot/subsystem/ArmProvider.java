@@ -16,4 +16,5 @@ public interface ArmProvider {
 	
 	void stop();
 	void start();
+	void calibrateBlocking();
 }

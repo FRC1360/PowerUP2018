@@ -1,10 +1,7 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
-import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
-import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
-import org.usfirst.frc.team1360.robot.util.Singleton;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -45,7 +42,7 @@ public class DriveToDistance extends AutonRoutine{
 		double distance = length * this.ticksPerInch;
 		double encoderStartAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 		double target = encoderStartAverage + distance;
-		OrbitPID pidAngle = new OrbitPID(4.7, 0.0025 , 0.1);
+		OrbitPID pidAngle = new OrbitPID(2, 0.0025 , 0.1);//p = 4.7
 		OrbitPID pidSpeed = new OrbitPID(0.01, 0.2, 0.2); //p = 0.0024
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
 		

@@ -37,6 +37,7 @@ public interface SensorInputProvider {
 	void resetElevatorEncoder();
 	boolean getTopSwitch();
 	boolean getBottomSwitch();
+	double getElevatorCurrent();
 	
 	
 	void calculate();

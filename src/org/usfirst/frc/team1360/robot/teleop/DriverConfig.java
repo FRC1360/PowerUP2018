@@ -6,7 +6,6 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,12 +25,27 @@ public enum DriverConfig {
 				turn = turn / 2;
 			}
 			
-			double elevatorHeight = sensorInput.getElevatorEncoder();
-			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
+			if(turn > 0)
+			{
+				double elevatorHeight = sensorInput.getElevatorEncoder();
+				double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
+				
+				speed = speed * multiplier;
+				
+				robotOutput.arcadeDrive(speed, turn);
+			}
+			else
+			{
+				
+				double pwmToVelocity = 0.0;
+				double pidSetPoint = speed * pwmToVelocity;
+				
+				double rightSpeed = rightPID.calculate(sensorInput.getRightEncoderVelocity(), pidSetPoint);
+				double leftSpeed = leftPID.calculate(sensorInput.getLeftEncoderVelocity(), pidSetPoint);
+				
+				robotOutput.tankDrive(leftSpeed, rightSpeed);
+			}
 			
-			speed = speed * multiplier;
-			
-			robotOutput.arcadeDrive(speed, turn);
 			robotOutput.shiftGear(humanInput.getRacingShift());
 		}
 	},
@@ -116,6 +130,7 @@ public enum DriverConfig {
 		
 	};
 	
-	protected LogProvider log = Singleton.get(LogProvider.class);
 	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput);
+	public OrbitPID leftPID = new OrbitPID(0.0, 0.0, 0.0);
+	public OrbitPID rightPID = new OrbitPID(0.0, 0.0, 0.0);
 }

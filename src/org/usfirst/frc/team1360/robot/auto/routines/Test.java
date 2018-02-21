@@ -15,9 +15,12 @@ public final class Test extends AutonRoutine {
 	@Override
 	protected void runCore() throws InterruptedException {
 		
-
-		
-		Thread.sleep(1000);
-
+		while(true)
+		{
+			robotOutput.setDriveLeft(0.1);
+			robotOutput.setDriveRight(0.1);
+			matchLogger.write(String.format("LEFT VELO == %f || RIGHT VELO == %f", sensorInput.getLeftEncoderVelocity(), sensorInput.getRightEncoderVelocity()));
+			Thread.sleep(10);
+		}
 	}
 }

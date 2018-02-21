@@ -2,6 +2,7 @@ package org.usfirst.frc.team1360.robot.util;
 
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
@@ -14,6 +15,7 @@ public class OrbitCamera {
 	private CvSource output;
 	private CvSink cvSink;
 	private Mat out = new Mat();
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	
 	public OrbitCamera()
 	{		
@@ -27,5 +29,7 @@ public class OrbitCamera {
 		cvSink = CameraServer.getInstance().getVideo();
 		cvSink.grabFrame(out);
 		output.putFrame(out);
+		
+		matchLogger.cacheImage(out);
 	}
 }

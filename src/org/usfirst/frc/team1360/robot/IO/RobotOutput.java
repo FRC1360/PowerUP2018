@@ -3,7 +3,7 @@ package org.usfirst.frc.team1360.robot.IO;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
@@ -34,12 +34,12 @@ public class RobotOutput implements RobotOutputProvider {
 	private final double CHEESY_SENSITIVITY_LOW = 0.75;
 	private double oldTurn, quickStopAccumulator;
 	
-	private LogProvider log;
+	private MatchLogProvider matchLogger;
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
-		log = Singleton.get(LogProvider.class);
-		log.write("Instantiating RobotOutput");
+		matchLogger = Singleton.get(MatchLogProvider.class);
+		matchLogger.write("Instantiating RobotOutput");
 		
 		leftDrive = new Victor(0);
 		rightDrive = new Victor(1);
@@ -51,17 +51,21 @@ public class RobotOutput implements RobotOutputProvider {
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
+		arm1.setInverted(true);
+		arm2.setInverted(true);
 
 		leftIntake = new Victor(6);
 		rightIntake = new Victor(7);
-		rightIntake.setInverted(true);
+		//rightIntake.setInverted(true);
+		leftIntake.setInverted(true);
+		//rightIntake.setInverted(true);
 
-		log.write("Done motors");
+		matchLogger.write("Done motors");
 		
 		driveShift = new Solenoid(0);
 		intakeClamp1 = new Solenoid(1);
 		intakeClamp2 = new Solenoid(2);
-		log.write("Done RobotOutput");
+		matchLogger.write("Done RobotOutput");
 	}
 	
 	@Override
@@ -106,7 +110,7 @@ public class RobotOutput implements RobotOutputProvider {
 
 	public void setDriveLeft(double speed)
 	{
-		log.write("LEFT " + speed);
+		matchLogger.write("LEFT " + speed);
 		SmartDashboard.putNumber("DL", speed);
 		leftDrive.set(speed);
 		SmartDashboard.putNumber("Left Voltage", -speed);
@@ -114,7 +118,7 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public void setDriveRight(double speed) //Set speed of right motors
 	{
-		log.write("RIGHT " + speed);
+		matchLogger.write("RIGHT " + speed);
 		SmartDashboard.putNumber("DR", speed);
 		rightDrive.set(speed);
 		SmartDashboard.putNumber("Right Voltage", speed);

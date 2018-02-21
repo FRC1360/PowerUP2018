@@ -56,18 +56,17 @@ public interface HumanInputProvider {
 	// controls whether intake is clamping or not
 	boolean getOperatorClamp();
 
-	//controls speed of intake wheels
-	double getOperatorSpeed();
+	double getElevator();
 	
 	double getArm();
+	
+	//Elevator Presets
+	int getOperatorPOV();
 
 	//-----------Auto Selection-----------
 	boolean getAutoInc();
 
 	boolean getAutoDec();
-
-	double getElevator();
-
 	double deadzone(double Input, double deadzone);
 
 	

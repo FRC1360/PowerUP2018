@@ -1,5 +1,5 @@
 package org.usfirst.frc.team1360.robot.util.log;
 
-public interface LogProvider {
+public interface RioLogProvider {
 	void write(String msg);
 }

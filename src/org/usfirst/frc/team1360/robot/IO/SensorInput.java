@@ -11,7 +11,7 @@ import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.NavxIO;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.ITimestampedDataSubscriber;
@@ -51,10 +51,11 @@ public class SensorInput implements SensorInputProvider {
 	private double[] ahrsValues = new double[7]; // Array to store data from NavX: yaw, pitch, roll, x acceleration (world frame), y acceleration (world frame), x velocity (local frame), y velocity (local frame)
 	private ConcurrentLinkedQueue<Runnable> ahrsThreadDispatchQueue = new ConcurrentLinkedQueue<>(); // Queue code to be run on ahrsThread
 	
-	private LogProvider log;
+	private MatchLogProvider matchLogger;
 	
 	public SensorInput()								//Constructor to initialize fields  
 	{
+		matchLogger = Singleton.get(MatchLogProvider.class);
 		PDP = new PowerDistributionPanel();
 		
 		leftDriveEnc = new Encoder(0, 1);
@@ -113,7 +114,7 @@ public class SensorInput implements SensorInputProvider {
 			}
 		}
 		
-		log = Singleton.get(LogProvider.class);
+
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX
@@ -234,13 +235,19 @@ public class SensorInput implements SensorInputProvider {
 	}
 
 	@Override
+	public double getArmCurrent() {
+		return PDP.getCurrent(4) + PDP.getCurrent(10);
+	}
+	
+
+	@Override
 	public int getElevatorEncoder() {
 		return elevatorEnc.get();
 	}
 
 	@Override
 	public void resetElevatorEncoder() {
-		log.write("Reset elevator encoder");
+		matchLogger.write("Reset elevator encoder");
 		elevatorEnc.reset();
 	}
 
@@ -257,5 +264,10 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public boolean getBottomSwitch() {
 		return bottomSwitch.get() != true;
+	}
+
+	@Override
+	public double getBatteryVoltage() {
+		return PDP.getVoltage();
 	}
 }

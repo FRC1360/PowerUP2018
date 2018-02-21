@@ -2,37 +2,41 @@ package org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
-import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(ArmProvider.class)
 public class Arm implements ArmProvider{
 	
-	private LogProvider log = Singleton.get(LogProvider.class);
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+	
+	private long cooldown = 0;
 	
 	private enum ArmState implements OrbitStateMachineState<ArmState>		{
 		DOWN_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				if(!(context.getArg() instanceof Integer)) {
-					log.write("No Down Target Provided to ArmStateMachine");
+					matchLogger.write("No Down Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
 				}
 				
-				while(sensorInput.getArmEncoder() < (Integer)context.getArg())	{
-					robotOutput.setArm(1360.0);
+				int target = (Integer) context.getArg();
+				arm.safety(-1.0);
+				
+				while(sensorInput.getArmEncoder() > target)	{
 					Thread.sleep(10);
 				}
-				context.nextState(HOLD, (Integer)context.getArg());
+				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
+				
+				context.nextState(IDLE, target);
 			}
 			
 		},
@@ -40,68 +44,68 @@ public class Arm implements ArmProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				if(!(context.getArg() instanceof Integer)) {
-					log.write("No Up Target Provided to ArmStateMachine");
+					matchLogger.write("No Up Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
 				}
 				
-				while(sensorInput.getArmEncoder() > (Integer)context.getArg())	{
-					robotOutput.setArm(1360.0);
+				int target = (Integer) context.getArg();
+				arm.safety(1.0);
+				
+				while(sensorInput.getArmEncoder() < target)	{
 					Thread.sleep(10);
 				}
+				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(HOLD, (Integer)context.getArg());
+				context.nextState(IDLE, target);
 			}
 		},
 		UP_TO_TOP{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				while(!sensorInput.getArmSwitch()) {
-					robotOutput.setArm(0.75);
+					arm.safety(0.75);
 					Thread.sleep(10);
 				}
 				sensorInput.resetArmEncoder();
 				
-				context.nextState(HOLD, 0);
+				context.nextState(IDLE, 0);
 			}	
 		},
 		MANUAL{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-
 			}
-			
-		},
-		HOLD{
-			@Override
-			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				OrbitPID arm = new OrbitPID(0.01, 0.0, 0.0);
-				
-				if(!(context.getArg() instanceof Integer)) {
-					log.write("No Hold Position Provided to Arm.Hold");
-					context.nextState(IDLE);
-				}
-				
-				while(true) {
-					robotOutput.setArm(arm.calculate((Integer) context.getArg(), sensorInput.getArmEncoder()));
-					Thread.sleep(10);
-				}
-				
-			}	
 		},
 		IDLE{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				robotOutput.setArm(0);
+				arm.safety(0);
 			}
 			
 		};
 		
-		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-		protected LogProvider log = Singleton.get(LogProvider.class);
+		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+		public static Arm arm;
 	}
 	
-	private OrbitStateMachine<ArmState> stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
+	private OrbitStateMachine<ArmState> stateMachine;
+	
+	public Arm() {
+		ArmState.arm = this;
+	}
+	
+	
+	@Override
+	public void stop() {
+		stateMachine.kill();
+	}
+	
+	@Override
+	public void start() {
+		stateMachine = new OrbitStateMachine<Arm.ArmState>(ArmState.IDLE);
+	}
+	
 	
 	@Override
 	public boolean idle() {
@@ -109,39 +113,28 @@ public class Arm implements ArmProvider{
 			stateMachine.setState(ArmState.IDLE);
 			return true;
 		} catch (InterruptedException e) {
-			log.write(e.toString());
+			matchLogger.write(e.toString());
 			return false;
 		}
 	}
 	
 	@Override
-	public boolean hold(int position) {
-		try {
-			stateMachine.setState(ArmState.HOLD, position);
-			return true;
-		} catch (InterruptedException e) {
-			log.write(e.toString());
-			return false;
-		}
-	}
-	
-	@Override
-	public boolean isHolding() {
-		return stateMachine.getState() == ArmState.HOLD;
+	public boolean isIdle() {
+		return stateMachine.getState() == ArmState.IDLE;
 	}
 
 	@Override
 	public boolean goToPosition(int position) {
 		try {
 			if(sensorInput.getArmEncoder() > position) {
-				stateMachine.setState(ArmState.UP_TO_TARGET, position);
+				stateMachine.setState(ArmState.DOWN_TO_TARGET, position);
 			}
 			else {
-				stateMachine.setState(ArmState.DOWN_TO_TARGET, position);
+				stateMachine.setState(ArmState.UP_TO_TARGET, position);
 			}
 			return true;
 		} catch(InterruptedException e) {
-			log.write(e.toString());
+			matchLogger.write(e.toString());
 			return false;
 		}
 		
@@ -166,23 +159,30 @@ public class Arm implements ArmProvider{
 	public boolean setManualSpeed(double speed) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
-				robotOutput.setArm(safety(speed));
+				safety(speed);
 				return true;
 			}
 			return false;
 		}
 	}
 	
-	public double safety(double power)	{
+	@Override
+	public void safety(double power)	{
 		if(sensorInput.getArmSwitch())
 			sensorInput.resetArmEncoder();
 		
-		if(sensorInput.getArmSwitch() && power < 0)
-			return 0;
-		else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power > 0)
-			return 0;
+		if (sensorInput.getArmCurrent() > 200.0)
+			cooldown = System.currentTimeMillis() + 500;
 		
-		return power;
+		if (System.currentTimeMillis() < cooldown)
+			robotOutput.setArm(0);
+		
+		if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
+			robotOutput.setArm(0);
+		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
+			robotOutput.setArm(0);
+		else
+			robotOutput.setArm(power);
 	}
 
 	@Override
@@ -190,10 +190,12 @@ public class Arm implements ArmProvider{
 		try {
 			stateMachine.setState(ArmState.MANUAL);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
+			matchLogger.write(e.toString());
 			return false;
 		}
 		return true;
 	}
+	
+	
 
 }

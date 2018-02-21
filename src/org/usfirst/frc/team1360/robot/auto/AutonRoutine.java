@@ -2,14 +2,19 @@ package org.usfirst.frc.team1360.robot.auto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.GetFMS;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class AutonRoutine extends Thread {
 	private final String name;
@@ -19,12 +24,15 @@ public abstract class AutonRoutine extends Thread {
 	private static final HashMap<String, AutonRoutine> map = new HashMap<>();
 	private boolean done;
 	
-	protected LogProvider log = Singleton.get(LogProvider.class);
+	protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	protected OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
 	protected ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
+	protected ArmProvider arm = Singleton.get(ArmProvider.class);
+	protected IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	protected GetFMS fms = Singleton.get(GetFMS.class);
+	
 	
 	public AutonRoutine(String name, long timeout)
 	{
@@ -38,8 +46,14 @@ public abstract class AutonRoutine extends Thread {
 	{
 		if (timeout != 0)
 		{
+			long start = System.currentTimeMillis();
 			start();
-			Thread.sleep(timeout);
+			
+			while(isAlive() && (System.currentTimeMillis()-start) < timeout) {
+				Thread.sleep(10);
+			}
+			
+			
 			if (isAlive())
 			{
 				try
@@ -64,7 +78,7 @@ public abstract class AutonRoutine extends Thread {
 			}
 			catch (Throwable t)
 			{
-				log.write(t.toString());
+				matchLogger.write(t.toString());
 			}
 		}
 		done = true;
@@ -181,7 +195,7 @@ public abstract class AutonRoutine extends Thread {
 		}
 		catch (Throwable t)
 		{
-			log.write(t.toString());
+			matchLogger.write(t.toString());
 		}
 	}
 	

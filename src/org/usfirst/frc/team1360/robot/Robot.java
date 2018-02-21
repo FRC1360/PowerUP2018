@@ -165,6 +165,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
+		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
 		
 		teleopControl.runCycle();
 	}

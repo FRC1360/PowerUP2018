@@ -61,7 +61,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 * @throws InterruptedException In the unlikely event that the current thread is interrupted while waiting for the run thread to complete
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
-		Singleton.get(MatchLogProvider.class).write(String.format("%s -> %s", this.state.toString(), state.toString()));
+		matchLogger.write("Switching state " + state + " passing argument " + arg);
 
 		this.state = state;
 		this.arg = arg;

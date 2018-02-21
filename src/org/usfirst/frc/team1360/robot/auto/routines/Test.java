@@ -16,7 +16,8 @@ public final class Test extends AutonRoutine {
 	protected void runCore() throws InterruptedException {
 		
 
-		
+		new SweepTurn(10000, 96, true, true).runUntilFinish();
+		robotOutput.tankDrive(0, 0);
 		Thread.sleep(1000);
 
 	}

@@ -30,9 +30,8 @@ public class SweepTurn extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		// TODO Auto-generated method stub
-		OrbitPID pidInner = new OrbitPID(0.002, 0.0, 0.04);
-		OrbitPID pidOutter = new OrbitPID(0.005, 0.0, 0.0);
+		OrbitPID pidInner = new OrbitPID(0.003, 0.0, 0.04);
+		OrbitPID pidOutter = new OrbitPID(0.008, 0.0, 0.0);
 		
 		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 4) * 5.30516);
 		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 4) * 5.30516);

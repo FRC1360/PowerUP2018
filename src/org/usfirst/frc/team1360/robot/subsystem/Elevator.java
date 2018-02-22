@@ -35,13 +35,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				elevator.safety(0.5);
-				while(sensorInput.getElevatorEncoder() < target) 
-					{
-						elevator.safety(0.5);
-					
-					}
-				elevator.safety(0);
+				while(elevator.dampen(target, 0.75)) Thread.sleep(10);;
 				
 				context.nextState(HOLD);
 			}
@@ -73,7 +67,7 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				elevator.safety((context.getArg() instanceof Integer ? (Integer) context.getArg() : sensorInput.getElevatorEncoder()) > elevator.POS_BOTTOM_HOLD ? 0.05 : 0);
+				elevator.safety((context.getArg() instanceof Integer ? (Integer) context.getArg() : sensorInput.getElevatorEncoder()) > elevator.POS_BOTTOM_HOLD ? 0.1 : 0);
 //				if(IS_COMP_BOT)
 //					elevator.safety(0.05);
 //				else
@@ -122,12 +116,14 @@ public final class Elevator implements ElevatorProvider {
 			else 
 				return true;
 		}
-		else {
+		else 
+		{
 			if(Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
 				robotOutput.setElevatorMotor(0.3);
 			else {
 				safety((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
 			}
+			
 			if(sensorInput.getElevatorEncoder() >= position)
 				return false;
 			else 

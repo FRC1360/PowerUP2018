@@ -61,7 +61,7 @@ public class DriveToDistance extends AutonRoutine{
 			
 			matchLogger.write(String.format("SPEED == %f, TURN == %f", speed, turn));
 			
-			if(speed > 0.5) speed = 0.5;
+			if(speed > 0.75) speed = 0.75;
 			speed -= lastSpeed;
 			if (Math.abs(speed) > 0.05)
 				speed = Math.copySign(0.05, speed);

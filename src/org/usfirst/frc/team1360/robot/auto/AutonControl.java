@@ -8,6 +8,7 @@ import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 import org.usfirst.frc.team1360.robot.auto.routines.Default;
 import org.usfirst.frc.team1360.robot.auto.routines.EncoderSwitch;
+import org.usfirst.frc.team1360.robot.auto.routines.ScaleRightStart;
 import org.usfirst.frc.team1360.robot.auto.routines.Switch;
 import org.usfirst.frc.team1360.robot.auto.routines.Test;
 import org.usfirst.frc.team1360.robot.util.Singleton;
@@ -32,7 +33,8 @@ public class AutonControl {
 	{
 		routines.clear();
 		//routines.add(new EncoderSwitch());
-		routines.add(new Switch());
+		//routines.add(new Switch());
+		routines.add(new ScaleRightStart());
 		routines.add(new Test());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());

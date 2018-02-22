@@ -18,6 +18,10 @@ public class ScaleRightStart extends AutonRoutine{
 		
 		if(fms.plateLeft(1))
 		{
+			
+		}
+		else
+		{
 			elevator.goToTarget(elevator.FOUR_FOOT);
 			new DriveToDistance(10000, position.getX(), 225, 0, 20, true).runUntilFinish();
 			new SweepTurn(10000, 36, true, false).runUntilFinish();
@@ -34,10 +38,6 @@ public class ScaleRightStart extends AutonRoutine{
 			arm.goToTop();
 			elevator.goToBottom();
 			Thread.sleep(10000);
-		}
-		else
-		{
-			
 		}
 	}
 

@@ -130,6 +130,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
 		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
 		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
@@ -191,6 +192,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+
 		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
 		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());

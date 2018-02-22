@@ -14,7 +14,7 @@ public class ScaleRightStart extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		new Calibrate.runUntilFinish();
+		new Calibrate().runUntilFinish();
 		
 		if(fms.plateLeft(1))
 		{

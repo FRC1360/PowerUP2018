@@ -45,8 +45,6 @@ public class TeleopElevator implements TeleopComponent {
 		double speed = humanInput.getElevator();
 		int preset = humanInput.getOperatorPOV(); 
 		
-		
-		
 		if (speed == 0)
 		{
 			if(preset == 0 && !heldLastLoop)
@@ -65,9 +63,16 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				heldLastLoop = false;
 			}
-			if (!elevator.isHolding() && !elevator.isMovingToTarget())
+			if (!elevator.isMovingToTarget())
 			{
-				elevator.hold();
+				//elevator.hold();
+				
+				if(lastSpeed > 0)
+					elevator.goToTarget(sensorInput.getElevatorEncoder() + 300);
+				else if(lastSpeed < 0)
+					elevator.goToTarget(sensorInput.getElevatorEncoder() - 300);
+				else
+					elevator.hold();
 			}
 			
 		}
@@ -75,7 +80,7 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if (lastSpeed == 0)
 				elevator.startManual();
-			elevator.setManualSpeed(speed);
+			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1);
 		}
 		lastSpeed = speed;
 	}	

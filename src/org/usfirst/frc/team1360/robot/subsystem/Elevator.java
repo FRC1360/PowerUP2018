@@ -52,13 +52,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				elevator.safety(-0.5);
-				while(sensorInput.getElevatorEncoder() > target) 
-					{
-						elevator.safety(-0.5);
-					
-					}
-				elevator.safety(0);
+				while(elevator.dampen(target, -0.75)) Thread.sleep(10);
 				
 				context.nextState(HOLD);
 			}
@@ -67,11 +61,12 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				elevator.safety((context.getArg() instanceof Integer ? (Integer) context.getArg() : sensorInput.getElevatorEncoder()) > elevator.POS_BOTTOM_HOLD ? 0.1 : 0);
-//				if(IS_COMP_BOT)
-//					elevator.safety(0.05);
-//				else
-//					elevator.safety(0.05);
+				
+				
+				if(sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM_HOLD)
+					elevator.safety(0.05);
+				else
+					elevator.safety(0.0);
 			}
 		},
 		
@@ -109,7 +104,7 @@ public final class Elevator implements ElevatorProvider {
 	public boolean dampen(int position, double power) {
 		if(position < sensorInput.getElevatorEncoder()) {
 			
-			safety((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
+			safety((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
 			
 			if(sensorInput.getElevatorEncoder() <= position)
 				return false;

@@ -99,12 +99,19 @@ public class Arm implements ArmProvider{
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				sensorInput.resetArmEncoder();
 				robotOutput.setArm(-1);
-				while(sensorInput.getArmEncoder() > -20) 
+				try {
+					while(sensorInput.getArmEncoder() > -10) 
 					{
 						Thread.sleep(10);
 						matchLogger.write("Waiting for the arm to reach the bottom");
 					}
-				matchLogger.write("Arm encoder down past 20 encoder ticks" + sensorInput.getArmEncoder());
+				} catch (Throwable t)
+				{
+					arm.safety(0);
+					matchLogger.write("CALIBRATE: " + t.toString());
+					throw t;
+				}
+				matchLogger.write("Arm encoder down past -10 encoder ticks" + sensorInput.getArmEncoder());
 				
 				robotOutput.setArm(0.75);
 				while(!sensorInput.getArmSwitch()) robotOutput.setArm(0.75);
@@ -230,8 +237,8 @@ public class Arm implements ArmProvider{
 	@Override
 	public void calibrateBlocking() {
 		try {
-			stateMachine.setState(ArmState.IDLE);
-			while (stateMachine.getState() == ArmState.IDLE) Thread.sleep(10);
+			stateMachine.setState(ArmState.CALIBRATE);
+			while (stateMachine.getState() == ArmState.CALIBRATE) Thread.sleep(10);
 		} catch (InterruptedException e) {
 			matchLogger.write("Calibrate arm: " + e.toString());
 		}

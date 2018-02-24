@@ -15,37 +15,39 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		new Calibrate().runNow("Calibration");
+		new Calibrate().runUntilFinish();
 		
 		if(fms.plateLeft(0)) {
-			elevator.goToTarget(600);
-			new SweepTurn(10000, 141/4, true, false).runUntilFinish();
-			waitFor("Calibration", 10000);
+			elevator.goToTarget(700);
+			new SweepTurn(10000, 130/4, true, false).runUntilFinish();
+			new DriveToDistance(10000, -80, position.getY(), -80, 10, false).runUntilFinish();
 			arm.goToPosition(-40);
-			new DriveToDistance(10000, -90, position.getY(), -90, 10, false).runUntilFinish();
-			new SweepTurn(10000, 141/4, false, false).runUntilFinish();
-			new DriveToDistance(10000, position.getX(), 90, 0, 10, false).runUntilFinish();
-			intake.setClamp(intake.FREE);
+			new SweepTurn(10000, 130/4, false, false).runUntilFinish();
+			new DriveToDistance(10000, position.getX(), 80, 0, 10, false).runUntilFinish();
 			
-			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			intake.setIntake(-0.5);
 			Thread.sleep(500);
+			intake.setIntake(0);
 			arm.goToTop();
+			elevator.goToBottom();
 			Thread.sleep(1000);
 			
 			
 		} else {
-
-			elevator.goToTarget(600);
+			
+			elevator.goToTarget(700);
 			arm.goToPosition(-40);
 
-			new DriveToDistance(10000, 0, 110, 0, 10, false).runUntilFinish();//96 inches
+			new DriveToDistance(10000, 0, 90, 0, 10, false).runUntilFinish();//96 inches
 	
 			intake.setClamp(intake.FREE);
-			intake.setIntake(-1);
+			intake.setIntake(-0.5);
 			
 			Thread.sleep(500);
 			intake.setIntake(0);
 			arm.goToTop();
+			elevator.goToBottom();
 			
 			Thread.sleep(1000);
 			

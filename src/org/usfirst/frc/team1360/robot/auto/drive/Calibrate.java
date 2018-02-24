@@ -12,6 +12,10 @@ public class Calibrate extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException
 	{
+		position.reset();
+		sensorInput.reset();
+		intake.setClamp(intake.CLOSED);
+		intake.setIntake(0);
 		arm.calibrateBlocking();
 	}
 

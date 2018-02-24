@@ -62,9 +62,14 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
 		matchLogger.write("Switching state " + state + " passing argument " + arg);
+		
+		thread.interrupt();
 
 		this.state = state;
 		this.arg = arg;
+		
+		thread = new RunThread();
+		thread.start();
 	}
 	
 	public void kill() {
@@ -137,6 +142,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 			while (true)
 				try {
 					state.run(new Context());
+					return;
 				} catch (NextStateException e) {
 					synchronized (OrbitStateMachine.this) {
 						state = (T) e.getNextState();

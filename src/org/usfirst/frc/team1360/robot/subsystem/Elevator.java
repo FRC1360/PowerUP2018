@@ -62,7 +62,6 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
-				
 				if(sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM_HOLD)
 					elevator.safety(0.05);
 				else

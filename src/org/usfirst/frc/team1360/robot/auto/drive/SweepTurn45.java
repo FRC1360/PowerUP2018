@@ -6,7 +6,7 @@ import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SweepTurn extends AutonRoutine{
+public class SweepTurn45 extends AutonRoutine{
 	
 	private double radius;
 	private int leftOffset;
@@ -17,8 +17,8 @@ public class SweepTurn extends AutonRoutine{
 	
 	private final double DRIVE_WIDTH = 24;
 	
-	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
-		super("SweepTurn", timeout);
+	public SweepTurn45(long timeout, double r, boolean leftTurn, boolean chain) {
+		super("SweepTurn45", timeout);
 		
 		this.left = leftTurn;
 		this.chain = chain;
@@ -33,8 +33,8 @@ public class SweepTurn extends AutonRoutine{
 		OrbitPID pidInner = new OrbitPID(0.003, 0.0, 0.04);
 		OrbitPID pidOutter = new OrbitPID(0.008, 0.0, 0.0);
 		
-		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 4) * 5.30516);
-		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 4) * 5.30516);
+		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 8) * 5.30516);
+		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 8) * 5.30516);
 		
 		double leftSpeed = 0;
 		double rightSpeed = 0;

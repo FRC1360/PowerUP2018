@@ -11,7 +11,7 @@ import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.GetFMS;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +24,7 @@ public abstract class AutonRoutine extends Thread {
 	private static final HashMap<String, AutonRoutine> map = new HashMap<>();
 	private boolean done;
 	
-	protected LogProvider log = Singleton.get(LogProvider.class);
+	protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	protected OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
@@ -78,7 +78,7 @@ public abstract class AutonRoutine extends Thread {
 			}
 			catch (Throwable t)
 			{
-				log.write(t.toString());
+				matchLogger.write(t.toString());
 			}
 		}
 		done = true;
@@ -183,6 +183,7 @@ public abstract class AutonRoutine extends Thread {
 	@Override
 	public final void run()
 	{
+		matchLogger.write("Start " + getClass().getSimpleName());
 		try
 		{
 			runCore();
@@ -195,8 +196,9 @@ public abstract class AutonRoutine extends Thread {
 		}
 		catch (Throwable t)
 		{
-			log.write(t.toString());
+			matchLogger.write(t.toString());
 		}
+		matchLogger.write("End " + getClass().getSimpleName());
 	}
 	
 	@Override

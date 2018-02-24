@@ -7,14 +7,13 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 
 @SingletonSee(ArmProvider.class)
 public class Arm implements ArmProvider{
 	
-	private LogProvider log = Singleton.get(LogProvider.class);
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
@@ -24,20 +23,31 @@ public class Arm implements ArmProvider{
 		DOWN_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting Down to target arm at: " + sensorInput.getArmEncoder());
+				
 				if(!(context.getArg() instanceof Integer)) {
-					log.write("No Down Target Provided to ArmStateMachine");
+					matchLogger.write("No Down Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
 				}
 				
 				int target = (Integer) context.getArg();
 				arm.safety(-1.0);
 				
-				while(sensorInput.getArmEncoder() > target)	{
-					Thread.sleep(10);
+				try {
+					matchLogger.write("Entering while loop");
+					while(sensorInput.getArmEncoder() > target)	{
+						Thread.sleep(10);
+						arm.safety(-1.0);
+						matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
+					}
+				} catch(Throwable e) {
+					matchLogger.write("ARM DOWN_TO_TARGET: " + e.toString());
+					throw e;
 				}
-				log.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(IDLE, target);
+				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
+				
+				context.nextState(IDLE);
 			}
 			
 		},
@@ -45,7 +55,7 @@ public class Arm implements ArmProvider{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				if(!(context.getArg() instanceof Integer)) {
-					log.write("No Up Target Provided to ArmStateMachine");
+					matchLogger.write("No Up Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
 				}
 				
@@ -55,7 +65,7 @@ public class Arm implements ArmProvider{
 				while(sensorInput.getArmEncoder() < target)	{
 					Thread.sleep(10);
 				}
-				log.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
+				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
 				context.nextState(IDLE, target);
 			}
@@ -83,12 +93,38 @@ public class Arm implements ArmProvider{
 				arm.safety(0);
 			}
 			
+		},
+		CALIBRATE{
+			@Override
+			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				sensorInput.resetArmEncoder();
+				robotOutput.setArm(-1);
+				try {
+					while(sensorInput.getArmEncoder() > -10) 
+					{
+						Thread.sleep(10);
+						matchLogger.write("Waiting for the arm to reach the bottom");
+					}
+				} catch (Throwable t)
+				{
+					arm.safety(0);
+					matchLogger.write("CALIBRATE: " + t.toString());
+					throw t;
+				}
+				matchLogger.write("Arm encoder down past -10 encoder ticks" + sensorInput.getArmEncoder());
+				
+				robotOutput.setArm(0.75);
+				while(!sensorInput.getArmSwitch()) robotOutput.setArm(0.75);
+				sensorInput.resetArmEncoder();
+				robotOutput.setArm(0);
+				context.nextState(IDLE);
+			}
 		};
 		
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-		protected LogProvider log = Singleton.get(LogProvider.class);
-		public static Arm arm;
+		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+		public static Arm arm;
 	}
 	
 	private OrbitStateMachine<ArmState> stateMachine;
@@ -115,7 +151,7 @@ public class Arm implements ArmProvider{
 			stateMachine.setState(ArmState.IDLE);
 			return true;
 		} catch (InterruptedException e) {
-			log.write(e.toString());
+			matchLogger.write(e.toString());
 			return false;
 		}
 	}
@@ -136,7 +172,7 @@ public class Arm implements ArmProvider{
 			}
 			return true;
 		} catch(InterruptedException e) {
-			log.write(e.toString());
+			matchLogger.write(e.toString());
 			return false;
 		}
 		
@@ -197,12 +233,19 @@ public class Arm implements ArmProvider{
 		try {
 			stateMachine.setState(ArmState.MANUAL);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
+			matchLogger.write(e.toString());
 			return false;
 		}
 		return true;
 	}
 	
-	
-
+	@Override
+	public void calibrateBlocking() {
+		try {
+			stateMachine.setState(ArmState.CALIBRATE);
+			while (stateMachine.getState() == ArmState.CALIBRATE) Thread.sleep(10);
+		} catch (InterruptedException e) {
+			matchLogger.write("Calibrate arm: " + e.toString());
+		}
+	}
 }

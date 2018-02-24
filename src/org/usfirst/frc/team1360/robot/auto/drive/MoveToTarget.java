@@ -35,7 +35,7 @@ public final class MoveToTarget extends AutonRoutine {
 			double throttle = pidY.calculate(length, yl);
 			double turn = 1.0 * (Math.atan(xl / 12) - al);
 			robotOutput.arcadeDrivePID(throttle, turn);
-			log.write(String.format("moveToTaret %f %f %f | %f %f", xl, yl, al, throttle, turn));
+			matchLogger.write(String.format("moveToTaret %f %f %f | %f %f", xl, yl, al, throttle, turn));
 			Thread.sleep(10);
 		} while (xl * xl + (length - yl) * (length - yl) > epsilon);
 		robotOutput.arcadeDrivePID(0, 0);

@@ -4,19 +4,31 @@ import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 
-public class CrossBaseline extends AutonRoutine{
+public class TwoCubeRight extends AutonRoutine{
 
-	public CrossBaseline() {
-		super("Cross baseline", 0);
+	public TwoCubeRight() {
+		super("Two Cube Right", 0);
 		// TODO Auto-generated constructor stub
 	}
+	
+	//SWITCH		SCALE
+	//Right		Right	switch then scale
+	//Right		Left		switch then scale
+	//Left		Right	
+	//Left		Left
 
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
 		new Calibrate().runNow("Calibration");
 		
-		new DriveToDistance(10000, 0, 100, 0, 10, false).runUntilFinish();
+		if(fms.plateLeft(0)) {
+			
+		}
+		
+		
+		
+		
 	}
 
 }

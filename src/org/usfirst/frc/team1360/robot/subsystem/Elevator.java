@@ -8,12 +8,10 @@ import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineState;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 @SingletonSee(ElevatorProvider.class)
 public final class Elevator implements ElevatorProvider {
-	private LogProvider log = Singleton.get(LogProvider.class);
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
@@ -30,14 +28,15 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
+				matchLogger.write("Lift up to target: " + (Integer) context.getArg());
+				
 				if (!(context.getArg() instanceof Integer)) {
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
 
-				while (elevator.dampen(target, 1) ) {
-					Thread.sleep(10);
-				}
+				while(elevator.dampen(target, 0.75)) Thread.sleep(10);;
+				
 				context.nextState(HOLD);
 			}
 		},
@@ -48,14 +47,19 @@ public final class Elevator implements ElevatorProvider {
 				
 				
 				if (!(context.getArg() instanceof Integer)) {
-					log.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
+					matchLogger.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
 					context.nextState(IDLE);
 				}
 				int target = (Integer) context.getArg();
 
-				while (elevator.dampen(target, 1) ) {
-					Thread.sleep(10);
-				}
+				elevator.safety(-0.5);
+				while(sensorInput.getElevatorEncoder() > target) 
+					{
+						elevator.safety(-0.5);
+					
+					}
+				elevator.safety(0);
+				
 				context.nextState(HOLD);
 			}
 		},
@@ -63,10 +67,11 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				if(IS_COMP_BOT)
-					elevator.safety(0.05);
-				else
-					elevator.safety(0.1);
+				elevator.safety((context.getArg() instanceof Integer ? (Integer) context.getArg() : sensorInput.getElevatorEncoder()) > elevator.POS_BOTTOM_HOLD ? 0.1 : 0);
+//				if(IS_COMP_BOT)
+//					elevator.safety(0.05);
+//				else
+//					elevator.safety(0.05);
 			}
 		},
 		
@@ -77,7 +82,7 @@ public final class Elevator implements ElevatorProvider {
 			}
 		};
 		
-		protected LogProvider log = Singleton.get(LogProvider.class);
+		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 		public static Elevator elevator;
 	};
@@ -103,22 +108,22 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean dampen(int position, double power) {
 		if(position < sensorInput.getElevatorEncoder()) {
-//			if(Math.abs(-0.004*(sensorInput.getElevatorEncoder() - position)) < 0.2) 
-//				robotOutput.setElevatorMotor(-0.1);
-//			else {
-				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));
-//			}
+			
+			safety((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
+			
 			if(sensorInput.getElevatorEncoder() <= position)
 				return false;
 			else 
 				return true;
 		}
-		else {
+		else 
+		{
 			if(Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
 				robotOutput.setElevatorMotor(0.3);
 			else {
-				robotOutput.setElevatorMotor((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
+				safety((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
 			}
+			
 			if(sensorInput.getElevatorEncoder() >= position)
 				return false;
 			else 
@@ -130,37 +135,37 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public void safety(double power) {
-		log.write("Checking elevator safety on power " + power);
 		
-		if(sensorInput.getBottomSwitch())
+		if(sensorInput.getBottomSwitch()) {
 			sensorInput.resetElevatorEncoder();
-		
-		if(sensorInput.getTopSwitch())
+			if(power < 0)
+				hold();
+			else
+				robotOutput.setElevatorMotor(power);
+		}
+	
+		else if(sensorInput.getTopSwitch()) {
 			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
+			if(power > 0)
+				hold();
+			else
+				robotOutput.setElevatorMotor(power);
+		}
 		
-		if (power > 0 && sensorInput.getTopSwitch())
-			robotOutput.setElevatorMotor(0.1);
-		
-		else if (power < 0 && sensorInput.getBottomSwitch())
-			robotOutput.setElevatorMotor(0);
-		
-		else if(/*sensorInput.getElevatorEncoder() < POS_BOTTOM + 500 &&*/ !sensorInput.getBottomSwitch() && power < 0  /*&& sensorInput.getElevatorEncoder() < 500*/)
-			if(-0.002*sensorInput.getElevatorEncoder() < 0.2) 
+		else if(power < 0) {
+			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
 				robotOutput.setElevatorMotor(-0.2);
 			else
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
-			
-			
+		}
 		
-		else if(sensorInput.getElevatorEncoder() > (POS_TOP + topPosOffset) - 500 && !sensorInput.getTopSwitch() && power > 0)
-			
+		else if(power > 0) {
 			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
 				robotOutput.setElevatorMotor(0.3);
-				
 			else
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
-		
-
+		}
+	
 		else
 			robotOutput.setElevatorMotor(power);
 	}
@@ -179,7 +184,6 @@ public final class Elevator implements ElevatorProvider {
 			try {
 				stateMachine.setState(ElevatorState.HOLD);
 			} catch (InterruptedException e) {
-				log.write(e.toString());
 				return false;
 			}
 		}
@@ -191,7 +195,6 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.UP_TO_TARGET, target);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -202,7 +205,6 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.DOWN_TO_TARGET, target);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -234,7 +236,6 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.HOLD);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -250,7 +251,6 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.MANUAL);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
 			return false;
 		}
 		return true;
@@ -261,7 +261,6 @@ public final class Elevator implements ElevatorProvider {
 		try {
 			stateMachine.setState(ElevatorState.IDLE);
 		} catch (InterruptedException e) {
-			log.write(e.toString());
 			return false;
 		}
 		return true;

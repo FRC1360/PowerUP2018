@@ -184,6 +184,7 @@ public abstract class AutonRoutine extends Thread {
 	@Override
 	public final void run()
 	{
+		matchLogger.write("Start " + getClass().getSimpleName());
 		try
 		{
 			runCore();
@@ -198,6 +199,7 @@ public abstract class AutonRoutine extends Thread {
 		{
 			matchLogger.write(t.toString());
 		}
+		matchLogger.write("End " + getClass().getSimpleName());
 	}
 	
 	@Override

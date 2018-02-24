@@ -251,7 +251,6 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public void resetElevatorEncoder() {
-		matchLogger.write("Reset elevator encoder");
 		elevatorEnc.reset();
 	}
 
@@ -273,5 +272,10 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public double getBatteryVoltage() {
 		return PDP.getVoltage();
+	}
+
+	@Override
+	public double getElevatorCurrent() {
+		return PDP.getCurrent(3) + PDP.getCurrent(12);
 	}
 }

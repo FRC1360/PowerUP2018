@@ -23,6 +23,8 @@ public class Arm implements ArmProvider{
 		DOWN_TO_TARGET{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting Down to target arm at: " + sensorInput.getArmEncoder());
+				
 				if(!(context.getArg() instanceof Integer)) {
 					matchLogger.write("No Down Target Provided to ArmStateMachine");
 					context.nextState(IDLE);
@@ -31,12 +33,21 @@ public class Arm implements ArmProvider{
 				int target = (Integer) context.getArg();
 				arm.safety(-1.0);
 				
-				while(sensorInput.getArmEncoder() > target)	{
-					Thread.sleep(10);
+				try {
+					matchLogger.write("Entering while loop");
+					while(sensorInput.getArmEncoder() > target)	{
+						Thread.sleep(10);
+						arm.safety(-1.0);
+						matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
+					}
+				} catch(Throwable e) {
+					matchLogger.write("ARM DOWN_TO_TARGET: " + e.toString());
+					throw e;
 				}
+				
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(IDLE, target);
+				context.nextState(IDLE);
 			}
 			
 		},
@@ -82,9 +93,36 @@ public class Arm implements ArmProvider{
 				arm.safety(0);
 			}
 			
+		},
+		CALIBRATE{
+			@Override
+			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				sensorInput.resetArmEncoder();
+				robotOutput.setArm(-1);
+				try {
+					while(sensorInput.getArmEncoder() > -10) 
+					{
+						Thread.sleep(10);
+						matchLogger.write("Waiting for the arm to reach the bottom");
+					}
+				} catch (Throwable t)
+				{
+					arm.safety(0);
+					matchLogger.write("CALIBRATE: " + t.toString());
+					throw t;
+				}
+				matchLogger.write("Arm encoder down past -10 encoder ticks" + sensorInput.getArmEncoder());
+				
+				robotOutput.setArm(0.75);
+				while(!sensorInput.getArmSwitch()) robotOutput.setArm(0.75);
+				sensorInput.resetArmEncoder();
+				robotOutput.setArm(0);
+				context.nextState(IDLE);
+			}
 		};
 		
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+		protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		public static Arm arm;
 	}
@@ -196,6 +234,13 @@ public class Arm implements ArmProvider{
 		return true;
 	}
 	
-	
-
+	@Override
+	public void calibrateBlocking() {
+		try {
+			stateMachine.setState(ArmState.CALIBRATE);
+			while (stateMachine.getState() == ArmState.CALIBRATE) Thread.sleep(10);
+		} catch (InterruptedException e) {
+			matchLogger.write("Calibrate arm: " + e.toString());
+		}
+	}
 }

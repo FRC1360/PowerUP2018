@@ -44,5 +44,6 @@ public interface SensorInputProvider {
 	void reset();
 	
 	double getBatteryVoltage();
+	double getElevatorCurrent();
 	
 }

@@ -9,6 +9,7 @@ public interface ElevatorProvider {
 	public static final int SIX_FOOT = 1800;
 	
 	public static final int POS_BOTTOM = 0;
+	public static final int POS_BOTTOM_HOLD = 100;
 	
 	public static final boolean IS_COMP_BOT = false;
 	

@@ -188,14 +188,12 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public double getLeftEncoderVelocity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return leftDriveEnc.getRate();
 	}
 
 	@Override
 	public double getRightEncoderVelocity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return rightDriveEnc.getRate();
 	}
 
 	@Override
@@ -237,10 +235,6 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public double getArmCurrent() {
 		return PDP.getCurrent(4) + PDP.getCurrent(10);
-	}
-	
-	public double getElevatorCurrent() {
-		return PDP.getCurrent(3) + PDP.getCurrent(12);
 	}
 	
 

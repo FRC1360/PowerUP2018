@@ -90,7 +90,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getArcadeThrottle()
 	{
-		return this.driver.getY(Hand.kLeft);
+		return -this.driver.getY(Hand.kLeft);
 	}
 	
 	/* (non-Javadoc)

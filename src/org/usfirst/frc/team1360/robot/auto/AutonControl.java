@@ -11,6 +11,7 @@ import org.usfirst.frc.team1360.robot.auto.routines.EncoderSwitch;
 import org.usfirst.frc.team1360.robot.auto.routines.ScaleRightStart;
 import org.usfirst.frc.team1360.robot.auto.routines.Switch;
 import org.usfirst.frc.team1360.robot.auto.routines.Test;
+import org.usfirst.frc.team1360.robot.auto.routines.TwoCubeRight;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
@@ -33,6 +34,7 @@ public class AutonControl {
 	{
 		routines.clear();
 		//routines.add(new EncoderSwitch());
+		routines.add(new TwoCubeRight());
 		routines.add(new Switch());
 		routines.add(new ScaleRightStart());
 		routines.add(new Test());
@@ -107,7 +109,7 @@ public class AutonControl {
 		});
 		autoThreads.clear();
 		scheduler.shutdownNow();
-		setup();
+		//setup();
 	}
 	
 	public static void schedule(AutonRunnable runnable, long period)

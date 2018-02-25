@@ -62,10 +62,20 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
+				int target = sensorInput.getElevatorEncoder();
+				
+				OrbitPID elevatorPID = new OrbitPID(0.03, 0.0, 0.0);
+				
+				while(true) {
+					elevator.safety(elevatorPID.calculate(target, sensorInput.getElevatorEncoder()));
+				}
+				
+				/*
 				if(sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM_HOLD)
 					elevator.safety(0.05);
 				else
 					elevator.safety(0.0);
+				*/
 			}
 		},
 		

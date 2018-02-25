@@ -17,7 +17,11 @@ public final class TeleopArm implements TeleopComponent {
 		
 		if (speed == 0)
 		{
-			if (!arm.isIdle())
+			if(sensorInput.getElevatorEncoder() < 1000 && !sensorInput.getArmSwitch())
+			{
+				arm.goToTop();
+			}
+			else if (!arm.isIdle())
 			{
 				arm.idle();
 			}

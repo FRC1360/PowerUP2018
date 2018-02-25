@@ -37,7 +37,34 @@ public enum DriverConfig {
 			robotOutput.shiftGear(humanInput.getRacingShift());
 		}
 	},
-	
+	RACING_CURRENT_LIMIT
+	{
+		double voltageMax = 1.0;
+		
+		@Override
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
+		{
+			double speed = humanInput.getRacingThrottle();
+			double turn = humanInput.getRacingTurn();
+			boolean change = humanInput.getRacingDampen();
+			
+			if(change)
+			{
+				speed = speed / 2;
+				turn = turn / 2;
+			}
+			
+			double elevatorHeight = sensorInput.getElevatorEncoder();
+			matchLogger.write("Elevator Enc == " + elevatorHeight / 100);
+			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
+			matchLogger.write("Multiplier == " + multiplier);
+			
+			speed = speed * multiplier;
+			
+			robotOutput.arcadeDrive(speed, turn);
+			robotOutput.shiftGear(humanInput.getRacingShift());
+		}
+	},
 	HALO 
 	{
 		@Override

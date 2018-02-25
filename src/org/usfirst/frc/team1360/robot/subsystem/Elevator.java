@@ -14,7 +14,10 @@ import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 public final class Elevator implements ElevatorProvider {
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-	
+	private ArmProvider arm = Singleton.get(ArmProvider.class);
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+
+
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState> {
 		//sets motors to 0
 		IDLE {
@@ -62,11 +65,15 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
-				
-				if(sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM_HOLD)
-					elevator.safety(0.05);
-				else
-					elevator.safety(0.0);
+				int holdTarget = sensorInput.getElevatorEncoder();
+				OrbitPID elevatorPID = new OrbitPID(0.005, 0.0, 1);
+				matchLogger.write("ELEVATOR TARGET == " + holdTarget);
+
+				while(true)
+				{
+					elevator.safety(elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder()));
+					Thread.sleep(10);
+				}
 			}
 		},
 		
@@ -79,6 +86,7 @@ public final class Elevator implements ElevatorProvider {
 		
 		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+		
 		public static Elevator elevator;
 	};
 	
@@ -147,6 +155,12 @@ public final class Elevator implements ElevatorProvider {
 				robotOutput.setElevatorMotor(power);
 		}
 		
+		if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() > -2) {
+			if(!arm.movingToPosition())
+				arm.goToPosition(-3);
+		}
+		
+		
 		else if(power < 0) {
 			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
 				robotOutput.setElevatorMotor(-0.2);
@@ -179,6 +193,7 @@ public final class Elevator implements ElevatorProvider {
 			try {
 				stateMachine.setState(ElevatorState.HOLD);
 			} catch (InterruptedException e) {
+				
 				return false;
 			}
 		}

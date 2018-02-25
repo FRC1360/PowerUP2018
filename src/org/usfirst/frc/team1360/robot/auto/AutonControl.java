@@ -33,10 +33,10 @@ public class AutonControl {
 	{
 		routines.clear();
 		//routines.add(new EncoderSwitch());
-		routines.add(new Switch());
+		//routines.add(new Switch());
+		//routines.add(new Test());
 		routines.add(new ScaleRightStart());
 		routines.add(new CrossBaseline());
-		routines.add(new Test());
 		routines.add(new Default());
 	}
 	
@@ -107,7 +107,8 @@ public class AutonControl {
 		});
 		autoThreads.clear();
 		scheduler.shutdownNow();
-		setup();
+		routines.clear();
+		//setup();
 	}
 	
 	public static void schedule(AutonRunnable runnable, long period)

@@ -17,7 +17,7 @@ public final class Test extends AutonRoutine {
 	protected void runCore() throws InterruptedException {
 		
 		
-		new DriveToDistance(10000, position.getX(), 100, -10, 10, false).runUntilFinish();
+		new DriveToDistance(10000, position.getX(), 100, -0, 10, false).runUntilFinish();
 		
 		
 		robotOutput.tankDrive(0, 0);

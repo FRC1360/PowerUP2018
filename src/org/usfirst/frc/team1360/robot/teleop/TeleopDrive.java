@@ -7,7 +7,7 @@ import org.usfirst.frc.team1360.robot.teleop.TeleopComponent;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopDrive implements TeleopComponent {
-	private DriverConfig cfg = DriverConfig.ARCADE; 
+	private DriverConfig cfg = DriverConfig.RACING; 
 	
 	public void calculate() 
 	{

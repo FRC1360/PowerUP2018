@@ -6,6 +6,7 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,13 +38,16 @@ public enum DriverConfig {
 			else
 			{
 				
-				double pwmToVelocity = 0.0;
-				double pidSetPoint = speed * pwmToVelocity;
+				if(speed < 0.2) speed = 0.155;
+				double pwmToVelocity = 645;
+				double pidSetPoint = 1 * pwmToVelocity - 100;
 				
-				double rightSpeed = rightPID.calculate(sensorInput.getRightEncoderVelocity(), pidSetPoint);
-				double leftSpeed = leftPID.calculate(sensorInput.getLeftEncoderVelocity(), pidSetPoint);
-				
-				robotOutput.tankDrive(leftSpeed, rightSpeed);
+				logger.write("TARGET == " + pidSetPoint);
+								
+				//double rightSpeed = rightPID.calculate(sensorInput.getRightEncoderVelocity(), pidSetPoint);
+				double leftSpeed = leftPID.calculate(pidSetPoint, sensorInput.getLeftEncoderVelocity());
+				logger.write("LEFT VELO == " + sensorInput.getLeftEncoderVelocity());
+				robotOutput.tankDrive(leftSpeed, 0.0);
 			}
 			
 			robotOutput.shiftGear(humanInput.getRacingShift());
@@ -131,6 +135,7 @@ public enum DriverConfig {
 	};
 	
 	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput);
-	public OrbitPID leftPID = new OrbitPID(0.0, 0.0, 0.0);
+	public OrbitPID leftPID = new OrbitPID(0.00186, 0.0, 0.0);
 	public OrbitPID rightPID = new OrbitPID(0.0, 0.0, 0.0);
-}
+	protected MatchLogger logger = Singleton.get(MatchLogger.class);
+	}

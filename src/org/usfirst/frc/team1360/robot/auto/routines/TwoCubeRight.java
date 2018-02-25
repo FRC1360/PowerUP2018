@@ -31,19 +31,19 @@ public class TwoCubeRight extends AutonRoutine{
 		else
 		{
 			elevator.goToTarget(elevator.ONE_FOOT*4);
-			
-			new DriveToDistance(10000, position.getX(), 175, 0, 20, true).runUntilFinish();
-			
+			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
+
 			new SweepTurn45(10000, 48, true, false).runUntilFinish();
 
-			arm.goToPosition(-15);
+			arm.goToPosition(-40);
 			elevator.goToTarget(elevator.POS_TOP);
-			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, true).runUntilFinish();
-			
-			while(elevator.isMovingToTarget()) Thread.sleep(10);
+			while(elevator.isMovingToTarget() && arm.movingToPosition()) Thread.sleep(10);
+			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, false).runUntilFinish();
 			intake.setClamp(intake.FREE);
-			intake.setIntake(0.5);
-			Thread.sleep(500);
+			robotOutput.setIntake(0.5);
+			Thread.sleep(1000);
+			robotOutput.setIntake(0);
+			
 			
 			arm.goToPosition(-40);
 			elevator.goToBottom();

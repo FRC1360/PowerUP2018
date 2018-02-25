@@ -18,4 +18,6 @@ public interface ArmProvider {
 	void start();
 	void calibrateBlocking();
 	boolean movingToPosition();
+	void blockArm();
+	void unblockArm();
 }

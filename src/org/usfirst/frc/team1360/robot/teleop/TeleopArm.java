@@ -23,8 +23,9 @@ public final class TeleopArm implements TeleopComponent {
 				arm.idle();
 			}
 		}
-		else if(!arm.movingToPosition())
+		else if(speed > 0)
 		{
+			arm.unblockArm();
 			if (lastSpeed == 0)
 				arm.startManual();
 			arm.setManualSpeed(speed);

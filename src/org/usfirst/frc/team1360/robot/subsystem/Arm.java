@@ -18,6 +18,7 @@ public class Arm implements ArmProvider{
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
 	private long cooldown = 0;
+	private boolean blockArm = false;
 	
 	private enum ArmState implements OrbitStateMachineState<ArmState>		{
 		DOWN_TO_TARGET{
@@ -238,7 +239,17 @@ public class Arm implements ArmProvider{
 	}
 	
 	@Override
+	public void blockArm() {
+		blockArm = true;
+	}
+	
+	@Override
+	public void unblockArm() {
+		blockArm = false;
+	}
+	
+	@Override
 	public boolean movingToPosition() {
-		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET;
+		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET || blockArm;
 	}
 }

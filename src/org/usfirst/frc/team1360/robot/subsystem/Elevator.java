@@ -14,6 +14,7 @@ import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 public final class Elevator implements ElevatorProvider {
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+	private ArmProvider arm = Singleton.get(ArmProvider.class);
 	
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState> {
 		//sets motors to 0
@@ -159,6 +160,12 @@ public final class Elevator implements ElevatorProvider {
 			else
 				robotOutput.setElevatorMotor(power);
 		}
+		
+		if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() > -2) {
+			if(!arm.movingToPosition())
+				arm.goToPosition(-3);
+		}
+		
 		
 		else if(power < 0) {
 			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 

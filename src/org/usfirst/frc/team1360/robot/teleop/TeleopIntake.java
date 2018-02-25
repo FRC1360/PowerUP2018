@@ -10,18 +10,27 @@ public class TeleopIntake implements TeleopComponent {
 	private HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	private ArmProvider arm = Singleton.get(ArmProvider.class);
 	
+	private boolean intakeWasDown = false;
+	
 	
 	@Override
 	public void calculate() {
 		// TODO Auto-generated method stub
 		
-		if(humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
-			intake.setIntake(humanInput.getOperatorIntake());
+		if(!humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
+			intake.setIntake(humanInput.getOperatorIntake()*-1);
 			intake.setClamp(intake.FREE);
-			
-			arm.
+			if(!arm.movingToPosition())
+				arm.goToPosition(arm.POS_BOTTOM);
+				arm.blockArm();
+			intakeWasDown = true;
 		}
-		else if(!humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
+		else if(intakeWasDown) {
+			arm.unblockArm();
+			arm.goToTop();
+			intakeWasDown = false;
+		}
+		else if(humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
 			intake.setIntake(humanInput.getOperatorIntake()*-1);
 			intake.setClamp(intake.FREE);
 		}

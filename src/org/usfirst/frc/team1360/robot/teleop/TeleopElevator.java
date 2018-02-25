@@ -30,7 +30,6 @@ public class TeleopElevator implements TeleopComponent {
 	
 	@Override
 	public void disable() {
-		// TODO Auto-generated method stub
 		elevator.setIdle();
 		lastSpeed = 0;
 	}
@@ -62,10 +61,9 @@ public class TeleopElevator implements TeleopComponent {
 				elevator.goToTarget(elevator.SWITCH_HEIGHT);
 				arm.goToPosition(arm.POS_BOTTOM);
 			}
-			else if(intakePreset && !arm.movingToPosition())
+			else if(intakePreset)
 			{
 				elevator.goToTarget(elevator.INTAKE_HEIGHT);
-				intake.setClamp(intake.FREE);
 			}
 			if (!elevator.isMovingToTarget())
 			{

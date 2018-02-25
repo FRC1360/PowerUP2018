@@ -71,8 +71,8 @@ public class Robot extends TimedRobot {
 		position = Singleton.configure(DriveEncoderPositionProvider.class);
 		Singleton.configure(Drive.class);
 		Singleton.configure(Intake.class);
-		elevator = Singleton.configure(Elevator.class);
 		arm = Singleton.configure(Arm.class);
+		elevator = Singleton.configure(Elevator.class);
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);

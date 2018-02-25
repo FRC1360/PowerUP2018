@@ -27,7 +27,7 @@ public class ScaleRightStart extends AutonRoutine{
 			/*new SweepTurn(10000, 48, true, false).runUntilFinish();
 			new SweepTurn(10000, 40, false, false).runUntilFinish();*/
 			new SweepTurn(10000, 48, true, false).runUntilFinish();
-			elevator.goToTarget(elevator.SIX_FOOT);
+			elevator.goToTarget(elevator.ONE_FOOT*6);
 			new DriveToDistance(10000, position.getX() + 135, position.getY(), -90, 20, true).runUntilFinish();
 			new SweepTurn(10000, 48, false, false).runUntilFinish();
 			//new SweepTurn45(10000, 48, false, false).runUntilFinish();
@@ -50,23 +50,22 @@ public class ScaleRightStart extends AutonRoutine{
 		{
 			//Tuned
 			elevator.goToTarget(elevator.ONE_FOOT*4);
-			new DriveToDistance(10000, position.getX(), 175, 0, 20, true).runUntilFinish();
+			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
 			/*new SweepTurn(10000, 48, true, false).runUntilFinish();
 			new SweepTurn(10000, 40, false, false).runUntilFinish();*/
 			new SweepTurn45(10000, 48, true, false).runUntilFinish();
 
-			arm.goToPosition(-15);
+			arm.goToPosition(-40);
 			elevator.goToTarget(elevator.POS_TOP);
-			//while(elevator.isMovingToTarget()) Thread.sleep(10);
-			Thread.sleep(500);
-			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, true).runUntilFinish();
+			while(elevator.isMovingToTarget() && arm.movingToPosition()) Thread.sleep(10);
+			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, false).runUntilFinish();
 			intake.setClamp(intake.FREE);
-			intake.setIntake(-0.5);
+			robotOutput.setIntake(0.5);
 			Thread.sleep(1000);
-			intake.setIntake(0);
+			robotOutput.setIntake(0);
 			arm.goToTop();
-			new DriveBackwardsToDistance(10000, position.getX() + 10, position.getY() + 10, -45, 20, true).runUntilFinish();
-			elevator.goToBottom();
+			new DriveBackwardsToDistance(10000, position.getX() + 10, position.getY() + 10, -45, 20, false).runUntilFinish();
+			elevator.goToTarget(elevator.ONE_FOOT);
 			Thread.sleep(10000);
 		}
 	}

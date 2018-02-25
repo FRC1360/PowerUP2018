@@ -38,7 +38,6 @@ public class AutonControl {
 		routines.add(new Switch());
 		routines.add(new ScaleRightStart());
 		routines.add(new CrossBaseline());
-		routines.add(new Test());
 		routines.add(new Default());
 	}
 	
@@ -109,6 +108,7 @@ public class AutonControl {
 		});
 		autoThreads.clear();
 		scheduler.shutdownNow();
+		routines.clear();
 		//setup();
 	}
 	

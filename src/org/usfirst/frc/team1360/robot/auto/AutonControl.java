@@ -37,8 +37,8 @@ public class AutonControl {
 		routines.add(new TwoCubeRight());
 		routines.add(new Switch());
 		routines.add(new ScaleRightStart());
-		routines.add(new Test());
 		routines.add(new CrossBaseline());
+		routines.add(new Test());
 		routines.add(new Default());
 	}
 	

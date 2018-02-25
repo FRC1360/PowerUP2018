@@ -15,18 +15,15 @@ public final class TeleopArm implements TeleopComponent {
 	public void calculate() {
 		double speed = humanInput.deadzone(humanInput.getArm(), 0.1);
 		
-		if (speed == 0)
+		
+		if (speed == 0 && !arm.movingToPosition())
 		{
-			if(sensorInput.getElevatorEncoder() < 1000 && !sensorInput.getArmSwitch())
-			{
-				arm.goToTop();
-			}
-			else if (!arm.isIdle())
+			if (!arm.isIdle())
 			{
 				arm.idle();
 			}
 		}
-		else
+		else if(!arm.movingToPosition())
 		{
 			if (lastSpeed == 0)
 				arm.startManual();

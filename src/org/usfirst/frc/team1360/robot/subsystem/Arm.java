@@ -33,19 +33,12 @@ public class Arm implements ArmProvider{
 				int target = (Integer) context.getArg();
 				arm.safety(-1.0);
 				
-				try {
-					matchLogger.write("Entering while loop");
-					while(sensorInput.getArmEncoder() > target)	{
-						Thread.sleep(10);
-						arm.safety(-1.0);
-						matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
-					}
-				} catch(Throwable e) {
-					matchLogger.write("ARM DOWN_TO_TARGET: " + e.toString());
-					throw e;
+				while(sensorInput.getArmEncoder() > target)	{
+					Thread.sleep(10);
+					arm.safety(-1.0);
+					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
 				}
-				
-				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
+
 				
 				context.nextState(IDLE);
 			}
@@ -242,5 +235,10 @@ public class Arm implements ArmProvider{
 		} catch (InterruptedException e) {
 			matchLogger.write("Calibrate arm: " + e.toString());
 		}
+	}
+	
+	@Override
+	public boolean movingToPosition() {
+		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET;
 	}
 }

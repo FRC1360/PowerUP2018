@@ -60,9 +60,15 @@ public interface HumanInputProvider {
 	
 	double getArm();
 	
-	//Elevator Presets
-	int getOperatorPOV();
+	boolean getScaleMax();
 
+	boolean getSwitch();
+
+	boolean getScaleLow();
+
+	boolean getIntake();
+
+	
 	//-----------Auto Selection-----------
 	boolean getAutoInc();
 

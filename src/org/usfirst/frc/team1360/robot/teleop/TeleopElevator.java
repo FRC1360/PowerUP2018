@@ -6,7 +6,9 @@ import java.util.Map;
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopElevator implements TeleopComponent {
@@ -14,15 +16,10 @@ public class TeleopElevator implements TeleopComponent {
 	RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
+	ArmProvider arm = Singleton.get(ArmProvider.class);
+	IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	
-	private Map<Integer, Integer> positions = new HashMap<Integer, Integer>();
-	{
-		positions.put(0, elevator.POS_BOTTOM);
-		positions.put(1, elevator.FOUR_FOOT);
-		positions.put(2, elevator.FIVE_FOOT);
-		positions.put(3, elevator.SIX_FOOT);
-	}
 	
 	private double lastSpeed = 0;
 	private boolean heldLastLoop = false;
@@ -43,35 +40,43 @@ public class TeleopElevator implements TeleopComponent {
 	public void calculate() {
 		// TODO Auto-generated method stub
 		double speed = humanInput.getElevator();
-		int preset = humanInput.getOperatorPOV(); 
+		boolean scaleMax = humanInput.getScaleMax();
+		boolean scaleLow = humanInput.getScaleLow();
+		boolean switchPreset = humanInput.getSwitch();
+		boolean intakePreset = humanInput.getIntake();
 		
 		if (speed == 0)
 		{
-			if(preset == 0 && !heldLastLoop)
+			if(scaleMax && !arm.movingToPosition())
 			{
-				if(position < 3) position += 1;
-				elevator.goToTarget(positions.get(position));
-				heldLastLoop = true;
+				elevator.goToTarget(elevator.SCALE_HIGH);
+				arm.goToTop();
 			}
-			else if(preset == 180 && !heldLastLoop)
+			else if(scaleLow && !arm.movingToPosition())
 			{
-				if(position > 0) position -= 1;
-				elevator.goToTarget(positions.get(position));
-				heldLastLoop = true;
+				elevator.goToTarget(elevator.SCALE_LOW);
+				arm.goToPosition(arm.POS_BOTTOM);
 			}
-			else if(preset != 180 && preset != 0)
+			else if(switchPreset && !arm.movingToPosition())
 			{
-				heldLastLoop = false;
+				elevator.goToTarget(elevator.SWITCH_HEIGHT);
+				arm.goToPosition(arm.POS_BOTTOM);
+			}
+			else if(intakePreset && !arm.movingToPosition())
+			{
+				elevator.goToTarget(elevator.INTAKE_HEIGHT);
+				intake.setClamp(intake.FREE);
 			}
 			if (!elevator.isMovingToTarget())
 			{
 				//elevator.hold();
-				
-				if(lastSpeed > 0)
-					elevator.goToTarget(sensorInput.getElevatorEncoder() + 300);
-				else if(lastSpeed < 0)
-					elevator.goToTarget(sensorInput.getElevatorEncoder() - 300);
-				else
+				//dampening stuff
+//				
+//				if(lastSpeed > 0)
+//					elevator.goToTarget(sensorInput.getElevatorEncoder() + 300);
+//				else if(lastSpeed < 0)
+//					elevator.goToTarget(sensorInput.getElevatorEncoder() - 300);
+//				else
 					elevator.hold();
 			}
 			

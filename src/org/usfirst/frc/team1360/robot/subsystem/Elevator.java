@@ -66,9 +66,13 @@ public final class Elevator implements ElevatorProvider {
 				
 				OrbitPID elevatorPID = new OrbitPID(0.03, 0.0, 0.0);
 				
+				elevator.safety(0.05);
+				
+				/*
 				while(true) {
 					elevator.safety(elevatorPID.calculate(target, sensorInput.getElevatorEncoder()));
 				}
+				*/
 				
 				/*
 				if(sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM_HOLD)

@@ -1,20 +1,25 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopIntake implements TeleopComponent {
 	private IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	private HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
+	private ArmProvider arm = Singleton.get(ArmProvider.class);
 	
 	
 	@Override
 	public void calculate() {
 		// TODO Auto-generated method stub
+		
 		if(humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
 			intake.setIntake(humanInput.getOperatorIntake());
 			intake.setClamp(intake.FREE);
+			
+			arm.
 		}
 		else if(!humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
 			intake.setIntake(humanInput.getOperatorIntake()*-1);

@@ -18,8 +18,6 @@ public class TeleopIntake implements TeleopComponent {
 		if(humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
 			intake.setIntake(humanInput.getOperatorIntake());
 			intake.setClamp(intake.FREE);
-			
-			arm.
 		}
 		else if(!humanInput.getOperatorClamp() && humanInput.getOperatorIntake() > 0) {
 			intake.setIntake(humanInput.getOperatorIntake()*-1);

@@ -14,6 +14,8 @@ import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 public final class Elevator implements ElevatorProvider {
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+
 	
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState> {
 		//sets motors to 0
@@ -62,24 +64,15 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
-				int target = sensorInput.getElevatorEncoder();
-				
-				OrbitPID elevatorPID = new OrbitPID(0.03, 0.0, 0.0);
-				
-				elevator.safety(0.05);
-				
-				/*
-				while(true) {
-					elevator.safety(elevatorPID.calculate(target, sensorInput.getElevatorEncoder()));
+				int holdTarget = sensorInput.getElevatorEncoder();
+				OrbitPID elevatorPID = new OrbitPID(0.005, 0.0, 1);
+				matchLogger.write("ELEVATOR TARGET == " + holdTarget);
+
+				while(true)
+				{
+					elevator.safety(elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder()));
+					Thread.sleep(10);
 				}
-				*/
-				
-				/*
-				if(sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM_HOLD)
-					elevator.safety(0.05);
-				else
-					elevator.safety(0.0);
-				*/
 			}
 		},
 		
@@ -92,6 +85,7 @@ public final class Elevator implements ElevatorProvider {
 		
 		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+		
 		public static Elevator elevator;
 	};
 	
@@ -192,6 +186,7 @@ public final class Elevator implements ElevatorProvider {
 			try {
 				stateMachine.setState(ElevatorState.HOLD);
 			} catch (InterruptedException e) {
+				
 				return false;
 			}
 		}

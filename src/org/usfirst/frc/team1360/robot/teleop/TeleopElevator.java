@@ -43,6 +43,7 @@ public class TeleopElevator implements TeleopComponent {
 		boolean scaleLow = humanInput.getScaleLow();
 		boolean switchPreset = humanInput.getSwitch();
 		boolean intakePreset = humanInput.getIntake();
+		boolean climb = humanInput.getClimb();
 		
 		if (speed == 0)
 		{
@@ -65,7 +66,11 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				elevator.goToTarget(elevator.INTAKE_HEIGHT);
 			}
-			if (!elevator.isMovingToTarget())
+			if (climb && !elevator.isClimbing())
+			{
+				elevator.climb();
+			}
+			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
 			{
 				//elevator.hold();
 				//dampening stuff

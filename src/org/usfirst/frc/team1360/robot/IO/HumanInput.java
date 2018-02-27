@@ -233,6 +233,11 @@ public class HumanInput implements HumanInputProvider {
 		return operator.getAButton();
 	}
 	
+	@Override
+	public boolean getClimb() {
+		return operator.getBumper(Hand.kRight);
+	}
+	
 
 	//-----------Auto Selection-----------
 	@Override

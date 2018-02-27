@@ -82,6 +82,21 @@ public final class Elevator implements ElevatorProvider {
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
 			}
+		},
+		
+		CLIMB {
+			@Override
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				while (true) {
+					double power = (POS_CLIMB - sensorInput.getElevatorEncoder()) * 0.005;
+					if (power > 0)
+						power = 0;
+					else if (power < -1)
+						power = -1;
+					elevator.safety(power);
+					Thread.sleep(10);
+				}
+			}
 		};
 		
 		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
@@ -262,6 +277,21 @@ public final class Elevator implements ElevatorProvider {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean climb() {
+		try {
+			stateMachine.setState(ElevatorState.CLIMB);
+		} catch (InterruptedException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean isClimbing() {
+		return stateMachine.getState() == ElevatorState.CLIMB;
 	}
 	
 	@Override

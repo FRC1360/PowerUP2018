@@ -32,11 +32,11 @@ public class Arm implements ArmProvider{
 				}
 				
 				int target = (Integer) context.getArg();
-				arm.safety(-1.0);
+				arm.safety(-0.75);
 				
 				while(sensorInput.getArmEncoder() > target)	{
 					Thread.sleep(10);
-					arm.safety(-1.0);
+					arm.safety(-0.75);
 					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
 				}
 
@@ -54,9 +54,10 @@ public class Arm implements ArmProvider{
 				}
 				
 				int target = (Integer) context.getArg();
-				arm.safety(1.0);
+				arm.safety(0.75);
 				
 				while(sensorInput.getArmEncoder() < target)	{
+					arm.safety(0.75);
 					Thread.sleep(10);
 				}
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
@@ -209,10 +210,14 @@ public class Arm implements ArmProvider{
 		if (System.currentTimeMillis() < cooldown)
 			robotOutput.setArm(0);
 		
+		
+		
 		if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
 			robotOutput.setArm(0);
 		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
 			robotOutput.setArm(0);
+		else if(sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*3.25 && sensorInput.getArmEncoder() >= -1)
+			return;
 		else
 			robotOutput.setArm(power);
 	}

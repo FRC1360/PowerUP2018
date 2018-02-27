@@ -142,7 +142,7 @@ public final class Elevator implements ElevatorProvider {
 		if(sensorInput.getBottomSwitch()) {
 			sensorInput.resetElevatorEncoder();
 			if(power < 0)
-				hold();
+				robotOutput.setElevatorMotor(0);
 			else
 				robotOutput.setElevatorMotor(power);
 		}
@@ -150,17 +150,15 @@ public final class Elevator implements ElevatorProvider {
 		else if(sensorInput.getTopSwitch()) {
 			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
 			if(power > 0)
-				hold();
+				robotOutput.setElevatorMotor(0.15);//prevent jiggle
 			else
 				robotOutput.setElevatorMotor(power);
 		}
 		
-		if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() > -2) {
+		if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() >= -1) {
 			if(!arm.movingToPosition())
-				arm.goToPosition(-3);
+				arm.goToPosition(-1);
 		}
-		
-		
 		else if(power < 0) {
 			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
 				robotOutput.setElevatorMotor(-0.2);
@@ -168,7 +166,7 @@ public final class Elevator implements ElevatorProvider {
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
 		}
 		
-		else if(power > 0) {
+		else if(power > 0 && !sensorInput.getTopSwitch()) {
 			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
 				robotOutput.setElevatorMotor(0.3);
 			else

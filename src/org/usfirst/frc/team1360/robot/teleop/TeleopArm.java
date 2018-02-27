@@ -23,7 +23,7 @@ public final class TeleopArm implements TeleopComponent {
 				arm.idle();
 			}
 		}
-		else if(speed > 0)
+		else if(speed != 0)
 		{
 			arm.unblockArm();
 			if (lastSpeed == 0)

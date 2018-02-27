@@ -66,7 +66,11 @@ public class AutonControl {
 	
 	public static void registerThread(Thread thread)
 	{
-		autoThreads.add(thread);
+		synchronized (autoThreads)
+		{
+			Singleton.get(MatchLogProvider.class).write("Auton thread registered: " + thread.getName());
+			autoThreads.add(thread);
+		}
 	}
 	
 	public static Thread run(AutonRunnable runnable)
@@ -109,7 +113,7 @@ public class AutonControl {
 		autoThreads.clear();
 		scheduler.shutdownNow();
 		routines.clear();
-		//setup();
+		setup();
 	}
 	
 	public static void schedule(AutonRunnable runnable, long period)

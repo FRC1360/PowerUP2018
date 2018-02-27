@@ -81,8 +81,6 @@ public class Robot extends TimedRobot {
 		
 		CameraServer.getInstance().startAutomaticCapture();
 		
-
-		
 		matchLog.writeHead();
 		
 		robotOutput.clearStickyFaults();
@@ -190,6 +188,7 @@ public class Robot extends TimedRobot {
 		
 		AutonControl.select();
 		
+		/*
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
@@ -201,6 +200,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+		*/
 	}
 
 	/**

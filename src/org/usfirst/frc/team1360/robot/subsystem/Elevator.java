@@ -87,7 +87,7 @@ public final class Elevator implements ElevatorProvider {
 		CLIMB {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				while (true) {
+				while (sensorInput.getElevatorEncoder() > POS_CLIMB) {
 					double power = (POS_CLIMB - sensorInput.getElevatorEncoder()) * 0.005;
 					if (power > 0)
 						power = 0;
@@ -95,6 +95,17 @@ public final class Elevator implements ElevatorProvider {
 						power = -1;
 					elevator.safety(power);
 					Thread.sleep(10);
+				}
+				context.nextState(CLIMB_HOLD);
+			}
+		},
+		
+		CLIMB_HOLD {
+			@Override
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				while (true) {
+					elevator.safety(-0.1);
+					Thread.sleep(10); // Tune this power to what we need to hold the robot up!
 				}
 			}
 		};

@@ -34,8 +34,8 @@ public class AutonControl {
 	{
 		routines.clear();
 		//routines.add(new EncoderSwitch());
-		routines.add(new TwoCubeRight());
-		routines.add(new Switch());
+		//routines.add(new TwoCubeRight());
+		//routines.add(new Switch());
 		routines.add(new ScaleRightStart());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());

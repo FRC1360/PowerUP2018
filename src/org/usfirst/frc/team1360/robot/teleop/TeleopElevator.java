@@ -6,7 +6,9 @@ import java.util.Map;
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopElevator implements TeleopComponent {
@@ -14,15 +16,10 @@ public class TeleopElevator implements TeleopComponent {
 	RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
+	ArmProvider arm = Singleton.get(ArmProvider.class);
+	IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	
-	private Map<Integer, Integer> positions = new HashMap<Integer, Integer>();
-	{
-		positions.put(0, elevator.POS_BOTTOM);
-		positions.put(1, elevator.FOUR_FOOT);
-		positions.put(2, elevator.FIVE_FOOT);
-		positions.put(3, elevator.SIX_FOOT);
-	}
 	
 	private double lastSpeed = 0;
 	private boolean heldLastLoop = false;
@@ -33,7 +30,6 @@ public class TeleopElevator implements TeleopComponent {
 	
 	@Override
 	public void disable() {
-		// TODO Auto-generated method stub
 		elevator.setIdle();
 		lastSpeed = 0;
 	}
@@ -43,31 +39,49 @@ public class TeleopElevator implements TeleopComponent {
 	public void calculate() {
 		// TODO Auto-generated method stub
 		double speed = humanInput.getElevator();
-		int preset = humanInput.getOperatorPOV(); 
-		
-		
+		boolean scaleMax = humanInput.getScaleMax();
+		boolean scaleLow = humanInput.getScaleLow();
+		boolean switchPreset = humanInput.getSwitch();
+		boolean intakePreset = humanInput.getIntake();
+		boolean climb = humanInput.getClimb();
 		
 		if (speed == 0)
 		{
-			if(preset == 0 && !heldLastLoop)
+			if(scaleMax && !arm.movingToPosition())
 			{
-				if(position < 3) position += 1;
-				elevator.goToTarget(positions.get(position));
-				heldLastLoop = true;
+				elevator.goToTarget(elevator.SCALE_HIGH);
+				arm.goToTop();
 			}
-			else if(preset == 180 && !heldLastLoop)
+			else if(scaleLow && !arm.movingToPosition())
 			{
-				if(position > 0) position -= 1;
-				elevator.goToTarget(positions.get(position));
-				heldLastLoop = true;
+				elevator.goToTarget(elevator.SCALE_LOW);
+				arm.goToPosition(arm.POS_BOTTOM);
 			}
-			else if(preset != 180 && preset != 0)
+			else if(switchPreset && !arm.movingToPosition())
 			{
-				heldLastLoop = false;
+				elevator.goToTarget(elevator.SWITCH_HEIGHT);
+				arm.goToPosition(arm.POS_BOTTOM);
 			}
-			if (!elevator.isHolding() && !elevator.isMovingToTarget())
+			else if(intakePreset)
 			{
-				elevator.hold();
+				elevator.goToTarget(elevator.INTAKE_HEIGHT);
+			}
+			if (climb && !elevator.isClimbing())
+			{
+				elevator.climb();
+			}
+			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
+			{
+				//elevator.hold();
+				//dampening stuff
+//				
+//				if(lastSpeed > 0)
+//					elevator.goToTarget(sensorInput.getElevatorEncoder() + 300);
+//				else if(lastSpeed < 0)
+//					elevator.goToTarget(sensorInput.getElevatorEncoder() - 300);
+//				else
+				if(!elevator.isHolding())
+					elevator.hold();
 			}
 			
 		}
@@ -75,7 +89,7 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if (lastSpeed == 0)
 				elevator.startManual();
-			elevator.setManualSpeed(speed);
+			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1);
 		}
 		lastSpeed = speed;
 	}	

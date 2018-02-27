@@ -91,7 +91,6 @@ public abstract class AutonRoutine extends Thread {
 	public final void runNow(String name)
 	{
 		map.put(name.toLowerCase(), this);
-		AutonControl.registerThread(this);
 		start();
 		if (timeout != 0)
 		{
@@ -183,6 +182,7 @@ public abstract class AutonRoutine extends Thread {
 	@Override
 	public final void run()
 	{
+		AutonControl.registerThread(this);
 		matchLogger.write("Start " + getClass().getSimpleName());
 		try
 		{

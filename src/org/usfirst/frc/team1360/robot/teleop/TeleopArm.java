@@ -15,15 +15,17 @@ public final class TeleopArm implements TeleopComponent {
 	public void calculate() {
 		double speed = humanInput.deadzone(humanInput.getArm(), 0.1);
 		
-		if (speed == 0)
+		
+		if (speed == 0 && !arm.movingToPosition())
 		{
 			if (!arm.isIdle())
 			{
 				arm.idle();
 			}
 		}
-		else
+		else if(speed != 0)
 		{
+			arm.unblockArm();
 			if (lastSpeed == 0)
 				arm.startManual();
 			arm.setManualSpeed(speed);

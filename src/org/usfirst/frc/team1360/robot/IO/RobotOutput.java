@@ -110,7 +110,12 @@ public class RobotOutput implements RobotOutputProvider {
 	{
 		matchLogger.write("LEFT " + speed);
 		SmartDashboard.putNumber("DL", speed);
+		
+		
+		
 		leftDrive.set(speed);
+		
+		
 		SmartDashboard.putNumber("Left Voltage", -speed);
 	}
 	

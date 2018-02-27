@@ -62,8 +62,8 @@ public class DriveBackwardsToDistance extends AutonRoutine{
 			
 			matchLogger.write(String.format("SPEED == %f, PID OUTPUT == %f", speed, speed));
 			
-			if(speed > 0.5) speed = 0.5;
-			robotOutput.arcadeDrive( -speed, 1*turn);
+			if(speed < 0.5) speed = -0.5;
+			robotOutput.arcadeDrive( speed, 1*turn);
 			
 			SmartDashboard.putNumber("Current Distance", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2);
 			SmartDashboard.putNumber("targetDistance", target - eps);

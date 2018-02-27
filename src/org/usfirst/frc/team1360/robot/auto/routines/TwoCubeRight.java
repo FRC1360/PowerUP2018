@@ -23,45 +23,58 @@ public class TwoCubeRight extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
+		int offset;
+		double TICK_INCH = 5.30516;
 		new Calibrate().runNow("Calibration");
 		
 		if(fms.plateLeft(1)) {
-			elevator.goToTarget(elevator.ONE_FOOT*4);
 			new DriveToDistance(10000, position.getX(), 140, 0, 20, true).runUntilFinish();
-
+			
 			new SweepTurn(10000, 48, true, false).runUntilFinish();
-			elevator.goToTarget(elevator.ONE_FOOT*6);
-			new DriveToDistance(10000, position.getX() + 135, position.getY(), -90, 20, true).runUntilFinish();
-			new SweepTurn(10000, 48, false, false).runUntilFinish();
-			new SweepTurn45(10000, 48, false, false).runUntilFinish();
-
-			arm.goToPosition(-25);
-			elevator.goToTarget(elevator.POS_TOP);
+			new DriveToDistance(10000, -135, position.getY(), -90, 20, true).runUntilFinish();
+			new SweepTurn(10000, 110, 40, false, false).runUntilFinish();
+			
+			waitFor("Calibrate", 0);
+			elevator.goToTarget(elevator.POS_TOP - 100);
+			
 			Thread.sleep(20);
 			while(elevator.isMovingToTarget()) Thread.sleep(10);
+			arm.goToPosition(-25);
+			
+			new DriveToDistance(1000, position.getX(), position.getY()+13, 0, 2, false).runUntilFinish();
 			
 			intake.setClamp(intake.FREE);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			intake.setIntake(0);
+			arm.goToTop();
+			Thread.sleep(500);
+			elevator.goToBottom();
 			
 			//-------------Grab Cube-------------
-			new DriveBackwardsToDistance(10000, position.getX()-36, position.getY()-36, 45, 20, false).runUntilFinish();
-			new SweepTurn(10000, 50, false, false).runUntilFinish();
 			
-			arm.goToPosition(arm.POS_BOTTOM);
-			intake.setClamp(intake.FREE);
+			robotOutput.tankDrive(-0.5, -0.5);
+			
+			offset = sensorInput.getLeftDriveEncoder();
+			while(Math.abs(sensorInput.getLeftDriveEncoder() - offset) < TICK_INCH*12) Thread.sleep(10);
+			
+			robotOutput.tankDrive(0.5, -0.5);
+			while(Math.abs(sensorInput.getAHRSYaw()) < 90) Thread.sleep(10);
+			robotOutput.tankDrive(0, 0);
+			
+			
 			intake.setIntake(-1);
-			
-			new DriveToDistance(1000, position.getX()+10, position.getY()+10, 135, 5, false).runUntilFinish();
-			
+			intake.setClamp(intake.FREE);
+			robotOutput.tankDrive(0.5, 0.5);
+			Thread.sleep(1000);
 			intake.setClamp(intake.CLOSED);
 			intake.setIntake(0);
+			
 			
 			if(fms.plateLeft(0))
 			{
 				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveBackwardsToDistance(10000, position.getX()-10, position.getY()-10, 135, 5, false).runUntilFinish();
+				while(elevator.isMovingToTarget())
 				
 				intake.setClamp(intake.FREE);
 				intake.setIntake(0.5);
@@ -71,7 +84,11 @@ public class TwoCubeRight extends AutonRoutine{
 			}
 			else
 			{
-				new DriveBackwardsToDistance(10000, position.getX()-10, position.getY()-10, 135, 5, false).runUntilFinish();
+				robotOutput.tankDrive(-0.5, -0.5);
+				offset = sensorInput.getLeftDriveEncoder();
+				while(Math.abs(sensorInput.getLeftDriveEncoder() - offset) < TICK_INCH*24) Thread.sleep(10);
+				robotOutput.tankDrive(0, 0);
+				
 				new SweepTurn45(10000, 40, false, false).runUntilFinish();
 				elevator.goToTarget(elevator.SWITCH_HEIGHT);
 				new DriveToDistance(10000, -20, position.getY(), 90, 20, false).runUntilFinish();

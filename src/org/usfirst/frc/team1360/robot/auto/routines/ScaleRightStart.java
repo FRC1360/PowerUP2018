@@ -53,8 +53,7 @@ public class ScaleRightStart extends AutonRoutine{
 			//Tuned
 			elevator.goToTarget(elevator.ONE_FOOT*4);
 			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
-			/*new SweepTurn(10000, 48, true, false).runUntilFinish();
-			new SweepTurn(10000, 40, false, false).runUntilFinish();*/
+
 			new SweepTurn45(10000, 48, true, false).runUntilFinish();
 
 			arm.goToPosition(-40);

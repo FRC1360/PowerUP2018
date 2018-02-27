@@ -13,6 +13,7 @@ public class SweepTurn extends AutonRoutine{
 	private int rightOffset;
 	private double sweepAngle;
 	
+	private boolean reverse;
 	private boolean chain;
 	private boolean left;
 	
@@ -29,7 +30,7 @@ public class SweepTurn extends AutonRoutine{
 		
 		this.radius = r;
 	}
-	
+
 	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
 		this(timeout, 90, r, leftTurn, chain);
 	}

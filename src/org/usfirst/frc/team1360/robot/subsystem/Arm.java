@@ -207,8 +207,10 @@ public class Arm implements ArmProvider{
 		if (sensorInput.getArmCurrent() > 200.0)
 			cooldown = System.currentTimeMillis() + 500;
 		
-		if (System.currentTimeMillis() < cooldown)
+		if (System.currentTimeMillis() < cooldown) {
 			robotOutput.setArm(0);
+			return;
+		}
 		
 		
 		
@@ -216,8 +218,8 @@ public class Arm implements ArmProvider{
 			robotOutput.setArm(0);
 		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
 			robotOutput.setArm(0);
-		else if(sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*3.25 && sensorInput.getArmEncoder() >= -1)
-			return;
+		else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*3.25 && sensorInput.getArmEncoder() >= -10 && power > 0)
+			robotOutput.setArm(0);
 		else
 			robotOutput.setArm(power);
 	}

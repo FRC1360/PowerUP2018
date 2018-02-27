@@ -187,6 +187,8 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		
 		AutonControl.select();
+		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
+		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		
 		/*
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());

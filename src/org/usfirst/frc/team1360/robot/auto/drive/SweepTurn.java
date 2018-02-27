@@ -11,15 +11,17 @@ public class SweepTurn extends AutonRoutine{
 	private double radius;
 	private int leftOffset;
 	private int rightOffset;
+	private double sweepAngle;
 	
 	private boolean chain;
 	private boolean left;
 	
 	private final double DRIVE_WIDTH = 24;
 	
-	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
+	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
 		
+		this.sweepAngle = sweepAngle;
 		this.left = leftTurn;
 		this.chain = chain;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
@@ -27,14 +29,18 @@ public class SweepTurn extends AutonRoutine{
 		
 		this.radius = r;
 	}
+	
+	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
+		this(timeout, 90, r, leftTurn, chain);
+	}
 
 	@Override
 	protected void runCore() throws InterruptedException {
 		OrbitPID pidInner = new OrbitPID(0.003, 0.0, 0.04);
 		OrbitPID pidOutter = new OrbitPID(0.008, 0.0, 0.0);
 		
-		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 4) * 5.30516);
-		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI) / 4) * 5.30516);
+		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * 5.30516);
+		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * 5.30516);
 		
 		double leftSpeed = 0;
 		double rightSpeed = 0;

@@ -69,8 +69,7 @@ public class DriveToDistance extends AutonRoutine{
 			lastSpeed = speed;
 			robotOutput.arcadeDrive(speed, turn);
 			
-			SmartDashboard.putNumber("Current Distance", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2);
-			SmartDashboard.putNumber("targetDistance", target - eps);
+			matchLogger.write(String.format("Current Distance: %d of %d", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2, target));
 			
 			Thread.sleep(10);
 		} while ((sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2 < target - eps);

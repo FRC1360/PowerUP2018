@@ -38,7 +38,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				while(elevator.dampen(target, 0.75)) Thread.sleep(10);;
+				while(elevator.dampen(target, 0.75, true)) Thread.sleep(10);;
 				
 				context.nextState(HOLD);
 			}
@@ -55,7 +55,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				while(elevator.dampen(target, -0.75)) Thread.sleep(10);
+				while(elevator.dampen(target, -0.75, false)) Thread.sleep(10);
 				
 				context.nextState(HOLD);
 			}
@@ -108,32 +108,22 @@ public final class Elevator implements ElevatorProvider {
 	}
 	
 	
-	@Override
-	public boolean dampen(int position, double power) {
-		if(position < sensorInput.getElevatorEncoder()) {
-			
-			safety((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
-			
-			if(sensorInput.getElevatorEncoder() <= position)
-				return false;
-			else 
-				return true;
-		}
-		else 
-		{
-			if(Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
+	private boolean dampen(int position, double power, boolean up) {
+		if (up) {
+			if (Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
 				robotOutput.setElevatorMotor(0.3);
 			else {
 				safety((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
 			}
 			
-			if(sensorInput.getElevatorEncoder() >= position)
-				return false;
-			else 
-				return true;
+			return sensorInput.getElevatorEncoder() < position;
 		}
-		
-		
+		else
+		{
+			safety((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
+			
+			return sensorInput.getElevatorEncoder() > position;
+		}
 	}
 	
 	@Override

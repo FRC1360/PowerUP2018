@@ -2,10 +2,8 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveBackwardsToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
-import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn45;
 
 public class TwoCubeRight extends AutonRoutine{
 
@@ -14,11 +12,6 @@ public class TwoCubeRight extends AutonRoutine{
 		// TODO Auto-generated constructor stub
 	}
 	
-	//SWITCH		SCALE
-	//Right		Right	switch then scale
-	//Right		Left		switch then scale
-	//Left		Right	
-	//Left		Left
 
 	@Override
 	protected void runCore() throws InterruptedException 
@@ -101,7 +94,7 @@ public class TwoCubeRight extends AutonRoutine{
 			elevator.goToTarget(elevator.ONE_FOOT*4);
 			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
 
-			new SweepTurn45(10000, 48, true, false).runUntilFinish();
+			new SweepTurn(10000, 45, 48, true, false).runUntilFinish();
 
 			arm.goToPosition(-40);
 			elevator.goToTarget(elevator.POS_TOP);
@@ -109,15 +102,12 @@ public class TwoCubeRight extends AutonRoutine{
 			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, false).runUntilFinish();
 			intake.setClamp(intake.FREE);
 			robotOutput.setIntake(0.5);
-			Thread.sleep(1000);
-			robotOutput.tankDrive(-0.2, -0.2); // remove when u two cube
-			robotOutput.setIntake(0);
-			arm.goToTop();
 			Thread.sleep(500);
-			elevator.goToTarget(elevator.ONE_FOOT);
-			Thread.sleep(1000);
-			robotOutput.tankDrive(0, 0);
+			robotOutput.setIntake(0);
+
+			new SweepTurn(1000, 45, -48, false, false).runUntilFinish();
 			
+			elevator.goToBottom();
 			
 			
 			if(fms.plateLeft(0)) {
@@ -139,8 +129,8 @@ public class TwoCubeRight extends AutonRoutine{
 			{
 				
 				
-				return;
-				
+				intake.setIntake(-1);
+				new SweepTurn(1000, 45, 48, true, false).runUntilFinish();
 				
 				
 				/*

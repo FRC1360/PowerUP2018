@@ -5,7 +5,6 @@ import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveBackwardsToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
-import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn45;
 
 public class ScaleRightStart extends AutonRoutine{
 
@@ -54,7 +53,7 @@ public class ScaleRightStart extends AutonRoutine{
 			elevator.goToTarget(elevator.ONE_FOOT*4);
 			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
 
-			new SweepTurn45(10000, 48, true, false).runUntilFinish();
+			new SweepTurn(10000, 45, 48, true, false).runUntilFinish();
 
 			arm.goToPosition(-40);
 			elevator.goToTarget(elevator.POS_TOP);

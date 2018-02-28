@@ -240,10 +240,8 @@ public final class Elevator implements ElevatorProvider {
 	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized (stateMachine) {
 			if (stateMachine.getState() == ElevatorState.MANUAL) {
-				if(override)
-					safety(speed, true);
-				else
-					safety(speed, false);
+				safety(speed, override);
+
 				return true;
 			}
 			return false;

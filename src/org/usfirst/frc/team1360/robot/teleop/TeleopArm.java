@@ -11,18 +11,26 @@ public final class TeleopArm implements TeleopComponent {
 	private ArmProvider arm = Singleton.get(ArmProvider.class);
 	private double lastSpeed = 0;
 	
-	private boolean climbPressed = false;
+	
+	private boolean overrideToggle = false;
+	private boolean overrideHeld = false;
 	
 	@Override
 	public void calculate() {
 		double speed = humanInput.deadzone(humanInput.getArm(), 0.1);
 		boolean climb = humanInput.getDriverArmDown();
+		boolean override = humanInput.getDriverOverride();
 		
-		if(climb) {
-			climbPressed = !climbPressed;
+		if(override && !overrideHeld) {
+			overrideToggle = !overrideToggle;
+			overrideHeld = true;
+		}
+		if(!override) {
+			overrideHeld = false;
 		}
 		
-		if(!arm.isClimbing() && climbPressed)
+
+		if(!arm.isClimbing() && climb)
 			arm.climb();
 		
 		if (speed == 0 && !arm.movingToPosition() && !arm.isClimbing())
@@ -37,7 +45,7 @@ public final class TeleopArm implements TeleopComponent {
 			arm.unblockArm();
 			if (lastSpeed == 0)
 				arm.startManual();
-			arm.setManualSpeed(speed);
+			arm.setManualSpeed(speed, overrideToggle);
 		}
 		lastSpeed = speed;
 	}

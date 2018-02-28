@@ -212,10 +212,10 @@ public class Arm implements ArmProvider{
 	}
 
 	@Override
-	public boolean setManualSpeed(double speed) {
+	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
-				safety(speed);
+				safety(speed, override);
 				return true;
 			}
 			return false;

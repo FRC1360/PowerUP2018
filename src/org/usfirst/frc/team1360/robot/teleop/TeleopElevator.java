@@ -22,7 +22,7 @@ public class TeleopElevator implements TeleopComponent {
 	
 	
 	private double lastSpeed = 0;
-	private boolean override = false;
+	private boolean overrideToggle = false;
 	private boolean overrideHeld = false;
 	
 	
@@ -49,7 +49,7 @@ public class TeleopElevator implements TeleopComponent {
 		boolean override = humanInput.getDriverOverride();
 		
 		if(override && !overrideHeld) {
-			override = !override;
+			overrideToggle = !overrideToggle;
 			overrideHeld = true;
 		}
 		
@@ -93,7 +93,7 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if (lastSpeed == 0)
 				elevator.startManual();
-			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1, override);
+			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1, overrideToggle);
 		}
 		lastSpeed = speed;
 	}	

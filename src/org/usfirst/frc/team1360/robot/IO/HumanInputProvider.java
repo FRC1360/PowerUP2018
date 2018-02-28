@@ -53,6 +53,8 @@ public interface HumanInputProvider {
 	
 	boolean getDriverArmDown();
 	
+	boolean getDriverOverride();
+	
 	//---------operator controls-------
 
 	// controls whether intake is on or off

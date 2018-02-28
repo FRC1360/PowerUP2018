@@ -24,7 +24,7 @@ public interface ElevatorProvider {
 	boolean downToTarget(int target);
 	boolean goToTop();
 	boolean goToBottom();
-	boolean setManualSpeed(double speed);
+	boolean setManualSpeed(double speed, boolean override);
 	boolean hold();
 	boolean isHolding();
 	boolean startManual();

@@ -22,8 +22,10 @@ public class TeleopElevator implements TeleopComponent {
 	
 	
 	private double lastSpeed = 0;
-	private boolean heldLastLoop = false;
-	private int position = 0;
+	private boolean override = false;
+	private boolean overrideHeld = false;
+	
+	
 	//0 = 4 foot
 	//1 = 5 foot
 	//2 = 6 foot
@@ -44,6 +46,16 @@ public class TeleopElevator implements TeleopComponent {
 		boolean switchPreset = humanInput.getSwitch();
 		boolean intakePreset = humanInput.getIntake();
 		boolean climb = humanInput.getClimb();
+		boolean override = humanInput.getDriverOverride();
+		
+		if(override && !overrideHeld) {
+			override = !override;
+			overrideHeld = true;
+		}
+		
+		if(!override) {
+			overrideHeld = false;
+		}
 		
 		if (speed == 0)
 		{
@@ -81,7 +93,7 @@ public class TeleopElevator implements TeleopComponent {
 		{
 			if (lastSpeed == 0)
 				elevator.startManual();
-			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1);
+			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1, override);
 		}
 		lastSpeed = speed;
 	}	

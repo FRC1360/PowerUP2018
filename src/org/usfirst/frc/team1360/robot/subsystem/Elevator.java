@@ -66,7 +66,7 @@ public final class Elevator implements ElevatorProvider {
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
 				int holdTarget = sensorInput.getElevatorEncoder();
-				OrbitPID elevatorPID = new OrbitPID(0.005, 0.0, 1);
+				OrbitPID elevatorPID = new OrbitPID(0.00425, 0.0, 1);
 				matchLogger.write("ELEVATOR TARGET == " + holdTarget);
 
 				while(true)

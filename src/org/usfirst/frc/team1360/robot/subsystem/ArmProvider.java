@@ -5,7 +5,7 @@ public interface ArmProvider {
 	public static final int POS_MIDDLE = -20;
 	public static final int POS_BOTTOM = -45;
 	
-	void safety(double power);
+	void safety(double power, boolean override);
 	boolean idle();
 	boolean isIdle();
 	boolean goToTop();
@@ -20,4 +20,6 @@ public interface ArmProvider {
 	boolean movingToPosition();
 	void blockArm();
 	void unblockArm();
+	boolean climb();
+	boolean isClimbing();
 }

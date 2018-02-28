@@ -18,7 +18,7 @@ public interface ElevatorProvider {
 	
 	public static final boolean IS_COMP_BOT = false;
 	
-	void safety(double power);
+	void safety(double power, boolean override);
 	boolean goToTarget(int target);
 	boolean upToTarget(int target);
 	boolean downToTarget(int target);

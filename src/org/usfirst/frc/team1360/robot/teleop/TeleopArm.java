@@ -11,12 +11,21 @@ public final class TeleopArm implements TeleopComponent {
 	private ArmProvider arm = Singleton.get(ArmProvider.class);
 	private double lastSpeed = 0;
 	
+	private boolean climbPressed = false;
+	
 	@Override
 	public void calculate() {
 		double speed = humanInput.deadzone(humanInput.getArm(), 0.1);
+		boolean climb = humanInput.getDriverArmDown();
 		
+		if(climb) {
+			climbPressed = !climbPressed;
+		}
 		
-		if (speed == 0 && !arm.movingToPosition())
+		if(!arm.isClimbing() && climbPressed)
+			arm.climb();
+		
+		if (speed == 0 && !arm.movingToPosition() && !arm.isClimbing())
 		{
 			if (!arm.isIdle())
 			{

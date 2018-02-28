@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 import org.usfirst.frc.team1360.robot.auto.routines.Default;
 import org.usfirst.frc.team1360.robot.auto.routines.EncoderSwitch;
@@ -12,6 +13,8 @@ import org.usfirst.frc.team1360.robot.auto.routines.ScaleRightStart;
 import org.usfirst.frc.team1360.robot.auto.routines.Switch;
 import org.usfirst.frc.team1360.robot.auto.routines.Test;
 import org.usfirst.frc.team1360.robot.auto.routines.TwoCubeRight;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
@@ -102,6 +105,15 @@ public class AutonControl {
 	
 	public static void stop()
 	{
+		ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
+		RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+		ArmProvider arm = Singleton.get(ArmProvider.class);
+		
+		robotOutput.tankDrive(0, 0);
+		arm.idle();
+		elevator.setIdle();
+		
+		
 		autoThreads.forEach(Thread::interrupt);
 		autoThreads.forEach(t -> {
 			try {
@@ -110,6 +122,13 @@ public class AutonControl {
 				e.printStackTrace();
 			}
 		});
+		
+		autoThreads.forEach(t -> {
+		    if (t instanceof AutonRoutine) {
+		        ((AutonRoutine) t).override("END AUTO");
+		    }
+		});
+		
 		autoThreads.clear();
 		scheduler.shutdownNow();
 		routines.clear();

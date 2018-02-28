@@ -12,20 +12,25 @@ public class SweepTurn45 extends AutonRoutine{
 	private int leftOffset;
 	private int rightOffset;
 	
+	private boolean backwards;
 	private boolean chain;
 	private boolean left;
 	
 	private final double DRIVE_WIDTH = 24;
 	
+	//DEPRECATED NOTE THIS 
+	
 	public SweepTurn45(long timeout, double r, boolean leftTurn, boolean chain) {
 		super("SweepTurn45", timeout);
+		
+		backwards = r < 0;
 		
 		this.left = leftTurn;
 		this.chain = chain;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
 		
-		this.radius = r;
+		this.radius = Math.abs(r);
 	}
 
 	@Override
@@ -52,10 +57,13 @@ public class SweepTurn45 extends AutonRoutine{
 				{
 					robotOutput.tankDrive(0.5, ratio * 0.5 * 1.275);
 				}else {
-					leftSpeed = pidInner.calculate(innerEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
-					rightSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+					leftSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
+					rightSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset));
 					
-					robotOutput.tankDrive(leftSpeed, rightSpeed);
+					if(backwards)
+						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+					else
+						robotOutput.tankDrive(leftSpeed, rightSpeed);
 				}
 					
 			}
@@ -67,10 +75,13 @@ public class SweepTurn45 extends AutonRoutine{
 				{
 					robotOutput.tankDrive(ratio * 0.5, 0.5);
 				}else {
-					leftSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
-					rightSpeed = pidInner.calculate(innerEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+					leftSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
+					rightSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset));
 					
-					robotOutput.tankDrive(leftSpeed, rightSpeed);
+					if(backwards)
+						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+					else
+						robotOutput.tankDrive(leftSpeed, rightSpeed);
 				}
 			}
 		}

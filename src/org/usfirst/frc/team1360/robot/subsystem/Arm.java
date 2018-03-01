@@ -89,6 +89,29 @@ public class Arm implements ArmProvider{
 			}
 			
 		},
+		CLIMB {
+			@Override
+			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting Down to target arm at: " + sensorInput.getArmEncoder());
+				
+				if(!(context.getArg() instanceof Integer)) {
+					matchLogger.write("No Down Target Provided to ArmStateMachine");
+					context.nextState(IDLE);
+				}
+				
+				int target = (Integer) context.getArg();
+				arm.safety(-0.75);
+				
+				while(sensorInput.getArmEncoder() > target)	{
+					Thread.sleep(10);
+					arm.safety(-0.75, true);
+					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
+				}
+
+				
+				context.nextState(IDLE);
+			}
+		},
 		CALIBRATE{
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
@@ -189,10 +212,10 @@ public class Arm implements ArmProvider{
 	}
 
 	@Override
-	public boolean setManualSpeed(double speed) {
+	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
-				safety(speed);
+				safety(speed, override);
 				return true;
 			}
 			return false;
@@ -200,33 +223,53 @@ public class Arm implements ArmProvider{
 	}
 	
 	@Override
-	public boolean goingToPosition() {
-		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET;
+	public void safety(double power, boolean override)	{
+		if(override)
+			robotOutput.setArm(power);
+		else
+		{
+			if(sensorInput.getArmSwitch())
+				sensorInput.resetArmEncoder();
+			
+			if (sensorInput.getArmCurrent() > 200.0)
+				cooldown = System.currentTimeMillis() + 500;
+			
+			if (System.currentTimeMillis() < cooldown) {
+				robotOutput.setArm(0);
+				return;
+			}
+			
+			
+			
+			if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
+				robotOutput.setArm(0);
+			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
+				robotOutput.setArm(0);
+			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -10 && power > 0)
+				robotOutput.setArm(0);
+			else
+				robotOutput.setArm(power);
+		}
+	}
+	
+	private void safety(double power) {
+		safety(power, false);
 	}
 	
 	@Override
-	public void safety(double power)	{
-		if(sensorInput.getArmSwitch())
-			sensorInput.resetArmEncoder();
-		
-		if (sensorInput.getArmCurrent() > 200.0)
-			cooldown = System.currentTimeMillis() + 500;
-		
-		if (System.currentTimeMillis() < cooldown) {
-			robotOutput.setArm(0);
-			return;
+	public boolean climb() {
+		try {
+			stateMachine.setState(ArmState.CLIMB);
+		} catch (InterruptedException e) {
+			matchLogger.write(e.toString());
+			return false;
 		}
-		
-		
-		
-		if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
-			robotOutput.setArm(0);
-		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
-			robotOutput.setArm(0);
-		else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -10 && power > 0)
-			robotOutput.setArm(0);
-		else
-			robotOutput.setArm(power);
+		return true;
+	}
+	
+	@Override
+	public boolean isClimbing() {
+		return stateMachine.getState() == ArmState.CLIMB;
 	}
 
 	@Override

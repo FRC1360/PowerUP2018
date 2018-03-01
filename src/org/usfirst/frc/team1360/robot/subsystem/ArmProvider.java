@@ -5,20 +5,21 @@ public interface ArmProvider {
 	public static final int POS_MIDDLE = -20;
 	public static final int POS_BOTTOM = -45;//-45
 	
-	void safety(double power);
+	void safety(double power, boolean override);
 	boolean idle();
 	boolean isIdle();
 	boolean goToTop();
 	boolean goToMiddle();
 	boolean goToPosition(int position);
-	boolean setManualSpeed(double speed);
+	boolean setManualSpeed(double speed, boolean override);
 	boolean startManual();
 	
-	boolean goingToPosition();
 	void stop();
 	void start();
 	void calibrateBlocking();
 	boolean movingToPosition();
 	void blockArm();
 	void unblockArm();
+	boolean climb();
+	boolean isClimbing();
 }

@@ -84,22 +84,6 @@ public final class Elevator implements ElevatorProvider {
 			}
 		},
 		
-		CLIMB {
-			@Override
-			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				while (sensorInput.getElevatorEncoder() > POS_CLIMB) {
-					double power = (POS_CLIMB - sensorInput.getElevatorEncoder()) * 0.005;
-					if (power > 0)
-						power = 0;
-					else if (power < -1)
-						power = -1;
-					elevator.safety(power);
-					Thread.sleep(10);
-				}
-				context.nextState(CLIMB_HOLD);
-			}
-		},
-		
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
@@ -153,44 +137,51 @@ public final class Elevator implements ElevatorProvider {
 	}
 	
 	@Override
-	public void safety(double power) {
+	public void safety(double power, boolean override) {
 		
-		if(sensorInput.getBottomSwitch()) {
-			sensorInput.resetElevatorEncoder();
-			if(power < 0)
-				robotOutput.setElevatorMotor(0);
-			else
-				robotOutput.setElevatorMotor(power);
-		}
-	
-		else if(sensorInput.getTopSwitch()) {
-			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
-			if(power > 0)
-				robotOutput.setElevatorMotor(0.15);//prevent jiggle
-			else
-				robotOutput.setElevatorMotor(power);
-		}
-		
-		if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
-			if(!arm.movingToPosition())
-				arm.goToPosition(-1);
-		}
-		else if(power < 0) {
-			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
-				robotOutput.setElevatorMotor(-0.2);
-			else
-				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
-		}
-		
-		else if(power > 0 && !sensorInput.getTopSwitch()) {
-			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
-				robotOutput.setElevatorMotor(0.3);
-			else
-				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
-		}
-	
-		else
+		if(override)
 			robotOutput.setElevatorMotor(power);
+		else {
+			if(sensorInput.getBottomSwitch()) {
+				sensorInput.resetElevatorEncoder();
+				if(power < 0)
+					robotOutput.setElevatorMotor(0);
+				else
+					robotOutput.setElevatorMotor(power);
+			}
+			else if(sensorInput.getTopSwitch()) {
+				topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
+				if(power > 0)
+					robotOutput.setElevatorMotor(0.15);//prevent jiggle
+				else
+					robotOutput.setElevatorMotor(power);
+			}
+			
+			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() >= -1) {
+				if(!arm.movingToPosition())
+					arm.goToPosition(-1);
+			}
+			else if(power < 0) {
+				if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
+					robotOutput.setElevatorMotor(-0.2);
+				else
+					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
+			}
+			
+			else if(power > 0 && !sensorInput.getTopSwitch()) {
+				if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
+					robotOutput.setElevatorMotor(0.3);
+				else
+					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
+			}
+		
+			else
+				robotOutput.setElevatorMotor(power);
+		}
+	}
+	
+	private void safety(double power) {
+		safety(power, false);
 	}
 	
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
@@ -245,10 +236,11 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	@Override
-	public boolean setManualSpeed(double speed) {
+	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized (stateMachine) {
 			if (stateMachine.getState() == ElevatorState.MANUAL) {
-				safety(speed);
+				safety(speed, override);
+
 				return true;
 			}
 			return false;
@@ -293,7 +285,7 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean climb() {
 		try {
-			stateMachine.setState(ElevatorState.CLIMB);
+			stateMachine.setState(ElevatorState.CLIMB_HOLD);
 		} catch (InterruptedException e) {
 			return false;
 		}
@@ -302,7 +294,7 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public boolean isClimbing() {
-		return stateMachine.getState() == ElevatorState.CLIMB;
+		return stateMachine.getState() == ElevatorState.CLIMB_HOLD;
 	}
 	
 	@Override

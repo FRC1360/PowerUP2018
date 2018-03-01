@@ -238,6 +238,15 @@ public class HumanInput implements HumanInputProvider {
 		return operator.getBumper(Hand.kRight);
 	}
 	
+	@Override
+	public boolean getDriverArmDown() {
+		return driver.getPOV(0) == 180;
+	}
+	
+	@Override
+	public boolean getDriverOverride() {
+		return driver.getBumper(Hand.kLeft) && driver.getBumper(Hand.kRight);
+	}
 
 	//-----------Auto Selection-----------
 	@Override
@@ -249,6 +258,8 @@ public class HumanInput implements HumanInputProvider {
 	public boolean getAutoDec() {
 		return operator.getPOV(0) == 180;
 	}
+	
+	
 
 	//TODO Operator Controls
 	// Operator Controls

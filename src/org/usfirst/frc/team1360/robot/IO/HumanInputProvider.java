@@ -48,6 +48,13 @@ public interface HumanInputProvider {
 	double getRightJoystickThrottle();
 
 	boolean getJoystickShift();
+	
+	//OTHER
+	
+	boolean getDriverArmDown();
+	
+	boolean getDriverOverride();
+	
 	//---------operator controls-------
 
 	// controls whether intake is on or off

@@ -18,13 +18,13 @@ public interface ElevatorProvider {
 	
 	public static final boolean IS_COMP_BOT = false;
 	
-	void safety(double power);
+	void safety(double power, boolean override);
 	boolean goToTarget(int target);
 	boolean upToTarget(int target);
 	boolean downToTarget(int target);
 	boolean goToTop();
 	boolean goToBottom();
-	boolean setManualSpeed(double speed);
+	boolean setManualSpeed(double speed, boolean override);
 	boolean hold();
 	boolean isHolding();
 	boolean startManual();

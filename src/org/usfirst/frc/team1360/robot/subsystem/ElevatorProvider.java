@@ -14,6 +14,8 @@ public interface ElevatorProvider {
 
 	public static final int POS_BOTTOM_HOLD = 100;
 	
+	public static final int POS_CLIMB = ONE_FOOT * 2; // how far above the bottom the elevator should be when the climb is complete
+	
 	public static final boolean IS_COMP_BOT = false;
 	
 	void safety(double power);
@@ -27,6 +29,8 @@ public interface ElevatorProvider {
 	boolean isHolding();
 	boolean startManual();
 	boolean setIdle();
+	boolean climb();
+	boolean isClimbing();
 	boolean isMovingToTarget();
 	
 	void stop();

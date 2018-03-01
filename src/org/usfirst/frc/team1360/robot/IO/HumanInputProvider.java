@@ -68,6 +68,7 @@ public interface HumanInputProvider {
 
 	boolean getIntake();
 
+	boolean getClimb();
 	
 	//-----------Auto Selection-----------
 	boolean getAutoInc();

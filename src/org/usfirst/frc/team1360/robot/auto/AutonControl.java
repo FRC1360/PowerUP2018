@@ -113,23 +113,29 @@ public class AutonControl {
 		arm.idle();
 		elevator.setIdle();
 		
+		MatchLogProvider matchLog = Singleton.get(MatchLogProvider.class);
 		
-		autoThreads.forEach(Thread::interrupt);
-		autoThreads.forEach(t -> {
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		});
-		
-		autoThreads.forEach(t -> {
-		    if (t instanceof AutonRoutine) {
-		        ((AutonRoutine) t).override("END AUTO");
-		    }
-		});
-		
-		autoThreads.clear();
+		synchronized (autoThreads) {
+			matchLog.write(String.format("%d auto threads to kill", autoThreads.size()));
+			
+			autoThreads.forEach(Thread::interrupt);
+			autoThreads.forEach(t -> {
+				try {
+					matchLog.write(String.format("Waiting for %s to finish...", t.getName()));
+					t.join();
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			});
+			
+			autoThreads.forEach(t -> {
+			    if (t instanceof AutonRoutine) {
+			        ((AutonRoutine) t).override("END AUTO");
+			    }
+			});
+			
+			autoThreads.clear();
+		}
 		scheduler.shutdownNow();
 		routines.clear();
 		setup();

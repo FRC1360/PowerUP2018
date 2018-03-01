@@ -69,7 +69,7 @@ public class SweepTurn extends AutonRoutine{
 					else
 						robotOutput.tankDrive(leftSpeed, rightSpeed);
 				}
-					
+				Thread.sleep(10);
 			}
 		}
 		else
@@ -87,6 +87,7 @@ public class SweepTurn extends AutonRoutine{
 					else
 						robotOutput.tankDrive(leftSpeed, rightSpeed);
 				}
+				Thread.sleep(10);
 			}
 		}
 	}

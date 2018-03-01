@@ -53,10 +53,13 @@ public class TwoCubeRight extends AutonRoutine{
 			{
 				arm.goToPosition(arm.POS_BOTTOM);
 				new SweepTurn(2000, 30, 50, false, false).runUntilFinish();
-
 				
 				intake.setIntake(-1);
 				intake.setClamp(intake.FREE);
+				
+				new DriveToDistance(2000, position.getX(), position.getY()+30, 135, 2, false).runUntilFinish();
+				
+				robotOutput.tankDrive(0, 0);
 				elevator.upToTarget(elevator.SWITCH_HEIGHT);
 				while(elevator.isMovingToTarget()) Thread.sleep(10);
 				intake.setIntake(0.75);
@@ -128,9 +131,9 @@ public class TwoCubeRight extends AutonRoutine{
 			else
 			{
 				
-				
-				intake.setIntake(-1);
-				new SweepTurn(1000, 45, 48, true, false).runUntilFinish();
+				return;
+				//intake.setIntake(-1);
+				//new SweepTurn(1000, 45, 48, true, false).runUntilFinish();
 				
 				
 				/*

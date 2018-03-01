@@ -28,7 +28,7 @@ public class Arm implements ArmProvider{
 				
 				if(!(context.getArg() instanceof Integer)) {
 					matchLogger.write("No Down Target Provided to ArmStateMachine");
-					context.nextState(IDLE);
+					context.nextState(HOLD);
 				}
 				
 				int target = (Integer) context.getArg();
@@ -41,7 +41,7 @@ public class Arm implements ArmProvider{
 				}
 
 				
-				context.nextState(IDLE);
+				context.nextState(HOLD);
 			}
 			
 		},
@@ -50,7 +50,7 @@ public class Arm implements ArmProvider{
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				if(!(context.getArg() instanceof Integer)) {
 					matchLogger.write("No Up Target Provided to ArmStateMachine");
-					context.nextState(IDLE);
+					context.nextState(HOLD);
 				}
 				
 				int target = (Integer) context.getArg();

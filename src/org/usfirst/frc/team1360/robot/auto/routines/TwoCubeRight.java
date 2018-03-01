@@ -29,7 +29,7 @@ public class TwoCubeRight extends AutonRoutine{
 			new SweepTurn(10000, 110, 40, false, false).runUntilFinish();
 			
 			waitFor("Calibrate", 0);
-			elevator.goToTarget(elevator.POS_TOP);
+			elevator.goToTarget(elevator.POS_TOP - 50);
 			
 			Thread.sleep(20);
 			while(elevator.isMovingToTarget()) Thread.sleep(10);
@@ -100,9 +100,9 @@ public class TwoCubeRight extends AutonRoutine{
 			new SweepTurn(10000, 45, 48, true, false).runUntilFinish();
 
 			arm.goToPosition(-40);
-			elevator.goToTarget(elevator.POS_TOP);
+			elevator.goToTarget(elevator.POS_TOP - 50);
 			while(elevator.isMovingToTarget() && arm.movingToPosition()) Thread.sleep(10);
-			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, false).runUntilFinish();
+			new DriveToDistance(2000, position.getX() + 20, position.getY() + 20, -45, 2, false).runUntilFinish();
 			intake.setClamp(intake.FREE);
 			robotOutput.setIntake(0.5);
 			Thread.sleep(500);

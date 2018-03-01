@@ -14,7 +14,10 @@ import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 public final class Elevator implements ElevatorProvider {
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-	
+	private ArmProvider arm = Singleton.get(ArmProvider.class);
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+
+
 	private static enum ElevatorState implements OrbitStateMachineState<ElevatorState> {
 		//sets motors to 0
 		IDLE {
@@ -35,7 +38,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				while(elevator.dampen(target, 0.75)) Thread.sleep(10);;
+				while(elevator.dampen(target, 0.75, true)) Thread.sleep(10);;
 				
 				context.nextState(HOLD);
 			}
@@ -52,13 +55,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				elevator.safety(-0.5);
-				while(sensorInput.getElevatorEncoder() > target) 
-					{
-						elevator.safety(-0.5);
-					
-					}
-				elevator.safety(0);
+				while(elevator.dampen(target, -0.75, false)) Thread.sleep(10);
 				
 				context.nextState(HOLD);
 			}
@@ -67,11 +64,16 @@ public final class Elevator implements ElevatorProvider {
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				elevator.safety((context.getArg() instanceof Integer ? (Integer) context.getArg() : sensorInput.getElevatorEncoder()) > elevator.POS_BOTTOM_HOLD ? 0.1 : 0);
-//				if(IS_COMP_BOT)
-//					elevator.safety(0.05);
-//				else
-//					elevator.safety(0.05);
+				
+				int holdTarget = sensorInput.getElevatorEncoder();
+				OrbitPID elevatorPID = new OrbitPID(0.00425, 0.0, 1);
+				matchLogger.write("ELEVATOR TARGET == " + holdTarget);
+
+				while(true)
+				{
+					elevator.safety(elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder()));
+					Thread.sleep(10);
+				}
 			}
 		},
 		
@@ -84,6 +86,7 @@ public final class Elevator implements ElevatorProvider {
 		
 		protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 		protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+		
 		public static Elevator elevator;
 	};
 	
@@ -105,32 +108,22 @@ public final class Elevator implements ElevatorProvider {
 	}
 	
 	
-	@Override
-	public boolean dampen(int position, double power) {
-		if(position < sensorInput.getElevatorEncoder()) {
-			
-			safety((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
-			
-			if(sensorInput.getElevatorEncoder() <= position)
-				return false;
-			else 
-				return true;
-		}
-		else 
-		{
-			if(Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
+	private boolean dampen(int position, double power, boolean up) {
+		if (up) {
+			if (Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
 				robotOutput.setElevatorMotor(0.3);
 			else {
 				safety((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
 			}
 			
-			if(sensorInput.getElevatorEncoder() >= position)
-				return false;
-			else 
-				return true;
+			return sensorInput.getElevatorEncoder() < position;
 		}
-		
-		
+		else
+		{
+			safety((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
+			
+			return sensorInput.getElevatorEncoder() > position;
+		}
 	}
 	
 	@Override
@@ -139,7 +132,7 @@ public final class Elevator implements ElevatorProvider {
 		if(sensorInput.getBottomSwitch()) {
 			sensorInput.resetElevatorEncoder();
 			if(power < 0)
-				hold();
+				robotOutput.setElevatorMotor(0);
 			else
 				robotOutput.setElevatorMotor(power);
 		}
@@ -147,11 +140,15 @@ public final class Elevator implements ElevatorProvider {
 		else if(sensorInput.getTopSwitch()) {
 			topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
 			if(power > 0)
-				hold();
+				robotOutput.setElevatorMotor(0.15);//prevent jiggle
 			else
 				robotOutput.setElevatorMotor(power);
 		}
 		
+		if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
+			if(!arm.movingToPosition())
+				arm.goToPosition(-1);
+		}
 		else if(power < 0) {
 			if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
 				robotOutput.setElevatorMotor(-0.2);
@@ -159,7 +156,7 @@ public final class Elevator implements ElevatorProvider {
 				robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
 		}
 		
-		else if(power > 0) {
+		else if(power > 0 && !sensorInput.getTopSwitch()) {
 			if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
 				robotOutput.setElevatorMotor(0.3);
 			else
@@ -184,6 +181,7 @@ public final class Elevator implements ElevatorProvider {
 			try {
 				stateMachine.setState(ElevatorState.HOLD);
 			} catch (InterruptedException e) {
+				
 				return false;
 			}
 		}

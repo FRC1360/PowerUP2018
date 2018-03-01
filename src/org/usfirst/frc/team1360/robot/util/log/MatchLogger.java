@@ -47,15 +47,16 @@ public class MatchLogger implements MatchLogProvider {
 	
 	@Override
 	public void cacheImage(Mat image) {
-		if(enabled) {
-			try {
-				Imgcodecs.imwrite("/U/"+frameNumber+".jpg", image);
-				write("frame " + frameNumber);
-			} catch(RuntimeException e) {
-				write("frame"+frameNumber+" not saved");
-			}
-
-		}
+//		if(enabled) {
+//			try {
+//				Imgcodecs.imwrite("/U/"+frameNumber+".jpg", image);
+//				write("frame " + frameNumber);
+//				frameNumber++;
+//			} catch(RuntimeException e) {
+//				write("frame"+frameNumber+" not saved");
+//			}
+//
+//		}
 	}
 	
 	@Override

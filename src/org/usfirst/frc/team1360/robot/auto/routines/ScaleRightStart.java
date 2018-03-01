@@ -5,7 +5,6 @@ import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveBackwardsToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
-import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn45;
 
 public class ScaleRightStart extends AutonRoutine{
 
@@ -21,50 +20,52 @@ public class ScaleRightStart extends AutonRoutine{
 		if(fms.plateLeft(1))
 		{
 			//Not tuned
-			elevator.goToTarget(elevator.FOUR_FOOT);
+//			elevator.goToTarget(elevator.ONE_FOOT*4);
 			new DriveToDistance(10000, position.getX(), 140, 0, 20, true).runUntilFinish();
-			/*new SweepTurn(10000, 48, true, false).runUntilFinish();
-			new SweepTurn(10000, 40, false, false).runUntilFinish();*/
+			
 			new SweepTurn(10000, 48, true, false).runUntilFinish();
-			new DriveToDistance(10000, position.getX() + 145, position.getY(), -90, 20, true).runUntilFinish();
-			new SweepTurn(10000, 36, false, false).runUntilFinish();
-			//new SweepTurn45(10000, 48, false, false).runUntilFinish();
-
-			arm.goToPosition(-15);
+//			elevator.goToTarget(elevator.ONE_FOOT*6);
+			new DriveToDistance(10000, -135, position.getY(), -90, 20, true).runUntilFinish();
+			new SweepTurn(10000, 110, 40, false, false).runUntilFinish();
+			
+			waitFor("Calibrate", 0);
 			elevator.goToTarget(elevator.POS_TOP);
-			//while(elevator.isMovingToTarget()) Thread.sleep(10);
-			Thread.sleep(500);
-			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, 45, 20, true).runUntilFinish();
+			
+			Thread.sleep(20);
+			while(elevator.isMovingToTarget()) Thread.sleep(10);
+			arm.goToPosition(-25);
+			
+			new DriveToDistance(1000, position.getX(), position.getY()+13, 0, 2, false).runUntilFinish();
+			
 			intake.setClamp(intake.FREE);
-			intake.setIntake(-0.5);
+			intake.setIntake(1);
 			Thread.sleep(1000);
 			intake.setIntake(0);
 			arm.goToTop();
-			new DriveBackwardsToDistance(10000, position.getX() + 10, position.getY() + 10, 45, 20, true).runUntilFinish();
+			Thread.sleep(500);
 			elevator.goToBottom();
 			Thread.sleep(10000);
+			/**/
 		}
 		else
 		{
 			//Tuned
-			elevator.goToTarget(elevator.FOUR_FOOT);
-			new DriveToDistance(10000, position.getX(), 175, 0, 20, true).runUntilFinish();
-			/*new SweepTurn(10000, 48, true, false).runUntilFinish();
-			new SweepTurn(10000, 40, false, false).runUntilFinish();*/
-			new SweepTurn45(10000, 48, true, false).runUntilFinish();
+			elevator.goToTarget(elevator.ONE_FOOT*4);
+			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
 
-			arm.goToPosition(-15);
+			new SweepTurn(10000, 45, 48, true, false).runUntilFinish();
+
+			arm.goToPosition(-40);
 			elevator.goToTarget(elevator.POS_TOP);
-			//while(elevator.isMovingToTarget()) Thread.sleep(10);
-			Thread.sleep(500);
-			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, true).runUntilFinish();
+			while(elevator.isMovingToTarget() && arm.movingToPosition()) Thread.sleep(10);
+			new DriveToDistance(10000, position.getX() + 20, position.getY() + 20, -45, 20, false).runUntilFinish();
 			intake.setClamp(intake.FREE);
-			intake.setIntake(-0.5);
+			robotOutput.setIntake(0.5);
 			Thread.sleep(1000);
-			intake.setIntake(0);
+			robotOutput.setIntake(0);
 			arm.goToTop();
-			new DriveBackwardsToDistance(10000, position.getX() + 10, position.getY() + 10, -45, 20, true).runUntilFinish();
-			elevator.goToBottom();
+			Thread.sleep(500);
+			elevator.goToTarget(elevator.ONE_FOOT);
 			Thread.sleep(10000);
 		}
 	}

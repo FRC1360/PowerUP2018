@@ -44,7 +44,7 @@ public class DriveBackwardsToDistance extends AutonRoutine{
 		double length = Math.sqrt(dx * dx + dy * dy);
 		double distance = length * this.ticksPerInch;
 		double encoderStartAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
-		double target = encoderStartAverage - distance;
+		double target = -(encoderStartAverage - distance);
 		OrbitPID pidAngle = new OrbitPID(4.7, 0.0025 , 0.1);
 		OrbitPID pidSpeed = new OrbitPID(0.003, 0.1, 0.2); //p = 0.0024
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
@@ -62,8 +62,8 @@ public class DriveBackwardsToDistance extends AutonRoutine{
 			
 			matchLogger.write(String.format("SPEED == %f, PID OUTPUT == %f", speed, speed));
 			
-			if(speed > 0.5) speed = 0.5;
-			robotOutput.arcadeDrive( -speed, 1*turn);
+			if(speed < 0.5) speed = -0.5;
+			robotOutput.arcadeDrive( speed, 1*turn);
 			
 			SmartDashboard.putNumber("Current Distance", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2);
 			SmartDashboard.putNumber("targetDistance", target - eps);

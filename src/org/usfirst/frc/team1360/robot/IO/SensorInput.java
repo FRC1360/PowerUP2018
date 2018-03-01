@@ -4,6 +4,10 @@ package org.usfirst.frc.team1360.robot.IO;
  * Date 30 Jan 2017 - added pdp variable; getClimberFrontCurrent method; getClimberBackCurrent method; removed calculate
  *****/
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
@@ -33,6 +37,7 @@ public class SensorInput implements SensorInputProvider {
 	private Encoder leftDriveEnc;
 	private Encoder rightDriveEnc;
 	
+	
 	//Elevator
 	private Encoder elevatorEnc;
 	private DigitalInput bottomSwitch;
@@ -55,6 +60,7 @@ public class SensorInput implements SensorInputProvider {
 	
 	public SensorInput()								//Constructor to initialize fields  
 	{
+		
 		matchLogger = Singleton.get(MatchLogProvider.class);
 		PDP = new PowerDistributionPanel();
 		
@@ -216,6 +222,8 @@ public class SensorInput implements SensorInputProvider {
 	public boolean getArmSwitch() {
 		return !armTopSwitch.get();
 	}
+	
+	
 
 	@Override
 	public int getArmEncoder() {
@@ -236,6 +244,7 @@ public class SensorInput implements SensorInputProvider {
 	public double getArmCurrent() {
 		return PDP.getCurrent(4) + PDP.getCurrent(10);
 	}
+	
 	
 
 	@Override
@@ -271,5 +280,18 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public double getElevatorCurrent() {
 		return PDP.getCurrent(3) + PDP.getCurrent(12);
+	}
+	
+	//Max Current Allowance per motor = 50A
+	//Total for DT = 300A
+	
+	@Override
+	public double getDriveCurrentLeft() {
+		return PDP.getCurrent(0) + PDP.getCurrent(1) + PDP.getCurrent(2);
+	}
+	
+	@Override
+	public double getDriveCurrentRight() {
+		return PDP.getCurrent(13) + PDP.getCurrent(14) + PDP.getCurrent(15);
 	}
 }

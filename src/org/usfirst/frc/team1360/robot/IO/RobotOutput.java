@@ -56,9 +56,7 @@ public class RobotOutput implements RobotOutputProvider {
 
 		leftIntake = new Victor(6);
 		rightIntake = new Victor(7);
-		//rightIntake.setInverted(true);
-		leftIntake.setInverted(true);
-		//rightIntake.setInverted(true);
+		rightIntake.setInverted(true);
 
 		matchLogger.write("Done motors");
 		
@@ -112,7 +110,12 @@ public class RobotOutput implements RobotOutputProvider {
 	{
 		matchLogger.write("LEFT " + speed);
 		SmartDashboard.putNumber("DL", speed);
+		
+		
+		
 		leftDrive.set(speed);
+		
+		
 		SmartDashboard.putNumber("Left Voltage", -speed);
 	}
 	

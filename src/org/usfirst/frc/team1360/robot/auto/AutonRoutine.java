@@ -45,10 +45,12 @@ public abstract class AutonRoutine extends Thread {
 	
 	public final void runUntilFinish() throws InterruptedException
 	{
+		map.put(name.toLowerCase(), this);
 		if (timeout != 0)
 		{
 			long start = System.currentTimeMillis();
 			start();
+			
 			
 			while(isAlive() && (System.currentTimeMillis()-start) < timeout) {
 				Thread.sleep(10);
@@ -66,6 +68,7 @@ public abstract class AutonRoutine extends Thread {
 					override("timeout");
 				}
 			}
+			
 		}
 		else
 		{
@@ -92,7 +95,6 @@ public abstract class AutonRoutine extends Thread {
 	public final void runNow(String name)
 	{
 		map.put(name.toLowerCase(), this);
-		AutonControl.registerThread(this);
 		start();
 		if (timeout != 0)
 		{
@@ -184,6 +186,7 @@ public abstract class AutonRoutine extends Thread {
 	@Override
 	public final void run()
 	{
+		AutonControl.registerThread(this);
 		matchLogger.write("Start " + getClass().getSimpleName());
 		try
 		{

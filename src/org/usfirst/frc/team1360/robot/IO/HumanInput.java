@@ -207,6 +207,47 @@ public class HumanInput implements HumanInputProvider {
 	public double getArm() {
 		return deadzone(-operator.getY(Hand.kLeft), 0.2);
 	}
+	
+	@Override
+	public boolean getOperatorClamp() {
+		return operator.getBumper(Hand.kLeft);
+	}
+	
+	@Override
+	public boolean getScaleMax() {
+		return operator.getYButton();
+	}
+	
+	@Override
+	public boolean getSwitch() {
+		return operator.getXButton();
+	}
+	
+	@Override
+	public boolean getScaleLow() {
+		return operator.getBButton();
+	}
+	
+	@Override
+	public boolean getIntake() {
+		return operator.getAButton();
+	}
+	
+	@Override
+	public boolean getClimb() {
+		return false;
+//		return operator.getBumper(Hand.kRight);
+	}
+	
+	@Override
+	public boolean getDriverArmDown() {
+		return driver.getPOV(0) == 180;
+	}
+	
+	@Override
+	public boolean getDriverOverride() {
+		return driver.getBumper(Hand.kLeft) && driver.getBumper(Hand.kRight);
+	}
 
 	//-----------Auto Selection-----------
 	@Override
@@ -218,6 +259,8 @@ public class HumanInput implements HumanInputProvider {
 	public boolean getAutoDec() {
 		return operator.getPOV(0) == 180;
 	}
+	
+	
 
 	//TODO Operator Controls
 	// Operator Controls
@@ -234,16 +277,6 @@ public class HumanInput implements HumanInputProvider {
 		}
 		return 0;
 	}
-	
-	@Override
-	public boolean getOperatorClamp() {
-		return operator.getBumper(Hand.kLeft);
-	}
 
-	//Returns the angle in degrees of the POV at location X
-	//For example, 0 (at the top) is 0 degrees.  2 is 90 degrees
-	@Override
-	public int getOperatorPOV() {
-		return operator.getPOV(0);
-	}
+	
 }

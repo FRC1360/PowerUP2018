@@ -17,8 +17,11 @@ import org.usfirst.frc.team1360.robot.util.SingletonSee;
 public class MatchLogger implements MatchLogProvider {
 	private PrintStream file;
 	private PrintStream tempFile;
+	private PrintStream tempFileComp;
+	
 	private int frameNumber = 0;
 	private boolean enabled = false;
+	
 	
 	private DriverStation ds = DriverStation.getInstance();
 	
@@ -30,6 +33,13 @@ public class MatchLogger implements MatchLogProvider {
 			file = new PrintStream("/tmp/Match1360.log"); 
 			file.println("-----------WARNING UNABLE TO WRITE TO USB DRIVE-------------");
 			file.flush();
+		}
+		
+		try {
+			tempFileComp = new PrintStream("/U/1360.log"); 
+		}
+		catch(IOException e) {
+			tempFileComp = new PrintStream("/tmp/back1360.log"); 
 		}
 		
 		tempFile = new PrintStream("/tmp/1360.log");
@@ -84,6 +94,8 @@ public class MatchLogger implements MatchLogProvider {
 	@Override
 	public void write(String msg) {
 		tempFile.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
+		tempFileComp.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
+		tempFileComp.flush();
 		tempFile.flush();
 	}
 	

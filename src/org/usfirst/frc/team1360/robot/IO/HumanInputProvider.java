@@ -48,6 +48,13 @@ public interface HumanInputProvider {
 	double getRightJoystickThrottle();
 
 	boolean getJoystickShift();
+	
+	//OTHER
+	
+	boolean getDriverArmDown();
+	
+	boolean getDriverOverride();
+	
 	//---------operator controls-------
 
 	// controls whether intake is on or off
@@ -60,9 +67,16 @@ public interface HumanInputProvider {
 	
 	double getArm();
 	
-	//Elevator Presets
-	int getOperatorPOV();
+	boolean getScaleMax();
 
+	boolean getSwitch();
+
+	boolean getScaleLow();
+
+	boolean getIntake();
+
+	boolean getClimb();
+	
 	//-----------Auto Selection-----------
 	boolean getAutoInc();
 

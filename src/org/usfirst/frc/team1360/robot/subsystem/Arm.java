@@ -18,6 +18,7 @@ public class Arm implements ArmProvider{
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
 	private long cooldown = 0;
+	private boolean blockArm = false;
 	
 	private enum ArmState implements OrbitStateMachineState<ArmState>		{
 		DOWN_TO_TARGET{
@@ -27,27 +28,20 @@ public class Arm implements ArmProvider{
 				
 				if(!(context.getArg() instanceof Integer)) {
 					matchLogger.write("No Down Target Provided to ArmStateMachine");
-					context.nextState(IDLE);
+					context.nextState(HOLD);
 				}
 				
 				int target = (Integer) context.getArg();
-				arm.safety(-1.0);
+				arm.safety(-0.75);
 				
-				try {
-					matchLogger.write("Entering while loop");
-					while(sensorInput.getArmEncoder() > target)	{
-						Thread.sleep(10);
-						arm.safety(-1.0);
-						matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
-					}
-				} catch(Throwable e) {
-					matchLogger.write("ARM DOWN_TO_TARGET: " + e.toString());
-					throw e;
+				while(sensorInput.getArmEncoder() > target)	{
+					Thread.sleep(10);
+					arm.safety(-0.75);
+					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
 				}
+
 				
-				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
-				
-				context.nextState(IDLE);
+				context.nextState(HOLD);
 			}
 			
 		},
@@ -56,18 +50,19 @@ public class Arm implements ArmProvider{
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				if(!(context.getArg() instanceof Integer)) {
 					matchLogger.write("No Up Target Provided to ArmStateMachine");
-					context.nextState(IDLE);
+					context.nextState(HOLD);
 				}
 				
 				int target = (Integer) context.getArg();
-				arm.safety(1.0);
+				arm.safety(0.75);
 				
 				while(sensorInput.getArmEncoder() < target)	{
+					arm.safety(0.75);
 					Thread.sleep(10);
 				}
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(IDLE, target);
+				context.nextState(HOLD);
 			}
 		},
 		UP_TO_TOP{
@@ -79,7 +74,7 @@ public class Arm implements ArmProvider{
 				}
 				sensorInput.resetArmEncoder();
 				
-				context.nextState(IDLE, 0);
+				context.nextState(HOLD);
 			}	
 		},
 		MANUAL{
@@ -92,11 +87,48 @@ public class Arm implements ArmProvider{
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				arm.safety(0);
 			}
-			
 		},
-		CALIBRATE{
+		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				while (true) {
+					arm.safety(0.05);
+					Thread.sleep(10);
+				}
+			}
+		},
+		CLIMB {
+			@Override
+			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				matchLogger.write("Starting Down to target arm at: " + sensorInput.getArmEncoder());
+				
+				if(!(context.getArg() instanceof Integer)) {
+					matchLogger.write("No Down Target Provided to ArmStateMachine");
+					context.nextState(IDLE);
+				}
+				
+				int target = (Integer) context.getArg();
+				arm.safety(-0.75);
+				
+				while(sensorInput.getArmEncoder() > target)	{
+					Thread.sleep(10);
+					arm.safety(-0.75, true);
+					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
+				}
+
+				
+				context.nextState(IDLE);
+			}
+		},
+		CALIBRATE{
+			private boolean calibrated = false;
+			
+			@Override
+			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				if (context.getArg() instanceof Boolean && (boolean) context.getArg())
+					calibrated = false;
+				if (calibrated)
+					return;
 				sensorInput.resetArmEncoder();
 				robotOutput.setArm(-1);
 				try {
@@ -194,10 +226,10 @@ public class Arm implements ArmProvider{
 	}
 
 	@Override
-	public boolean setManualSpeed(double speed) {
+	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
-				safety(speed);
+				safety(speed, override);
 				return true;
 			}
 			return false;
@@ -205,22 +237,53 @@ public class Arm implements ArmProvider{
 	}
 	
 	@Override
-	public void safety(double power)	{
-		if(sensorInput.getArmSwitch())
-			sensorInput.resetArmEncoder();
-		
-		if (sensorInput.getArmCurrent() > 200.0)
-			cooldown = System.currentTimeMillis() + 500;
-		
-		if (System.currentTimeMillis() < cooldown)
-			robotOutput.setArm(0);
-		
-		if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
-			robotOutput.setArm(0);
-		else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
-			robotOutput.setArm(0);
-		else
+	public void safety(double power, boolean override)	{
+		if(override)
 			robotOutput.setArm(power);
+		else
+		{
+			if(sensorInput.getArmSwitch())
+				sensorInput.resetArmEncoder();
+			
+			if (sensorInput.getArmCurrent() > 200.0)
+				cooldown = System.currentTimeMillis() + 500;
+			
+			if (System.currentTimeMillis() < cooldown) {
+				robotOutput.setArm(0);
+				return;
+			}
+			
+			
+			
+			if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
+				robotOutput.setArm(0);
+			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
+				robotOutput.setArm(0);
+			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -10 && power > 0)
+				robotOutput.setArm(0);
+			else
+				robotOutput.setArm(power);
+		}
+	}
+	
+	private void safety(double power) {
+		safety(power, false);
+	}
+	
+	@Override
+	public boolean climb() {
+		try {
+			stateMachine.setState(ArmState.CLIMB);
+		} catch (InterruptedException e) {
+			matchLogger.write(e.toString());
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean isClimbing() {
+		return stateMachine.getState() == ArmState.CLIMB;
 	}
 
 	@Override
@@ -242,5 +305,55 @@ public class Arm implements ArmProvider{
 		} catch (InterruptedException e) {
 			matchLogger.write("Calibrate arm: " + e.toString());
 		}
+	}
+
+	@Override
+	public boolean calibrate(boolean force) {
+		try {
+			stateMachine.setState(ArmState.CALIBRATE, force);
+		} catch (InterruptedException e) {
+			matchLogger.write("Hold arm: " + e.toString());
+			return false;
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean isCalibrating() {
+		return stateMachine.getState() == ArmState.CALIBRATE;
+	}
+	
+	@Override
+	public void blockArm() {
+		blockArm = true;
+	}
+	
+	@Override
+	public void unblockArm() {
+		blockArm = false;
+	}
+	
+	@Override
+	public boolean movingToPosition() {
+		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET || blockArm;
+	}
+
+
+	@Override
+	public boolean hold() {
+		try {
+			stateMachine.setState(ArmState.HOLD);
+		} catch (InterruptedException e) {
+			matchLogger.write("Hold arm: " + e.toString());
+			return false;
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean isHolding() {
+		return stateMachine.getState() == ArmState.HOLD;
 	}
 }

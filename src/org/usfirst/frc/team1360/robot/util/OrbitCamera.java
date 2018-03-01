@@ -17,16 +17,20 @@ public class OrbitCamera {
 	private Mat out = new Mat();
 	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	
+	
+	private Thread thread;
+	
 	public OrbitCamera()
 	{		
 		camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(640, 480);
 		output = CameraServer.getInstance().putVideo("Driver Stream", 320, 400);
 	}
-
+	
 	public void updateCamera()
 	{
 		cvSink = CameraServer.getInstance().getVideo();
+		
 		cvSink.grabFrame(out);
 		output.putFrame(out);
 		

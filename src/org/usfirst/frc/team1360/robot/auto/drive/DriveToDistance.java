@@ -42,7 +42,7 @@ public class DriveToDistance extends AutonRoutine{
 		double distance = length * this.ticksPerInch;
 		double encoderStartAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 		double target = encoderStartAverage + distance;
-		OrbitPID pidAngle = new OrbitPID(1, 0.0025 , 0.3);//p = 4.7
+		OrbitPID pidAngle = new OrbitPID(1, 0.003 , 0.3);//p = 4.7 i = 0.0025
 		OrbitPID pidSpeed = new OrbitPID(0.0025, 0.2, 0.2); //p = 0.01 i = 0.2 d = 0.2
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
 		

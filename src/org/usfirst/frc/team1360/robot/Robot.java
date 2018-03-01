@@ -140,10 +140,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		
+		disabledInit();
+		
 		matchLog.write("----------STARTING TELEOP PERIOD----------");
 		matchLog.startVideoCache();
-		
-		AutonControl.stop();
 	}
 	
 	/**
@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-
+		teleopControl.runCycle();
 		
 		matchLog.writeClean(String.format("Elevator Enc = %d, Arm Enc = %d", 
 				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
@@ -168,19 +168,29 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
 		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
-		
-		teleopControl.runCycle();
 	}
 	
 	@Override
 	public void disabledInit() {
 		matchLog.writeClean("----------ROBOT DISABLED LOG ENDING----------");
+		matchLog.write("*");
 		matchLog.stopVideoCache();
-		
+		matchLog.write("*");
+
+		try {
+			AutonControl.stop();
+		} catch (Throwable t) {
+			matchLog.write(t.toString());
+		}
+		matchLog.write("*");
 		elevator.stop();
+		matchLog.write("*");
 		arm.stop();
-		AutonControl.stop();
+		matchLog.write("*");
 		position.stop();
+		matchLog.write("*");
+		
+		teleopControl.disable();
 	}
 	
 	@Override

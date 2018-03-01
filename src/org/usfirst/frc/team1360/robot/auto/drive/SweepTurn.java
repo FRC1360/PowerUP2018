@@ -22,13 +22,15 @@ public class SweepTurn extends AutonRoutine{
 	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
 		
+		reverse = r < 0;
+		
 		this.sweepAngle = sweepAngle;
 		this.left = leftTurn;
 		this.chain = chain;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
 		
-		this.radius = r;
+		this.radius = Math.abs(r);
 	}
 
 	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
@@ -59,12 +61,15 @@ public class SweepTurn extends AutonRoutine{
 				{
 					robotOutput.tankDrive(0.5, ratio * 0.5 * 1.275);
 				}else {
-					leftSpeed = pidInner.calculate(innerEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
-					rightSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+					leftSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
+					rightSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset));
 					
-					robotOutput.tankDrive(leftSpeed, rightSpeed);
+					if(reverse)
+						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+					else
+						robotOutput.tankDrive(leftSpeed, rightSpeed);
 				}
-					
+				Thread.sleep(10);
 			}
 		}
 		else
@@ -74,11 +79,15 @@ public class SweepTurn extends AutonRoutine{
 				{
 					robotOutput.tankDrive(ratio * 0.5, 0.5);
 				}else {
-					leftSpeed = pidOutter.calculate(outterEncTicks, sensorInput.getLeftDriveEncoder() - leftOffset);
-					rightSpeed = pidInner.calculate(innerEncTicks, sensorInput.getRightDriveEncoder() - rightOffset);
+					leftSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
+					rightSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset))	;
 					
-					robotOutput.tankDrive(leftSpeed, rightSpeed);
+					if(reverse)
+						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+					else
+						robotOutput.tankDrive(leftSpeed, rightSpeed);
 				}
+				Thread.sleep(10);
 			}
 		}
 	}

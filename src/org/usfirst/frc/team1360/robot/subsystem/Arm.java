@@ -62,7 +62,7 @@ public class Arm implements ArmProvider{
 				}
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(IDLE, target);
+				context.nextState(HOLD);
 			}
 		},
 		UP_TO_TOP{
@@ -74,7 +74,7 @@ public class Arm implements ArmProvider{
 				}
 				sensorInput.resetArmEncoder();
 				
-				context.nextState(IDLE, 0);
+				context.nextState(HOLD);
 			}	
 		},
 		MANUAL{
@@ -87,7 +87,15 @@ public class Arm implements ArmProvider{
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
 				arm.safety(0);
 			}
-			
+		},
+		HOLD {
+			@Override
+			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				while (true) {
+					arm.safety(0.05);
+					Thread.sleep(10);
+				}
+			}
 		},
 		CLIMB {
 			@Override
@@ -113,8 +121,14 @@ public class Arm implements ArmProvider{
 			}
 		},
 		CALIBRATE{
+			private boolean calibrated = false;
+			
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				if (context.getArg() instanceof Boolean && (boolean) context.getArg())
+					calibrated = false;
+				if (calibrated)
+					return;
 				sensorInput.resetArmEncoder();
 				robotOutput.setArm(-1);
 				try {
@@ -292,6 +306,23 @@ public class Arm implements ArmProvider{
 			matchLogger.write("Calibrate arm: " + e.toString());
 		}
 	}
+
+	@Override
+	public boolean calibrate(boolean force) {
+		try {
+			stateMachine.setState(ArmState.CALIBRATE, force);
+		} catch (InterruptedException e) {
+			matchLogger.write("Hold arm: " + e.toString());
+			return false;
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean isCalibrating() {
+		return stateMachine.getState() == ArmState.CALIBRATE;
+	}
 	
 	@Override
 	public void blockArm() {
@@ -306,5 +337,23 @@ public class Arm implements ArmProvider{
 	@Override
 	public boolean movingToPosition() {
 		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET || blockArm;
+	}
+
+
+	@Override
+	public boolean hold() {
+		try {
+			stateMachine.setState(ArmState.HOLD);
+		} catch (InterruptedException e) {
+			matchLogger.write("Hold arm: " + e.toString());
+			return false;
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean isHolding() {
+		return stateMachine.getState() == ArmState.HOLD;
 	}
 }

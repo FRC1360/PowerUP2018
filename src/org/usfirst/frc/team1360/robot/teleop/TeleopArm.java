@@ -35,10 +35,10 @@ public final class TeleopArm implements TeleopComponent {
 			arm.climb();
 		if (speed == 0 && !arm.movingToPosition() && !arm.isClimbing())
 		{
-			if (!arm.isIdle())
-				arm.idle();
+			if (!arm.isHolding())
+				arm.hold();
 		}
-		else if(speed == 0)
+		else if(speed != 0)
 		{
 			arm.unblockArm();
 			if (lastSpeed == 0)

@@ -17,9 +17,13 @@ public interface ArmProvider {
 	void stop();
 	void start();
 	void calibrateBlocking();
+	boolean calibrate(boolean force);
+	boolean isCalibrating();
 	boolean movingToPosition();
 	void blockArm();
 	void unblockArm();
 	boolean climb();
 	boolean isClimbing();
+	boolean hold();
+	boolean isHolding();
 }

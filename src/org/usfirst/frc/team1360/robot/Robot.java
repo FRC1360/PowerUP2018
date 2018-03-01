@@ -144,6 +144,8 @@ public class Robot extends TimedRobot {
 		
 		matchLog.write("----------STARTING TELEOP PERIOD----------");
 		matchLog.startVideoCache();
+		
+		arm.calibrate(false);
 	}
 	
 	/**

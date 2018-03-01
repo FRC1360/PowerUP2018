@@ -1,5 +1,9 @@
 package org.usfirst.frc.team1360.robot.util;
 
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * An instance of this class represents an asynchronous state machine
  * @author Nick Mertin
@@ -7,10 +11,12 @@ package org.usfirst.frc.team1360.robot.util;
  * @param <T> The state type; see {@link OrbitStateMachineState}
  */
 public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
+	private boolean enabled = true;
 	private final T base;
 	private volatile T state;
 	private volatile Object arg;
 	private volatile RunThread thread;
+	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	
 	/**
 	 * Creates a new state machine
@@ -55,14 +61,20 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 * @throws InterruptedException In the unlikely event that the current thread is interrupted while waiting for the run thread to complete
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
-		if (thread.isAlive()) {
-			thread.interrupt();
-			thread.join();
-		}
+		matchLogger.write("Switching state " + state + " passing argument " + arg);
+		
+		thread.interrupt();
+
 		this.state = state;
 		this.arg = arg;
+		
 		thread = new RunThread();
 		thread.start();
+	}
+	
+	public void kill() {
+		enabled = false;
+		thread.interrupt();
 	}
 	
 	/**
@@ -75,7 +87,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	
 	/**
 	 * An exception that is thrown to inform RunThread to switch to a different state
-	 * @see Context.nextState
+	 * @see this.Context#nextState
 	 * @author Nick Mertin
 	 */
 	@SuppressWarnings("serial")
@@ -112,7 +124,9 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		@Override
 		public void nextState(T state, Object arg) {
 			OrbitStateMachine.this.arg = arg;
+			SmartDashboard.putString("State Machine Running: ", Enum.class.cast(state).name());
 			throw new NextStateException(state);
+			
 		}
 	}
 	
@@ -124,6 +138,7 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
+			
 			while (true)
 				try {
 					state.run(new Context());
@@ -135,9 +150,11 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 				} catch (InterruptedException e) {
 					return;
 				} catch (Throwable t) {
-					t.printStackTrace();
+					matchLogger.write(t.toString());
 					return;
 				}
 		}
 	}
+	
+	
 }

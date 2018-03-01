@@ -15,21 +15,26 @@ import org.usfirst.frc.team1360.robot.IO.SensorInput;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
 import org.usfirst.frc.team1360.robot.subsystem.Arm;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
+
 import org.usfirst.frc.team1360.robot.subsystem.Drive;
 import org.usfirst.frc.team1360.robot.subsystem.Elevator;
+import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.Intake;
 import org.usfirst.frc.team1360.robot.teleop.TeleopArm;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
 import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
 import org.usfirst.frc.team1360.robot.teleop.TeleopIntake;
+import org.usfirst.frc.team1360.robot.util.OrbitCamera;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
-import org.usfirst.frc.team1360.robot.util.log.TempFileLog;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,12 +48,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @SingletonStatic
 public class Robot extends TimedRobot {
-	private LogProvider log;
+	private ElevatorProvider elevator;
+	private ArmProvider arm;
+	private MatchLogProvider matchLog;
 	private HumanInputProvider humanInput;
 	private SensorInputProvider sensorInput;
 	private RobotOutputProvider robotOutput;
 	private OrbitPositionProvider position;
 	private TeleopControl teleopControl;
+
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -56,23 +64,30 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		log = Singleton.configure(TempFileLog.class);
+		matchLog = Singleton.configure(MatchLogger.class);
 		humanInput = Singleton.configure(HumanInput.class);
 		sensorInput = Singleton.configure(SensorInput.class);
 		robotOutput = Singleton.configure(RobotOutput.class);
 		position = Singleton.configure(DriveEncoderPositionProvider.class);
 		Singleton.configure(Drive.class);
 		Singleton.configure(Intake.class);
-		Singleton.configure(Elevator.class);
-		Singleton.configure(Arm.class);
+		arm = Singleton.configure(Arm.class);
+		elevator = Singleton.configure(Elevator.class);
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);
 		Singleton.configure(TeleopArm.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
+		CameraServer.getInstance().startAutomaticCapture();
+		
+		matchLog.writeHead();
+		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
+		
+		arm.start();
+		elevator.start();
 	}
 
 	/**
@@ -88,6 +103,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		matchLog.writeClean("----------STARTING AUTO PERIOD----------");
+		matchLog.startVideoCache();
+		
 		position.start();
 		AutonControl.start();
 		
@@ -101,17 +119,33 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
+		
+		matchLog.writeClean(String.format("X Pos = %f inches, Y Pos = %f inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
+				position.getX(), position.getY(), sensorInput.getLeftDriveEncoder(), sensorInput.getRightDriveEncoder()));
+		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
 	}
 
 	@Override
 	public void teleopInit() {
-		AutonControl.stop();
-//		position.stop();
+		
+		disabledInit();
+		
+		matchLog.write("----------STARTING TELEOP PERIOD----------");
+		matchLog.startVideoCache();
+		
+		arm.calibrate(false);
 	}
 	
 	/**
@@ -119,28 +153,68 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		teleopControl.runCycle();
+		
+		matchLog.writeClean(String.format("Elevator Enc = %d, Arm Enc = %d", 
+				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
+		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
-		
-		teleopControl.runCycle();
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
+		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
 	}
 	
 	@Override
 	public void disabledInit() {
-		AutonControl.stop();
+		matchLog.writeClean("----------ROBOT DISABLED LOG ENDING----------");
+		matchLog.write("*");
+		matchLog.stopVideoCache();
+		matchLog.write("*");
+
+		try {
+			AutonControl.stop();
+		} catch (Throwable t) {
+			matchLog.write(t.toString());
+		}
+		matchLog.write("*");
+		elevator.stop();
+		matchLog.write("*");
+		arm.stop();
+		matchLog.write("*");
 		position.stop();
+		matchLog.write("*");
+		
+		teleopControl.disable();
 	}
 	
 	@Override
 	public void disabledPeriodic() {
+		
+		AutonControl.select();
+		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
+		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		
+		/*
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
+
+		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
+		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
+		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
+		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+		*/
 	}
 
 	/**

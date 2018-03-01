@@ -4,12 +4,18 @@ package org.usfirst.frc.team1360.robot.IO;
  * Date 30 Jan 2017 - added pdp variable; getClimberFrontCurrent method; getClimberBackCurrent method; removed calculate
  *****/
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.NavxIO;
+import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.ITimestampedDataSubscriber;
@@ -31,6 +37,7 @@ public class SensorInput implements SensorInputProvider {
 	private Encoder leftDriveEnc;
 	private Encoder rightDriveEnc;
 	
+	
 	//Elevator
 	private Encoder elevatorEnc;
 	private DigitalInput bottomSwitch;
@@ -49,18 +56,25 @@ public class SensorInput implements SensorInputProvider {
 	private double[] ahrsValues = new double[7]; // Array to store data from NavX: yaw, pitch, roll, x acceleration (world frame), y acceleration (world frame), x velocity (local frame), y velocity (local frame)
 	private ConcurrentLinkedQueue<Runnable> ahrsThreadDispatchQueue = new ConcurrentLinkedQueue<>(); // Queue code to be run on ahrsThread
 	
+	private MatchLogProvider matchLogger;
+	
 	public SensorInput()								//Constructor to initialize fields  
 	{
+		
+		matchLogger = Singleton.get(MatchLogProvider.class);
 		PDP = new PowerDistributionPanel();
 		
-		leftDriveEnc = new Encoder(3, 2);
-		rightDriveEnc = new Encoder(0, 1);
+		leftDriveEnc = new Encoder(0, 1);
+		rightDriveEnc = new Encoder(2, 3);
 		elevatorEnc = new Encoder(4, 5);
-		bottomSwitch = new DigitalInput(6); // change ports as needed
-		topSwitch = new DigitalInput(7); //change ports as needed
+		armEnc = new Encoder(7, 6);
+
+		bottomSwitch = new DigitalInput(NavxIO.dio(1)); // change ports as needed
+		topSwitch = new DigitalInput(NavxIO.dio(0)); //change ports as needed
 		
-		armTopSwitch = new DigitalInput(8);
-		armEnc = new Encoder(NavxIO.dio(0), NavxIO.dio(1));
+		armTopSwitch = new DigitalInput(NavxIO.dio(2));
+//		solDriveEnc = new Encoder(0);
+//		armEnc = new Encoder(NavxIO.dio(1), NavxIO.dio(2));
 
 		ahrsThread = new Thread(() ->
 		{
@@ -105,26 +119,8 @@ public class SensorInput implements SensorInputProvider {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public boolean getBottomSwitch() 
-	{
-		return bottomSwitch.get();
-	}
-	//returns switch sensor at top of elevator
-	public boolean getTopSwitch() 
-	{
-		return topSwitch.get();
-	}
-	//return current encoder tick
-	public int getElevatorTick() 
-	{
-		return elevatorEnc.get();
-	}
-	//returns speed of elevator
-	public double getElevatorVelocity() 
-	{
-		return elevatorEnc.getRate();
+		
+
 	}
 	
 	public synchronized double getAHRSYaw() // Get yaw from NavX
@@ -226,8 +222,10 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public boolean getArmSwitch() {
-		return armTopSwitch.get();
+		return !armTopSwitch.get();
 	}
+	
+	
 
 	@Override
 	public int getArmEncoder() {
@@ -242,5 +240,60 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public void resetArmEncoder() {
 		armEnc.reset();
+	}
+
+	@Override
+	public double getArmCurrent() {
+		return PDP.getCurrent(4) + PDP.getCurrent(10);
+	}
+	
+	
+
+	@Override
+	public int getElevatorEncoder() {
+		return elevatorEnc.get();
+	}
+
+	@Override
+	public void resetElevatorEncoder() {
+		elevatorEnc.reset();
+	}
+
+	@Override
+	public double getElevatorVelocity() {
+		return elevatorEnc.getRate();
+	}
+	
+	@Override
+	public boolean getTopSwitch() {
+		return topSwitch.get() != true;
+	}
+
+	@Override
+	public boolean getBottomSwitch() {
+		return bottomSwitch.get() != true;
+	}
+
+	@Override
+	public double getBatteryVoltage() {
+		return PDP.getVoltage();
+	}
+
+	@Override
+	public double getElevatorCurrent() {
+		return PDP.getCurrent(3) + PDP.getCurrent(12);
+	}
+	
+	//Max Current Allowance per motor = 50A
+	//Total for DT = 300A
+	
+	@Override
+	public double getDriveCurrentLeft() {
+		return PDP.getCurrent(0) + PDP.getCurrent(1) + PDP.getCurrent(2);
+	}
+	
+	@Override
+	public double getDriveCurrentRight() {
+		return PDP.getCurrent(13) + PDP.getCurrent(14) + PDP.getCurrent(15);
 	}
 }

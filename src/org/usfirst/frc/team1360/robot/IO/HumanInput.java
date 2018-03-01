@@ -30,7 +30,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingThrottle()
 	{
-		return this.driver.getTriggerAxis(Hand.kRight) - this.driver.getTriggerAxis(Hand.kLeft); 
+		return deadzone(driver.getTriggerAxis(Hand.kRight), 0.1) - deadzone(driver.getTriggerAxis(Hand.kLeft), 0.1); 
 	}
 	
 	/* (non-Javadoc)
@@ -39,7 +39,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getRacingTurn()
 	{
-		return this.driver.getX(Hand.kLeft);
+		return deadzone(driver.getX(Hand.kLeft), 0.2);
 	}
 	
 	/* (non-Javadoc)
@@ -90,7 +90,7 @@ public class HumanInput implements HumanInputProvider {
 	@Override
 	public double getArcadeThrottle()
 	{
-		return this.driver.getY(Hand.kLeft);
+		return -this.driver.getY(Hand.kLeft);
 	}
 	
 	/* (non-Javadoc)
@@ -202,42 +202,74 @@ public class HumanInput implements HumanInputProvider {
     {
     		return operator.getTriggerAxis(Hand.kRight);
     }
-    
-    //controls speed of intake wheels
-    /* (non-Javadoc)
-	 * @see org.usfirst.frc.team1360.robot.IO.HumanInputProvider#getOperatorSpeed()
-	 */
-    @Override
-	public double getOperatorSpeed() //getter method for intake roller speed
-    {
-    		return operator.getY(Hand.kLeft);
-    }
 
 	@Override
 	public double getArm() {
-		return operator.getX(Hand.kRight);
+		return deadzone(-operator.getY(Hand.kLeft), 0.2);
+	}
+	
+	@Override
+	public boolean getOperatorClamp() {
+		return operator.getBumper(Hand.kLeft);
+	}
+	
+	@Override
+	public boolean getScaleMax() {
+		return operator.getYButton();
+	}
+	
+	@Override
+	public boolean getSwitch() {
+		return operator.getXButton();
+	}
+	
+	@Override
+	public boolean getScaleLow() {
+		return operator.getBButton();
+	}
+	
+	@Override
+	public boolean getIntake() {
+		return operator.getAButton();
+	}
+	
+	@Override
+	public boolean getClimb() {
+		return false;
+//		return operator.getBumper(Hand.kRight);
+	}
+	
+	@Override
+	public boolean getDriverArmDown() {
+		return driver.getPOV(0) == 180;
+	}
+	
+	@Override
+	public boolean getDriverOverride() {
+		return driver.getBumper(Hand.kLeft) && driver.getBumper(Hand.kRight);
 	}
 
 	//-----------Auto Selection-----------
 	@Override
 	public boolean getAutoInc() {
-		// TODO Auto-generated method stub
-		return false;
+		return operator.getPOV(0) == 0;
 	}
 
 	@Override
 	public boolean getAutoDec() {
-		// TODO Auto-generated method stub
-		return false;
+		return operator.getPOV(0) == 180;
 	}
+	
+	
 
 	//TODO Operator Controls
 	// Operator Controls
 	//returns left joystick of elevator of operator controller
 	public double getElevator()
 	{
-		return this.operator.getY(Hand.kRight);
+		return deadzone(-operator.getY(Hand.kRight), 0.2);
 	}
+	
 	//returns input after comparing to deadzone
 	public double deadzone(double Input, double deadzone) {
 		if (Math.abs(Input) > deadzone) {
@@ -245,9 +277,6 @@ public class HumanInput implements HumanInputProvider {
 		}
 		return 0;
 	}
+
 	
-	@Override
-	public boolean getOperatorClamp() {
-		return operator.getBumper(Hand.kLeft);
-	}
 }

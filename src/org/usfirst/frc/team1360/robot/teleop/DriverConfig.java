@@ -6,19 +6,19 @@ import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public enum DriverConfig {
 	RACING 
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			double speed = humanInput.getRacingThrottle();
 			double turn = humanInput.getRacingTurn();
 			boolean change = humanInput.getRacingDampen();
-
-			if(Math.abs(turn) < 0.2)
-				turn = 0;
 			
 			if(change)
 			{
@@ -26,15 +26,49 @@ public enum DriverConfig {
 				turn = turn / 2;
 			}
 			
+			double elevatorHeight = sensorInput.getElevatorEncoder();
+			matchLogger.write("Elevator Enc == " + elevatorHeight / 100);
+			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
+			matchLogger.write("Multiplier == " + multiplier);
+			
+			speed = speed * multiplier;
+			
 			robotOutput.arcadeDrive(speed, turn);
 			robotOutput.shiftGear(humanInput.getRacingShift());
 		}
 	},
-	
+	RACING_CURRENT_LIMIT
+	{
+		double voltageMax = 1.0;
+		
+		@Override
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
+		{
+			double speed = humanInput.getRacingThrottle();
+			double turn = humanInput.getRacingTurn();
+			boolean change = humanInput.getRacingDampen();
+			
+			if(change)
+			{
+				speed = speed / 2;
+				turn = turn / 2;
+			}
+			
+			double elevatorHeight = sensorInput.getElevatorEncoder();
+			matchLogger.write("Elevator Enc == " + elevatorHeight / 100);
+			double multiplier = Math.cos((1/33.165) * (elevatorHeight / 100));
+			matchLogger.write("Multiplier == " + multiplier);
+			
+			speed = speed * multiplier;
+			
+			robotOutput.arcadeDrive(speed, turn);
+			robotOutput.shiftGear(humanInput.getRacingShift());
+		}
+	},
 	HALO 
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			double turn = humanInput.getHaloTurn();
 			
@@ -50,7 +84,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			double left = humanInput.getTankLeft();
 			double right = humanInput.getTankRight();
@@ -71,7 +105,7 @@ public enum DriverConfig {
 	{
 
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput) 
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput) 
 		{
 			double turn = humanInput.getArcadeTurn();
 			
@@ -87,7 +121,7 @@ public enum DriverConfig {
 	JOYSTICKTANK
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			
 			robotOutput.tankDrive(humanInput.getLeftJoystickThrottle(), humanInput.getRightJoystickThrottle());
@@ -100,7 +134,7 @@ public enum DriverConfig {
 	CHEESYDRIVE
 	{
 		@Override
-		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput)
+		public void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput)
 		{
 			robotOutput.cheesyDrive(humanInput.getCheesyThrottle(),
 					humanInput.getCheesyTurn(),
@@ -111,5 +145,6 @@ public enum DriverConfig {
 		
 	};
 	
-	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput);
+	protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
+	public abstract void calculate(RobotOutputProvider robotOutput, HumanInputProvider humanInput, SensorInputProvider sensorInput);
 }

@@ -5,16 +5,18 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
+import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 import org.usfirst.frc.team1360.robot.auto.routines.Default;
-import org.usfirst.frc.team1360.robot.auto.routines.Demo;
 import org.usfirst.frc.team1360.robot.auto.routines.EncoderSwitch;
-import org.usfirst.frc.team1360.robot.auto.routines.SwitchLeft;
-import org.usfirst.frc.team1360.robot.auto.routines.SwitchMiddle;
-import org.usfirst.frc.team1360.robot.auto.routines.SwitchRight;
+import org.usfirst.frc.team1360.robot.auto.routines.ScaleRightStart;
+import org.usfirst.frc.team1360.robot.auto.routines.Switch;
 import org.usfirst.frc.team1360.robot.auto.routines.Test;
+import org.usfirst.frc.team1360.robot.auto.routines.TwoCubeRight;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
-import org.usfirst.frc.team1360.robot.util.log.LogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 
 public class AutonControl {
 	public static ArrayList<AutonRoutine> routines = new ArrayList<>();
@@ -34,14 +36,12 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
-		routines.add(new EncoderSwitch());
-		routines.add(new Test());
-		routines.add(new Demo());
+		//routines.add(new EncoderSwitch());
+		routines.add(new TwoCubeRight());
+		//routines.add(new Switch());
+		routines.add(new ScaleRightStart());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());
-		routines.add(new SwitchLeft());
-		routines.add(new SwitchMiddle());
-		routines.add(new SwitchRight());
 	}
 	
 	public static void select()
@@ -69,7 +69,11 @@ public class AutonControl {
 	
 	public static void registerThread(Thread thread)
 	{
-		autoThreads.add(thread);
+		synchronized (autoThreads)
+		{
+			Singleton.get(MatchLogProvider.class).write("Auton thread registered: " + thread.getName());
+			autoThreads.add(thread);
+		}
 	}
 	
 	public static Thread run(AutonRunnable runnable)
@@ -93,23 +97,47 @@ public class AutonControl {
 		if (selectedIndex < routines.size())
 		{
 			AutonRoutine routine = routines.get(selectedIndex);
-			Singleton.get(LogProvider.class).write("Starting auto: " + routine.toString());
+			Singleton.get(MatchLogProvider.class).writeClean("Running auto - " + routine.toString());
+			Singleton.get(MatchLogProvider.class).write("Starting auto: " + routine.toString());
 			routine.runNow("");
 		}
 	}
 	
 	public static void stop()
 	{
-		autoThreads.forEach(Thread::interrupt);
-		autoThreads.forEach(t -> {
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		});
-		autoThreads.clear();
+		ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
+		RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+		ArmProvider arm = Singleton.get(ArmProvider.class);
+		
+		robotOutput.tankDrive(0, 0);
+		arm.idle();
+		elevator.setIdle();
+		
+		MatchLogProvider matchLog = Singleton.get(MatchLogProvider.class);
+		
+		synchronized (autoThreads) {
+			matchLog.write(String.format("%d auto threads to kill", autoThreads.size()));
+			
+			autoThreads.forEach(Thread::interrupt);
+			autoThreads.forEach(t -> {
+				try {
+					matchLog.write(String.format("Waiting for %s to finish...", t.getName()));
+					t.join();
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			});
+			
+			autoThreads.forEach(t -> {
+			    if (t instanceof AutonRoutine) {
+			        ((AutonRoutine) t).override("END AUTO");
+			    }
+			});
+			
+			autoThreads.clear();
+		}
 		scheduler.shutdownNow();
+		routines.clear();
 		setup();
 	}
 	

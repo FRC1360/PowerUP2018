@@ -1,9 +1,14 @@
 package org.usfirst.frc.team1360.robot.teleop;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopElevator implements TeleopComponent {
@@ -11,36 +16,84 @@ public class TeleopElevator implements TeleopComponent {
 	RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
+	ArmProvider arm = Singleton.get(ArmProvider.class);
+	IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
+	
+	
 	private double lastSpeed = 0;
-	//sets state to idle and turns off motors
+	private boolean overrideToggle = false;
+	private boolean overrideHeld = false;
+	
+	
+	//0 = 4 foot
+	//1 = 5 foot
+	//2 = 6 foot
+	
 	@Override
 	public void disable() {
-		// TODO Auto-generated method stub
 		elevator.setIdle();
 		lastSpeed = 0;
 	}
-/*checks the input of operator's right controller*with deadzone) and applies that to the motors.
- * It decides whether to set the elevator state to rising or decsending based on direction of joystick (negative or positive)
- * calls the hold state if joystick is 0(and joystick isn't already holding
-*/
+	
+
 	@Override
 	public void calculate() {
 		// TODO Auto-generated method stub
-		double speed = humanInput.deadzone(humanInput.getElevator(), 0.1);
+		double speed = humanInput.getElevator();
+		boolean scaleMax = humanInput.getScaleMax();
+		boolean scaleLow = humanInput.getScaleLow();
+		boolean switchPreset = humanInput.getSwitch();
+		boolean intakePreset = humanInput.getIntake();
+		boolean climb = humanInput.getClimb();
+		boolean override = humanInput.getDriverOverride();
+		
+		if(override && !overrideHeld) {
+			overrideToggle = !overrideToggle;
+			overrideHeld = true;
+		}
+		
+		if(!override) {
+			overrideHeld = false;
+		}
 		
 		if (speed == 0)
 		{
-			if (!elevator.isHolding())
+			if(scaleMax && !arm.movingToPosition())
 			{
-				elevator.hold();
+				elevator.goToTarget(elevator.SCALE_HIGH);
+				arm.goToTop();
 			}
+			else if(scaleLow && !arm.movingToPosition())
+			{
+				elevator.goToTarget(elevator.SCALE_LOW);
+				arm.goToPosition(arm.POS_BOTTOM);
+			}
+			else if(switchPreset && !arm.movingToPosition())
+			{
+				elevator.goToTarget(elevator.SWITCH_HEIGHT);
+				arm.goToPosition(arm.POS_BOTTOM);
+			}
+			else if(intakePreset)
+			{
+				elevator.goToTarget(elevator.INTAKE_HEIGHT);
+			}
+			if (climb && !elevator.isClimbing())
+			{
+				elevator.climb();
+			}
+			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
+			{
+				if(!elevator.isHolding())
+					elevator.hold();
+			}
+			
 		}
 		else
 		{
 			if (lastSpeed == 0)
 				elevator.startManual();
-			elevator.setManualSpeed(speed);
+			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1, overrideToggle);
 		}
 		lastSpeed = speed;
 	}	

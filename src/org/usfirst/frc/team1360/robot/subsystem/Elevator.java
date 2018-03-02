@@ -139,8 +139,10 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public void safety(double power, boolean override) {
 		
-		if(override)
+		if(override) {
 			robotOutput.setElevatorMotor(power);
+			matchLogger.writeClean("Overriding Elevator");
+		}
 		else {
 			if(sensorInput.getBottomSwitch()) {
 				sensorInput.resetElevatorEncoder();
@@ -300,6 +302,11 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean isMovingToTarget() {
 		return stateMachine.getState() == ElevatorState.DOWN_TO_TARGET || stateMachine.getState() == ElevatorState.UP_TO_TARGET;
+	}
+	
+	@Override
+	public void logState() {
+		matchLogger.writeClean("Current Elevator State = " + stateMachine.getState().toString());
 	}
 	
 	

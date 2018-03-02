@@ -16,7 +16,7 @@ import org.usfirst.frc.team1360.robot.util.SingletonSee;
 @SingletonSee(MatchLogProvider.class)
 public class MatchLogger implements MatchLogProvider {
 	private PrintStream file;
-	private PrintStream tempFile;
+	//private PrintStream tempFile;
 	private PrintStream tempFileComp;
 	
 	private int frameNumber = 0;
@@ -42,7 +42,7 @@ public class MatchLogger implements MatchLogProvider {
 			tempFileComp = new PrintStream("/tmp/back1360.log"); 
 		}
 		
-		tempFile = new PrintStream("/tmp/1360.log");
+		//tempFile = new PrintStream("/tmp/1360.log");
 	}
 	
 	@Override
@@ -93,10 +93,10 @@ public class MatchLogger implements MatchLogProvider {
 
 	@Override
 	public void write(String msg) {
-		tempFile.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
+		//tempFile.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
 		tempFileComp.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
 		tempFileComp.flush();
-		tempFile.flush();
+		//tempFile.flush();
 	}
 	
 	@Override

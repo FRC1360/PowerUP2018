@@ -26,4 +26,5 @@ public interface ArmProvider {
 	boolean isClimbing();
 	boolean hold();
 	boolean isHolding();
+	void logState();
 }

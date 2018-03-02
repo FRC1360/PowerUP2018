@@ -35,4 +35,5 @@ public interface ElevatorProvider {
 	
 	void stop();
 	void start();
+	void logState();
 }

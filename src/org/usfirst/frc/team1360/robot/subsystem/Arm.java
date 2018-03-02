@@ -238,8 +238,10 @@ public class Arm implements ArmProvider{
 	
 	@Override
 	public void safety(double power, boolean override)	{
-		if(override)
+		if(override) {
 			robotOutput.setArm(power);
+			matchLogger.writeClean("Overriding Arm");
+		}
 		else
 		{
 			if(sensorInput.getArmSwitch())
@@ -259,7 +261,7 @@ public class Arm implements ArmProvider{
 				robotOutput.setArm(0);
 			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
 				robotOutput.setArm(0);
-			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -10 && power > 0)
+			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -5 && power > 0)
 				robotOutput.setArm(0);
 			else
 				robotOutput.setArm(power);
@@ -351,6 +353,10 @@ public class Arm implements ArmProvider{
 		return true;
 	}
 
+	@Override
+	public void logState() {
+		matchLogger.writeClean("Current Arm State = " + stateMachine.getState().toString());
+	}
 
 	@Override
 	public boolean isHolding() {

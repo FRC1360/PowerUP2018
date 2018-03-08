@@ -31,12 +31,12 @@ public class MatchLogger implements MatchLogProvider {
 		}
 		catch(IOException e) {
 			file = new PrintStream("/tmp/Match1360.log"); 
-			file.println("-----------WARNING UNABLE TO WRITE TO USB DRIVE-------------");
+			file.println("-----------EXCEPTION: UNABLE TO WRITE TO USB DRIVE-------------");
 			file.flush();
 		}
-		
+
 		try {
-			tempFileComp = new PrintStream("/U/1360.log"); 
+			tempFileComp = new PrintStream("/U/" + ds.getMatchNumber() + "_temp.log"); 
 		}
 		catch(IOException e) {
 			tempFileComp = new PrintStream("/tmp/back1360.log"); 
@@ -71,6 +71,15 @@ public class MatchLogger implements MatchLogProvider {
 	
 	@Override
 	public void writeHead() {
+		
+		try {
+			file = new PrintStream("/U/" + ds.getMatchNumber() + "_1360.log"); 
+		}
+		catch(IOException e) {
+			file.println("-----------EXCEPTION: UNABLE TO RENAME FILE-------------");
+			file.flush();
+		}
+		
 		file.println("----------STARTING LOG FILE----------");
 		file.println("Match Number - " + ds.getMatchNumber());
 		file.println("Alliance - " + ds.getAlliance());

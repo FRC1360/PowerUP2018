@@ -63,6 +63,8 @@ public class AutonControl {
 			System.out.println("Selected: " + routines.get(selectedIndex).toString());
 		}
 		
+		System.out.println("Selected: " + routines.get(selectedIndex).toString());
+		
 		lastInc = inc;
 		lastDec = dec;
 	}

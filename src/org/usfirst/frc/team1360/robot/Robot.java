@@ -79,9 +79,8 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopArm.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 		
-		matchLog.writeHead();
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
@@ -103,6 +102,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		matchLog.writeHead();
+		
 		matchLog.writeClean("----------STARTING AUTO PERIOD----------");
 		matchLog.startVideoCache();
 		
@@ -225,6 +226,137 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
+		
+	}
+	
+	@Override
+	public void testInit() {
+		int armEps = 1;
+		int elevatorEps = 10;
+		int driveEps = 20;
+		
+		boolean armNominal = false;
+		boolean elevatorNominal = false;
+		
+		
+		sensorInput.resetArmEncoder();
+		
+		matchLog.writeHead();
+		
+		matchLog.writeClean("STARTING ARM SELF CHECK");
+		
+		arm.safety(0.5, false);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		//Check the arm encoder
+		if(Math.abs(sensorInput.getArmEncoder()) <= armEps) {
+			matchLog.writeClean("Arm Encoder: FAILURE");
+		}
+		else {
+			matchLog.writeClean("Arm Encoder: Ready for Orbit");
+			armNominal = true;
+		}
+		
+		if(armNominal) {
+			arm.safety(0.1, false);
+			while(sensorInput.getArmEncoderVelocity() > 0 && !sensorInput.getArmSwitch()) {
+				arm.safety(0.1, false);
+			}
+			
+			if(!sensorInput.getArmSwitch()) {
+				matchLog.writeClean("Arm Switch: FAILURE");
+			}
+			else
+			{
+				matchLog.writeClean("Arm Switch: Ready for Orbit");
+			}
+			
+			arm.safety(0, false);
+			
+		}
+		
+		matchLog.writeClean("STARTING ELEVATOR SELF CHECK");
+		
+		sensorInput.resetElevatorEncoder();
+		elevator.safety(0.25, false);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		if(Math.abs(sensorInput.getElevatorEncoder()) <= elevatorEps) {
+			matchLog.writeClean("Elevator Encoder: FAILURE");
+		}
+		else {
+			matchLog.writeClean("Elevator Encoder: Ready for Orbit");
+			elevatorNominal = true;
+		}
+		
+		if(elevatorNominal) {
+			elevator.safety(-0.1, false);
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			while(sensorInput.getElevatorVelocity() > 0 && !sensorInput.getBottomSwitch()) {
+				elevator.safety(-0.1, false);
+			}
+			
+			if(!sensorInput.getBottomSwitch()) {
+				matchLog.writeClean("Elevator Bottom Switch: FAILURE");
+			} else {
+				matchLog.writeClean("Elevator Bottom Switch: Ready for Orbit");
+			}
+		}
+		
+		matchLog.writeClean("STARTING DRIVE SELF CHECK");
+		
+		sensorInput.resetLeftEncoder();
+		
+		robotOutput.tankDrive(0.5, 0);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		robotOutput.tankDrive(0, 0);
+		
+		if(Math.abs(sensorInput.getLeftDriveEncoder()) > driveEps) {
+			matchLog.writeClean("Left Drive: Ready for Orbit");
+		}
+		else {
+			matchLog.writeClean("Left Drive: FAILURE");
+		}
+		
+		robotOutput.tankDrive(0, 0.5);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		robotOutput.tankDrive(0, 0);
+		
+		if(Math.abs(sensorInput.getRightDriveEncoder()) > driveEps) {
+			matchLog.writeClean("Right Drive: Ready for Orbit");
+		}
+		else {
+			matchLog.writeClean("Right Drive: FAILURE");
+		}
+
+		matchLog.writeClean("SELF TEST COMPLETE LOG ENDING");
+		
+		
+		
 		
 	}
 }

@@ -17,7 +17,8 @@ public class SweepTurn extends AutonRoutine{
 	private boolean chain;
 	private boolean left;
 	
-	private final double DRIVE_WIDTH = 24;
+	private final double DRIVE_WIDTH = 24;//inches
+	private final double TARGET_SPEED = 5;//ft/sec
 	
 	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
@@ -45,8 +46,6 @@ public class SweepTurn extends AutonRoutine{
 		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * 5.30516);
 		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * 5.30516);
 		
-		double leftSpeed = 0;
-		double rightSpeed = 0;
 		
 		double innerCircle = radius - 12;
 		double outerCircle = radius + 12;

@@ -20,16 +20,12 @@ public class DriveToDistance extends AutonRoutine{
 	
 	public DriveToDistance(long timeout, double x, double y, double A, double eps, boolean chain) {
 		super("DriveToDistance", timeout);
-		//this.length = length;
-		//this.distance = this.length * this.ticksPerInch;
 
 		this.chain = chain;
 		this.eps = eps;
 		this.targetAngle = Math.toRadians(A);
 		this.x = x;
 		this.y = y;
-		
-		
 	}
 
 	@Override

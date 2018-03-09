@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.ArcToTarget;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 

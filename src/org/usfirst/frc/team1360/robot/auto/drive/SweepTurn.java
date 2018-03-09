@@ -41,49 +41,53 @@ public class SweepTurn extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
+		double leftSpeed;
+		double rightSpeed;
+		
 		OrbitPID pidInner = new OrbitPID(0.003, 0.0, 0.04);
-		OrbitPID pidOutter = new OrbitPID(0.008, 0.0, 0.0);
+		OrbitPID pidOuter = new OrbitPID(0.008, 0.0, 0.0);
 		
-		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
-		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
+		//middle ticks if there was a wheel there
+		int middleTicks = (int) (((radius * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
 		
+		//Inner and outer ticks
+		int innerTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
+		int outerTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
+		
+		//convert ft/s to ticks/s
 		double ticksPerSec = TICKS_PER_INCH * (TARGET_SPEED * 12);
+		
+		//Calculate total time to do the sweep assuming our ticks/s is the outter speed
+		double timeForMovement = middleTicks / ticksPerSec;
+		
+		//calculate inner velocity based off of the time
+		double innerVelocity = innerTicks / timeForMovement;
+		
+		//calculate outer veloctiy based off of the time
+		double outerVelocity = outerTicks / timeForMovement;
 		
 		if(left)
 		{
-			while(sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
+			while(sensorInput.getRightDriveEncoder() - rightOffset < outerTicks) {
 				
-				if(chain)
-				{
-					robotOutput.tankDrive(0.5, ratio * 0.5 * 1.275);
-				}else {
-					leftSpeed = pidInner.calculate(ticksPerSec, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
-					rightSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset));
-					
-					if(reverse)
-						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
-					else
-						robotOutput.tankDrive(leftSpeed, rightSpeed);
-				}
-				Thread.sleep(10);
+				leftSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
+				rightSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
+				
+				robotOutput.tankDrive(leftSpeed, rightSpeed);
+				
+				Thread.sleep(5);
 			}
 		}
 		else
 		{
-			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks) {
-				if(chain)
-				{
-					robotOutput.tankDrive(ratio * 0.5, 0.5);
-				}else {
-					leftSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
-					rightSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset))	;
-					
-					if(reverse)
-						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
-					else
-						robotOutput.tankDrive(leftSpeed, rightSpeed);
-				}
-				Thread.sleep(10);
+			while(sensorInput.getLeftDriveEncoder() - leftOffset < outerTicks) {
+				
+				leftSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
+				rightSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
+				
+				robotOutput.tankDrive(leftSpeed, rightSpeed);
+				
+				Thread.sleep(5);
 			}
 		}
 	}

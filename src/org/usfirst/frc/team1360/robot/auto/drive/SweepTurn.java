@@ -17,7 +17,7 @@ public class SweepTurn extends AutonRoutine{
 	private boolean chain;
 	private boolean left;
 	
-	private final double DRIVE_WIDTH = 24;//inches
+	private final double DRIVE_WIDTH = 24.7;//inches
 	private final double TARGET_SPEED = 5;//ft/sec
 	private final double TICKS_PER_INCH = 5.30516;//Ticks
 	

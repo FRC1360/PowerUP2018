@@ -164,7 +164,7 @@ public final class Elevator implements ElevatorProvider {
 					arm.goToPosition(-1);
 			}
 			else if(power < 0) {
-				if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
+				if(Math.abs(0.002*sensorInput.getElevatorEncoder()) < 0.2) 
 					robotOutput.setElevatorMotor(-0.2);
 				else
 					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());

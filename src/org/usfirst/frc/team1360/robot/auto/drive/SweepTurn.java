@@ -14,29 +14,27 @@ public class SweepTurn extends AutonRoutine{
 	private double sweepAngle;
 	
 	private boolean reverse;
-	private boolean chain;
 	private boolean left;
 	
 	private final double DRIVE_WIDTH = 24.7;//inches
 	private final double TARGET_SPEED = 5;//ft/sec
 	private final double TICKS_PER_INCH = 5.30516;//Ticks
 	
-	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
+	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn) {
 		super("SweepTurn", timeout);
 		
 		reverse = r < 0;
 		
 		this.sweepAngle = sweepAngle;
 		this.left = leftTurn;
-		this.chain = chain;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
 		
 		this.radius = Math.abs(r);
 	}
 
-	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
-		this(timeout, 90, r, leftTurn, chain);
+	public SweepTurn(long timeout, double r, boolean leftTurn) {
+		this(timeout, 90, r, leftTurn);
 	}
 
 	@Override
@@ -73,7 +71,10 @@ public class SweepTurn extends AutonRoutine{
 				leftSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
 				rightSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
 				
-				robotOutput.tankDrive(leftSpeed, rightSpeed);
+				if(reverse)
+					robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+				else
+					robotOutput.tankDrive(leftSpeed, rightSpeed);
 				
 				Thread.sleep(5);
 			}
@@ -85,7 +86,10 @@ public class SweepTurn extends AutonRoutine{
 				leftSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
 				rightSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
 				
-				robotOutput.tankDrive(leftSpeed, rightSpeed);
+				if(reverse)
+					robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+				else
+					robotOutput.tankDrive(leftSpeed, rightSpeed);
 				
 				Thread.sleep(5);
 			}

@@ -24,10 +24,10 @@ public class TwoCubeRight extends AutonRoutine{
 		if(fms.plateLeft(1)) {
 			new DriveToDistance(5000, position.getX(), 145, 0, 20, true).runUntilFinish();
 			
-			new SweepTurn(2000, 48, true, false).runUntilFinish();
+			new SweepTurn(2000, 48, true).runUntilFinish();
 			//elevator.goToTarget(elevator.ONE_FOOT*6);
 			new DriveToDistance(5000, -125-3, position.getY(), -90, 20, true).runUntilFinish();//-90
-			new SweepTurn(2000, 110, 40, false, false).runUntilFinish();
+			new SweepTurn(2000, 110, 40, false).runUntilFinish();
 			
 			waitFor("Calibrate", 0);
 			
@@ -45,13 +45,13 @@ public class TwoCubeRight extends AutonRoutine{
 			elevator.goToBottom();
 			
 			//-------------Grab Cube-------------
-			new SweepTurn(2000, 130,-20, true, false).runUntilFinish();
+			new SweepTurn(2000, 130,-20, true).runUntilFinish();
 			
 			
 			if(fms.plateLeft(0))
 			{
 				arm.goToPosition(arm.POS_BOTTOM);
-				new SweepTurn(2000, 30, 50, false, false).runUntilFinish();
+				new SweepTurn(2000, 30, 50, false).runUntilFinish();
 				
 				intake.setIntake(-1);
 				intake.setClamp(intake.FREE);
@@ -96,7 +96,7 @@ public class TwoCubeRight extends AutonRoutine{
 			elevator.goToTarget(elevator.ONE_FOOT*4);
 			new DriveToDistance(5000, position.getX(), 200, 0, 20, true).runUntilFinish();
 
-			new SweepTurn(2000, 45, 48, true, false).runUntilFinish();
+			new SweepTurn(2000, 45, 48, true).runUntilFinish();
 
 			arm.goToPosition(-40);
 			
@@ -108,7 +108,7 @@ public class TwoCubeRight extends AutonRoutine{
 			Thread.sleep(500);
 			robotOutput.setIntake(0);
 
-			new SweepTurn(1000, 45, -48, false, false).runUntilFinish();
+			new SweepTurn(1000, 45, -48, false).runUntilFinish();
 			
 			elevator.goToBottom();
 			

@@ -19,12 +19,12 @@ public class Switch extends AutonRoutine{
 		
 		if(fms.plateLeft(0)) {
 			elevator.goToTarget(700);
-			new SweepTurn(2500, 130/4, true, false).runUntilFinish();
+			new SweepTurn(2500, 130/4, true).runUntilFinish();
 			new DriveToDistance(2500, -80, position.getY(), -80, 10, false).runUntilFinish();
 			
 			waitFor("Calibrate", 0);
 			arm.goToPosition(-40);
-			new SweepTurn(2500, 130/4, false, false).runUntilFinish();
+			new SweepTurn(2500, 130/4, false).runUntilFinish();
 			new DriveToDistance(2500, position.getX(), 80, 0, 10, false).runUntilFinish();
 			
 			intake.setClamp(intake.FREE);

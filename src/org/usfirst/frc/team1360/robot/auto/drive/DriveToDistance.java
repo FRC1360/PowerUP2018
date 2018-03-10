@@ -50,7 +50,7 @@ public class DriveToDistance extends AutonRoutine{
 			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 			
 			if(chain) {
-				speed = 1;
+				speed = 0.75;
 			} else {
 				speed = pidSpeed.calculate(target, encoderAverage);
 			}

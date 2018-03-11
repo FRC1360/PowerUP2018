@@ -180,6 +180,10 @@ public class SensorInput implements SensorInputProvider {
 		this.resetAHRS();
 		this.resetLeftEncoder();
 		this.resetRightEncoder();
+		rightDriveEnc.setSamplesToAverage(50);
+		leftDriveEnc.setSamplesToAverage(50);
+		rightDriveEnc.setMaxPeriod(1.0);
+		leftDriveEnc.setMaxPeriod(1.0);
 	}
 
 	@Override
@@ -195,13 +199,13 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public double getLeftEncoderVelocity() {
 		// TODO Auto-generated method stub
-		return 0;
+		return leftDriveEnc.getRate();
 	}
 
 	@Override
 	public double getRightEncoderVelocity() {
 		// TODO Auto-generated method stub
-		return 0;
+		return rightDriveEnc.getRate();
 	}
 
 	@Override

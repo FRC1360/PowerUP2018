@@ -21,11 +21,13 @@ public class SolidworksTwoCube extends AutonRoutine{
 		
 		new DriveToDistance(10000, 0, 210, 0, 0, true).runUntilFinish();
 		
-		new SweepTurn(10000, 38.3, 100, true).runUntilFinish();
+		new SweepTurn(10000, 38.3, 100, true, true).runUntilFinish();
 		
-		new SweepTurn(10000, -82.07, 40, true).runUntilFinish();
+		new SweepTurn(10000, -82.07, 40, false, false).runUntilFinish();
 		
-		new DriveToDistance(10000, -30.42, 196.91, -97.93, 0, true).runUntilFinish();
+		new DriveToDistance(10000, -30.42, 196.91, -130, 0, false).runUntilFinish();
+		
+		robotOutput.tankDrive(0, 0);
 		
 	}
 

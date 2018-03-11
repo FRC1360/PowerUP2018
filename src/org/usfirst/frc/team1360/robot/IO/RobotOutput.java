@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1360.robot.IO;
 
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
+import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonSee;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
@@ -28,16 +29,25 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
+	private SensorInputProvider sensorInput;
+	
 	private final double CHEESY_SPEED_DEADZONE = 0.1;
 	private final double CHEESY_TURN_DEADZONE = 0.1;
 	private final double CHEESY_SENSITIVITY_HIGH = 0.75;
 	private final double CHEESY_SENSITIVITY_LOW = 0.75;
 	private double oldTurn, quickStopAccumulator;
 	
+	private static final double MAX_VELOCITY_LOW = 600;
+	
+	private OrbitPID driveLeft = new OrbitPID(0.25, 0.0, 0.0, 1);
+	private OrbitPID driveRight = new OrbitPID(0.25, 0.0, 0.0, 1);
+	
 	private MatchLogProvider matchLogger;
 	
 	public RobotOutput() //Instantiates all motors and solenoid
 	{
+		sensorInput = Singleton.get(SensorInputProvider.class);
+		
 		matchLogger = Singleton.get(MatchLogProvider.class);
 		matchLogger.write("Instantiating RobotOutput");
 		
@@ -129,10 +139,21 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public void tankDrive(double left, double right) // Basic tank drive helper
 	{
+		/*
+		double leftPercent = sensorInput.getLeftEncoderVelocity() / MAX_VELOCITY_LOW;
+		double rightPercent = sensorInput.getRightEncoderVelocity() / MAX_VELOCITY_LOW;
 		
+		double outLeft = driveLeft.calculate(left, leftPercent);
+		double outRight = driveRight.calculate(right, rightPercent);
+		
+		SmartDashboard.putNumber("Left Speed", outLeft);
+		SmartDashboard.putNumber("Right Speed", outRight);
+		
+		SmartDashboard.putNumber("Outer Velocity", sensorInput.getLeftEncoderVelocity());
+		SmartDashboard.putNumber("Inner Velocity", sensorInput.getRightEncoderVelocity());
+		*/
 		setDriveLeft(left);
-		setDriveRight(right);
-		
+		setDriveRight(right);	
 	}
 	
 	public void arcadeDrive(double speed, double turn) // Arcade drive algorithm that filters turn
@@ -156,8 +177,7 @@ public class RobotOutput implements RobotOutputProvider {
 			right = speed;
 		}
 		
-		setDriveLeft(left);
-		setDriveRight(right);
+		tankDrive(left, right);
 	}
 	
 	public void arcadeDrivePID(double speed, double turn) // Non-filtering arcade drive algorithm for use in PID-based autos

@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
 		
+		
 		arm.start();
 		elevator.start();
 	}
@@ -205,6 +206,8 @@ public class Robot extends TimedRobot {
 		AutonControl.select();
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		
+		SmartDashboard.putNumber("VEL RIGHT", sensorInput.getRightEncoderVelocity());
 		
 		/*
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());

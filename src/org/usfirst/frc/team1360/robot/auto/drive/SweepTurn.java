@@ -18,12 +18,13 @@ public class SweepTurn extends AutonRoutine{
 	private boolean left;
 	private boolean dampen;
 	private boolean chain;
+	private double fps;//ft/sec
 	
 	private final double DRIVE_WIDTH = 24.7;//inches
-	private final double TARGET_SPEED = 7;//ft/sec
+
 	private final double TICKS_PER_INCH = 5.30516;//Ticks
 	
-	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
+	public SweepTurn(long timeout, double sweepAngle, double r, double fps, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
 		
 		reverse = sweepAngle < 0;
@@ -35,22 +36,23 @@ public class SweepTurn extends AutonRoutine{
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
 		this.angleOffset = sensorInput.getAHRSYaw();
+		this.fps = fps;
 		
 		this.radius = r-12.35;
 	}
 	
 	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean dampen, boolean chain) {
-		this(timeout, sweepAngle, r, leftTurn, chain);
+		this(timeout, sweepAngle, r, 7.5, leftTurn, chain);
 		this.dampen = dampen;
 	}
 
 	public SweepTurn(long timeout, double r, boolean leftTurn, boolean dampen, boolean chain) {
-		this(timeout, 90, r, leftTurn, chain);
+		this(timeout, 90, r, 7.5, leftTurn, chain);
 		this.dampen = dampen;
 	}
 	
 	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
-		this(timeout, 90, r, leftTurn, chain);
+		this(timeout, 90, r, 7.5, leftTurn, chain);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class SweepTurn extends AutonRoutine{
 		int outerTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
 		
 		//convert ft/s to ticks/s
-		double ticksPerSec = TICKS_PER_INCH * (TARGET_SPEED * 12);
+		double ticksPerSec = TICKS_PER_INCH * (fps * 12);
 		
 		//Calculate total time to do the sweep assuming our ticks/s is the outer speed
 		double timeForMovement = outerTicks / ticksPerSec;

@@ -20,7 +20,7 @@ public final class Test extends AutonRoutine {
 
 		new DriveToInch(5000, 100, 0, 0, true).runUntilFinish();
 		
-		new SweepTurn(2000, 90, 36, true, false).runUntilFinish();
+		//new SweepTurn(2000, 90, 36, true, false).runUntilFinish();
 		
 		
 		//new SweepTurn(10000, 90, 40, true, false).runUntilFinish();

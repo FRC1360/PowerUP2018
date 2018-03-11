@@ -16,9 +16,9 @@ public class DriveToInch extends AutonRoutine{
 	double targetAngle;
 	boolean chain;
 	boolean reverse;
-	double TARGET_SPEED = (7 * 12) * TICKS_PER_INCH;
+	double fps;
 	
-	public DriveToInch(long timeout, double dis, double A, double eps, boolean chain) {
+	public DriveToInch(long timeout, double dis, double A, double fps, boolean chain) {
 		super("DriveToDistance", timeout);
 		
 		
@@ -26,12 +26,15 @@ public class DriveToInch extends AutonRoutine{
 		this.dis = Math.abs(dis);
 		this.chain = chain;
 		this.eps = eps;
+		this.fps = fps;
 		this.targetAngle = Math.toRadians(A);
 	}
+	
 
 	@Override
 	protected void runCore() throws InterruptedException
 	{
+		double TARGET_SPEED = (fps * 12) * TICKS_PER_INCH;
 		double speed;
 		double target = dis * this.TICKS_PER_INCH;
 		double driveOffset = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;

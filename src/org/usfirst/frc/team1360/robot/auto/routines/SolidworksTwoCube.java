@@ -17,6 +17,7 @@ public class SolidworksTwoCube extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
+		/*
 		new Calibrate().runNow("Calibrate");
 		
 		new DriveToDistance(10000, 0, 210, 0, 0, true).runUntilFinish();
@@ -28,7 +29,7 @@ public class SolidworksTwoCube extends AutonRoutine{
 		new DriveToDistance(10000, -30.42, 196.91, -130, 0, false).runUntilFinish();
 		
 		robotOutput.tankDrive(0, 0);
-		
+		*/
 	}
 
 }

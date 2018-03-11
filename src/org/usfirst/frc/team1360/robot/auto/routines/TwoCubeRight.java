@@ -27,17 +27,17 @@ public class TwoCubeRight extends AutonRoutine{
 			matchLogger.writeClean("AUTO LOG 1: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(5000, 185, 0, 9, true).runUntilFinish();
+			new DriveToInch(5000, 170, 0, 10, true).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 			sensorInput.getAHRSYaw());
 			
-			new SweepTurn(10000, 85, 36, 9, true, true).runUntilFinish();
+			new SweepTurn(10000, 80, 48, 10, true, true).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(5000, 186, -90, 7.5, true).runUntilFinish();
+			new DriveToInch(5000, 174, -90, 7.5, true).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
@@ -52,8 +52,8 @@ public class TwoCubeRight extends AutonRoutine{
 			while(sensorInput.getElevatorEncoder() < elevator.ONE_FOOT*4) Thread.sleep(10);
 			arm.goToPosition(-15);
 			new ElevatorToTarget(1500, (int) (elevator.ONE_FOOT*5)).runUntilFinish();
+
 			
-			intake.setClamp(intake.FREE);
 			Thread.sleep(250);
 			intake.setIntake(1);
 			arm.goToTop();
@@ -73,8 +73,6 @@ public class TwoCubeRight extends AutonRoutine{
 						sensorInput.getAHRSYaw());
 				
 				new SweepTurn(10000, 90, 24, 7.5, false, true).runUntilFinish();
-				
-				//new FaceAngle(2000, 159).runUntilFinish();
 				
 				matchLogger.writeClean("AUTO LOG 7: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 						sensorInput.getAHRSYaw());

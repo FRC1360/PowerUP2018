@@ -58,10 +58,10 @@ public class SweepTurn extends AutonRoutine{
 		double leftSpeed;
 		double rightSpeed;
 		
-		OrbitPID pidInner = new OrbitPID(0.01, 0.0, 0.0);
+		OrbitPID pidInner = new OrbitPID(0.005, 0.0, 0.1);
 		OrbitPID pidOuter = new OrbitPID(0.01, 0.0, 0.0);
 		
-		OrbitPID dampen = new OrbitPID(0.02, 0.0, 0.0);
+		OrbitPID dampen = new OrbitPID(0.045, 0.0, 0.0);
 		
 		//middle ticks if there was a wheel there
 		int middleTicks = (int) (((radius * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
@@ -73,13 +73,13 @@ public class SweepTurn extends AutonRoutine{
 		//convert ft/s to ticks/s
 		double ticksPerSec = TICKS_PER_INCH * (TARGET_SPEED * 12);
 		
-		//Calculate total time to do the sweep assuming our ticks/s is the outter speed
+		//Calculate total time to do the sweep assuming our ticks/s is the outer speed
 		double timeForMovement = outerTicks / ticksPerSec;
 		
 		//calculate inner velocity based off of the time
 		double innerVelocity = innerTicks / timeForMovement;
 		
-		//calculate outer veloctiy based off of the time
+		//calculate outer velocity based off of the time
 		double outerVelocity = ticksPerSec;
 		
 		double dampenAmt;
@@ -88,32 +88,22 @@ public class SweepTurn extends AutonRoutine{
 		{
 			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {			
 				
-				leftSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
-				rightSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
-				
-				SmartDashboard.putNumber("Inner Velocity", Math.abs(sensorInput.getLeftEncoderVelocity()));
-				SmartDashboard.putNumber("Outer Velocity", Math.abs(sensorInput.getRightEncoderVelocity()));
-				
-				SmartDashboard.putNumber("Target Inner Velocity", innerVelocity);
-				SmartDashboard.putNumber("Target Outer Velocity", outerVelocity);
-				
-				SmartDashboard.putNumber("Target Angle", sweepAngle);
-				SmartDashboard.putNumber("Current Angle", Math.abs(angleOffset - sensorInput.getAHRSYaw()));
-				SmartDashboard.putNumber("Raw Sensor", sensorInput.getAHRSYaw());
-				
-				
 				if(!chain)
 				{	
 					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()));
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					
-					SmartDashboard.putNumber("Dampen Amt", dampenAmt);
+					if(dampenAmt < 0)
+						dampenAmt = 0;
 					
-					leftSpeed = leftSpeed * dampenAmt;
-					rightSpeed = rightSpeed * dampenAmt;
+					leftSpeed = pidInner.calculate(innerVelocity*dampenAmt, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidOuter.calculate(outerVelocity*dampenAmt, Math.abs(sensorInput.getRightEncoderVelocity()));
 				}
-
+				else {
+					leftSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
+				}
 				
 				if(reverse)
 					robotOutput.tankDrive(-leftSpeed, -rightSpeed);
@@ -122,28 +112,32 @@ public class SweepTurn extends AutonRoutine{
 				
 				Thread.sleep(5);
 			}
+			robotOutput.tankDrive(0, 0);
 		}
 		else
 		{
 			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {
 				
-				leftSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
-				rightSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
-				
-				SmartDashboard.putNumber("Target Angle", sweepAngle);
-				SmartDashboard.putNumber("Current Angle", Math.abs(Math.abs(angleOffset) - sensorInput.getAHRSYaw()));
-				SmartDashboard.putNumber("Raw Sensor", sensorInput.getAHRSYaw());
 				
 				if(!chain)
 				{
 					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()));
+					
+
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					
-					SmartDashboard.putNumber("Dampen Amt", dampenAmt);
 					
-					leftSpeed = leftSpeed * dampenAmt;
-					rightSpeed = rightSpeed * dampenAmt;
+					if(dampenAmt < 0)
+						dampenAmt = 0;
+					
+					leftSpeed = pidOuter.calculate(outerVelocity*dampenAmt, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidInner.calculate(innerVelocity*dampenAmt, Math.abs(sensorInput.getRightEncoderVelocity()));
+					
+				}
+				else {
+					leftSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
 				}
 				
 				if(reverse)
@@ -153,6 +147,7 @@ public class SweepTurn extends AutonRoutine{
 				
 				Thread.sleep(5);
 			} 
+			robotOutput.tankDrive(0, 0);
 		}
 		
 		robotOutput.tankDrive(0, 0);

@@ -11,12 +11,12 @@ public class DriveToInch extends AutonRoutine{
 	double gearRatio = 3.0 / 1.0;
 	double wheelDiameter = 5.0;
 	double ticksPerRotation = 250;
-	double inchesPerTick = Math.PI * gearRatio * wheelDiameter / ticksPerRotation;
-	double ticksPerInch = 1 / inchesPerTick;
+	double TICKS_PER_INCH = 5.30516;
 	double dis;
 	double targetAngle;
 	boolean chain;
 	boolean reverse;
+	double TARGET_SPEED = (7 * 12) * TICKS_PER_INCH;
 	
 	public DriveToInch(long timeout, double dis, double A, double eps, boolean chain) {
 		super("DriveToDistance", timeout);
@@ -33,11 +33,13 @@ public class DriveToInch extends AutonRoutine{
 	protected void runCore() throws InterruptedException
 	{
 		double speed;
-		double target = dis * this.ticksPerInch;
+		double target = dis * this.TICKS_PER_INCH;
 		double driveOffset = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 		OrbitPID pidAngle = new OrbitPID(1, 0.003 , 0.3);//p = 4.7 i = 0.0025
-		OrbitPID pidSpeed = new OrbitPID(0.0025, 0.2, 0.2); //p = 0.01 i = 0.2 d = 0.2
+		OrbitPID pidSpeed = new OrbitPID(0.0007, 0.01, 0.5); //p = 0.01 i = 0.2 d = 0.2
+		OrbitPID pidFs = new OrbitPID(0.01, 0.0, 0.0);
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
+		
 		
 		double lastSpeed = 0;
 		
@@ -47,19 +49,22 @@ public class DriveToInch extends AutonRoutine{
 			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 			
 			if(chain) {
-				speed = 0.75;
+				speed = pidFs.calculate(TARGET_SPEED, (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2);
+				SmartDashboard.putNumber("Target Velocity", TARGET_SPEED);
 			} else {
 				speed = pidSpeed.calculate(target, Math.abs(encoderAverage-driveOffset));
 			}
 			
 			matchLogger.write(String.format("SPEED == %f, TURN == %f", speed, turn));
 			
+			/*
 			if(speed > 0.75) speed = 0.75;
 			speed -= lastSpeed;
 			if (Math.abs(speed) > 0.05)
 				speed = Math.copySign(0.05, speed);
 			speed += lastSpeed;
 			lastSpeed = speed;
+			*/
 			
 			if(reverse)
 				speed = -speed;

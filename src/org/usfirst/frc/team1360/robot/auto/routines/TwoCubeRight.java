@@ -5,6 +5,7 @@ import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
 import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
+import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
 public class TwoCubeRight extends AutonRoutine{
@@ -20,24 +21,37 @@ public class TwoCubeRight extends AutonRoutine{
 	{
 		int offset;
 		double TICK_INCH = 5.30516;
-		//new Calibrate().runNow("Calibrate");
+		new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(1)) {
-			new DriveToInch(5000, 185, 0, 0, false).runUntilFinish();
+			matchLogger.writeClean("AUTO LOG 1: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
 			
-			/*
-			new SweepTurn(2000, 90, 36, true, false).runUntilFinish();
+			new DriveToInch(5000, 185, 0, 0, true).runUntilFinish();
 			
-			//new DriveToDistance(5000, -201, 221, -90, 0, true).runUntilFinish();
-			new DriveToInch(5000, 180, -90, 0, false).runUntilFinish();
+			matchLogger.writeClean("AUTO LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			sensorInput.getAHRSYaw());
+			
+			new SweepTurn(10000, 90, 36, true, true).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
+			
+			new DriveToInch(5000, 186, -90, 0, true).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
 
-			new SweepTurn(2000, 137, 26, false, false).runUntilFinish();
+			new SweepTurn(2000, 130, 30, false, false).runUntilFinish();//36
 			
-			//new ElevatorToTarget(1500, elevator.POS_TOP-50).runUntilFinish();
+			matchLogger.writeClean("AUTO LOG 5: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
 			
-			//waitFor("Calibrate", 0);
+			new ElevatorToTarget(1500, elevator.POS_TOP-50).runUntilFinish();
 			
-			/*
+			waitFor("Calibrate", 0);
+			
+			
 			arm.goToPosition(-35);
 			Thread.sleep(500);
 			
@@ -52,17 +66,30 @@ public class TwoCubeRight extends AutonRoutine{
 			if(fms.plateLeft(0))
 			{
 				
-				//new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
+				new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
 
-				/*
+				
 				arm.goToPosition(arm.POS_BOTTOM);
 				
 				intake.setIntake(-1);
 				intake.setClamp(intake.FREE);
 				
-				new DriveToInch(2000, 70, 159, 0, false).runUntilFinish();
+				matchLogger.writeClean("AUTO LOG 6: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+						sensorInput.getAHRSYaw());
 				
-				/*
+				new SweepTurn(10000, 90, 24, false, true).runUntilFinish();
+				
+				//new FaceAngle(2000, 159).runUntilFinish();
+				
+				matchLogger.writeClean("AUTO LOG 7: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+						sensorInput.getAHRSYaw());
+				
+				new DriveToInch(2000, 90, 159, 0, false).runUntilFinish();
+				
+				matchLogger.writeClean("AUTO LOG 8: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+						sensorInput.getAHRSYaw());
+				
+				
 				arm.goToTop();
 				intake.setIntake(0);
 				intake.setClamp(intake.CLOSED);

@@ -39,7 +39,7 @@ public class DriveToDistance extends AutonRoutine{
 		double encoderStartAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
 		double target = encoderStartAverage + distance;
 		OrbitPID pidAngle = new OrbitPID(1, 0.003 , 0.3);//p = 4.7 i = 0.0025
-		OrbitPID pidSpeed = new OrbitPID(0.0025, 0.2, 0.2); //p = 0.01 i = 0.2 d = 0.2
+		OrbitPID pidSpeed = new OrbitPID(0.5, 0.0, 0.0); //p = 0.01 i = 0.2 d = 0.1
 		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
 		
 		double lastSpeed = 0;
@@ -51,6 +51,7 @@ public class DriveToDistance extends AutonRoutine{
 			
 			SmartDashboard.putNumber("Current Angle", sensorInput.getAHRSYaw());
 			SmartDashboard.putNumber("Turn", turn);
+
 			
 			if(chain) {
 				speed = 0.5;
@@ -58,20 +59,23 @@ public class DriveToDistance extends AutonRoutine{
 				speed = pidSpeed.calculate(target, encoderAverage);
 			}
 			
+			SmartDashboard.putNumber("Speed", speed);
+			
 			matchLogger.write(String.format("SPEED == %f, TURN == %f", speed, turn));
 			
 			if(speed > 0.75) speed = 0.75;
-			speed -= lastSpeed;
+			
+			/*speed -= lastSpeed;
 			if (Math.abs(speed) > 0.05)
 				speed = Math.copySign(0.05, speed);
 			speed += lastSpeed;
-			lastSpeed = speed;
+			lastSpeed = speed;*/
 			robotOutput.arcadeDrive(speed, turn);
 			
 			//matchLogger.write(String.format("Current Distance: %d of %d", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2, target));
 			
 			Thread.sleep(10);
-		} while ((sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2 < target - eps);
+		} while ((sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2 < target);
 
 		robotOutput.tankDrive(0, 0);
 	}

@@ -17,12 +17,9 @@ public final class Test extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
+
 		
-		new SweepTurn(2000, 90, 36, true, false).runUntilFinish();
-		
-		Thread.sleep(2000);
-		
-		new SweepTurn(2000, 137, 26, false, false).runUntilFinish();
+		new SweepTurn(2000, 137, 26, true, false).runUntilFinish();
 		
 		
 		//new SweepTurn(10000, 90, 40, true, false).runUntilFinish();

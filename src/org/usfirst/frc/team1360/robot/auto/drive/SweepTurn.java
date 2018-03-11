@@ -20,7 +20,7 @@ public class SweepTurn extends AutonRoutine{
 	private boolean chain;
 	
 	private final double DRIVE_WIDTH = 24.7;//inches
-	private final double TARGET_SPEED = 5;//ft/sec
+	private final double TARGET_SPEED = 7;//ft/sec
 	private final double TICKS_PER_INCH = 5.30516;//Ticks
 	
 	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
@@ -59,7 +59,7 @@ public class SweepTurn extends AutonRoutine{
 		double rightSpeed;
 		
 		OrbitPID pidInner = new OrbitPID(0.01, 0.0, 0.0);
-		OrbitPID pidOuter = new OrbitPID(0.015, 0.0, 0.05);
+		OrbitPID pidOuter = new OrbitPID(0.01, 0.0, 0.0);
 		
 		OrbitPID dampen = new OrbitPID(0.02, 0.0, 0.0);
 		
@@ -74,13 +74,13 @@ public class SweepTurn extends AutonRoutine{
 		double ticksPerSec = TICKS_PER_INCH * (TARGET_SPEED * 12);
 		
 		//Calculate total time to do the sweep assuming our ticks/s is the outter speed
-		double timeForMovement = middleTicks / ticksPerSec;
+		double timeForMovement = outerTicks / ticksPerSec;
 		
 		//calculate inner velocity based off of the time
 		double innerVelocity = innerTicks / timeForMovement;
 		
 		//calculate outer veloctiy based off of the time
-		double outerVelocity = outerTicks / timeForMovement;
+		double outerVelocity = ticksPerSec;
 		
 		double dampenAmt;
 		
@@ -98,13 +98,13 @@ public class SweepTurn extends AutonRoutine{
 				SmartDashboard.putNumber("Target Outer Velocity", outerVelocity);
 				
 				SmartDashboard.putNumber("Target Angle", sweepAngle);
-				SmartDashboard.putNumber("Current Angle", Math.abs(angleOffset - Math.abs(sensorInput.getAHRSYaw())));
+				SmartDashboard.putNumber("Current Angle", Math.abs(angleOffset - sensorInput.getAHRSYaw()));
 				SmartDashboard.putNumber("Raw Sensor", sensorInput.getAHRSYaw());
 				
 				
 				if(!chain)
 				{	
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(Math.abs(angleOffset) - Math.abs(sensorInput.getAHRSYaw())));
+					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()));
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					
@@ -136,7 +136,7 @@ public class SweepTurn extends AutonRoutine{
 				
 				if(!chain)
 				{
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - Math.abs(sensorInput.getAHRSYaw())));
+					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()));
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					

@@ -32,7 +32,7 @@ public class TwoCubeRight extends AutonRoutine{
 			matchLogger.writeClean("AUTO LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 			sensorInput.getAHRSYaw());
 			
-			new SweepTurn(10000, 90, 36, 9, true, true).runUntilFinish();
+			new SweepTurn(10000, 85, 36, 9, true, true).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
@@ -47,23 +47,22 @@ public class TwoCubeRight extends AutonRoutine{
 			matchLogger.writeClean("AUTO LOG 5: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
+			elevator.startManual();
+			elevator.setManualSpeed(1.0, false);
+			while(sensorInput.getElevatorEncoder() < elevator.ONE_FOOT*4) Thread.sleep(10);
+			arm.goToPosition(-15);
 			new ElevatorToTarget(1500, (int) (elevator.ONE_FOOT*5)).runUntilFinish();
 			
-			waitFor("Calibrate", 0);
-			
-			arm.goToPosition(-10);
-			Thread.sleep(500);
-			
 			intake.setClamp(intake.FREE);
+			Thread.sleep(250);
 			intake.setIntake(1);
-			Thread.sleep(500);
-			intake.setIntake(0);
 			arm.goToTop();
 			/**/
 			
 			if(fms.plateLeft(0))
 			{
 				new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
+				intake.setIntake(0);
 
 				arm.goToPosition(arm.POS_BOTTOM);
 				

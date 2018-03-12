@@ -8,6 +8,8 @@ import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
 import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TwoCubeRight extends AutonRoutine{
 
 	public TwoCubeRight() {
@@ -19,6 +21,7 @@ public class TwoCubeRight extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
+		long start = System.currentTimeMillis();
 		int offset;
 		double TICK_INCH = 5.30516;
 		new Calibrate().runNow("Calibrate");
@@ -97,7 +100,7 @@ public class TwoCubeRight extends AutonRoutine{
 				intake.setClamp(intake.FREE);
 				new DriveToInch(1000, 6, 190, 10, true).runUntilFinish(); //159
 				robotOutput.tankDrive(0, 0);
-				Thread.sleep(10000);
+				SmartDashboard.putNumber("Auto time", (System.currentTimeMillis() - start) / 1000.0);
 				
 				
 				/*

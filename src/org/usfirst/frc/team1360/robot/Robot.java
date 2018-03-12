@@ -212,7 +212,6 @@ public class Robot extends TimedRobot {
 		
 		SmartDashboard.putNumber("VEL RIGHT", sensorInput.getRightEncoderVelocity());
 		
-		/*
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
@@ -224,7 +223,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
-		*/
 	}
 
 	/**

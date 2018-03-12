@@ -88,7 +88,7 @@ public class SensorInput implements SensorInputProvider {
 				synchronized (this)
 				{
 					// Get values from AHRS
-					ahrsValues[0] = ahrs.getYaw();
+					ahrsValues[0] = ahrs.getAngle();
 					ahrsValues[1] = ahrs.getPitch();
 					ahrsValues[2] = ahrs.getRoll();
 					ahrsValues[3] = ahrs.getWorldLinearAccelX();

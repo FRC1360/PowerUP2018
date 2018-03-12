@@ -88,19 +88,14 @@ public class SweepTurn extends AutonRoutine{
 		double dampenAmt;
 		
 		if(left)
-		{
-			double retrievedAngle = sensorInput.getAHRSYaw();
-			
-			
-			while(retrievedAngle/*Math.toDegrees(position.getA())*/ < sweepAngle) {			
+		{		
+			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {			
 				
-				retrievedAngle = sensorInput.getAHRSYaw();
-				
-				matchLogger.writeClean("AUTO DEBUG " + Double.toString(retrievedAngle));
+				//matchLogger.writeClean("AUTO DEBUG " + Double.toString(sensorInput.getAHRSYaw()));
 				
 				if(!chain)
 				{	
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - retrievedAngle) /*Math.toDegrees(position.getA())*/);
+					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()) /*Math.toDegrees(position.getA())*/);
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					
@@ -125,21 +120,15 @@ public class SweepTurn extends AutonRoutine{
 			robotOutput.tankDrive(0, 0);
 		}
 		else
-		{
-			double retrievedAngle = sensorInput.getAHRSYaw();
-			
-			
-			
-			while(retrievedAngle /*Math.toDegrees(position.getA())*/ < sweepAngle) {
-				
-				retrievedAngle =  sensorInput.getAHRSYaw();
-				
-				matchLogger.writeClean("AUTO DEBUG " + Double.toString(retrievedAngle));
+		{			
+			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {
+
+				//matchLogger.writeClean("AUTO DEBUG " + Double.toString(sensorInput.getAHRSYaw()));
 				
 				
 				if(!chain)
 				{
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - retrievedAngle) /*Math.toDegrees(position.getA())*/);
+					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()) /*Math.toDegrees(position.getA())*/);
 					
 
 					if(dampenAmt > 1) 

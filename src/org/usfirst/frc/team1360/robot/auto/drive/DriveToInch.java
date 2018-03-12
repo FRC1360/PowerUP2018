@@ -39,8 +39,8 @@ public class DriveToInch extends AutonRoutine{
 		int leftEncoderOffset = sensorInput.getLeftDriveEncoder();
 		int rightEncoderOffset = sensorInput.getRightDriveEncoder();
 		
-		OrbitPID pidAngle = new OrbitPID(1, 0.003 , 0.3);//p = 4.7 i = 0.0025
-		OrbitPID pidSpeed = new OrbitPID(0.0007, 0.01, 0.5); //p = 0.01 i = 0.2 d = 0.2
+		OrbitPID pidAngle = new OrbitPID(0.05, 0.1, 0.0);//p = 4.7 i = 0.0025
+		OrbitPID pidSpeed = new OrbitPID(0.0007, 0.01, 0.0); //p = 0.01 i = 0.2 d = 0.2
 		OrbitPID pidFs = new OrbitPID(0.01, 0.0, 0.0);
 		
 		int leftEncoderActual = 0;
@@ -50,25 +50,31 @@ public class DriveToInch extends AutonRoutine{
 			double loggedAngle = Math.toRadians(sensorInput.getAHRSYaw());
 			matchLogger.writeClean("NAVX DEBUG" + sensorInput.getAHRSYaw() + " RAW: " + loggedAngle);
 			
-			double turn = pidAngle.calculate(targetAngle, loggedAngle /* position.getA()*/);
+			double turn = pidAngle.calculate(leftEncoderOffset - rightEncoderOffset, sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder());
 			
 			double encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;
 			
 			if(chain) {
 				speed = pidFs.calculate(TARGET_SPEED, (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2);
+				
 				SmartDashboard.putNumber("Target Velocity", TARGET_SPEED);
+				matchLogger.writeClean("MOVEMENT SPEED " + speed);
 				
 				if(speed > 1)
-					speed = 1;
+					speed = 0.9;
 			} else {
 				speed = pidSpeed.calculate(target, Math.abs(encoderAverage));
+				//matchLogger.writeClean("MOVEMENT SPEED " + speed);
 			}
 			
 
 			
 			if(reverse)
 				speed = -speed;
-			robotOutput.arcadeDrive(speed, turn);
+			robotOutput.arcadeDrivePID(speed, turn);
+			
+			
+			
 			
 			
 			Thread.sleep(10);
@@ -77,7 +83,7 @@ public class DriveToInch extends AutonRoutine{
 			rightEncoderActual = sensorInput.getRightDriveEncoder() - rightEncoderOffset;
 		} while (Math.abs((leftEncoderActual + rightEncoderActual) / 2) < target);
 
-		robotOutput.tankDrive(0, 0);
+		//robotOutput.tankDrive(0, 0);
 	}
 
 }

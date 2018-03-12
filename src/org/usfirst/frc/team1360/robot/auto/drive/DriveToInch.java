@@ -46,6 +46,8 @@ public class DriveToInch extends AutonRoutine{
 		int leftEncoderActual = 0;
 		int rightEncoderActual = 0;
 		
+		double currentVel;
+		
 		do {
 			double loggedAngle = Math.toRadians(sensorInput.getAHRSYaw());
 			matchLogger.writeClean("NAVX DEBUG" + sensorInput.getAHRSYaw() + " RAW: " + loggedAngle);
@@ -53,9 +55,10 @@ public class DriveToInch extends AutonRoutine{
 			double turn = pidAngle.calculate(leftEncoderOffset - rightEncoderOffset, sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder());
 			
 			double encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;
+			currentVel = (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2;
 			
 			if(chain) {
-				speed = pidFs.calculate(TARGET_SPEED, (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2);
+				speed = pidFs.calculate(TARGET_SPEED, currentVel);
 				
 				SmartDashboard.putNumber("Target Velocity", TARGET_SPEED);
 				matchLogger.writeClean("MOVEMENT SPEED " + speed);
@@ -81,7 +84,7 @@ public class DriveToInch extends AutonRoutine{
 			
 			leftEncoderActual = sensorInput.getLeftDriveEncoder() - leftEncoderOffset;
 			rightEncoderActual = sensorInput.getRightDriveEncoder() - rightEncoderOffset;
-		} while (Math.abs((leftEncoderActual + rightEncoderActual) / 2) < target);
+		} while (Math.abs((leftEncoderActual + rightEncoderActual) / 2) < target - Math.abs(currentVel) * 0.035);
 
 		//robotOutput.tankDrive(0, 0);
 	}

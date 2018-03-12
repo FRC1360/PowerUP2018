@@ -61,7 +61,7 @@ public class SweepTurn extends AutonRoutine{
 		double leftSpeed;
 		double rightSpeed;
 		
-		OrbitPID pidInner = new OrbitPID(0.005, 0.0, 0.1);
+		OrbitPID pidInner = new OrbitPID(0.005, 0.003, 0.0);
 		OrbitPID pidOuter = new OrbitPID(0.01, 0.0, 0.0);
 		
 		OrbitPID dampen = new OrbitPID(0.045, 0.0, 0.0);

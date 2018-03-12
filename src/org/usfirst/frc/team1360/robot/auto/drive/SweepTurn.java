@@ -104,16 +104,16 @@ public class SweepTurn extends AutonRoutine{
 					
 					leftSpeed = pidInner.calculate(innerVelocity*dampenAmt, Math.abs(sensorInput.getLeftEncoderVelocity()));
 					rightSpeed = pidOuter.calculate(outerVelocity*dampenAmt, Math.abs(sensorInput.getRightEncoderVelocity()));
-					
-					if (leftSpeed < 0.1)
-						leftSpeed = 0.1;
-					if (rightSpeed < 0.1)
-						rightSpeed = 0.1;
 				}
 				else {
 					leftSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
 					rightSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
 				}
+				
+				if (leftSpeed < -0.1)
+					leftSpeed = -0.1;
+				if (rightSpeed < -0.1)
+					rightSpeed = -0.1;
 				
 				if(reverse)
 					robotOutput.tankDrive(-leftSpeed, -rightSpeed);
@@ -145,16 +145,16 @@ public class SweepTurn extends AutonRoutine{
 					
 					leftSpeed = pidOuter.calculate(outerVelocity*dampenAmt, Math.abs(sensorInput.getLeftEncoderVelocity()));
 					rightSpeed = pidInner.calculate(innerVelocity*dampenAmt, Math.abs(sensorInput.getRightEncoderVelocity()));
-					
-					if (leftSpeed < 0.1)
-						leftSpeed = 0.1;
-					if (rightSpeed < 0.1)
-						rightSpeed = 0.1;
 				}
 				else {
 					leftSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
 					rightSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
 				}
+				
+				if (leftSpeed < -0.1)
+					leftSpeed = -0.1;
+				if (rightSpeed < -0.1)
+					rightSpeed = -0.1;
 				
 				if(reverse)
 					robotOutput.tankDrive(-leftSpeed, -rightSpeed);

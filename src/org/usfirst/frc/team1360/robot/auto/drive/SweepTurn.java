@@ -35,7 +35,8 @@ public class SweepTurn extends AutonRoutine{
 		this.left = leftTurn;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
-		this.angleOffset = sensorInput.getAHRSYaw();
+		this.angleOffset = sensorInput.getAHRSYaw(); /*Math.toDegrees(position.getA())*/;
+		matchLogger.writeClean("NAVX ANGLE OFFSET " + this.angleOffset);
 		this.fps = fps;
 		
 		this.radius = r-12.35;
@@ -88,11 +89,18 @@ public class SweepTurn extends AutonRoutine{
 		
 		if(left)
 		{
-			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {			
+			double retrievedAngle = sensorInput.getAHRSYaw();
+			
+			
+			while(retrievedAngle/*Math.toDegrees(position.getA())*/ < sweepAngle) {			
+				
+				retrievedAngle = sensorInput.getAHRSYaw();
+				
+				matchLogger.writeClean("AUTO DEBUG " + Double.toString(retrievedAngle));
 				
 				if(!chain)
 				{	
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()));
+					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - retrievedAngle) /*Math.toDegrees(position.getA())*/);
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					
@@ -118,12 +126,20 @@ public class SweepTurn extends AutonRoutine{
 		}
 		else
 		{
-			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {
+			double retrievedAngle = sensorInput.getAHRSYaw();
+			
+			
+			
+			while(retrievedAngle /*Math.toDegrees(position.getA())*/ < sweepAngle) {
+				
+				retrievedAngle =  sensorInput.getAHRSYaw();
+				
+				matchLogger.writeClean("AUTO DEBUG " + Double.toString(retrievedAngle));
 				
 				
 				if(!chain)
 				{
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()));
+					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - retrievedAngle) /*Math.toDegrees(position.getA())*/);
 					
 
 					if(dampenAmt > 1) 

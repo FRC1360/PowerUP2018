@@ -21,11 +21,9 @@ public class DriveToInch extends AutonRoutine{
 	public DriveToInch(long timeout, double dis, double A, double fps, boolean chain) {
 		super("DriveToDistance", timeout);
 		
-		
 		this.reverse = dis < 0;
 		this.dis = Math.abs(dis);
 		this.chain = chain;
-		this.eps = eps;
 		this.fps = fps;
 		this.targetAngle = Math.toRadians(A);
 	}
@@ -37,46 +35,47 @@ public class DriveToInch extends AutonRoutine{
 		double TARGET_SPEED = (fps * 12) * TICKS_PER_INCH;
 		double speed;
 		double target = dis * this.TICKS_PER_INCH;
-		double driveOffset = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
+		
+		int leftEncoderOffset = sensorInput.getLeftDriveEncoder();
+		int rightEncoderOffset = sensorInput.getRightDriveEncoder();
+		
 		OrbitPID pidAngle = new OrbitPID(1, 0.003 , 0.3);//p = 4.7 i = 0.0025
 		OrbitPID pidSpeed = new OrbitPID(0.0007, 0.01, 0.5); //p = 0.01 i = 0.2 d = 0.2
 		OrbitPID pidFs = new OrbitPID(0.01, 0.0, 0.0);
-		matchLogger.write(String.format("START ANGLE == %f", sensorInput.getAHRSYaw()));
 		
-		
-		double lastSpeed = 0;
+		int leftEncoderActual = 0;
+		int rightEncoderActual = 0;
 		
 		do {
-			double turn = pidAngle.calculate(targetAngle, Math.toRadians(sensorInput.getAHRSYaw()));
-			matchLogger.write(String.format("ANGLE == %f, PID OUTPUT == %f", sensorInput.getAHRSYaw(), turn));
-			double encoderAverage = (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2;
+			double loggedAngle = Math.toRadians(sensorInput.getAHRSYaw());
+			matchLogger.writeClean("NAVX DEBUG" + sensorInput.getAHRSYaw() + " RAW: " + loggedAngle);
+			
+			double turn = pidAngle.calculate(targetAngle, loggedAngle /* position.getA()*/);
+			
+			double encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;
 			
 			if(chain) {
 				speed = pidFs.calculate(TARGET_SPEED, (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2);
 				SmartDashboard.putNumber("Target Velocity", TARGET_SPEED);
+				
+				if(speed > 1)
+					speed = 1;
 			} else {
-				speed = pidSpeed.calculate(target, Math.abs(encoderAverage-driveOffset));
+				speed = pidSpeed.calculate(target, Math.abs(encoderAverage));
 			}
 			
-			matchLogger.write(String.format("SPEED == %f, TURN == %f", speed, turn));
-			
-			/*
-			if(speed > 0.75) speed = 0.75;
-			speed -= lastSpeed;
-			if (Math.abs(speed) > 0.05)
-				speed = Math.copySign(0.05, speed);
-			speed += lastSpeed;
-			lastSpeed = speed;
-			*/
+
 			
 			if(reverse)
 				speed = -speed;
 			robotOutput.arcadeDrive(speed, turn);
 			
-			//matchLogger.write(String.format("Current Distance: %d of %d", (sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2, target));
 			
 			Thread.sleep(10);
-		} while (Math.abs(((sensorInput.getLeftDriveEncoder() + sensorInput.getRightDriveEncoder()) / 2) - driveOffset) < target);
+			
+			leftEncoderActual = sensorInput.getLeftDriveEncoder() - leftEncoderOffset;
+			rightEncoderActual = sensorInput.getRightDriveEncoder() - rightEncoderOffset;
+		} while (Math.abs((leftEncoderActual + rightEncoderActual) / 2) < target);
 
 		robotOutput.tankDrive(0, 0);
 	}

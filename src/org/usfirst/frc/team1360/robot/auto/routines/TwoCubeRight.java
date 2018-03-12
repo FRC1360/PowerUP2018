@@ -24,38 +24,41 @@ public class TwoCubeRight extends AutonRoutine{
 		new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(1)) {
-			matchLogger.writeClean("AUTO LOG 1: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			matchLogger.writeClean("AUTO DEBUG LOG 1: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(5000, 170, 0, 10, true).runUntilFinish();
+			new DriveToInch(5000, 146, 0, 10, true).runUntilFinish();
 			
-			matchLogger.writeClean("AUTO LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			matchLogger.writeClean("AUTO DEBUG LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 			sensorInput.getAHRSYaw());
 			
-			new SweepTurn(10000, 80, 48, 10, true, true).runUntilFinish();
+			new SweepTurn(10000, 80, 72, 10, true, true).runUntilFinish();
 			
-			matchLogger.writeClean("AUTO LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			matchLogger.writeClean("AUTO DEBUG LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(5000, 174, -90, 7.5, true).runUntilFinish();
+			new DriveToInch(5000, 150, -90, 7.5, true).runUntilFinish();
 			
-			matchLogger.writeClean("AUTO LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			matchLogger.writeClean("AUTO DEBUG LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 
 			new SweepTurn(2000, 130, 30, 7.5, false, false).runUntilFinish();//36
 			
-			matchLogger.writeClean("AUTO LOG 5: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			matchLogger.writeClean("AUTO DEBUG LOG 5: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			elevator.startManual();
-			elevator.setManualSpeed(1.0, false);
-			while(sensorInput.getElevatorEncoder() < elevator.ONE_FOOT*4) Thread.sleep(10);
-			arm.goToPosition(-15);
-			new ElevatorToTarget(1500, (int) (elevator.ONE_FOOT*5)).runUntilFinish();
-
+			//BUG STARTS HERE
+			//elevator.startManual();
+			//elevator.setManualSpeed(1.0, false);
+			//while(sensorInput.getElevatorEncoder() < elevator.ONE_FOOT*3) Thread.sleep(10);
 			
-			Thread.sleep(250);
+			new ElevatorToTarget(1500, (int) (elevator.ONE_FOOT*5)).runUntilFinish();
+			arm.goToPosition(-20);
+			Thread.sleep(1000);
+			
+			intake.setClamp(intake.FREE);
 			intake.setIntake(1);
+			Thread.sleep(250);
 			arm.goToTop();
 			/**/
 			
@@ -69,17 +72,18 @@ public class TwoCubeRight extends AutonRoutine{
 				intake.setIntake(-1);
 				intake.setClamp(intake.FREE);
 				
-				matchLogger.writeClean("AUTO LOG 6: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+				//BUG DOESN'T REACH
+				matchLogger.writeClean("AUTO DEBUG LOG 6: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 						sensorInput.getAHRSYaw());
 				
-				new SweepTurn(10000, 90, 24, 7.5, false, true).runUntilFinish();
+				new SweepTurn(2000, 105, 24, 7.5, false, true).runUntilFinish();//100
 				
-				matchLogger.writeClean("AUTO LOG 7: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+				matchLogger.writeClean("AUTO DEBUG LOG 7: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 						sensorInput.getAHRSYaw());
 				
-				new DriveToInch(2000, 90, 159, 7.5, false).runUntilFinish();
+				new DriveToInch(2000, 90, 170, 7.5, false).runUntilFinish();
 				
-				matchLogger.writeClean("AUTO LOG 8: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+				matchLogger.writeClean("AUTO DEBUG LOG 8: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 						sensorInput.getAHRSYaw());
 				
 				

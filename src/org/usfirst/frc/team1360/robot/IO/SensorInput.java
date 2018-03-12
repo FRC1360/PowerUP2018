@@ -78,7 +78,7 @@ public class SensorInput implements SensorInputProvider {
 
 		ahrsThread = new Thread(() ->
 		{
-			ahrs = new AHRS(SPI.Port.kMXP); // THIS SHOULD BE THE ONLY AHRS CONSTRUCTOR BEING CALLED, IF IT IS NOT, DELETE THE OTHER ONE
+			ahrs = new AHRS(SPI.Port.kMXP, (byte) 127); // THIS SHOULD BE THE ONLY AHRS CONSTRUCTOR BEING CALLED, IF IT IS NOT, DELETE THE OTHER ONE
 			synchronized (this)
 			{
 				notify(); // Inform main thread that this thread has started, and that the AHRS object has been initialized

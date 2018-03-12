@@ -15,29 +15,37 @@ public class DriveToInch extends AutonRoutine{
 	double dis;
 	double targetAngle;
 	boolean chain;
+	boolean useNavx;
 	boolean reverse;
-	double fps;
+	double fpsStart;
+	double fpsEnd;
 	
-	public DriveToInch(long timeout, double dis, double A, double fps, boolean chain) {
+	public DriveToInch(long timeout, double dis, double A, double fpsStart, double fpsEnd, boolean chain, boolean useNavx) {
 		super("DriveToDistance", timeout);
 		
 		this.reverse = dis < 0;
 		this.dis = Math.abs(dis);
 		this.chain = chain;
-		this.fps = fps;
+		this.fpsStart = fpsStart;
+		this.fpsEnd = fpsEnd;
 		this.targetAngle = Math.toRadians(A);
+		this.useNavx = useNavx;
+	}
+	
+	public DriveToInch(long timeout, double dis, double A, double fps, boolean chain, boolean useNavx) {
+		this(timeout, dis, A, fps, fps, chain, useNavx);
 	}
 	
 
 	@Override
 	protected void runCore() throws InterruptedException
 	{
-		double TARGET_SPEED = (fps * 12) * TICKS_PER_INCH;
 		double speed;
 		double target = dis * this.TICKS_PER_INCH;
 		
 		int leftEncoderOffset = sensorInput.getLeftDriveEncoder();
 		int rightEncoderOffset = sensorInput.getRightDriveEncoder();
+		int targetDelta = leftEncoderOffset - rightEncoderOffset;
 		
 		OrbitPID pidAngle = new OrbitPID(0.05, 0.1, 0.0);//p = 4.7 i = 0.0025
 		OrbitPID pidSpeed = new OrbitPID(0.0007, 0.01, 0.0); //p = 0.01 i = 0.2 d = 0.2
@@ -48,14 +56,21 @@ public class DriveToInch extends AutonRoutine{
 		
 		double currentVel;
 		
+		long angleAccurate = System.currentTimeMillis();
+		
+		double encoderAverage = 0;
+		
 		do {
 			double loggedAngle = Math.toRadians(sensorInput.getAHRSYaw());
 			matchLogger.writeClean("NAVX DEBUG" + sensorInput.getAHRSYaw() + " RAW: " + loggedAngle);
 			
-			double turn = pidAngle.calculate(leftEncoderOffset - rightEncoderOffset, sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder());
-			
-			double encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;
+			int encoderErr = (sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder()) - targetDelta;
+			double turn = pidAngle.calculate(0, encoderErr);
 			currentVel = (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2;
+			
+			encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;
+			
+			double TARGET_SPEED = (fpsEnd + (fpsStart - fpsEnd) * (target - Math.abs(encoderAverage)) / target) * 12 * TICKS_PER_INCH;
 			
 			if(chain) {
 				speed = pidFs.calculate(TARGET_SPEED, currentVel);
@@ -76,7 +91,14 @@ public class DriveToInch extends AutonRoutine{
 				speed = -speed;
 			robotOutput.arcadeDrivePID(speed, turn);
 			
-			
+			if (useNavx) {
+				long time = System.currentTimeMillis();
+				if (Math.abs(encoderErr) > 3)
+					angleAccurate = time;
+				else if (time - angleAccurate >= 50) {
+					targetDelta += Math.round(Math.toRadians(sensorInput.getAHRSYaw() - targetAngle));
+				}
+			}
 			
 			
 			
@@ -84,7 +106,7 @@ public class DriveToInch extends AutonRoutine{
 			
 			leftEncoderActual = sensorInput.getLeftDriveEncoder() - leftEncoderOffset;
 			rightEncoderActual = sensorInput.getRightDriveEncoder() - rightEncoderOffset;
-		} while (Math.abs((leftEncoderActual + rightEncoderActual) / 2) < target - Math.abs(currentVel) * 0.035);
+		} while (Math.abs(encoderAverage) < target - Math.abs(currentVel) * 0.035);
 
 		//robotOutput.tankDrive(0, 0);
 	}

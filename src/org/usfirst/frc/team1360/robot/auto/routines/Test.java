@@ -17,35 +17,15 @@ public final class Test extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
-
-		new DriveToInch(5000, 146, 0, 13, true).runUntilFinish();
-		
-		
-		//new SweepTurn(2000, 90, 36, true, false).runUntilFinish();
-		
-		
-		//new SweepTurn(10000, 90, 40, true, false).runUntilFinish();
-		
-		//new DriveToInch(10000, -100, 0, 0, false).runUntilFinish();
-		
-		//robotOutput.tankDrive(0, 0);
-		
-		
-		//robotOutput.tankDrive(1, 1);
-		/*
-		while(true)
-		{
-			robotOutput.tankDrive(1, 1);
-			SmartDashboard.putNumber("Outer Velocity", sensorInput.getRightEncoderVelocity());
-			SmartDashboard.putNumber("Inner Veloctiy", sensorInput.getLeftEncoderVelocity());
-		}
-		*/
-		
-		robotOutput.tankDrive(0, 0);
-		
-		intake.setIntake(-0.5);
-		Thread.sleep(1000);
-
-
+//		sensorInput.reset();
+//		robotOutput.tankDrive(1, -1);
+//		long start = System.currentTimeMillis();
+//		while (sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder() == 0) Thread.yield();
+//		long next = System.currentTimeMillis();
+//		SmartDashboard.putNumber("Victor lag", (next - start) / 1000.0);
+//		while (Math.abs(sensorInput.getAHRSYaw()) < 0.25) Thread.yield();
+//		SmartDashboard.putNumber("NavX Lag", (System.currentTimeMillis() - next) / 1000.0);
+//		robotOutput.tankDrive(0, 0);
+		new SweepTurn(0, 30, true, false).runUntilFinish();
 	}
 }

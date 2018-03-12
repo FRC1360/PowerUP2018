@@ -33,12 +33,12 @@ public class TwoCubeRight extends AutonRoutine{
 			sensorInput.getAHRSYaw());
 			
 			
-			new SweepTurn(10000, 90, 72, 10, true, true).runUntilFinish();
+			new SweepTurn(10000, 90, 72, 10, true, false).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(5000, 150, -90, 7.5, true).runUntilFinish();
+			new DriveToInch(5000, 126, -90, 7.5, true).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());

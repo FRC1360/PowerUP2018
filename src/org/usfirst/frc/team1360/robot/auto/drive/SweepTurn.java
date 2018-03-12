@@ -27,17 +27,17 @@ public class SweepTurn extends AutonRoutine{
 	public SweepTurn(long timeout, double sweepAngle, double r, double fps, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
 		
-		reverse = sweepAngle < 0;
+		reverse = fps < 0;
 		
 		//this.dampen = dampen;
 		this.chain = chain;
-		this.sweepAngle = Math.abs(sweepAngle);
+		this.sweepAngle = sweepAngle;
 		this.left = leftTurn;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
 		this.angleOffset = sensorInput.getAHRSYaw(); /*Math.toDegrees(position.getA())*/;
 		matchLogger.writeClean("NAVX ANGLE OFFSET " + this.angleOffset);
-		this.fps = fps;
+		this.fps = Math.abs(fps);
 		
 		this.radius = r-12.35;
 	}
@@ -66,12 +66,14 @@ public class SweepTurn extends AutonRoutine{
 		
 		OrbitPID dampen = new OrbitPID(0.045, 0.0, 0.0);
 		
+		double deltaA = Math.abs(sweepAngle - angleOffset);
+		
 		//middle ticks if there was a wheel there
-		int middleTicks = (int) (((radius * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
+		int middleTicks = (int) (((radius * 2 * Math.PI * deltaA / 360)) * TICKS_PER_INCH);
 		
 		//Inner and outer ticks
-		int innerTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
-		int outerTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * TICKS_PER_INCH);
+		int innerTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * deltaA / 360)) * TICKS_PER_INCH);
+		int outerTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * deltaA / 360)) * TICKS_PER_INCH);
 		
 		//convert ft/s to ticks/s
 		double ticksPerSec = TICKS_PER_INCH * (fps * 12);
@@ -88,14 +90,14 @@ public class SweepTurn extends AutonRoutine{
 		double dampenAmt;
 		
 		if(left)
-		{		
-			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {			
+		{
+			while(sensorInput.getAHRSYaw() > sweepAngle) {			
 				
 				//matchLogger.writeClean("AUTO DEBUG " + Double.toString(sensorInput.getAHRSYaw()));
 				
 				if(!chain)
 				{	
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()) /*Math.toDegrees(position.getA())*/);
+					dampenAmt = -dampen.calculate(sweepAngle, sensorInput.getAHRSYaw());
 					if(dampenAmt > 1) 
 						dampenAmt = 1;
 					
@@ -126,14 +128,14 @@ public class SweepTurn extends AutonRoutine{
 		}
 		else
 		{			
-			while(Math.abs(angleOffset - sensorInput.getAHRSYaw()) < sweepAngle) {
+			while(sensorInput.getAHRSYaw() < sweepAngle) {
 
 				//matchLogger.writeClean("AUTO DEBUG " + Double.toString(sensorInput.getAHRSYaw()));
 				
 				
 				if(!chain)
 				{
-					dampenAmt = dampen.calculate(sweepAngle, Math.abs(angleOffset - sensorInput.getAHRSYaw()) /*Math.toDegrees(position.getA())*/);
+					dampenAmt = dampen.calculate(sweepAngle, sensorInput.getAHRSYaw());
 					
 
 					if(dampenAmt > 1) 

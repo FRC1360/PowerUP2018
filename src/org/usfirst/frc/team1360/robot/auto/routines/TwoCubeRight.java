@@ -31,19 +31,22 @@ public class TwoCubeRight extends AutonRoutine{
 			matchLogger.writeClean("AUTO DEBUG LOG 1: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(5000, 125, 0, 10, 8, true, false).runUntilFinish();
+			new DriveToInch(5000, 210, 0, 10, 5, true, false).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 			sensorInput.getAHRSYaw());
 			
 			
-			new SweepTurn(10000, -90, 72, 10, true, false).runUntilFinish();
+			new FaceAngle(1000, -90).runUntilFinish();
+			
+			
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
 			new DriveToInch(5000, 120, -90, 10, 8, true, false).runUntilFinish();
 			
+			/*
 			matchLogger.writeClean("AUTO DEBUG LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 
@@ -66,7 +69,7 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(1);
 			Thread.sleep(250);
 			arm.goToTop();
-			/**/
+
 			
 			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
 			intake.setIntake(0);
@@ -102,6 +105,7 @@ public class TwoCubeRight extends AutonRoutine{
 			robotOutput.tankDrive(0, 0);
 			intake.setIntake(0);
 			SmartDashboard.putNumber("Auto time", (System.currentTimeMillis() - start) / 1000.0);
+			/**/
 		}
 		else if(!fms.plateLeft(0) && fms.plateLeft(1))
 		{

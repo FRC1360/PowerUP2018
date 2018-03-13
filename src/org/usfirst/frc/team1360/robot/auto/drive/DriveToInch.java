@@ -19,6 +19,7 @@ public class DriveToInch extends AutonRoutine{
 	boolean reverse;
 	double fpsStart;
 	double fpsEnd;
+	double A;
 	
 	public DriveToInch(long timeout, double dis, double A, double fpsStart, double fpsEnd, boolean chain, boolean useNavx) {
 		super("DriveToDistance", timeout);
@@ -26,6 +27,7 @@ public class DriveToInch extends AutonRoutine{
 		this.reverse = dis < 0;
 		this.dis = Math.abs(dis);
 		this.chain = chain;
+		this.A = A;
 		this.fpsStart = fpsStart;
 		this.fpsEnd = fpsEnd;
 		this.targetAngle = Math.toRadians(A);
@@ -65,7 +67,8 @@ public class DriveToInch extends AutonRoutine{
 			matchLogger.writeClean("NAVX DEBUG" + sensorInput.getAHRSYaw() + " RAW: " + loggedAngle);
 			
 			int encoderErr = (sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder()) - targetDelta;
-			double turn = pidAngle.calculate(0, encoderErr);
+			//double turn = pidAngle.calculate(0, encoderErr);
+			double turn = pidAngle.calculate(A, sensorInput.getAHRSYaw()); 
 			currentVel = (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2;
 			
 			encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;

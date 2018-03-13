@@ -56,7 +56,7 @@ public abstract class AutonRoutine extends Thread {
 			
 			
 			while(isAlive() && (System.currentTimeMillis()-start) < timeout) {
-				System.out.println("waiting for: " + name);
+//				System.out.println("waiting for: " + name);
 				Thread.sleep(10);
 			}
 			

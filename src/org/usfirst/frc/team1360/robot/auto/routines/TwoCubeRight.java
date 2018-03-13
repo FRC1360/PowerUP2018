@@ -47,8 +47,8 @@ public class TwoCubeRight extends AutonRoutine{
 			matchLogger.writeClean("AUTO DEBUG LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 
-			new SweepTurn(3000, 0, 30, 10, false, false).runUntilFinish();//36
-			new FaceAngle(2000, 30).runUntilFinish();
+			new SweepTurn(3000, 0, 24, 10, false, false).runUntilFinish();//36
+			new FaceAngle(800, 30).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 5: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
@@ -81,12 +81,12 @@ public class TwoCubeRight extends AutonRoutine{
 					sensorInput.getAHRSYaw());
 			
 //				new SweepTurn(2000, 160, 20, 7.5, false, false).runUntilFinish();//100
-			new FaceAngle(3000, 160).runUntilFinish();
+			new FaceAngle(1500, 160).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 7: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
 			
-			new DriveToInch(2000, 90, 160, 7.5, false, false).runUntilFinish();
+			new DriveToInch(2000, 85, 160, 7.5, 2, true, false).runUntilFinish();
 			
 			matchLogger.writeClean("AUTO DEBUG LOG 8: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
 					sensorInput.getAHRSYaw());
@@ -98,7 +98,7 @@ public class TwoCubeRight extends AutonRoutine{
 			new ElevatorToTarget(750, elevator.ONE_FOOT*2).runUntilFinish();
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
-			new DriveToInch(1000, 6, 160, 10, true, false).runUntilFinish(); //159
+			new DriveToInch(1000, 6, 160, 7, true, false).runUntilFinish(); //159
 			robotOutput.tankDrive(0, 0);
 			intake.setIntake(0);
 			SmartDashboard.putNumber("Auto time", (System.currentTimeMillis() - start) / 1000.0);

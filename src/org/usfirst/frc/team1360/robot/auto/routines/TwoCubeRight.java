@@ -108,14 +108,32 @@ public class TwoCubeRight extends AutonRoutine{
 			//FIRST CUBE
 			 new DriveToInch(5000, 120, 0, 10, true, false).runUntilFinish();
 			 
-			 new SweepTurn(2000, 90, 24, 10, true, false).runUntilFinish();
+			 new SweepTurn(2000, -90, 24, 10, true, false).runUntilFinish();
 			 
 			 //SECOND CUBE
-			 new SweepTurn(5000, 270, 36, 7, true, true).runUntilFinish();
+			 new SweepTurn(5000, -270, 36, -7, true, true).runUntilFinish();
 			 
-			 new DriveToInch(5000, 185, 270, 10, 1, true, false).runUntilFinish();
+			 new DriveToInch(5000, 185, -270, 10, 1, true, false).runUntilFinish();
 			 
+			 new FaceAngle(3000, -238.39).runUntilFinish();
 			 
+			 new DriveToInch(2000, 12.41, -238.39, 4, false, false).runUntilFinish();
+			 
+			 new FaceAngle(2000, -356).runUntilFinish();
+			 
+			 new DriveToInch(5000, 72.32, -356, 6, true, false).runUntilFinish();
+		}
+		else if(!fms.plateLeft(0) && !fms.plateLeft(1))
+		{
+			new SweepTurn(5000, 11, 2700, 10, true, false).runUntilFinish();
+			
+			new FaceAngle(5000, -177).runUntilFinish();
+			
+			new DriveToInch(5000, 65.42, -177, 10, 1, true, false).runUntilFinish();
+		}
+		else if(fms.plateLeft(0) && !fms.plateLeft(1))
+		{
+			
 		}
 		
 	}

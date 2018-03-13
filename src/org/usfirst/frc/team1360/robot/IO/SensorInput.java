@@ -171,6 +171,7 @@ public class SensorInput implements SensorInputProvider {
 	public synchronized void resetAHRS() // Queue operation to reset NavX
 	{
 		ahrsThreadDispatchQueue.add(ahrs::zeroYaw);
+		Thread.yield();
 	}
 	
 

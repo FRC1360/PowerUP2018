@@ -8,8 +8,7 @@ import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
 import org.usfirst.frc.team1360.robot.auto.routines.Default;
-import org.usfirst.frc.team1360.robot.auto.routines.EncoderSwitch;
-import org.usfirst.frc.team1360.robot.auto.routines.ScaleRightStart;
+import org.usfirst.frc.team1360.robot.auto.routines.SolidworksTwoCube;
 import org.usfirst.frc.team1360.robot.auto.routines.Switch;
 import org.usfirst.frc.team1360.robot.auto.routines.Test;
 import org.usfirst.frc.team1360.robot.auto.routines.TwoCubeRight;
@@ -38,10 +37,12 @@ public class AutonControl {
 		routines.clear();
 		//routines.add(new EncoderSwitch());
 		routines.add(new TwoCubeRight());
+		routines.add(new Test());
 		routines.add(new Switch());
 		//routines.add(new ScaleRightStart());
 		routines.add(new CrossBaseline());
 		routines.add(new Default());
+		routines.add(new SolidworksTwoCube());
 	}
 	
 	public static void select()
@@ -62,6 +63,8 @@ public class AutonControl {
 			selectedIndex--;
 			System.out.println("Selected: " + routines.get(selectedIndex).toString());
 		}
+		
+		System.out.println("Selected: " + routines.get(selectedIndex).toString());
 		
 		lastInc = inc;
 		lastDec = dec;

@@ -18,7 +18,6 @@ public class Arm implements ArmProvider{
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
 	private long cooldown = 0;
-	private boolean blockArm = false;
 	
 	private enum ArmState implements OrbitStateMachineState<ArmState>		{
 		DOWN_TO_TARGET{
@@ -255,11 +254,9 @@ public class Arm implements ArmProvider{
 				return;
 			}
 			
-			
-			
-			if(/*sensorInput.getArmEncoder() >= POS_TOP &&*/ power > 0 && sensorInput.getArmSwitch())
+			if(power > 0 && sensorInput.getArmSwitch())
 				robotOutput.setArm(0);
-			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power < 0)
+			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power <= 0)
 				robotOutput.setArm(0);
 			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -5 && power > 0)
 				robotOutput.setArm(0);
@@ -326,19 +323,10 @@ public class Arm implements ArmProvider{
 		return stateMachine.getState() == ArmState.CALIBRATE;
 	}
 	
-	@Override
-	public void blockArm() {
-		blockArm = true;
-	}
-	
-	@Override
-	public void unblockArm() {
-		blockArm = false;
-	}
 	
 	@Override
 	public boolean movingToPosition() {
-		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET || blockArm;
+		return stateMachine.getState() == ArmState.UP_TO_TARGET || stateMachine.getState() == ArmState.DOWN_TO_TARGET;
 	}
 
 

@@ -11,85 +11,165 @@ public class SweepTurn extends AutonRoutine{
 	private double radius;
 	private int leftOffset;
 	private int rightOffset;
+	private double angleOffset;
 	private double sweepAngle;
 	
 	private boolean reverse;
-	private boolean chain;
 	private boolean left;
+	private boolean dampen;
+	private boolean chain;
+	private double fps;//ft/sec
 	
-	private final double DRIVE_WIDTH = 24;
+	private final double DRIVE_WIDTH = 24.7;//inches
+
+	private final double TICKS_PER_INCH = 5.30516;//Ticks
 	
-	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean chain) {
+	public SweepTurn(long timeout, double sweepAngle, double r, double fps, boolean leftTurn, boolean chain) {
 		super("SweepTurn", timeout);
 		
-		reverse = r < 0;
+		reverse = fps < 0;
 		
+		//this.dampen = dampen;
+		this.chain = chain;
 		this.sweepAngle = sweepAngle;
 		this.left = leftTurn;
-		this.chain = chain;
 		this.leftOffset = sensorInput.getLeftDriveEncoder();
 		this.rightOffset = sensorInput.getRightDriveEncoder();
+		this.angleOffset = sensorInput.getAHRSYaw(); /*Math.toDegrees(position.getA())*/;
+		matchLogger.writeClean("NAVX ANGLE OFFSET " + this.angleOffset);
+		this.fps = Math.abs(fps);
 		
-		this.radius = Math.abs(r);
+		this.radius = r-12.35;
+	}
+	
+	public SweepTurn(long timeout, double sweepAngle, double r, boolean leftTurn, boolean dampen, boolean chain) {
+		this(timeout, sweepAngle, r, 7.5, leftTurn, chain);
+		this.dampen = dampen;
 	}
 
+	public SweepTurn(long timeout, double r, boolean leftTurn, boolean dampen, boolean chain) {
+		this(timeout, 90, r, 7.5, leftTurn, chain);
+		this.dampen = dampen;
+	}
+	
 	public SweepTurn(long timeout, double r, boolean leftTurn, boolean chain) {
-		this(timeout, 90, r, leftTurn, chain);
+		this(timeout, 90, r, 7.5, leftTurn, chain);
 	}
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		OrbitPID pidInner = new OrbitPID(0.003, 0.0, 0.04);
-		OrbitPID pidOutter = new OrbitPID(0.008, 0.0, 0.0);
+		double leftSpeed;
+		double rightSpeed;
 		
-		int innerEncTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * 5.30516);
-		int outterEncTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * sweepAngle / 360)) * 5.30516);
+		OrbitPID pidInner = new OrbitPID(0.005, 0.003, 0.0);
+		OrbitPID pidOuter = new OrbitPID(0.01, 0.0, 0.0);
 		
-		double leftSpeed = 0;
-		double rightSpeed = 0;
+		OrbitPID dampen = new OrbitPID(0.045, 0.0, 0.0);
 		
-		double innerCircle = radius - 12;
-		double outerCircle = radius + 12;
+		double deltaA = Math.abs(sweepAngle - angleOffset);
 		
-		double ratio = outerCircle / innerCircle;
+		//middle ticks if there was a wheel there
+		int middleTicks = (int) (((radius * 2 * Math.PI * deltaA / 360)) * TICKS_PER_INCH);
+		
+		//Inner and outer ticks
+		int innerTicks = (int) ((((radius - (DRIVE_WIDTH / 2)) * 2 * Math.PI * deltaA / 360)) * TICKS_PER_INCH);
+		int outerTicks = (int) ((((radius + (DRIVE_WIDTH / 2)) * 2 * Math.PI * deltaA / 360)) * TICKS_PER_INCH);
+		
+		//convert ft/s to ticks/s
+		double ticksPerSec = TICKS_PER_INCH * (fps * 12);
+		
+		//Calculate total time to do the sweep assuming our ticks/s is the outer speed
+		double timeForMovement = outerTicks / ticksPerSec;
+		
+		//calculate inner velocity based off of the time
+		double innerVelocity = innerTicks / timeForMovement;
+		
+		//calculate outer velocity based off of the time
+		double outerVelocity = ticksPerSec;
+		
+		double dampenAmt;
 		
 		if(left)
 		{
-			while(sensorInput.getRightDriveEncoder() - rightOffset < outterEncTicks) {
+			while(sensorInput.getAHRSYaw() > sweepAngle) {			
 				
-				if(chain)
-				{
-					robotOutput.tankDrive(0.5, ratio * 0.5 * 1.275);
-				}else {
-					leftSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
-					rightSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset));
+				//matchLogger.writeClean("AUTO DEBUG " + Double.toString(sensorInput.getAHRSYaw()));
+				
+				if(!chain)
+				{	
+					dampenAmt = -dampen.calculate(sweepAngle, sensorInput.getAHRSYaw());
+					if(dampenAmt > 1) 
+						dampenAmt = 1;
 					
-					if(reverse)
-						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
-					else
-						robotOutput.tankDrive(leftSpeed, rightSpeed);
+					if(dampenAmt < 0)
+						dampenAmt = 0;
+					
+					leftSpeed = pidInner.calculate(innerVelocity*dampenAmt, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidOuter.calculate(outerVelocity*dampenAmt, Math.abs(sensorInput.getRightEncoderVelocity()));
 				}
-				Thread.sleep(10);
+				else {
+					leftSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
+				}
+				
+				if (leftSpeed < -0.1)
+					leftSpeed = -0.1;
+				if (rightSpeed < -0.1)
+					rightSpeed = -0.1;
+				
+				if(reverse)
+					robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+				else
+					robotOutput.tankDrive(leftSpeed, rightSpeed);
+				
+				Thread.sleep(5);
 			}
+			robotOutput.tankDrive(0, 0);
 		}
 		else
-		{
-			while(sensorInput.getLeftDriveEncoder() - leftOffset < outterEncTicks) {
-				if(chain)
+		{			
+			while(sensorInput.getAHRSYaw() < sweepAngle) {
+
+				//matchLogger.writeClean("AUTO DEBUG " + Double.toString(sensorInput.getAHRSYaw()));
+				
+				
+				if(!chain)
 				{
-					robotOutput.tankDrive(ratio * 0.5, 0.5);
-				}else {
-					leftSpeed = pidOutter.calculate(outterEncTicks, Math.abs(sensorInput.getLeftDriveEncoder() - leftOffset));
-					rightSpeed = pidInner.calculate(innerEncTicks, Math.abs(sensorInput.getRightDriveEncoder() - rightOffset))	;
+					dampenAmt = dampen.calculate(sweepAngle, sensorInput.getAHRSYaw());
 					
-					if(reverse)
-						robotOutput.tankDrive(-leftSpeed, -rightSpeed);
-					else
-						robotOutput.tankDrive(leftSpeed, rightSpeed);
+
+					if(dampenAmt > 1) 
+						dampenAmt = 1;
+					
+					
+					if(dampenAmt < 0)
+						dampenAmt = 0;
+					
+					leftSpeed = pidOuter.calculate(outerVelocity*dampenAmt, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidInner.calculate(innerVelocity*dampenAmt, Math.abs(sensorInput.getRightEncoderVelocity()));
 				}
-				Thread.sleep(10);
-			}
+				else {
+					leftSpeed = pidOuter.calculate(outerVelocity, Math.abs(sensorInput.getLeftEncoderVelocity()));
+					rightSpeed = pidInner.calculate(innerVelocity, Math.abs(sensorInput.getRightEncoderVelocity()));
+				}
+				
+				if (leftSpeed < -0.1)
+					leftSpeed = -0.1;
+				if (rightSpeed < -0.1)
+					rightSpeed = -0.1;
+				
+				if(reverse)
+					robotOutput.tankDrive(-leftSpeed, -rightSpeed);
+				else
+					robotOutput.tankDrive(leftSpeed, rightSpeed);
+				
+				Thread.sleep(5);
+			} 
+			robotOutput.tankDrive(0, 0);
 		}
+		
+		robotOutput.tankDrive(0, 0);
+		
 	}
 	
 

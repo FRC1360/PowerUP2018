@@ -44,7 +44,11 @@ public abstract class AutonRoutine extends Thread {
 	
 	public final void runUntilFinish() throws InterruptedException
 	{
-		map.put(name.toLowerCase(), this);
+		AutonRoutine previous = map.put(name.toLowerCase(), this);
+		if (previous!=null) {
+			previous.interrupt();
+		}
+		
 		if (timeout != 0)
 		{
 			long start = System.currentTimeMillis();
@@ -52,6 +56,7 @@ public abstract class AutonRoutine extends Thread {
 			
 			
 			while(isAlive() && (System.currentTimeMillis()-start) < timeout) {
+//				System.out.println("waiting for: " + name);
 				Thread.sleep(10);
 			}
 			

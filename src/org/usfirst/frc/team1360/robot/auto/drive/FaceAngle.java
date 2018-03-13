@@ -28,18 +28,39 @@ public class FaceAngle extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException
 	{
-		OrbitPID pidAngle = new OrbitPID(1, 0.003 , 0.3);//p = 4.7 i = 0.0025
+		OrbitPID pidAngle = new OrbitPID(1.0, 0.0, 1.0);//p = 4.7 i = 0.0025
 		
 		double lastSpeed = 0;
 		
+		long lastTime = System.currentTimeMillis();
+		
+		double lastA = Math.toRadians(sensorInput.getAHRSYaw());
+		
+		double err, velA;
+		
 		do {
-			double turn = pidAngle.calculate(targetAngle, Math.toRadians(sensorInput.getAHRSYaw()));
-			
-			robotOutput.arcadeDrive(0.5, turn);
-						
 			Thread.sleep(10);
-		} while (Math.toRadians(sensorInput.getAHRSYaw()) < targetAngle);
-
+			
+			double curA = Math.toRadians(sensorInput.getAHRSYaw());
+			err = targetAngle - curA;
+			double vTarget = 0.55 * Math.copySign(1 - Math.exp(-0.8 * Math.abs(err)), err);
+			
+			final double kB = 1.2;
+			final double kP = 0.3;
+			long time = System.currentTimeMillis();
+			velA = (curA - lastA) / (time - lastTime);
+			double turn = kB * vTarget + kP * (vTarget - velA);
+			
+			lastA = curA;
+			lastTime = time;
+			
+			robotOutput.arcadeDrive(0, turn);
+			
+			SmartDashboard.putNumber("FaceAngle Error", err);
+		} while (Math.abs(err) > 0.02);
+		
+		robotOutput.arcadeDrive(0, -0.2 * Math.signum(velA));
+		Thread.sleep(100);
 		robotOutput.tankDrive(0, 0);
 	}
 

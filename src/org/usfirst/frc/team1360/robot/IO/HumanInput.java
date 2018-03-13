@@ -55,7 +55,7 @@ public class HumanInput implements HumanInputProvider {
 	 */
 	@Override
 	public boolean getRacingShift() {
-		return this.driver.getYButton();
+		return this.driver.getYButton(); //inversed for default high gear
 	}
 	//------------Halo--------------
 	/* (non-Javadoc)

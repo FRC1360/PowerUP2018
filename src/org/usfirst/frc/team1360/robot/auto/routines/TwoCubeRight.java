@@ -3,7 +3,12 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
+import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
+import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
+import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TwoCubeRight extends AutonRoutine{
 
@@ -16,138 +21,119 @@ public class TwoCubeRight extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
+		long start = System.currentTimeMillis();
+		SmartDashboard.putNumber("Auto time", 0);
 		int offset;
 		double TICK_INCH = 5.30516;
 		new Calibrate().runNow("Calibrate");
 		
-		if(fms.plateLeft(1)) {
-			new DriveToDistance(10000, position.getX(), 145, 0, 20, true).runUntilFinish();
+		if(fms.plateLeft(1) && fms.plateLeft(0)) {
+			matchLogger.writeClean("AUTO DEBUG LOG 1: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
 			
-			new SweepTurn(10000, 48, true, false).runUntilFinish();
-			//elevator.goToTarget(elevator.ONE_FOOT*6);
-			new DriveToDistance(10000, -125, position.getY(), -90, 20, true).runUntilFinish();//-90
-			new SweepTurn(10000, 110, 40, false, false).runUntilFinish();
+			new DriveToInch(5000, 125, 0, 10, 8, true, false).runUntilFinish();
 			
-			waitFor("Calibrate", 0);
-			elevator.goToTarget(elevator.POS_TOP - 50);
+			matchLogger.writeClean("AUTO DEBUG LOG 2: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+			sensorInput.getAHRSYaw());
 			
-			Thread.sleep(20);
-			while(elevator.isMovingToTarget()) Thread.sleep(10);
-			arm.goToPosition(-25);
 			
-			new DriveToDistance(1000, position.getX(), position.getY()+13, 0, 2, false).runUntilFinish();
+			new SweepTurn(10000, -90, 72, 10, true, false).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO DEBUG LOG 3: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
+			
+			new DriveToInch(5000, 120, -90, 10, 8, true, false).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO DEBUG LOG 4: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
+
+			new SweepTurn(3000, 0, 24, 10, false, false).runUntilFinish();//36
+			new FaceAngle(800, 30).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO DEBUG LOG 5: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
+			
+			//BUG STARTS HERE
+			//elevator.startManual();
+			//elevator.setManualSpeed(1.0, false);
+			//while(sensorInput.getElevatorEncoder() < elevator.ONE_FOOT*3) Thread.sleep(10);
+			
+			new ElevatorToTarget(1500, (int) (elevator.ONE_FOOT*5)).runUntilFinish();
+			arm.goToPosition(-20);
+			Thread.sleep(1000);
 			
 			intake.setClamp(intake.FREE);
 			intake.setIntake(1);
-			Thread.sleep(1000);
-			intake.setIntake(0);
+			Thread.sleep(250);
 			arm.goToTop();
-			Thread.sleep(500);
-			elevator.goToBottom();
+			/**/
 			
-			//-------------Grab Cube-------------
-			new SweepTurn(2000, 130,-20, true, false).runUntilFinish();
+			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
+			intake.setIntake(0);
 			
+			arm.goToPosition(arm.POS_BOTTOM);
 			
-			if(fms.plateLeft(0))
-			{
-				arm.goToPosition(arm.POS_BOTTOM);
-				new SweepTurn(2000, 30, 50, false, false).runUntilFinish();
-				
-				intake.setIntake(-1);
-				intake.setClamp(intake.FREE);
-				
-				new DriveToDistance(2000, position.getX(), position.getY()+30, 135, 2, false).runUntilFinish();
-				
-				robotOutput.tankDrive(0, 0);
-				elevator.upToTarget(elevator.SWITCH_HEIGHT);
-				while(elevator.isMovingToTarget()) Thread.sleep(10);
-				intake.setIntake(0.75);
-				intake.setClamp(intake.FREE);
-				Thread.sleep(3000);
-				intake.setIntake(0);
-				intake.setClamp(intake.CLOSED);
-			}
-			else
-			{
-				return;
-						/*
-				robotOutput.tankDrive(-0.5, -0.5);
-				offset = sensorInput.getLeftDriveEncoder();
-				while(Math.abs(sensorInput.getLeftDriveEncoder() - offset) < TICK_INCH*24) Thread.sleep(10);
-				robotOutput.tankDrive(0, 0);
-				
-				new SweepTurn45(10000, 40, false, false).runUntilFinish();
-				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveToDistance(10000, -20, position.getY(), 90, 20, false).runUntilFinish();
-				new SweepTurn45(10000, 40, false, false).runUntilFinish();
-				intake.setClamp(intake.FREE);
-				intake.setIntake(0.5);
-				Thread.sleep(1000);
-				intake.setClamp(intake.CLOSED);
-				intake.setIntake(0);
-				*/
-			}
-			
-			
-		}
-		else
-		{
-			//Tuned
-			elevator.goToTarget(elevator.ONE_FOOT*4);
-			new DriveToDistance(10000, position.getX(), 200, 0, 20, true).runUntilFinish();
-
-			new SweepTurn(10000, 45, 48, true, false).runUntilFinish();
-
-			arm.goToPosition(-40);
-			elevator.goToTarget(elevator.POS_TOP - 50);
-			while(elevator.isMovingToTarget() && arm.movingToPosition()) Thread.sleep(10);
-			new DriveToDistance(2000, position.getX() + 20, position.getY() + 20, -45, 2, false).runUntilFinish();
+			intake.setIntake(-1);
 			intake.setClamp(intake.FREE);
-			robotOutput.setIntake(0.5);
-			Thread.sleep(500);
-			robotOutput.setIntake(0);
-
-			new SweepTurn(1000, 45, -48, false, false).runUntilFinish();
 			
-			elevator.goToBottom();
+			//BUG DOESN'T REACH
+			matchLogger.writeClean("AUTO DEBUG LOG 6: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
+			
+//				new SweepTurn(2000, 160, 20, 7.5, false, false).runUntilFinish();//100
+			new FaceAngle(1500, 160).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO DEBUG LOG 7: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
+			
+			new DriveToInch(2000, 85, 160, 7.5, 2, true, false).runUntilFinish();
+			
+			matchLogger.writeClean("AUTO DEBUG LOG 8: " + "Drive Encoders = " + sensorInput.getLeftDriveEncoder() + " " + sensorInput.getRightDriveEncoder() + ", NAVX Angle = " +
+					sensorInput.getAHRSYaw());
 			
 			
-			if(fms.plateLeft(0)) {
-				return;
-				/*new DriveBackwardsToDistance(10000, position.getX()-10, position.getY()-10, -135, 5, false).runUntilFinish();
-				new SweepTurn45(10000, 40, true, false).runUntilFinish();
-				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveToDistance(10000, -100, position.getY(), -90, 20, false).runUntilFinish();
-				new SweepTurn45(10000, 40, true, false).runUntilFinish();
-				intake.setClamp(intake.FREE);
-				intake.setIntake(0.5);
-				Thread.sleep(1000);
-				intake.setClamp(intake.CLOSED);
-				intake.setIntake(0);
-				*/
-				
-			}
-			else
-			{
-				
-				return;
-				//intake.setIntake(-1);
-				//new SweepTurn(1000, 45, 48, true, false).runUntilFinish();
-				
-				
-				/*
-				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveBackwardsToDistance(10000, position.getX()-10, position.getY()-10, -135, 5, false).runUntilFinish();
-				
-				intake.setClamp(intake.FREE);
-				intake.setIntake(0.5);
-				Thread.sleep(1000);
-				intake.setClamp(intake.CLOSED);
-				intake.setIntake(0);
-				*/
-				
-			}
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			arm.goToPosition(arm.POS_BOTTOM+5);
+			new ElevatorToTarget(750, elevator.ONE_FOOT*2).runUntilFinish();
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			new DriveToInch(1000, 6, 160, 7, true, false).runUntilFinish(); //159
+			robotOutput.tankDrive(0, 0);
+			intake.setIntake(0);
+			SmartDashboard.putNumber("Auto time", (System.currentTimeMillis() - start) / 1000.0);
+		}
+		else if(!fms.plateLeft(0) && fms.plateLeft(1))
+		{
+			//FIRST CUBE
+			 new DriveToInch(5000, 120, 0, 10, true, false).runUntilFinish();
+			 
+			 new SweepTurn(2000, -90, 24, 10, true, false).runUntilFinish();
+			 
+			 //SECOND CUBE
+			 new SweepTurn(5000, -270, 36, -7, true, true).runUntilFinish();
+			 
+			 new DriveToInch(5000, 185, -270, 10, 1, true, false).runUntilFinish();
+			 
+			 new FaceAngle(3000, -238.39).runUntilFinish();
+			 
+			 new DriveToInch(2000, 12.41, -238.39, 4, false, false).runUntilFinish();
+			 
+			 new FaceAngle(2000, -356).runUntilFinish();
+			 
+			 new DriveToInch(5000, 72.32, -356, 6, true, false).runUntilFinish();
+		}
+		else if(!fms.plateLeft(0) && !fms.plateLeft(1))
+		{
+			new SweepTurn(5000, 11, 2700, 10, true, false).runUntilFinish();
+			
+			new FaceAngle(5000, -177).runUntilFinish();
+			
+			new DriveToInch(5000, 65.42, -177, 10, 1, true, false).runUntilFinish();
+		}
+		else if(fms.plateLeft(0) && !fms.plateLeft(1))
+		{
+			
 		}
 		
 	}

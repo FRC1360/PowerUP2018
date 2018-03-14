@@ -20,7 +20,7 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.05;
 	final double FPS = 5;
 	final double ACCELERATION = 5;
-	final double MAX_FPS = 5;
+	final double MAX_FPS = 15.5;
 	
 	private Trajectory leftTraj;
 	private Trajectory rightTraj;
@@ -74,7 +74,7 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		matchLogger.writeClean("PATHFINDER STARTING");
 		
-		OrbitPID turnPID = new OrbitPID(0.7, 0.01, 0.3);
+		OrbitPID turnPID = new OrbitPID(1.3, 0.05, 0.5);
 		
 		while(!left.isFinished() || !right.isFinished()) {
 			

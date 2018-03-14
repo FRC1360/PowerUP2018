@@ -17,10 +17,10 @@ public class PathfindFromFile extends AutonRoutine{
 	final double DT_WIDTH = 2.05;
 	final int TICKS_PER_REV = 250/3;
 	final double WHEEL_SIZE = 0.4166;
-	final double TIME_STEP = 0.05;
-	final double FPS = 5;
-	final double ACCELERATION = 5;
-	final double MAX_FPS = 5;
+	final double TIME_STEP = 0.025;
+	final double FPS = 13;
+	final double ACCELERATION = 13;
+	final double MAX_FPS = 6;
 	
 	private Trajectory leftTraj;
 	private Trajectory rightTraj;
@@ -59,6 +59,10 @@ public class PathfindFromFile extends AutonRoutine{
 	public void setWaypoint(double position, String name) {
 		new WaypointComponent(position).runNow(name);
 	}
+	
+	private double nearAngle(double angle, double reference) {
+		return Math.round((reference - angle) / 360) * 360 + angle;
+	}
 
 	@Override
 	protected void runCore() throws InterruptedException {
@@ -77,20 +81,20 @@ public class PathfindFromFile extends AutonRoutine{
 		left.configureEncoder(sensorInput.getLeftDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		right.configureEncoder(sensorInput.getRightDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		
-		left.configurePIDVA(3.0, 0.0, 0.5, 1/MAX_FPS, 0);//D = 0.5 P = 4
-		right.configurePIDVA(3.0, 0.0, 0.5, 1/MAX_FPS, 0);
+		left.configurePIDVA(1.0, 0.0, 0.5, 1/MAX_FPS, 0);//D = 0.5 P = 4
+		right.configurePIDVA(1.0, 0.0, 0.5, 1/MAX_FPS, 0);
 		
 		double l, r, turn, angleDifference;
 		
 		long time = System.currentTimeMillis();
 		
-		matchLogger.writeClean("PATHFINDER STARTING");
+		matchLogger.write("PATHFINDER STARTING");
 		
-		OrbitPID turnPID = new OrbitPID(0.7, 0.01, 0.3);
+		OrbitPID turnPID = new OrbitPID(0.2, 0.0, 0.1);
 		
 		while(!left.isFinished() || !right.isFinished()) {
 			
-			if(System.currentTimeMillis() - time >= 50)
+			if(System.currentTimeMillis() - time >= TIME_STEP * 1000)
 			{
 				time = System.currentTimeMillis();
 				l = left.calculate(sensorInput.getLeftDriveEncoder());
@@ -100,11 +104,38 @@ public class PathfindFromFile extends AutonRoutine{
 				
 				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
 				
-				turn = turnPID.calculate(Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw());
+				double yaw = -sensorInput.getAHRSYaw();
+				turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
 				
-				matchLogger.writeClean(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10));
+				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r));
 				
-				robotOutput.tankDrive(l - (turn/10), r + (turn/10));
+//				if (turn > 0)
+//					l *= Math.exp(-turn);
+//				else
+//					r *= Math.exp(turn);
+				l -= turn;
+				r += turn;
+				
+//				if (turn < 0 && l < 0)
+//					l = 0;
+//				if (turn > 0 && r < 0)
+//					r = 0;
+				
+				if (Math.abs(l) > 1 || Math.abs(r) > 1)
+				{
+					if (Math.abs(l) > Math.abs(r))
+					{
+						r /= Math.abs(l);
+						l = Math.signum(l);
+					}
+					else
+					{
+						l /= Math.abs(r);
+						r = Math.signum(r);
+					}
+				}
+				
+				robotOutput.tankDrive(l, r);
 			}
 			
 			Thread.sleep(1);

@@ -2,7 +2,6 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
 import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
 import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;

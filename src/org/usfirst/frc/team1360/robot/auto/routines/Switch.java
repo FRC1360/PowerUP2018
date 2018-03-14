@@ -2,7 +2,6 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
 
@@ -20,12 +19,12 @@ public class Switch extends AutonRoutine{
 		if(fms.plateLeft(0)) {
 			elevator.goToTarget(700);
 			new SweepTurn(2500, 130/4, true, true).runUntilFinish();
-			new DriveToDistance(2500, -80, position.getY(), -80, 10, false).runUntilFinish();
+			//new DriveToDistance(2500, -80, position.getY(), -80, 10, false).runUntilFinish();
 			
 			waitFor("Calibrate", 0);
 			arm.goToPosition(-40);
 			new SweepTurn(2500, 130/4, false, true).runUntilFinish();
-			new DriveToDistance(2500, position.getX(), 80, 0, 10, false).runUntilFinish();
+			//new DriveToDistance(2500, position.getX(), 80, 0, 10, false).runUntilFinish();
 			
 			intake.setClamp(intake.FREE);
 			//intake.setIntake(0.5);
@@ -44,7 +43,7 @@ public class Switch extends AutonRoutine{
 			waitFor("Calibrate", 0);
 			arm.goToPosition(-40);
 
-			new DriveToDistance(5000, 0, 90, 0, 10, false).runUntilFinish();//96 inches
+			//new DriveToDistance(5000, 0, 90, 0, 10, false).runUntilFinish();//96 inches
 	
 			intake.setClamp(intake.FREE);
 			//intake.setIntake(-1);

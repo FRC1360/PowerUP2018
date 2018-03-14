@@ -25,7 +25,8 @@ public final class Test extends AutonRoutine {
 		
 		Waypoint[] points = new Waypoint[] {
 				new Waypoint(0, 0, 0),
-				new Waypoint(4, 4, Pathfinder.d2r(90))
+				new Waypoint(4, 4, Pathfinder.d2r(-90))
+				//new Waypoint(11, 18, 0)
 			};
 		
 		/*
@@ -36,7 +37,7 @@ public final class Test extends AutonRoutine {
 		};
 		/**/
 		
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 6, 6, 30);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 6, 6, 60);
 		Trajectory trajectory = Pathfinder.generate(points, config);
 		
 		PathfindFromFile path = new PathfindFromFile(10000, trajectory);

@@ -14,12 +14,12 @@ import jaci.pathfinder.modifiers.TankModifier;
 public class PathfindFromFile extends AutonRoutine{
 	
 	final double DT_WIDTH = 2.05;
-	final int TICKS_PER_REV = 83;
+	final int TICKS_PER_REV = 250/3;
 	final double WHEEL_SIZE = 0.4166;
 	final double TIME_STEP = 0.05;
-	final double FPS = 7;
+	final double FPS = 5;
 	final double ACCELERATION = 5;
-	final double MAX_FPS = 15.5;
+	final double MAX_FPS = 5;
 	
 	private Trajectory leftTraj;
 	private Trajectory rightTraj;
@@ -62,10 +62,10 @@ public class PathfindFromFile extends AutonRoutine{
 		left.configureEncoder(sensorInput.getLeftDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		right.configureEncoder(sensorInput.getRightDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		
-		left.configurePIDVA(1.25, 0.0, 0.0, 1/MAX_FPS, 0);
-		right.configurePIDVA(1.25, 0.0, 0.0, 1/MAX_FPS, 0);
+		left.configurePIDVA(3.0, 0.0, 0.5, 1/MAX_FPS, 0);//D = 0.5 P = 4
+		right.configurePIDVA(3.0, 0.0, 0.5, 1/MAX_FPS, 0);
 		
-		double l, r, turn;
+		double l, r, turn, angleDifference;
 		
 		long time = System.currentTimeMillis();
 		
@@ -77,9 +77,11 @@ public class PathfindFromFile extends AutonRoutine{
 				l = left.calculate(sensorInput.getLeftDriveEncoder());
 				r = right.calculate(sensorInput.getRightDriveEncoder());
 				
-				turn = 0.8 * (-1.0/80.0) * (Pathfinder.d2r(left.getHeading()) - sensorInput.getAHRSYaw());
+				angleDifference = Pathfinder.boundHalfDegrees(Pathfinder.r2d(left.getHeading()) - sensorInput.getAHRSYaw());
 				
-				matchLogger.writeClean("PATHFINDER left = " + l + " right = " + r + " turn = " + turn);
+				turn = 0.0375 * ((angleDifference) + (angleDifference / 0.02));
+				
+				matchLogger.writeClean("PATHFINDER heading = " + left.getHeading() + " turn = " + turn);
 				
 				robotOutput.tankDrive(l + turn, r - turn);
 			}

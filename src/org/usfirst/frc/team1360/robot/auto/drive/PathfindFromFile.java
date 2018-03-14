@@ -55,6 +55,10 @@ public class PathfindFromFile extends AutonRoutine{
 	public double getPosition() {
 		return left.getSegment().position;
 	}
+	
+	public void setWaypoint(double position, String name) {
+		new WaypointComponent(position).runNow(name);
+	}
 
 	@Override
 	protected void runCore() throws InterruptedException {
@@ -107,5 +111,19 @@ public class PathfindFromFile extends AutonRoutine{
 		}
 		
 		robotOutput.tankDrive(0, 0);
+	}
+	
+	private final class WaypointComponent extends AutonRoutine {
+		private double position;
+		
+		public WaypointComponent(double position) {
+			super(null, 0);
+			this.position = position;
+		}
+
+		@Override
+		protected void runCore() throws InterruptedException {
+			while (getPosition() < position) Thread.sleep(1);
+		}
 	}
 }

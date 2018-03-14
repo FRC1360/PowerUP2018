@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="byte-buddy-agent-1.6.5.jar"/>
 	<classpathentry kind="lib" path="objenesis-2.5.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/Pathfinder-Java-1.8.jar"/>
+	<classpathentry kind="lib" path="Pathfinder-Java-1.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

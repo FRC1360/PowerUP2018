@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 
@@ -26,7 +27,7 @@ public class PathfindFromFile extends AutonRoutine{
 	private EncoderFollower left;
 	private EncoderFollower right;
 	
-	public PathfindFromFile(long timeout, String file) {
+	public PathfindFromFile(long timeout, String file) throws IOException {
 		super("Pathfind From File", timeout);
 		
 		File leftProfile = new File("L-" + file);
@@ -34,8 +35,9 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
 		this.rightTraj = Pathfinder.readFromCSV(rightProfile);
+		
+		matchLogger.writeClean(file + " is valid");
 	}
-	
 	
 	public PathfindFromFile(long timeout, Trajectory traj) {
 		super("Pathfind From File", timeout);
@@ -75,7 +77,7 @@ public class PathfindFromFile extends AutonRoutine{
 				l = left.calculate(sensorInput.getLeftDriveEncoder());
 				r = right.calculate(sensorInput.getRightDriveEncoder());
 				
-				turn = -(0.8 * (-1.0/80.0) * (Pathfinder.d2r(left.getHeading()) - sensorInput.getAHRSYaw()));
+				turn = 0.8 * (-1.0/80.0) * (Pathfinder.d2r(left.getHeading()) - sensorInput.getAHRSYaw());
 				
 				matchLogger.writeClean("PATHFINDER left = " + l + " right = " + r + " turn = " + turn);
 				

@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
 import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
@@ -36,7 +35,5 @@ public final class Test extends AutonRoutine {
 		path.runNow("To Switch");
 		
 		waitFor("To Switch", 0);
-		
-		
 	}
 }

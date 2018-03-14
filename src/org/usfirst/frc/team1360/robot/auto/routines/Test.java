@@ -30,18 +30,20 @@ public final class Test extends AutonRoutine {
 			};
 			*/
 		
-		
+		/*
 		Waypoint[] points = new Waypoint[] {
-			new Waypoint(0, 8, 0),
-			new Waypoint(5, 13, Pathfinder.d2r(90)),
-			new Waypoint(8, 18, 0)
+			new Waypoint(1.63, 4, 0),
+			new Waypoint(16, 2, 0),
+			new Waypoint(19.5, 6, Pathfinder.d2r(90)),
+			new Waypoint(19.5, 17, Pathfinder.d2r(90)),
+			new Waypoint(23, 21, Pathfinder.d2r(-15)),
 		};
-		/**/
 		
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 6, 6, 60);
 		Trajectory trajectory = Pathfinder.generate(points, config);
+		*/
 		
-		PathfindFromFile path = new PathfindFromFile(10000, trajectory);
+		PathfindFromFile path = new PathfindFromFile(10000, "ScaleRacing.csv");
 		path.runNow("To Switch");
 		
 		waitFor("To Switch", 0);

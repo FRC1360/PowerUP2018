@@ -28,16 +28,21 @@ public class PathfindFromFile extends AutonRoutine{
 	private EncoderFollower left;
 	private EncoderFollower right;
 	
-	public PathfindFromFile(long timeout, String file) throws IOException {
+	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
+		File leftProfile;
+		File rightProfile;
 		
-		File leftProfile = new File("L-" + file);
-		File rightProfile = new File("R-" + file);
+		try {
+			leftProfile = new File("/U/L-" + file);	
+			rightProfile = new File("/U/R-" + file);
+		} catch(Throwable e) {
+			matchLogger.writeClean(file + " is invalid");
+			return;
+		}
 		
 		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
 		this.rightTraj = Pathfinder.readFromCSV(rightProfile);
-		
-		matchLogger.writeClean(file + " is valid");
 	}
 	
 	public PathfindFromFile(long timeout, Trajectory traj) {
@@ -54,7 +59,10 @@ public class PathfindFromFile extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException {
 		
-
+		if(leftTraj == null || rightTraj == null)
+		{
+			return;
+		}
 		
 		TankModifier modifierLeft = new TankModifier(leftTraj).modify(DT_WIDTH);
 		TankModifier modifierRight = new TankModifier(rightTraj).modify(DT_WIDTH);

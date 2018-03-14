@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -53,6 +54,8 @@ public class PathfindFromFile extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException {
 		
+
+		
 		TankModifier modifierLeft = new TankModifier(leftTraj).modify(DT_WIDTH);
 		TankModifier modifierRight = new TankModifier(rightTraj).modify(DT_WIDTH);
 		
@@ -69,21 +72,27 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		long time = System.currentTimeMillis();
 		
+		matchLogger.writeClean("PATHFINDER STARTING");
+		
+		OrbitPID turnPID = new OrbitPID(0.7, 0.01, 0.3);
+		
 		while(!left.isFinished() || !right.isFinished()) {
 			
-			if(System.currentTimeMillis() - time > 50)
+			if(System.currentTimeMillis() - time >= 50)
 			{
 				time = System.currentTimeMillis();
 				l = left.calculate(sensorInput.getLeftDriveEncoder());
 				r = right.calculate(sensorInput.getRightDriveEncoder());
 				
-				angleDifference = Pathfinder.boundHalfDegrees(Pathfinder.r2d(left.getHeading()) - sensorInput.getAHRSYaw());
+				//angleDifference = Pathfinder.boundHalfDegrees(Pathfinder.r2d(left.getHeading()) - sensorInput.getAHRSYaw());
 				
-				turn = 0.0375 * ((angleDifference) + (angleDifference / 0.02));
+				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
 				
-				matchLogger.writeClean("PATHFINDER heading = " + left.getHeading() + " turn = " + turn);
+				turn = turnPID.calculate(Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw());
 				
-				robotOutput.tankDrive(l + turn, r - turn);
+				matchLogger.writeClean(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10));
+				
+				robotOutput.tankDrive(l - (turn/10), r + (turn/10));
 			}
 			
 			Thread.sleep(1);

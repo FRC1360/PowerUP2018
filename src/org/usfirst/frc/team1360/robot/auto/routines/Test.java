@@ -25,7 +25,7 @@ public final class Test extends AutonRoutine {
 		
 		Waypoint[] points = new Waypoint[] {
 				new Waypoint(0, 0, 0),
-				new Waypoint(4, 4, Pathfinder.d2r(-90))
+				new Waypoint(4, 4, Pathfinder.d2r(90))
 				//new Waypoint(11, 18, 0)
 			};
 		

@@ -38,6 +38,9 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -57,6 +60,7 @@ public class Robot extends TimedRobot {
 	private OrbitPositionProvider position;
 	private TeleopControl teleopControl;
 
+	public static Trajectory trajectory;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -88,6 +92,25 @@ public class Robot extends TimedRobot {
 		
 		arm.start();
 		elevator.start();
+		
+		
+		Waypoint[] points = new Waypoint[] {
+				
+				
+//			new Waypoint(1.63, 6, 0),
+//			new Waypoint(6, 13, Pathfinder.d2r(90)),
+//			new Waypoint(9, 18, 0)
+			new Waypoint(1.63, 4, 0),
+			new Waypoint(17, 3, 0),
+			new Waypoint(19.5, 6, Pathfinder.d2r(90)),
+			new Waypoint(19.5, 17, Pathfinder.d2r(90)),
+			new Waypoint(23, 21, Pathfinder.d2r(-15))
+			
+			
+		};
+			
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 180);
+		this.trajectory = Pathfinder.generate(points, config);
 	}
 
 	/**

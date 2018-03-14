@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
+import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
@@ -29,7 +30,7 @@ public final class Test extends AutonRoutine {
 				//new Waypoint(11, 18, 0)
 		};
 
-		PathfindFromFile path = new PathfindFromFile(10000, "ScaleRacing.csv");
+		PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
 		path.runNow("To Switch");
 		
 		waitFor("To Switch", 0);

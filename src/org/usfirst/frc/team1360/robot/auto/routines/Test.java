@@ -32,6 +32,11 @@ public final class Test extends AutonRoutine {
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 6, 6, 30);
 		Trajectory trajectory = Pathfinder.generate(points, config);
 		
-		new PathfindFromFile(10000, trajectory).runUntilFinish();
+		PathfindFromFile path = new PathfindFromFile(10000, trajectory);
+		path.runNow("To Switch");
+		
+		waitFor("To Switch", 0);
+		
+		
 	}
 }

@@ -20,7 +20,7 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double FPS = 13;
 	final double ACCELERATION = 13;
-	final double MAX_FPS = 6;
+	final double MAX_FPS = 7;
 	
 	private Trajectory leftTraj;
 	private Trajectory rightTraj;
@@ -81,8 +81,8 @@ public class PathfindFromFile extends AutonRoutine{
 		left.configureEncoder(sensorInput.getLeftDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		right.configureEncoder(sensorInput.getRightDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		
-		left.configurePIDVA(1.0, 0.0, 0.5, 1/MAX_FPS, 0);//D = 0.5 P = 4
-		right.configurePIDVA(1.0, 0.0, 0.5, 1/MAX_FPS, 0);
+		left.configurePIDVA(2.5, 0.0, 0.3, 1/MAX_FPS, 0);//D = 0.5 P = 4
+		right.configurePIDVA(2.5, 0.0, 0.3, 1/MAX_FPS, 0);
 		
 		double l, r, turn, angleDifference;
 		
@@ -90,7 +90,7 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		matchLogger.write("PATHFINDER STARTING");
 		
-		OrbitPID turnPID = new OrbitPID(0.2, 0.0, 0.1);
+		OrbitPID turnPID = new OrbitPID(0.3, 0.0, 0.15);
 		
 		while(!left.isFinished() || !right.isFinished()) {
 			

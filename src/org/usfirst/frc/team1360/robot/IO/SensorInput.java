@@ -181,6 +181,7 @@ public class SensorInput implements SensorInputProvider {
 		this.resetAHRS();
 		this.resetLeftEncoder();
 		this.resetRightEncoder();
+		this.resetElevatorEncoder();
 		rightDriveEnc.setSamplesToAverage(50);
 		leftDriveEnc.setSamplesToAverage(50);
 		rightDriveEnc.setMaxPeriod(1.0);

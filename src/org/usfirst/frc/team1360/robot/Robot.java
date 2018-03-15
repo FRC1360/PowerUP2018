@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
 			new Waypoint(17, 3, 0),
 			new Waypoint(19.5, 6, Pathfinder.d2r(90)),
 			new Waypoint(19, 19, Pathfinder.d2r(90)),
-			new Waypoint(23, 23, Pathfinder.d2r(-15))
+			new Waypoint(22, 23, 0)
 			
 			
 		};
@@ -131,12 +131,9 @@ public class Robot extends TimedRobot {
 		matchLog.writeClean("----------STARTING AUTO PERIOD----------");
 		matchLog.startVideoCache();
 		
-		position.start();
-		AutonControl.start();
-		
 		sensorInput.reset();
-		position.start();
-		position.reset(0,0,0);
+		
+		AutonControl.start();
 	}
 
 	/**

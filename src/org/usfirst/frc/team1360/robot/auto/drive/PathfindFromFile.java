@@ -33,13 +33,11 @@ public class PathfindFromFile extends AutonRoutine{
 		File leftProfile;
 		File rightProfile;
 		
-		try {
-			leftProfile = new File("/U/L-" + file);	
-			rightProfile = new File("/U/R-" + file);
-		} catch(Throwable e) {
-			matchLogger.writeClean(file + " is invalid");
+		leftProfile = new File("/U/L-" + file);	
+		rightProfile = new File("/U/R-" + file);
+		
+		if (!leftProfile.exists() || !rightProfile.exists())
 			return;
-		}
 		
 		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
 		this.rightTraj = Pathfinder.readFromCSV(rightProfile);
@@ -53,7 +51,7 @@ public class PathfindFromFile extends AutonRoutine{
 	}
 	
 	public double getPosition() {
-		return left.getSegment().position;
+		return left == null ? 0 : left.getSegment().position;
 	}
 	
 	public void setWaypoint(double position, String name) {
@@ -107,7 +105,7 @@ public class PathfindFromFile extends AutonRoutine{
 				double yaw = -sensorInput.getAHRSYaw();
 				turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
 				
-				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r));
+				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
 				
 //				if (turn > 0)
 //					l *= Math.exp(-turn);
@@ -154,7 +152,12 @@ public class PathfindFromFile extends AutonRoutine{
 
 		@Override
 		protected void runCore() throws InterruptedException {
-			while (getPosition() < position) Thread.sleep(1);
+			System.out.printf("Waiting for position %f; %f\n", position, getPosition());
+			while (getPosition() < position) {
+				matchLogger.write(String.format("Position: %f (%f)", getPosition(), position));
+				Thread.sleep(25);
+			}
+			System.out.printf("Reached position %f\n", position);
 		}
 	}
 }

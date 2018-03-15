@@ -1,7 +1,10 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
+import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
+import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
+import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
 
@@ -17,36 +20,36 @@ public class Switch extends AutonRoutine{
 		new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0)) {
-			elevator.goToTarget(700);
-			new SweepTurn(2500, 130/4, true, true).runUntilFinish();
-			//new DriveToDistance(2500, -80, position.getY(), -80, 10, false).runUntilFinish();
+			PathfindFromFile path = new PathfindFromFile(10000, "switchOneCubeLeft.csv");
+			path.runNow("To Left Switch");
+			path.setWaypoint(10, "Start Elevator");
 			
 			waitFor("Calibrate", 0);
 			arm.goToPosition(-40);
-			new SweepTurn(2500, 130/4, false, true).runUntilFinish();
-			//new DriveToDistance(2500, position.getX(), 80, 0, 10, false).runUntilFinish();
 			
+			new ElevatorToTarget(2000, elevator.ONE_FOOT*3).runAfter("Start Elevator", "Elevator Switch");
+
+			waitFor("To Left Switch", 0);
 			intake.setClamp(intake.FREE);
-			//intake.setIntake(0.5);
 			robotOutput.setIntake(0.5);
 			Thread.sleep(500);
-			//intake.setIntake(0);
 			robotOutput.setIntake(0);
 			arm.goToTop();
 			elevator.goToBottom();
 			Thread.sleep(1000);
-			
-			
 		} else {
-			elevator.goToTarget(700);
 			
+			PathfindFromFile path = new PathfindFromFile(10000, "switchOneCubeRight.csv");
+			path.runNow("To Right Switch");
+			
+			new ElevatorToTarget(2000, elevator.ONE_FOOT*3).runNow("Elevator");
 			waitFor("Calibrate", 0);
+			
 			arm.goToPosition(-40);
-
-			//new DriveToDistance(5000, 0, 90, 0, 10, false).runUntilFinish();//96 inches
+			waitFor("Elevator", 0);
+			waitFor("To Right Switch", 0);
 	
 			intake.setClamp(intake.FREE);
-			//intake.setIntake(-1);
 			robotOutput.setIntake(1);
 			
 			Thread.sleep(500);
@@ -54,12 +57,11 @@ public class Switch extends AutonRoutine{
 			arm.goToTop();
 			elevator.goToBottom();
 			
-			Thread.sleep(1000);
-			
+			Thread.sleep(3000);
 		}
 		
-		Thread.sleep(1000);
-	
+		
+		
 	}
 
 }

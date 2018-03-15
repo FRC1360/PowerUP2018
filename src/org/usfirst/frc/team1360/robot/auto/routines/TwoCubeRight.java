@@ -145,7 +145,7 @@ public class TwoCubeRight extends AutonRoutine{
 			arm.goToPosition(-45);
 			intake.setIntake(-1);
 			intake.setClamp(intake.FREE);
-			new DriveToInch(1000, 50, 20, 6, false, false).runUntilFinish();
+			new DriveToInch(1000, 50, -162, 6, false, false).runUntilFinish();
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
 			
@@ -157,7 +157,50 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(0);
 		}
 		else if(!fms.plateLeft(0) && fms.plateLeft(1)) {
+			//Run Switch
+			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
+			PathfindFromFile cubePath = new PathfindFromFile(5000, "lmao.csv");
+			switchPath.runNow("To Switch");
 			
+			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			waitFor("Calibrate", 0);
+			arm.goToPosition(-30);
+			
+			waitFor("To Switch", 0);
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(500);
+			
+			intake.setIntake(0);
+			arm.goToTop();
+			elevator.goToBottom();
+			
+			new FaceAngle(1000, 0).runUntilFinish();
+			
+			//Run Scale
+			cubePath.runNow("To Cube");
+			Thread.sleep(1000);
+			
+			arm.goToPosition(-45);
+			
+			waitFor("To Cube", 0);
+			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			
+			new FaceAngle(1000, -180).runUntilFinish();
+			new DriveToInch(1000, 6, -180, 6, false, false).runUntilFinish();
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			new FaceAngle(1000, 0).runUntilFinish();
+			elevator.goToTop();
+			new DriveToInch(1000, 30, 0, 6, false, false).runUntilFinish();
+			
+			intake.setClamp(intake.FREE);
+			intake.setIntake(0.75);
+			Thread.sleep(1000);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
 		}
 	}
 

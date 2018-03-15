@@ -126,8 +126,8 @@ public class TwoCubeRight extends AutonRoutine{
 			matchLogger.writeClean("SCALE ELEVATOR DONE");
 			
 			waitFor("Calibrate", 0);
-			arm.goToPosition(-30);
-			Thread.sleep(750);
+			arm.goToPosition(-20);
+			Thread.sleep(500);
 			
 			matchLogger.writeClean("SCALE ELEVATOR AND PATH DONE");
 			
@@ -155,8 +155,6 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setClamp(intake.CLOSED);
 			
 			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
-			new DriveToInch(10000, 6, -162, 3, true, false).runUntilFinish();
-			Thread.sleep(500);
 			
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);

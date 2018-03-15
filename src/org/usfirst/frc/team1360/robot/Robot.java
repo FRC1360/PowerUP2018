@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
 				new Waypoint(22, 5.5, Pathfinder.d2r(25))
 		};
 			
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 10, 7, 100);
 		this.trajectory = Pathfinder.generate(points, config);
 	}
 

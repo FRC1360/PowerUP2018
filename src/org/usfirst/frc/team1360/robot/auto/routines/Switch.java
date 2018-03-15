@@ -32,7 +32,6 @@ public class Switch extends AutonRoutine{
 
 			waitFor("To Left Switch", 0);
 			robotOutput.tankDrive(0, 0);
-			matchLogger.writeClean("SWITCH: STARTING OUTTAKE");
 			
 			new DriveToInch(750, 6, 0, 4, false, false).runUntilFinish();
 			

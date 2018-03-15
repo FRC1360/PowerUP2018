@@ -38,7 +38,7 @@ public class TwoCubeRight extends AutonRoutine{
 			
 			new FaceAngle(1000, 20).runUntilFinish();
 			
-			waitFor("Elevator scale", 0);
+			waitFor("Elevator Scale", 0);
 			
 			arm.goToPosition(ArmProvider.POS_BOTTOM);
 			new DriveToInch(1000, 6, 20, 6, false, false).runUntilFinish();
@@ -115,24 +115,25 @@ public class TwoCubeRight extends AutonRoutine{
 		}
 		else if(!fms.plateLeft(0) && !fms.plateLeft(0)) {
 			//Start of first scale
-			PathfindFromFile scalePath = new PathfindFromFile(5000, "lmao.csv");
-			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
+			PathfindFromFile scalePath = new PathfindFromFile(10000, Robot.trajectory);
 			scalePath.runNow("To Scale");
 			
-			scalePath.setWaypoint(10, "Start Elevator");
-			
-			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runAfter("Start Elevator", "Elevator Scale");
-			
-			waitFor("Calibrate", 0);
-			
-			arm.goToPosition(-30);
+			waitFor("To Scale", 0);
+			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runNow("Elevator Scale");
+			robotOutput.tankDrive(0, 0);
 			
 			waitFor("Elevator Scale", 0);
-			waitFor("To Scale", 0);
+			matchLogger.writeClean("SCALE ELEVATOR DONE");
+			
+			waitFor("Calibrate", 0);
+			arm.goToPosition(-30);
+			Thread.sleep(750);
+			
+			matchLogger.writeClean("SCALE ELEVATOR AND PATH DONE");
 			
 			intake.setClamp(intake.FREE);
 			intake.setIntake(1);
-			Thread.sleep(500);
+			Thread.sleep(750);
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
 			
@@ -140,16 +141,23 @@ public class TwoCubeRight extends AutonRoutine{
 			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
 			
 			new FaceAngle(1000, -162).runUntilFinish();
+			arm.goToPosition(-45);
 			
 			//Start of switch
-			arm.goToPosition(-45);
 			intake.setIntake(-1);
 			intake.setClamp(intake.FREE);
-			new DriveToInch(1000, 50, -162, 6, false, false).runUntilFinish();
+			new DriveToInch(10000, 25, -162, 3, true, false).runUntilFinish();
+			robotOutput.tankDrive(0, 0);
+			matchLogger.writeClean("SCALE DONE DRIVING");
+			
+			Thread.sleep(500);
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
 			
 			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			new DriveToInch(10000, 6, -162, 3, true, false).runUntilFinish();
+			Thread.sleep(500);
+			
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
 			

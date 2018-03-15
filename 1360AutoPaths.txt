@@ -2,18 +2,18 @@ Motion Variables:
 
 Time Step: 0.025
 Velocity: 7
-Acceleration: 7
-Jerk: 180
+Acceleration: 4
+Jerk: 100
 Wheel Base W: 2.05
 Fit Method: Cubic
 
-switchOneCubeRight:
+switchOneCubeRight: CONFIRMED
 
 x	y	Angle
 1.63	8.5	0
 10	8.5	0
 
-switchOneCubeLeft:
+switchOneCubeLeft: CONFIRMED
 
 x	y	Angle
 1.63	8.5	0
@@ -34,11 +34,13 @@ x 	y 	angle
 19.5	10	90
 20	19	90
 
-switchRscaleR:
+
+
+switchRscaleR: CONFIRMED NOTE: FPS=10 ACCEL=7
 
 x	y	Angle
 1.63	4	0
-23	5.5	15
+22	5.5	25
 
 switchRscaleL-1:
 

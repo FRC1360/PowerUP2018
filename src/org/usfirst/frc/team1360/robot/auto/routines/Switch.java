@@ -31,12 +31,14 @@ public class Switch extends AutonRoutine{
 
 			waitFor("To Left Switch", 0);
 			intake.setClamp(intake.FREE);
-			robotOutput.setIntake(0.5);
+			robotOutput.setIntake(0.75);
 			Thread.sleep(500);
 			robotOutput.setIntake(0);
 			arm.goToTop();
 			elevator.goToBottom();
-			Thread.sleep(1000);
+			
+			Thread.sleep(2000);
+			
 		} else {
 			
 			PathfindFromFile path = new PathfindFromFile(10000, "switchOneCubeRight.csv");
@@ -50,14 +52,13 @@ public class Switch extends AutonRoutine{
 			waitFor("To Right Switch", 0);
 	
 			intake.setClamp(intake.FREE);
-			robotOutput.setIntake(1);
-			
+			robotOutput.setIntake(0.75);
 			Thread.sleep(500);
 			intake.setIntake(0);
 			arm.goToTop();
 			elevator.goToBottom();
 			
-			Thread.sleep(3000);
+			Thread.sleep(2000);
 		}
 		
 		

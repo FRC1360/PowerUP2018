@@ -25,15 +25,14 @@ public class TwoCubeRight extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
-		if(fms.plateLeft(0))
-		{
+		new Calibrate().runNow("Calibrate");
+		
+		if(fms.plateLeft(0) && fms.plateLeft(1)) {
 			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
 			path.runNow("To Scale");
-			path.setWaypoint(38, "Start elevator");
+			path.setWaypoint(38, "Start Elevator");
 			
-			new ElevatorToTarget(1000, ElevatorProvider.SCALE_HIGH).runAfter("Start elevator", "Elevator scale");
-			
-			new Calibrate().runUntilFinish();
+			new ElevatorToTarget(1000, ElevatorProvider.SCALE_HIGH-50).runAfter("Start Elevator", "Elevator Scale");
 			
 			waitFor("To Scale", 0);
 			
@@ -61,6 +60,104 @@ public class TwoCubeRight extends AutonRoutine{
 			
 			intake.setClamp(IntakeProvider.FREE);
 			intake.setIntake(-1);
+		}
+		else if(fms.plateLeft(0) && !fms.plateLeft(1)) {
+			//Start of first scale
+			PathfindFromFile scalePath = new PathfindFromFile(5000, "lmao.csv");
+			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
+			scalePath.runNow("To Scale");
+			
+			scalePath.setWaypoint(10, "Start Elevator");
+			
+			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runAfter("Start Elevator", "Elevator Scale");
+			
+			waitFor("Calibrate", 0);
+			
+			arm.goToPosition(-30);
+			
+			waitFor("Elevator Scale", 0);
+			waitFor("To Scale", 0);
+			
+			intake.setClamp(intake.FREE);
+			intake.setIntake(1);
+			Thread.sleep(500);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			arm.goToTop();
+			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
+			
+			new FaceAngle(1000, 180).runUntilFinish();
+			
+			//Start of switch
+			switchPath.runNow("To Switch");
+			switchPath.setWaypoint(10, "Drop Arm");
+			
+			waitFor("Drop Arm", 0);
+			
+			arm.goToPosition(-45);
+			
+			waitFor("To Switch", 0);
+			
+			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			new FaceAngle(1000, 180).runUntilFinish();
+			new DriveToInch(1000, 6, 20, 6, false, false).runUntilFinish();
+			
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			
+			Thread.sleep(1000);
+			intake.setIntake(0);
+		}
+		else if(!fms.plateLeft(0) && !fms.plateLeft(0)) {
+			//Start of first scale
+			PathfindFromFile scalePath = new PathfindFromFile(5000, "lmao.csv");
+			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
+			scalePath.runNow("To Scale");
+			
+			scalePath.setWaypoint(10, "Start Elevator");
+			
+			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runAfter("Start Elevator", "Elevator Scale");
+			
+			waitFor("Calibrate", 0);
+			
+			arm.goToPosition(-30);
+			
+			waitFor("Elevator Scale", 0);
+			waitFor("To Scale", 0);
+			
+			intake.setClamp(intake.FREE);
+			intake.setIntake(1);
+			Thread.sleep(500);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			arm.goToTop();
+			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
+			
+			new FaceAngle(1000, -162).runUntilFinish();
+			
+			//Start of switch
+			arm.goToPosition(-45);
+			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			new DriveToInch(1000, 50, 20, 6, false, false).runUntilFinish();
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			
+			Thread.sleep(1000);
+			intake.setIntake(0);
+		}
+		else if(!fms.plateLeft(0) && fms.plateLeft(1)) {
+			
 		}
 	}
 

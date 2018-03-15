@@ -27,39 +27,39 @@ public class TwoCubeRight extends AutonRoutine{
 	{
 		new Calibrate().runNow("Calibrate");
 		
-		if(fms.plateLeft(0) && fms.plateLeft(1)) {
+		if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
 			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
 			path.runNow("To Scale");
-			path.setWaypoint(38, "Start Elevator");
-			
-			new ElevatorToTarget(1000, ElevatorProvider.SCALE_HIGH-50).runAfter("Start Elevator", "Elevator Scale");
-			
 			waitFor("To Scale", 0);
 			
-			new FaceAngle(1000, 20).runUntilFinish();
+			new FaceAngle(1000, 20).runNow("spin");
 			
+			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runNow("Elevator Scale");
+			
+			waitFor("spin", 0);
 			waitFor("Elevator Scale", 0);
 			
 			arm.goToPosition(ArmProvider.POS_BOTTOM);
 			new DriveToInch(1000, 6, 20, 6, false, false).runUntilFinish();
 			
 			intake.setClamp(IntakeProvider.FREE);
-			intake.setIntake(-1);
+			intake.setIntake(1);
 			Thread.sleep(1000);
 			intake.setIntake(0);
 			arm.goToPosition(ArmProvider.POS_TOP);
 			
 			new ElevatorToTarget(1000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
 			arm.goToPosition(ArmProvider.POS_BOTTOM);
-			new FaceAngle(1000, 165).runUntilFinish();
+			new FaceAngle(1000, 150).runUntilFinish();
 			
-			intake.setIntake(1);
-			new DriveToInch(1500, 60, 165, 6,  2, true, false).runUntilFinish();
+			intake.setIntake(-1);
+			new DriveToInch(1500, 50, 150, 6,  2, true, false).runUntilFinish();
 			intake.setClamp(IntakeProvider.CLOSED);
-			new ElevatorToTarget(1000, ElevatorProvider.SWITCH_HEIGHT).runUntilFinish();
+			new ElevatorToTarget(1000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
 			
 			intake.setClamp(IntakeProvider.FREE);
-			intake.setIntake(-1);
+			intake.setIntake(1);
+			Thread.sleep(1000);
 		}
 		else if(fms.plateLeft(0) && !fms.plateLeft(1)) {
 			//Start of first scale

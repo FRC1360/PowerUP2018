@@ -37,14 +37,13 @@ public class TwoCubeRight extends AutonRoutine{
 			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runNow("Elevator Scale");
 			
 			waitFor("spin", 0);
+			arm.goToPosition(-30);
 			waitFor("Elevator Scale", 0);
 			
-			arm.goToPosition(ArmProvider.POS_BOTTOM);
-			new DriveToInch(1000, 6, 20, 6, false, false).runUntilFinish();
 			
 			intake.setClamp(IntakeProvider.FREE);
 			intake.setIntake(1);
-			Thread.sleep(1000);
+			Thread.sleep(500);
 			intake.setIntake(0);
 			arm.goToPosition(ArmProvider.POS_TOP);
 			

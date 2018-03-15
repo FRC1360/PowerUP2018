@@ -96,13 +96,13 @@ public class Robot extends TimedRobot {
 		
 		Waypoint[] points = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
-				new Waypoint(15, 3, 0),
-				new Waypoint(19.5, 9, Pathfinder.d2r(90)),
+				new Waypoint(12, 2, 0),
+				new Waypoint(20, 9, Pathfinder.d2r(90)),
 				new Waypoint(19.5, 19, Pathfinder.d2r(90)),
 				new Waypoint(23, 22, 0)
 		};
 			
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
 		this.trajectory = Pathfinder.generate(points, config);
 	}
 

@@ -28,7 +28,7 @@ public class TwoCubeRight extends AutonRoutine{
 		new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
+			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchLScaleL);
 			path.runNow("To Scale");
 			waitFor("To Scale", 0);
 			
@@ -62,23 +62,24 @@ public class TwoCubeRight extends AutonRoutine{
 		}
 		else if(fms.plateLeft(0) && !fms.plateLeft(1)) {
 			//Start of first scale
-			PathfindFromFile scalePath = new PathfindFromFile(5000, "lmao.csv");
-			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
+			PathfindFromFile scalePath = new PathfindFromFile(4800, Robot.trajectorySwitchLScaleR1);
+			PathfindFromFile switchPath = new PathfindFromFile(4500, Robot.trajectorySwitchLScaleR2);
 			scalePath.runNow("To Scale");
 			
-			scalePath.setWaypoint(10, "Start Elevator");
-			
-			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runAfter("Start Elevator", "Elevator Scale");
+//			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");
+			elevator.safety(0.15, false);
 			
 			waitFor("Calibrate", 0);
+			arm.goToPosition(-20);
 			
-			arm.goToPosition(-30);
-			
-			waitFor("Elevator Scale", 0);
 			waitFor("To Scale", 0);
+			robotOutput.tankDrive(0, 0);
 			
-			intake.setClamp(intake.FREE);
+			//waitFor("Elevator Scale", 0);
+			matchLogger.writeClean("SCALE ELEVATOR DONE");
+			
 			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
 			Thread.sleep(500);
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
@@ -86,35 +87,34 @@ public class TwoCubeRight extends AutonRoutine{
 			arm.goToTop();
 			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
 			
-			new FaceAngle(1000, 180).runUntilFinish();
+			new FaceAngle(1000, -150).runUntilFinish();
 			
 			//Start of switch
 			switchPath.runNow("To Switch");
-			switchPath.setWaypoint(10, "Drop Arm");
-			
-			waitFor("Drop Arm", 0);
-			
 			arm.goToPosition(-45);
 			
 			waitFor("To Switch", 0);
-			
+
 			intake.setIntake(-1);
 			intake.setClamp(intake.FREE);
-			new FaceAngle(1000, 180).runUntilFinish();
-			new DriveToInch(1000, 6, 20, 6, false, false).runUntilFinish();
+			new FaceAngle(1500, -180).runUntilFinish();
+			robotOutput.tankDrive(0, 0);
 			
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
 			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			new DriveToInch(2000, 4, -150, 5, true, false).runUntilFinish();
+			robotOutput.tankDrive(0, 0);
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
 			
 			Thread.sleep(1000);
 			intake.setIntake(0);
+			
 		}
 		else if(!fms.plateLeft(0) && !fms.plateLeft(0)) {
 			//Start of first scale
-			PathfindFromFile scalePath = new PathfindFromFile(10000, Robot.trajectory);
+			PathfindFromFile scalePath = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleR);
 			scalePath.runNow("To Scale");
 			
 			waitFor("To Scale", 0);

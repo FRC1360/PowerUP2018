@@ -21,7 +21,7 @@ public class Switch extends AutonRoutine{
 		new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0)) {
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
+			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchOneCubeLeft);
 			path.runNow("To Left Switch");
 			path.setWaypoint(7, "Start Elevator");
 			
@@ -46,7 +46,7 @@ public class Switch extends AutonRoutine{
 			
 		} else {
 			
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
+			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchOneCubeRight);
 			path.runNow("To Right Switch");
 			
 			waitFor("Calibrate", 0);

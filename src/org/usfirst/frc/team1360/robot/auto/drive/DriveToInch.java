@@ -47,9 +47,8 @@ public class DriveToInch extends AutonRoutine{
 		
 		int leftEncoderOffset = sensorInput.getLeftDriveEncoder();
 		int rightEncoderOffset = sensorInput.getRightDriveEncoder();
-		int targetDelta = leftEncoderOffset - rightEncoderOffset;
 		
-		OrbitPID pidAngle = new OrbitPID(0.05, 0.1, 0.0);//p = 4.7 i = 0.0025
+		OrbitPID pidAngle = new OrbitPID(0.05, 0.0, 0.0);//p = 4.7 i = 0.0025
 		OrbitPID pidSpeed = new OrbitPID(0.0007, 0.01, 0.0); //p = 0.01 i = 0.2 d = 0.2
 		OrbitPID pidFs = new OrbitPID(0.01, 0.0, 0.0);
 		
@@ -58,18 +57,17 @@ public class DriveToInch extends AutonRoutine{
 		
 		double currentVel;
 		
-		long angleAccurate = System.currentTimeMillis();
-		
 		double encoderAverage = 0;
 		
 		do {
 			double loggedAngle = Math.toRadians(sensorInput.getAHRSYaw());
 			matchLogger.writeClean("NAVX DEBUG" + sensorInput.getAHRSYaw() + " RAW: " + loggedAngle);
-			
-			int encoderErr = (sensorInput.getLeftDriveEncoder() - sensorInput.getRightDriveEncoder()) - targetDelta;
 			//double turn = pidAngle.calculate(0, encoderErr);
 			double turn = pidAngle.calculate(A, sensorInput.getAHRSYaw()); 
 			currentVel = (Math.abs(sensorInput.getLeftEncoderVelocity()) + Math.abs(sensorInput.getRightEncoderVelocity())) / 2;
+			
+			leftEncoderActual = sensorInput.getLeftDriveEncoder() - leftEncoderOffset;
+			rightEncoderActual = sensorInput.getRightDriveEncoder() - rightEncoderOffset;
 			
 			encoderAverage = (leftEncoderActual + rightEncoderActual) / 2;
 			
@@ -82,7 +80,7 @@ public class DriveToInch extends AutonRoutine{
 				matchLogger.writeClean("MOVEMENT SPEED " + speed);
 				
 				if(speed > 1)
-					speed = 0.9;
+					speed = 1;
 			} else {
 				speed = pidSpeed.calculate(target, Math.abs(encoderAverage));
 				//matchLogger.writeClean("MOVEMENT SPEED " + speed);
@@ -94,24 +92,17 @@ public class DriveToInch extends AutonRoutine{
 				speed = -speed;
 			robotOutput.arcadeDrivePID(speed, turn);
 			
-			if (useNavx) {
-				long time = System.currentTimeMillis();
-				if (Math.abs(encoderErr) > 3)
-					angleAccurate = time;
-				else if (time - angleAccurate >= 50) {
-					targetDelta += Math.round(Math.toRadians(sensorInput.getAHRSYaw() - targetAngle));
-				}
-			}
-			
 			
 			
 			Thread.sleep(10);
-			
-			leftEncoderActual = sensorInput.getLeftDriveEncoder() - leftEncoderOffset;
-			rightEncoderActual = sensorInput.getRightDriveEncoder() - rightEncoderOffset;
-		} while (Math.abs(encoderAverage) < target - Math.abs(currentVel) * 0.035);
+		} while (Math.abs(encoderAverage) < target);
 
-		//robotOutput.tankDrive(0, 0);
+		robotOutput.tankDrive(0, 0);
 	}
 
+	@Override
+	protected void overrideCore() {
+		super.overrideCore();
+		robotOutput.tankDrive(0, 0);
+	}
 }

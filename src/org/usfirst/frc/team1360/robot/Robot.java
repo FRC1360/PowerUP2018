@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
 		
 		Waypoint[] pointsSwitchRScaleR = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
-				new Waypoint(22, 5.5, Pathfinder.d2r(22))
+				new Waypoint(23, 5.5, Pathfinder.d2r(35))
 		};
 		
 		Waypoint[] pointsSwitchLScaleR1 = new Waypoint[] {
@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
 		};
 		
 			
-		Trajectory.Config configRR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 10, 7, 100);
+		Trajectory.Config configRR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
 		Trajectory.Config configLL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
 		Trajectory.Config configLR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
 		Trajectory.Config configLR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 5, 100);

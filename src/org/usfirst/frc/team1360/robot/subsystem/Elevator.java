@@ -87,8 +87,9 @@ public final class Elevator implements ElevatorProvider {
 		CLIMB {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 				while (!sensorInput.getBottomSwitch()) {
-					elevator.safety(-1);
+					robotOutput.setElevatorMotor(-1);
 					Thread.sleep(10);
 				}
 				context.nextState(CLIMB_HOLD);
@@ -98,10 +99,7 @@ public final class Elevator implements ElevatorProvider {
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				while (true) {
-					elevator.safety(-0.1);
-					Thread.sleep(10); // Tune this power to what we need to hold the robot up!
-				}
+				Singleton.get(RobotOutputProvider.class).setElevatorMotor(-0.3);
 			}
 		};
 		
@@ -307,7 +305,7 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public boolean isClimbing() {
-		return stateMachine.getState() == ElevatorState.CLIMB;
+		return stateMachine.getState() == ElevatorState.CLIMB || stateMachine.getState() == ElevatorState.CLIMB_HOLD;
 	}
 	
 	@Override

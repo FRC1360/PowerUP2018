@@ -43,10 +43,10 @@ public class FaceAngle extends AutonRoutine{
 			
 			double curA = Math.toRadians(sensorInput.getAHRSYaw());
 			err = targetAngle - curA;
-			double vTarget = 0.55 * Math.copySign(1 - Math.exp(-0.9 * Math.abs(err)), err);
+			double vTarget = 0.6 * Math.copySign(1 - Math.exp(-0.9 * Math.abs(err)), err);
 			
-			final double kB = 1.2;
-			final double kP = 0.3;
+			final double kB = 2;
+			final double kP = 1;
 			long time = System.currentTimeMillis();
 			velA = (curA - lastA) / (time - lastTime);
 			double turn = kB * vTarget + kP * (vTarget - velA);
@@ -57,11 +57,16 @@ public class FaceAngle extends AutonRoutine{
 			robotOutput.arcadeDrive(0, turn);
 			
 			SmartDashboard.putNumber("FaceAngle Error", err);
-		} while (Math.abs(err) > 0.03);
+		} while (Math.abs(err) > 0.15);
 		
 		robotOutput.arcadeDrive(0, -0.2 * Math.signum(velA));
-		Thread.sleep(100);
+		Thread.sleep(200);
 		robotOutput.tankDrive(0, 0);
 	}
 
+	@Override
+	protected void overrideCore() {
+		super.overrideCore();
+		robotOutput.tankDrive(0, 0);
+	}
 }

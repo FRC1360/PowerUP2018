@@ -51,8 +51,6 @@ public interface HumanInputProvider {
 	
 	//OTHER
 	
-	boolean getDriverArmDown();
-	
 	boolean getDriverOverride();
 	
 	//---------operator controls-------

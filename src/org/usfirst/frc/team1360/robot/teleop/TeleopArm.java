@@ -20,7 +20,6 @@ public final class TeleopArm implements TeleopComponent {
 	@Override
 	public void calculate() {
 		double speed = humanInput.deadzone(humanInput.getArm(), 0.1);
-		boolean climb = humanInput.getDriverArmDown();
 		boolean override = humanInput.getDriverOverride();
 		
 		if(override && !overrideHeld) {
@@ -31,9 +30,7 @@ public final class TeleopArm implements TeleopComponent {
 			overrideHeld = false;
 		}
 		
-		if (!arm.isClimbing() && climb)
-			arm.climb();
-		if (speed == 0 && !arm.movingToPosition() && !arm.isClimbing())
+		if (speed == 0 && !arm.movingToPosition())
 		{
 			if (!arm.isHolding())
 				arm.hold();

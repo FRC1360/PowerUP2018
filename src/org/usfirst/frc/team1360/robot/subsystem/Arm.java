@@ -99,29 +99,6 @@ public class Arm implements ArmProvider{
 				}
 			}
 		},
-		CLIMB {
-			@Override
-			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting Down to target arm at: " + sensorInput.getArmEncoder());
-				
-				if(!(context.getArg() instanceof Integer)) {
-					matchLogger.write("No Down Target Provided to ArmStateMachine");
-					context.nextState(IDLE);
-				}
-				
-				int target = (Integer) context.getArg();
-				arm.safety(-0.75);
-				
-				while(sensorInput.getArmEncoder() > target)	{
-					Thread.sleep(10);
-					arm.safety(-0.75, true);
-					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
-				}
-
-				
-				context.nextState(IDLE);
-			}
-		},
 		CALIBRATE{
 			private boolean calibrated = false;
 			
@@ -274,22 +251,6 @@ public class Arm implements ArmProvider{
 	
 	private void safety(double power) {
 		safety(power, false);
-	}
-	
-	@Override
-	public boolean climb() {
-		try {
-			stateMachine.setState(ArmState.CLIMB);
-		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean isClimbing() {
-		return stateMachine.getState() == ArmState.CLIMB;
 	}
 
 	@Override

@@ -240,11 +240,6 @@ public class HumanInput implements HumanInputProvider {
 	}
 	
 	@Override
-	public boolean getDriverArmDown() {
-		return driver.getPOV(0) == 180;
-	}
-	
-	@Override
 	public boolean getDriverOverride() {
 		return driver.getBumper(Hand.kLeft) && driver.getBumper(Hand.kRight);
 	}

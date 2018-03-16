@@ -235,8 +235,7 @@ public class HumanInput implements HumanInputProvider {
 	
 	@Override
 	public boolean getClimb() {
-		return false;
-//		return operator.getBumper(Hand.kRight);
+		return operator.getPOV(0) == 0;
 	}
 	
 	@Override

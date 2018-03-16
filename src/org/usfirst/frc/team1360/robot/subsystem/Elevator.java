@@ -84,6 +84,17 @@ public final class Elevator implements ElevatorProvider {
 			}
 		},
 		
+		CLIMB {
+			@Override
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				while (!sensorInput.getBottomSwitch()) {
+					elevator.safety(-1);
+					Thread.sleep(10);
+				}
+				context.nextState(CLIMB_HOLD);
+			}
+		},
+		
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
@@ -296,7 +307,7 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public boolean isClimbing() {
-		return stateMachine.getState() == ElevatorState.CLIMB_HOLD;
+		return stateMachine.getState() == ElevatorState.CLIMB;
 	}
 	
 	@Override

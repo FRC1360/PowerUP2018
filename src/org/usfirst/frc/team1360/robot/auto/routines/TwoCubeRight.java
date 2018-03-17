@@ -61,6 +61,7 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(0);
 		}
 		else if(fms.plateLeft(0) && !fms.plateLeft(1)) { //LR
+			/*
 			//Start of first scale
 			PathfindFromFile scalePath = new PathfindFromFile(4800, Robot.trajectorySwitchLScaleR1);
 			PathfindFromFile switchPath = new PathfindFromFile(4500, Robot.trajectorySwitchLScaleR2);
@@ -97,7 +98,7 @@ public class TwoCubeRight extends AutonRoutine{
 
 			intake.setIntake(-1);
 			intake.setClamp(intake.FREE);
-			new FaceAngle(1500, -180).runUntilFinish();
+			new FaceAngle(1500, -150).runUntilFinish();
 			robotOutput.tankDrive(0, 0);
 			
 			intake.setIntake(0);
@@ -110,8 +111,20 @@ public class TwoCubeRight extends AutonRoutine{
 			
 			Thread.sleep(1000);
 			intake.setIntake(0);
+			*/
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL);
+			switch1.runNow("Switch 1");
+			waitFor("Calibrate", 0);
+			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);
+			waitFor("Switch 1", 0);
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(1000);
+			arm.goToTop();
+			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
 		}
-		else if(!fms.plateLeft(0) && !fms.plateLeft(0)) { //RR
+		else if(!fms.plateLeft(0) && !fms.plateLeft(1)) { //RR
 			//Start of first scale
 			PathfindFromFile scalePath = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleR);
 			scalePath.runNow("To Scale");
@@ -162,6 +175,7 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(0);
 		}
 		else if(!fms.plateLeft(0) && fms.plateLeft(1)) { //RL
+			/*
 			//Run Switch
 			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
 			PathfindFromFile cubePath = new PathfindFromFile(5000, "lmao.csv");
@@ -206,6 +220,18 @@ public class TwoCubeRight extends AutonRoutine{
 			Thread.sleep(1000);
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
+			*/
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeR);
+			switch1.runNow("Switch 1");
+			waitFor("Calibrate", 0);
+			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);
+			waitFor("Switch 1", 0);
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(1000);
+			arm.goToTop();
+			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
 		}
 	}
 

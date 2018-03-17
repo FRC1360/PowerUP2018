@@ -35,7 +35,7 @@ public class Arm implements ArmProvider{
 				while(sensorInput.getArmEncoder() > target)	{
 					int pos = sensorInput.getArmEncoder();
 					double vTarget = 70 * (Math.exp(target - pos) - 1);
-					arm.safety(0.01 * vTarget + 0.005 * (vTarget - sensorInput.getArmEncoderVelocity()));
+					arm.safety(0.005 * vTarget + 0.0025 * (vTarget - sensorInput.getArmEncoderVelocity()));
 					matchLogger.write("Arm Currently at: " + pos);
 					Thread.sleep(10);
 				}
@@ -58,7 +58,7 @@ public class Arm implements ArmProvider{
 				while(sensorInput.getArmEncoder() < target)	{
 					int pos = sensorInput.getArmEncoder();
 					double vTarget = 70 * (1 - Math.exp(pos - target));
-					arm.safety(0.01 * vTarget + 0.005 * (vTarget - sensorInput.getArmEncoderVelocity()));
+					arm.safety(0.005 * vTarget + 0.0025 * (vTarget - sensorInput.getArmEncoderVelocity()));
 					matchLogger.write("Arm Currently at: " + pos);
 					Thread.sleep(10);
 				}

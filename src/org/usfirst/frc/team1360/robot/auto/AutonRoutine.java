@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1360.robot.auto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -200,6 +201,7 @@ public abstract class AutonRoutine extends Thread {
 		catch (Throwable t)
 		{
 			matchLogger.write(t.toString());
+			Arrays.stream(t.getStackTrace()).map(StackTraceElement::toString).forEach(matchLogger::write);
 		}
 		matchLogger.write("End " + getClass().getSimpleName());
 	}

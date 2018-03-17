@@ -49,7 +49,11 @@ public class PathfindFromFile extends AutonRoutine{
 	}
 	
 	public double getPosition() {
-		return left == null ? 0 : left.getSegment().position;
+		try {
+			return left == null ? 0 : left.getSegment().position;
+		} catch (Throwable t) {
+			return Double.NaN;
+		}
 	}
 	
 	public void setWaypoint(double position, String name) {

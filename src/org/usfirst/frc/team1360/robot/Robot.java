@@ -60,12 +60,14 @@ public class Robot extends TimedRobot {
 	private OrbitPositionProvider position;
 	private TeleopControl teleopControl;
 
-	public static Trajectory trajectorySwitchLScaleR1;
-	public static Trajectory trajectorySwitchLScaleR2;
+//	public static Trajectory trajectorySwitchLScaleR1;
+//	public static Trajectory trajectorySwitchLScaleR2;
 	public static Trajectory trajectorySwitchLScaleL;
 	public static Trajectory trajectorySwitchRScaleR;
 	public static Trajectory trajectorySwitchOneCubeRight;
 	public static Trajectory trajectorySwitchOneCubeLeft;
+	public static Trajectory trajectorySwitchFar2CubeR;
+	public static Trajectory trajectorySwitchFar2CubeL;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -111,7 +113,7 @@ public class Robot extends TimedRobot {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(23, 5.5, Pathfinder.d2r(35))
 		};
-		
+		/*
 		Waypoint[] pointsSwitchLScaleR1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(23, 5.5, Pathfinder.d2r(35))
@@ -122,7 +124,7 @@ public class Robot extends TimedRobot {
 				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
 				new Waypoint(19.5, 15.5, Pathfinder.d2r(90))
 		};
-		
+		*/
 		Waypoint[] pointsSwitchOneCubeLeft = new Waypoint[] {
 				new Waypoint(22, 5.5, Pathfinder.d2r(150)),
 				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
@@ -135,23 +137,37 @@ public class Robot extends TimedRobot {
 				new Waypoint(20, 15.5, Pathfinder.d2r(90))
 		};
 		
+		Waypoint[] pointsSwitchFar2CubeR = new Waypoint[] {
+				new Waypoint(1.63, 4, 0),
+				new Waypoint(10, 2.5, 0),
+				new Waypoint(14, 6.5, Pathfinder.d2r(90))
+		};
+		
+		Waypoint[] pointsSwitchFar2CubeL = new Waypoint[] {
+				new Waypoint(1.63, 4, 0),
+				new Waypoint(5.5, 11, Pathfinder.d2r(90)),
+				new Waypoint(5.5, 15, Pathfinder.d2r(90)),
+				new Waypoint(10, 18, 0)
+		};
 			
 		Trajectory.Config configRR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
 		Trajectory.Config configLL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
-		Trajectory.Config configLR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
-		Trajectory.Config configLR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 5, 100);
+//		Trajectory.Config configLR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
+//		Trajectory.Config configLR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 5, 100);
 		Trajectory.Config configRL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
 		Trajectory.Config configL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);
 		Trajectory.Config configR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);//jerk was 180
+		Trajectory.Config configFar2R = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);
+		Trajectory.Config configFar2L = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);
 		
-		//this.trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
-		this.trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
-		this.trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
-		//this.trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
-		//this.trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
-		//this.trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
-		
-		
+//		trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
+//		trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
+//		trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
+//		trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
+//		trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
+//		trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
+		trajectorySwitchFar2CubeR = Pathfinder.generate(pointsSwitchFar2CubeR, configFar2R);
+		trajectorySwitchFar2CubeL = Pathfinder.generate(pointsSwitchFar2CubeL, configFar2L);
 	}
 
 	/**

@@ -32,7 +32,7 @@ public final class Test extends AutonRoutine {
 
 		if(fms.plateLeft(0))
 		{
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectory);
+			PathfindFromFile path = new PathfindFromFile(10000, "lmao.csv");
 			path.runNow("To Scale");
 			path.setWaypoint(38, "Start elevator");
 			

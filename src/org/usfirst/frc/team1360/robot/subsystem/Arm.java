@@ -31,12 +31,13 @@ public class Arm implements ArmProvider{
 				}
 				
 				int target = (Integer) context.getArg();
-				arm.safety(-0.75);
 				
 				while(sensorInput.getArmEncoder() > target)	{
+					int pos = sensorInput.getArmEncoder();
+					double vTarget = 70 * (Math.exp(target - pos) - 1);
+					arm.safety(0.01 * vTarget + 0.005 * (vTarget - sensorInput.getArmEncoderVelocity()));
+					matchLogger.write("Arm Currently at: " + pos);
 					Thread.sleep(10);
-					arm.safety(-0.75);
-					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
 				}
 
 				
@@ -53,10 +54,12 @@ public class Arm implements ArmProvider{
 				}
 				
 				int target = (Integer) context.getArg();
-				arm.safety(0.75);
 				
 				while(sensorInput.getArmEncoder() < target)	{
-					arm.safety(0.75);
+					int pos = sensorInput.getArmEncoder();
+					double vTarget = 70 * (1 - Math.exp(pos - target));
+					arm.safety(0.01 * vTarget + 0.005 * (vTarget - sensorInput.getArmEncoderVelocity()));
+					matchLogger.write("Arm Currently at: " + pos);
 					Thread.sleep(10);
 				}
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
@@ -94,29 +97,6 @@ public class Arm implements ArmProvider{
 					arm.safety(0.05);
 					Thread.sleep(10);
 				}
-			}
-		},
-		CLIMB {
-			@Override
-			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				matchLogger.write("Starting Down to target arm at: " + sensorInput.getArmEncoder());
-				
-				if(!(context.getArg() instanceof Integer)) {
-					matchLogger.write("No Down Target Provided to ArmStateMachine");
-					context.nextState(IDLE);
-				}
-				
-				int target = (Integer) context.getArg();
-				arm.safety(-0.75);
-				
-				while(sensorInput.getArmEncoder() > target)	{
-					Thread.sleep(10);
-					arm.safety(-0.75, true);
-					matchLogger.write("Arm Currently at: " + sensorInput.getArmEncoder());
-				}
-
-				
-				context.nextState(IDLE);
 			}
 		},
 		CALIBRATE{
@@ -246,8 +226,12 @@ public class Arm implements ArmProvider{
 			if(sensorInput.getArmSwitch())
 				sensorInput.resetArmEncoder();
 			
-			if (sensorInput.getArmCurrent() > 200.0)
-				cooldown = System.currentTimeMillis() + 500;
+			try {
+				if (sensorInput.getArmCurrent() > 200.0)
+					cooldown = System.currentTimeMillis() + 500;
+			} catch (Throwable t) {
+				matchLogger.write("Could not run current draw safety on arm!");
+			}
 			
 			if (System.currentTimeMillis() < cooldown) {
 				robotOutput.setArm(0);
@@ -267,22 +251,6 @@ public class Arm implements ArmProvider{
 	
 	private void safety(double power) {
 		safety(power, false);
-	}
-	
-	@Override
-	public boolean climb() {
-		try {
-			stateMachine.setState(ArmState.CLIMB);
-		} catch (InterruptedException e) {
-			matchLogger.write(e.toString());
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean isClimbing() {
-		return stateMachine.getState() == ArmState.CLIMB;
 	}
 
 	@Override

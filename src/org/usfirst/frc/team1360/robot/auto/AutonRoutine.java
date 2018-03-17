@@ -195,12 +195,7 @@ public abstract class AutonRoutine extends Thread {
 		try
 		{
 			runCore();
-			synchronized(this)
-			{
-				notifyAll();
-				queue.forEach(AutonRoutine::start);
-				done = true;
-			}
+			onEnd();
 		}
 		catch (Throwable t)
 		{
@@ -219,9 +214,20 @@ public abstract class AutonRoutine extends Thread {
 	{
 		System.out.printf("%s overriden: %s!\n", getClass().getSimpleName(), reason);
 		overrideCore();
+		onEnd();
 	}
 	
 	protected void overrideCore()
 	{
+	}
+	
+	private void onEnd()
+	{
+		synchronized(this)
+		{
+			notifyAll();
+			queue.forEach(AutonRoutine::start);
+			done = true;
+		}
 	}
 }

@@ -20,8 +20,6 @@ public interface ArmProvider {
 	boolean calibrate(boolean force);
 	boolean isCalibrating();
 	boolean movingToPosition();
-	boolean climb();
-	boolean isClimbing();
 	boolean hold();
 	boolean isHolding();
 	void logState();

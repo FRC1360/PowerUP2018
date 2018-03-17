@@ -18,8 +18,6 @@ public class PathfindFromFile extends AutonRoutine{
 	final int TICKS_PER_REV = 250/3;
 	final double WHEEL_SIZE = 0.4166;
 	final double TIME_STEP = 0.025;
-	final double FPS = 13;
-	final double ACCELERATION = 13;
 	final double MAX_FPS = 7;
 	
 	private Trajectory leftTraj;

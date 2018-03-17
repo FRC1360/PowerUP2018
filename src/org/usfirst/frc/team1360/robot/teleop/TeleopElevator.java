@@ -78,10 +78,9 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				elevator.climb();
 			}
-			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
+			if (!elevator.isMovingToTarget() && !elevator.isClimbing() && !elevator.isHolding())
 			{
-				if(!elevator.isHolding())
-					elevator.hold();
+				elevator.hold();
 			}
 			
 		}

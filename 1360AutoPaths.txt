@@ -73,6 +73,13 @@ x	y	Angle
 10	2.5	0
 14	6.5	90
 
+switchFarR2: CONFIRMED FPS=6 ACCEL=6
+
+x	y	Angle
+13	5.5	0
+17	4.5	0
+21	7	90
+
 switchFarL1: CONFIRMED FPS=6 ACCEL=6
 
 x	y	Angle

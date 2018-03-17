@@ -112,12 +112,13 @@ public class TwoCubeRight extends AutonRoutine{
 			Thread.sleep(1000);
 			intake.setIntake(0);
 			*/
-			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL);
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL1);
 			switch1.runNow("Switch 1");
 			waitFor("Calibrate", 0);
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			arm.goToPosition(arm.POS_BOTTOM);
 			waitFor("Switch 1", 0);
+			new FaceAngle(2000, 0).runUntilFinish();
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
 			Thread.sleep(1000);
@@ -221,17 +222,34 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
 			*/
-			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeR);
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeR1);
+			PathfindFromFile switch2 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeR2);
 			switch1.runNow("Switch 1");
 			waitFor("Calibrate", 0);
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			arm.goToPosition(arm.POS_BOTTOM);
 			waitFor("Switch 1", 0);
+			new FaceAngle(2000, -90).runUntilFinish();
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
 			Thread.sleep(1000);
+			intake.setIntake(0);
 			arm.goToTop();
 			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
+			new FaceAngle(2000, 0).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);
+			switch2.runUntilFinish();
+			new FaceAngle(2000, -160).runUntilFinish();
+			intake.setIntake(-1);
+			new DriveToInch(2000, 24, -160, 5, true, false).runUntilFinish();
+			Thread.sleep(200);
+			intake.setClamp(intake.CLOSED);
+			intake.setIntake(0);
+			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
+			intake.setClamp(intake.FREE);
+			intake.setIntake(1);
+			Thread.sleep(1000);
+			intake.setIntake(0);
 		}
 	}
 

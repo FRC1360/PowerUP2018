@@ -66,8 +66,9 @@ public class Robot extends TimedRobot {
 	public static Trajectory trajectorySwitchRScaleR;
 	public static Trajectory trajectorySwitchOneCubeRight;
 	public static Trajectory trajectorySwitchOneCubeLeft;
-	public static Trajectory trajectorySwitchFar2CubeR;
-	public static Trajectory trajectorySwitchFar2CubeL;
+	public static Trajectory trajectorySwitchFar2CubeR1;
+	public static Trajectory trajectorySwitchFar2CubeR2;
+	public static Trajectory trajectorySwitchFar2CubeL1;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -137,13 +138,19 @@ public class Robot extends TimedRobot {
 				new Waypoint(20, 15.5, Pathfinder.d2r(90))
 		};
 		
-		Waypoint[] pointsSwitchFar2CubeR = new Waypoint[] {
+		Waypoint[] pointsSwitchFar2CubeR1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(10, 2.5, 0),
 				new Waypoint(14, 6.5, Pathfinder.d2r(90))
 		};
 		
-		Waypoint[] pointsSwitchFar2CubeL = new Waypoint[] {
+		Waypoint[] pointsSwitchFar2CubeR2 = new Waypoint[] {
+				new Waypoint(13, 5.5, 0),
+				new Waypoint(17, 4.5, 0),
+				new Waypoint(21, 7, Pathfinder.d2r(90))
+		};
+		
+		Waypoint[] pointsSwitchFar2CubeL1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(5.5, 11, Pathfinder.d2r(90)),
 				new Waypoint(5.5, 15, Pathfinder.d2r(90)),
@@ -166,8 +173,9 @@ public class Robot extends TimedRobot {
 //		trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
 //		trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
 //		trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
-		trajectorySwitchFar2CubeR = Pathfinder.generate(pointsSwitchFar2CubeR, configFar2R);
-		trajectorySwitchFar2CubeL = Pathfinder.generate(pointsSwitchFar2CubeL, configFar2L);
+		trajectorySwitchFar2CubeR1 = Pathfinder.generate(pointsSwitchFar2CubeR1, configFar2R);
+		trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
+		trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
 	}
 
 	/**

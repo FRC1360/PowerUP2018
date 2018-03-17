@@ -20,17 +20,17 @@ x	y	Angle
 5.5	13	90
 10	18.25	0
 
-switchLscaleR-1:
+switchLscaleR-1: TESTING FPS=10 ACCEL=
 
 x	y	Angle
 1.63	4	0
-23	5.5	15
+22	5.5	25
 
-switchLscaleR-2:
+switchLscaleR-2: TESTING
 
 x 	y 	angle
 
-23	5.5	180
+22	5.5	180
 19.5	10	90
 20	19	90
 
@@ -57,11 +57,11 @@ x	y	Angle
 20	10	90
 20	19	90
 
-switchLscaleL:
+switchLscaleL: CONFIRMED FPS=8 ACCEL=7
 
 x	y	Angle
 1.63	4	0
-17	3	0
-19.5	6	90
-19	19	90
-22	23	0
+12	2	0
+20	9	90
+19.5	19	90
+23	22	0

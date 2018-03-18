@@ -239,6 +239,11 @@ public class HumanInput implements HumanInputProvider {
 	}
 	
 	@Override
+	public boolean getClimbRaw() {
+		return operator.getPOV(0) == 90;
+	}
+	
+	@Override
 	public boolean getDriverOverride() {
 		return driver.getBumper(Hand.kLeft) && driver.getBumper(Hand.kRight);
 	}

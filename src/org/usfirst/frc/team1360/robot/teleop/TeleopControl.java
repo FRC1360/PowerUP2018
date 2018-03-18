@@ -18,6 +18,7 @@ public class TeleopControl {
 		this.components.add(Singleton.get(TeleopIntake.class));
 		this.components.add(Singleton.get(TeleopElevator.class));
 		this.components.add(Singleton.get(TeleopArm.class));
+		this.components.add(Singleton.get(TeleopClimber.class));
 	}
 	
 	public void runCycle() //Run every tick. Executes calculate for each component.

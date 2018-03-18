@@ -26,6 +26,7 @@ public class RobotOutput implements RobotOutputProvider {
 	private Solenoid driveShift;
 	private Solenoid intakeClamp1;
 	private Solenoid intakeClamp2;
+	private Solenoid climbBar;
 	
 	private final double TURN_WEIGHT_FACTOR = 0.2;
 	
@@ -58,6 +59,8 @@ public class RobotOutput implements RobotOutputProvider {
 		elevatorLeft = new Victor(2);
 		elevatorRight = new Victor(3);
 		elevatorLeft.setInverted(true);
+		
+		
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
@@ -73,6 +76,8 @@ public class RobotOutput implements RobotOutputProvider {
 		driveShift = new Solenoid(0);
 		intakeClamp1 = new Solenoid(1);
 		intakeClamp2 = new Solenoid(2);
+		climbBar = new Solenoid(3);
+		
 		matchLogger.write("Done RobotOutput");
 	}
 	
@@ -363,5 +368,10 @@ public class RobotOutput implements RobotOutputProvider {
 	public void setArm(double speed) {
 		arm1.set(speed);
 		arm2.set(speed);
+	}
+
+	@Override
+	public void setClimb(boolean release) {
+		climbBar.set(release);
 	}
 }

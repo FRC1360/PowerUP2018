@@ -16,4 +16,5 @@ public interface RobotOutputProvider {
 	void cheesyDrive(double speed, double turn, boolean quickturn, boolean highgear);
 	double handleDeadzone(double val, double deadzone);
 	void setArm(double speed);
+	void setClimb(boolean release);
 }

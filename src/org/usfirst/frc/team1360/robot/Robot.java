@@ -16,12 +16,13 @@ import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
 import org.usfirst.frc.team1360.robot.subsystem.Arm;
 import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
-
+import org.usfirst.frc.team1360.robot.subsystem.Climber;
 import org.usfirst.frc.team1360.robot.subsystem.Drive;
 import org.usfirst.frc.team1360.robot.subsystem.Elevator;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.Intake;
 import org.usfirst.frc.team1360.robot.teleop.TeleopArm;
+import org.usfirst.frc.team1360.robot.teleop.TeleopClimber;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
 import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
@@ -85,10 +86,12 @@ public class Robot extends TimedRobot {
 		Singleton.configure(Intake.class);
 		arm = Singleton.configure(Arm.class);
 		elevator = Singleton.configure(Elevator.class);
+		Singleton.configure(Climber.class);
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);
 		Singleton.configure(TeleopArm.class);
+		Singleton.configure(TeleopClimber.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
 		//CameraServer.getInstance().startAutomaticCapture();
@@ -149,12 +152,22 @@ public class Robot extends TimedRobot {
 				new Waypoint(17, 4.5, 0),
 				new Waypoint(21, 7, Pathfinder.d2r(90))
 		};
-		
+		/*
 		Waypoint[] pointsSwitchFar2CubeL1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(5.5, 11, Pathfinder.d2r(90)),
 				new Waypoint(5.5, 15, Pathfinder.d2r(90)),
 				new Waypoint(10, 18, 0)
+		};
+		*/
+		
+		Waypoint[] pointsSwitchFar2CubeL1 = new Waypoint[] {
+				new Waypoint(1.63, 4, 0),
+				new Waypoint(12, 2, 0),
+				new Waypoint(20, 9, Pathfinder.d2r(90)),
+				new Waypoint(19.5, 19, Pathfinder.d2r(90)),
+				new Waypoint(16.5, 23.5, Pathfinder.d2r(180)),
+				new Waypoint(14, 21.5, Pathfinder.d2r(270))
 		};
 			
 		Trajectory.Config configRR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);

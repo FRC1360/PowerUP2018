@@ -111,7 +111,7 @@ public class Arm implements ArmProvider{
 				sensorInput.resetArmEncoder();
 				robotOutput.setArm(-1);
 				try {
-					while(sensorInput.getArmEncoder() > -10) 
+					while(sensorInput.getArmEncoder() > -5) 
 					{
 						Thread.sleep(10);
 						matchLogger.write("Waiting for the arm to reach the bottom");
@@ -236,6 +236,10 @@ public class Arm implements ArmProvider{
 			if (System.currentTimeMillis() < cooldown) {
 				robotOutput.setArm(0);
 				return;
+			}
+			
+			if(sensorInput.getArmEncoder() < POS_BOTTOM + 10 && sensorInput.getArmEncoder() >= POS_BOTTOM) {
+				robotOutput.setArm(power*0.2);
 			}
 			
 			if(power > 0 && sensorInput.getArmSwitch())

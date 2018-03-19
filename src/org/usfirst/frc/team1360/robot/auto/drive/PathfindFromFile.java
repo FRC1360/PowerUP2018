@@ -20,13 +20,15 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double MAX_FPS = 7;
 	
+	private boolean reverse;
+	
 	private Trajectory leftTraj;
 	private Trajectory rightTraj;
 	
 	private EncoderFollower left;
 	private EncoderFollower right;
 	
-	public PathfindFromFile(long timeout, String file) {
+	public PathfindFromFile(long timeout, String file, boolean reverse) {
 		super("Pathfind From File", timeout);
 		File leftProfile;
 		File rightProfile;
@@ -36,6 +38,8 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		if (!leftProfile.exists() || !rightProfile.exists())
 			return;
+		
+		this.reverse = reverse;
 		
 		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
 		this.rightTraj = Pathfinder.readFromCSV(rightProfile);

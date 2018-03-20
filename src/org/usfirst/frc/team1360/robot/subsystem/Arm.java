@@ -18,6 +18,7 @@ public class Arm implements ArmProvider{
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	
 	private long cooldown = 0;
+	private double multiplier = 1;
 	
 	private enum ArmState implements OrbitStateMachineState<ArmState>		{
 		DOWN_TO_TARGET{
@@ -225,6 +226,13 @@ public class Arm implements ArmProvider{
 		{
 			if(sensorInput.getArmSwitch())
 				sensorInput.resetArmEncoder();
+			if(sensorInput.getArmEncoderVelocity() <= -80) {
+				multiplier = 0.15;
+			}
+			
+			if(sensorInput.getArmEncoderVelocity() <= -30) {
+				multiplier = 0.5;
+			}
 			
 			try {
 				if (sensorInput.getArmCurrent() > 200.0)
@@ -238,18 +246,19 @@ public class Arm implements ArmProvider{
 				return;
 			}
 			
-			if(sensorInput.getArmEncoder() < POS_BOTTOM + 10 && sensorInput.getArmEncoder() >= POS_BOTTOM) {
-				robotOutput.setArm(power*0.2);
+			if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
+				multiplier = 1;
 			}
 			
 			if(power > 0 && sensorInput.getArmSwitch())
 				robotOutput.setArm(0);
-			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power <= 0)
+			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power <= 0) {
 				robotOutput.setArm(0);
+			}
 			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -5 && power > 0)
 				robotOutput.setArm(0);
 			else
-				robotOutput.setArm(power);
+				robotOutput.setArm(power * multiplier);
 		}
 	}
 	

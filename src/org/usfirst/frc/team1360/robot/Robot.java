@@ -196,7 +196,7 @@ public class Robot extends TimedRobot {
 		File fileSwitchOneCubeRight = new File("trajectorySwitchOneCubeRight.csv");
 		File fileSwitchOneCubeLeft = new File("trajectorySwitchOneCubeLeft.csv");
 
-		
+		/*
 		if(new File("trajectorySwitchLScaleL.csv").isFile()) {
 			trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
 			trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
@@ -213,7 +213,7 @@ public class Robot extends TimedRobot {
 		}
 		else {
 			trajectorySwitchLScaleL = Pathfinder.readFromCSV(new File("trajectorySwitchLScaleL.csv"));
-		}
+		}*/
 	}
 	
 	
@@ -296,6 +296,8 @@ public class Robot extends TimedRobot {
 						", Top Switch: " + sensorInput.getTopSwitch() + 
 						", Arm Switch: " + sensorInput.getArmSwitch());
 		
+		SmartDashboard.putNumber("Arm Velocity", sensorInput.getArmEncoderVelocity());
+		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("X", position.getX());
@@ -345,6 +347,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
 		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
+		SmartDashboard.putNumber("Arm Velocity", sensorInput.getArmEncoderVelocity());
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());

@@ -38,7 +38,6 @@ public class DriveToInch extends AutonRoutine{
 		this(timeout, dis, A, fps, fps, chain, useNavx);
 	}
 	
-
 	@Override
 	protected void runCore() throws InterruptedException
 	{
@@ -85,8 +84,6 @@ public class DriveToInch extends AutonRoutine{
 				speed = pidSpeed.calculate(target, Math.abs(encoderAverage));
 				//matchLogger.writeClean("MOVEMENT SPEED " + speed);
 			}
-			
-
 			
 			if(reverse)
 				speed = -speed;

@@ -81,6 +81,8 @@ public interface HumanInputProvider {
 	boolean getAutoDec();
 	double deadzone(double Input, double deadzone);
 
+	boolean getClimbRaw();
+
 	
 
 }

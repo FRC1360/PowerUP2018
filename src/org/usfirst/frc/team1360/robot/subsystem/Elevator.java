@@ -168,7 +168,7 @@ public final class Elevator implements ElevatorProvider {
 					robotOutput.setElevatorMotor(power);
 			}
 			
-			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() >= -1) {
+			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
 				if(!arm.movingToPosition())
 					arm.goToPosition(-1);
 			}

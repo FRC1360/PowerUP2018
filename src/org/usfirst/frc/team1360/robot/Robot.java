@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team1360.robot;
 
+import java.io.File;
+
 import org.usfirst.frc.team1360.robot.IO.HumanInput;
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
@@ -16,12 +18,13 @@ import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.auto.AutonControl;
 import org.usfirst.frc.team1360.robot.subsystem.Arm;
 import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
-
+import org.usfirst.frc.team1360.robot.subsystem.Climber;
 import org.usfirst.frc.team1360.robot.subsystem.Drive;
 import org.usfirst.frc.team1360.robot.subsystem.Elevator;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.Intake;
 import org.usfirst.frc.team1360.robot.teleop.TeleopArm;
+import org.usfirst.frc.team1360.robot.teleop.TeleopClimber;
 import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
 import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
@@ -60,8 +63,8 @@ public class Robot extends TimedRobot {
 	private OrbitPositionProvider position;
 	private TeleopControl teleopControl;
 
-//	public static Trajectory trajectorySwitchLScaleR1;
-//	public static Trajectory trajectorySwitchLScaleR2;
+	public static Trajectory trajectorySwitchLScaleR1;
+	public static Trajectory trajectorySwitchLScaleR2;
 	public static Trajectory trajectorySwitchLScaleL;
 	public static Trajectory trajectorySwitchRScaleR;
 	public static Trajectory trajectorySwitchOneCubeRight;
@@ -85,23 +88,23 @@ public class Robot extends TimedRobot {
 		Singleton.configure(Intake.class);
 		arm = Singleton.configure(Arm.class);
 		elevator = Singleton.configure(Elevator.class);
+		Singleton.configure(Climber.class);
 		Singleton.configure(TeleopDrive.class);
 		Singleton.configure(TeleopIntake.class);
 		Singleton.configure(TeleopElevator.class);
 		Singleton.configure(TeleopArm.class);
+		Singleton.configure(TeleopClimber.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
 		//CameraServer.getInstance().startAutomaticCapture();
 		
-		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
-		
 		
 		arm.start();
 		elevator.start();
 		
-		
+		//Switch Left Scale Left two cube
 		Waypoint[] pointsSwitchLScaleL = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(12, 2, 0),
@@ -110,73 +113,111 @@ public class Robot extends TimedRobot {
 				new Waypoint(23, 22, 0)
 		};
 		
+		//Switch Right Scale Right two cube
 		Waypoint[] pointsSwitchRScaleR = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(23, 5.5, Pathfinder.d2r(35))
 		};
-		/*
+		
+		//Switch Left Scale Right score on scale
 		Waypoint[] pointsSwitchLScaleR1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(23, 5.5, Pathfinder.d2r(35))
 		};
 		
+		//Switch left scale right score on switch
 		Waypoint[] pointsSwitchLScaleR2 = new Waypoint[] {
 				new Waypoint(23, 5.5, Pathfinder.d2r(150)),
 				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
 				new Waypoint(19.5, 15.5, Pathfinder.d2r(90))
 		};
-		*/
+		
+		//Switch one cube left start from right score behind switch
 		Waypoint[] pointsSwitchOneCubeLeft = new Waypoint[] {
 				new Waypoint(22, 5.5, Pathfinder.d2r(150)),
 				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
 				new Waypoint(20, 15.5, Pathfinder.d2r(90))
-		};
+		};	
 		
+		//This isn't a path
 		Waypoint[] pointsSwitchOneCubeRight = new Waypoint[] {
 				new Waypoint(22, 5.5, Pathfinder.d2r(150)),
 				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
 				new Waypoint(20, 15.5, Pathfinder.d2r(90))
 		};
 		
+		//Score first cube on switch right (Two cube)
 		Waypoint[] pointsSwitchFar2CubeR1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(10, 2.5, 0),
 				new Waypoint(14, 6.5, Pathfinder.d2r(90))
 		};
 		
+		//Go to score second cube on switch right (Two cube)
 		Waypoint[] pointsSwitchFar2CubeR2 = new Waypoint[] {
 				new Waypoint(13, 5.5, 0),
 				new Waypoint(17, 4.5, 0),
 				new Waypoint(21, 7, Pathfinder.d2r(90))
 		};
 		
+		
 		Waypoint[] pointsSwitchFar2CubeL1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
-				new Waypoint(5.5, 11, Pathfinder.d2r(90)),
-				new Waypoint(5.5, 15, Pathfinder.d2r(90)),
-				new Waypoint(10, 18, 0)
+				new Waypoint(12, 2, 0),
+				new Waypoint(20, 9, Pathfinder.d2r(90)),
+				new Waypoint(19.5, 19, Pathfinder.d2r(90)),
+				new Waypoint(16.5, 23.5, Pathfinder.d2r(180)),
+				new Waypoint(14, 21.5, Pathfinder.d2r(270))
 		};
-			
+		
+		
 		Trajectory.Config configRR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
 		Trajectory.Config configLL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
-//		Trajectory.Config configLR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
-//		Trajectory.Config configLR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 5, 100);
+		Trajectory.Config configLR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
+		Trajectory.Config configLR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 5, 100);
 		Trajectory.Config configRL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
 		Trajectory.Config configL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);
 		Trajectory.Config configR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);//jerk was 180
 		Trajectory.Config configFar2R = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);
 		Trajectory.Config configFar2L = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);
 		
-//		trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
-//		trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
-//		trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
-//		trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
-//		trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
-//		trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
-		trajectorySwitchFar2CubeR1 = Pathfinder.generate(pointsSwitchFar2CubeR1, configFar2R);
-		trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
-		trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
+		//TwoCubes
+		File fileSwitchLScaleL = new File("trajectorySwitchLScaleL.csv");//LL
+		File fileSwitchRScaleR = new File("trajectorySwitchRScaleR.csv");//RR
+		File fileSwitchTwoCubeR1 = new File("trajectorySwitchTwoCubeR1.csv");//RL
+		File fileSwitchTwoCubeR2 = new File("trajectorySwitchFar2CubeR2.csv");//RL
+		File fileSwitchOneCubeL = new File("trajectorySwitchOneCubeL.csv");//LR
+		
+		//TwoCubes Too slow
+		File fileSwitchLScaleR1 = new File("trajectorySwitchLScaleR1.csv");//LR
+		File fileSwitchLScaleR2 = new File("trajectorySwitchLScaleR2.csv");//LR
+		
+		//Switch Only
+		File fileSwitchOneCubeRight = new File("trajectorySwitchOneCubeRight.csv");
+		File fileSwitchOneCubeLeft = new File("trajectorySwitchOneCubeLeft.csv");
+
+		
+		if(new File("trajectorySwitchLScaleL.csv").isFile()) {
+			trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
+			trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
+			trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
+			trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
+			trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
+			trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
+			trajectorySwitchFar2CubeR1 = Pathfinder.generate(pointsSwitchFar2CubeR1, configFar2R);
+			trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
+			trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
+			
+			Pathfinder.writeToCSV(new File("trajectorySwitchLScaleL.csv"), trajectorySwitchLScaleL);
+			
+		}
+		else {
+			trajectorySwitchLScaleL = Pathfinder.readFromCSV(new File("trajectorySwitchLScaleL.csv"));
+		}
 	}
+	
+	
+	
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
@@ -184,8 +225,7 @@ public class Robot extends TimedRobot {
 	 * chooser code works with the Java SmartDashboard. If you prefer the
 	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
 	 * getString line to get the auto name from the text box below the Gyro
-	 *
-	 * <p>You can add additional auto modes by adding additional comparisons to
+	 * You can add additional auto modes by adding additional comparisons to
 	 * the switch structure below with additional strings. If using the
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */

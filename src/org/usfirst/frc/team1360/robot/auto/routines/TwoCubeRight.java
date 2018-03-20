@@ -112,6 +112,7 @@ public class TwoCubeRight extends AutonRoutine{
 			Thread.sleep(1000);
 			intake.setIntake(0);
 			*/
+			/*
 			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL1);
 			switch1.runNow("Switch 1");
 			waitFor("Calibrate", 0);
@@ -123,7 +124,18 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setClamp(intake.FREE);
 			Thread.sleep(1000);
 			arm.goToTop();
-			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
+			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();*/
+			
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL1);
+			switch1.runNow("Switch 1");
+			waitFor("Switch 1", 0);
+			
+			new ElevatorToTarget(2000, (int) (elevator.ONE_FOOT*2)).runUntilFinish();
+			robotOutput.setClamp(intake.FREE);
+			robotOutput.setIntake(0.5);
+			Thread.sleep(1000);
+			robotOutput.setClamp(intake.FREE);
+			robotOutput.setIntake(0);
 		}
 		else if(!fms.plateLeft(0) && !fms.plateLeft(1)) { //RR
 			//Start of first scale

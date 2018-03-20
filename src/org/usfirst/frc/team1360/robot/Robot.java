@@ -196,8 +196,8 @@ public class Robot extends TimedRobot {
 		File fileSwitchOneCubeRight = new File("trajectorySwitchOneCubeRight.csv");
 		File fileSwitchOneCubeLeft = new File("trajectorySwitchOneCubeLeft.csv");
 
-		/*
-		if(new File("trajectorySwitchLScaleL.csv").isFile()) {
+		
+		if(new File("trajectorySwitchLScaleL.csv").exists()) {
 			trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
 			trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
 			trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
@@ -213,7 +213,9 @@ public class Robot extends TimedRobot {
 		}
 		else {
 			trajectorySwitchLScaleL = Pathfinder.readFromCSV(new File("trajectorySwitchLScaleL.csv"));
-		}*/
+		}
+		
+		//InputStream input = getClass().getResourceAsStream("");
 	}
 	
 	

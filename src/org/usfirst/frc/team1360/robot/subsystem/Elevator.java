@@ -88,11 +88,13 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-				while (!sensorInput.getBottomSwitch()) {
+				while (sensorInput.getElevatorEncoder() > 25) {
 					robotOutput.setElevatorMotor(-1);
 					Thread.sleep(10);
 				}
-				context.nextState(CLIMB_HOLD);
+				
+				robotOutput.setElevatorMotor(0);
+				context.nextState(MANUAL);
 			}
 		},
 		

@@ -197,25 +197,16 @@ public class Robot extends TimedRobot {
 		File fileSwitchOneCubeLeft = new File("trajectorySwitchOneCubeLeft.csv");
 
 		
-		if(new File("trajectorySwitchLScaleL.csv").exists()) {
-			trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
-			trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
-			trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
-			trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
-			trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
-			trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
-			trajectorySwitchFar2CubeR1 = Pathfinder.generate(pointsSwitchFar2CubeR1, configFar2R);
-			trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
-			trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
-			
-			Pathfinder.writeToCSV(new File("trajectorySwitchLScaleL.csv"), trajectorySwitchLScaleL);
-			
-		}
-		else {
-			trajectorySwitchLScaleL = Pathfinder.readFromCSV(new File("trajectorySwitchLScaleL.csv"));
-		}
-		
-		//InputStream input = getClass().getResourceAsStream("");
+		trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configLL);//switchLscaleL
+		trajectorySwitchLScaleR1 = Pathfinder.generate(pointsSwitchLScaleR1, configLR1);//switchLscaleR - 1
+		trajectorySwitchLScaleR2 = Pathfinder.generate(pointsSwitchLScaleR2, configLR2);//switchLscaleR - 2
+		trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configRR);//switchRscaleR
+		trajectorySwitchOneCubeRight = Pathfinder.generate(pointsSwitchOneCubeLeft, configL);
+		trajectorySwitchOneCubeLeft = Pathfinder.generate(pointsSwitchOneCubeLeft, configR);
+		trajectorySwitchFar2CubeR1 = Pathfinder.generate(pointsSwitchFar2CubeR1, configFar2R);
+		trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
+		trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
+
 	}
 	
 	

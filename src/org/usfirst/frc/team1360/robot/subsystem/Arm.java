@@ -227,11 +227,11 @@ public class Arm implements ArmProvider{
 			if(sensorInput.getArmSwitch())
 				sensorInput.resetArmEncoder();
 			if(sensorInput.getArmEncoderVelocity() <= -80) {
-				multiplier = 0.15;
+				multiplier = 0.2;
 			}
 			
 			if(sensorInput.getArmEncoderVelocity() <= -30) {
-				multiplier = 0.5;
+				multiplier = 0.7;
 			}
 			
 			try {

@@ -104,6 +104,47 @@ public class Robot extends TimedRobot {
 		arm.start();
 		elevator.start();
 		
+		/**Auto Path Naming System
+		 * 
+		 * waypoint "point+name"
+		 * Trajectory "trajectory+name"
+		 * Config "config+name"
+		 * File "file+name"
+		 * 
+		 * Auto Routines 2018 root names
+		 * 
+		 * Two Cubes Switch Scale
+		 * SwitchLScaleL - Two cube
+		 * SwitchRScaleR - Two cube
+		 * SwitchLScaleR - Single Switch
+		 * SwitchRScaleL - Double Switch
+		 * 
+		 * Single Cube Switch
+		 * SwitchL
+		 * SwitchR
+		 * 
+		 * 
+		 */
+		
+		//UNUSED
+		/*
+		//Switch Left Scale Right score on scale
+		Waypoint[] pointsSwitchLScaleR1 = new Waypoint[] {
+				new Waypoint(1.63, 4, 0),
+				new Waypoint(23, 5.5, Pathfinder.d2r(35))
+		};
+		
+		//Switch left scale right score on switch
+		Waypoint[] pointsSwitchLScaleR2 = new Waypoint[] {
+				new Waypoint(23, 5.5, Pathfinder.d2r(150)),
+				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
+				new Waypoint(19.5, 15.5, Pathfinder.d2r(90))
+		};
+		*/
+		//UNUSED
+		
+		//Two Cube Switch Scale
+		
 		//Switch Left Scale Left two cube
 		Waypoint[] pointsSwitchLScaleL = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
@@ -119,49 +160,23 @@ public class Robot extends TimedRobot {
 				new Waypoint(23, 5.5, Pathfinder.d2r(35))
 		};
 		
-		//Switch Left Scale Right score on scale
-		Waypoint[] pointsSwitchLScaleR1 = new Waypoint[] {
-				new Waypoint(1.63, 4, 0),
-				new Waypoint(23, 5.5, Pathfinder.d2r(35))
-		};
-		
-		//Switch left scale right score on switch
-		Waypoint[] pointsSwitchLScaleR2 = new Waypoint[] {
-				new Waypoint(23, 5.5, Pathfinder.d2r(150)),
-				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
-				new Waypoint(19.5, 15.5, Pathfinder.d2r(90))
-		};
-		
-		//Switch one cube left start from right score behind switch
-		Waypoint[] pointsSwitchOneCubeLeft = new Waypoint[] {
-				new Waypoint(22, 5.5, Pathfinder.d2r(150)),
-				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
-				new Waypoint(20, 15.5, Pathfinder.d2r(90))
-		};	
-		
-		//This isn't a path
-		Waypoint[] pointsSwitchOneCubeRight = new Waypoint[] {
-				new Waypoint(22, 5.5, Pathfinder.d2r(150)),
-				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
-				new Waypoint(20, 15.5, Pathfinder.d2r(90))
-		};
 		
 		//Score first cube on switch right (Two cube)
-		Waypoint[] pointsSwitchFar2CubeR1 = new Waypoint[] {
+		Waypoint[] pointsSwitchRScaleL1 = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(10, 2.5, 0),
 				new Waypoint(14, 6.5, Pathfinder.d2r(90))
 		};
 		
 		//Go to score second cube on switch right (Two cube)
-		Waypoint[] pointsSwitchFar2CubeR2 = new Waypoint[] {
+		Waypoint[] pointsSwitchRScaleL2 = new Waypoint[] {
 				new Waypoint(13, 5.5, 0),
 				new Waypoint(17, 4.5, 0),
 				new Waypoint(21, 7, Pathfinder.d2r(90))
 		};
 		
 		
-		Waypoint[] pointsSwitchFar2CubeL1 = new Waypoint[] {
+		Waypoint[] pointsSwitchLScaleR = new Waypoint[] {
 				new Waypoint(1.63, 4, 0),
 				new Waypoint(12, 2, 0),
 				new Waypoint(20, 9, Pathfinder.d2r(90)),
@@ -169,6 +184,9 @@ public class Robot extends TimedRobot {
 				new Waypoint(16.5, 23.5, Pathfinder.d2r(180)),
 				new Waypoint(14, 21.5, Pathfinder.d2r(270))
 		};
+		
+		
+		//Just Switch
 		
 		
 		Trajectory.Config configRR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
@@ -182,19 +200,17 @@ public class Robot extends TimedRobot {
 		Trajectory.Config configFar2L = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);
 		
 		//TwoCubes
-		File fileSwitchLScaleL = new File("trajectorySwitchLScaleL.csv");//LL
-		File fileSwitchRScaleR = new File("trajectorySwitchRScaleR.csv");//RR
-		File fileSwitchTwoCubeR1 = new File("trajectorySwitchTwoCubeR1.csv");//RL
-		File fileSwitchTwoCubeR2 = new File("trajectorySwitchFar2CubeR2.csv");//RL
-		File fileSwitchOneCubeL = new File("trajectorySwitchOneCubeL.csv");//LR
-		
-		//TwoCubes Too slow
-		File fileSwitchLScaleR1 = new File("trajectorySwitchLScaleR1.csv");//LR
-		File fileSwitchLScaleR2 = new File("trajectorySwitchLScaleR2.csv");//LR
+		File fileSwitchLScaleL = new File("switchLScaleL.csv");
+		File fileSwitchRScaleR = new File("switchRScaleR.csv");
+		File fileSwitchLScaleR = new File("switchLScaleR.csv");
+		File fileSwitchRScaleL1 = new File("switchRScaleL1.csv");
+		File fileSwitchRScaleL2 = new File("switchRScaleL2.csv");
 		
 		//Switch Only
 		File fileSwitchOneCubeRight = new File("trajectorySwitchOneCubeRight.csv");
 		File fileSwitchOneCubeLeft = new File("trajectorySwitchOneCubeLeft.csv");
+		
+		//Scale Only
 
 		
 		if(new File("trajectorySwitchLScaleL.csv").exists()) {
@@ -208,7 +224,15 @@ public class Robot extends TimedRobot {
 			trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
 			trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
 			
-			Pathfinder.writeToCSV(new File("trajectorySwitchLScaleL.csv"), trajectorySwitchLScaleL);
+			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchLScaleL);
+			Pathfinder.writeToCSV(fileSwitchTwoCubeR1, trajectorySwitchLScaleR1);
+			Pathfinder.writeToCSV(fileSwitchTwoCubeR2, trajectorySwitchLScaleR2);
+			Pathfinder.writeToCSV(fileSwitchRScaleR, trajectorySwitchRScaleR);
+			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchOneCubeRight);
+			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchOneCubeLeft);
+			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchFar2CubeR1);
+			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchFar2CubeR2);
+			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchFar2CubeL1);
 			
 		}
 		else {

@@ -45,8 +45,8 @@ public class FaceAngle extends AutonRoutine{
 			err = targetAngle - curA;
 			double vTarget = 0.6 * Math.copySign(1 - Math.exp(-1.5 * Math.abs(err)), err);
 			
-			final double kB = 2;
-			final double kP = 1;
+			final double kB = 1;//2 Practice Bot
+			final double kP = 1;//1 Practice Bot
 			long time = System.currentTimeMillis();
 			velA = (curA - lastA) / (time - lastTime);
 			double turn = kB * vTarget + kP * (vTarget - velA);

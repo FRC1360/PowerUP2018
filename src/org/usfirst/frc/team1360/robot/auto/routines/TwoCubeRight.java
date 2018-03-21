@@ -36,7 +36,6 @@ public class TwoCubeRight extends AutonRoutine{
 			waitFor("spin", 0);
 			arm.goToPosition(-30);
 			
-			
 			intake.setClamp(IntakeProvider.FREE);
 			intake.setIntake(1);
 			Thread.sleep(500);
@@ -45,9 +44,10 @@ public class TwoCubeRight extends AutonRoutine{
 			
 			new ElevatorToTarget(1000, ElevatorProvider.POS_BOTTOM).runNow("Elevator down");
 			while (sensorInput.getElevatorEncoder() > elevator.ONE_FOOT * 2) Thread.sleep(10);
-			new FaceAngle(1000, 153).runUntilFinish();
 			arm.goToPosition(ArmProvider.POS_BOTTOM);
+			new FaceAngle(1000, 153).runUntilFinish();
 			
+			/*
 			intake.setIntake(-1);
 			new DriveToInch(1500, 53, 153, 6,  2, true, false).runUntilFinish();
 			Thread.sleep(200);
@@ -59,6 +59,7 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			intake.setIntake(0);
+			*/
 		}
 		else if(fms.plateLeft(0) && !fms.plateLeft(1)) { //LR
 			/*

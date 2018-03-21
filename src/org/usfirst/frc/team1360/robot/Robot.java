@@ -206,6 +206,7 @@ public class Robot extends TimedRobot {
 		trajectorySwitchFar2CubeR1 = Pathfinder.generate(pointsSwitchFar2CubeR1, configFar2R);
 		trajectorySwitchFar2CubeR2 = Pathfinder.generate(pointsSwitchFar2CubeR2, configFar2R);
 		trajectorySwitchFar2CubeL1 = Pathfinder.generate(pointsSwitchFar2CubeL1, configFar2L);
+		
 
 	}
 	

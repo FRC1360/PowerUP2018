@@ -100,7 +100,8 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		matchLogger.write("PATHFINDER STARTING");
 		
-		OrbitPID turnPID = new OrbitPID(0.3, 0.0, 0.15);
+		//OrbitPID turnPID = new OrbitPID(0.3, 0.0, 0.15); Practice Bot TurnPID
+		OrbitPID turnPID = new OrbitPID(0.2, 0.0, 0.15); 
 		
 		while(!left.isFinished() || !right.isFinished()) {
 			

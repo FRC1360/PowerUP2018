@@ -127,7 +127,7 @@ public class TwoCubeRight extends AutonRoutine{
 			arm.goToTop();
 			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();*/
 			
-			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL1);
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchLScaleR);
 			switch1.runNow("Switch 1");
 			waitFor("Switch 1", 0);
 			
@@ -235,8 +235,8 @@ public class TwoCubeRight extends AutonRoutine{
 			intake.setIntake(0);
 			intake.setClamp(intake.CLOSED);
 			*/
-			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeR1);
-			PathfindFromFile switch2 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeR2);
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleL1);
+			PathfindFromFile switch2 = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleL2);
 			switch1.runNow("Switch 1");
 			waitFor("Calibrate", 0);
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();

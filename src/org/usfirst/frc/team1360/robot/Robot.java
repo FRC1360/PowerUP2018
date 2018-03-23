@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
 	public static Trajectory trajectorySwitchR;
 
 	
-	private boolean GENERATE = true;
+	private boolean IN_JAR = true;
 	private String FILE_ROOT = "~/";
 
 	/**
@@ -214,7 +214,9 @@ public class Robot extends TimedRobot {
 		Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);
 		Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);//jerk was 180
 		
-		
+
+
+
 		//FILES
 		//TwoCubes
 		File fileSwitchLScaleL = new File(FILE_ROOT + "switchLScaleL.csv");
@@ -228,45 +230,32 @@ public class Robot extends TimedRobot {
 		File fileSwitchR = new File(FILE_ROOT + "switchR.csv");
 
 		
-		if(GENERATE) {
+		if(IN_JAR) {
 			//TRAJECTORY GENERATION
 			//Two Cubes
-			trajectorySwitchLScaleL = Pathfinder.generate(pointsSwitchLScaleL, configSwitchLScaleL);//switchLscaleL
-			trajectorySwitchRScaleL1 = Pathfinder.generate(pointsSwitchRScaleL1, configSwitchRScaleL1);//switchLscaleR - 1
-			trajectorySwitchRScaleL2 = Pathfinder.generate(pointsSwitchRScaleL2, configSwitchRScaleL2);//switchLscaleR - 2
-			trajectorySwitchLScaleR = Pathfinder.generate(pointsSwitchLScaleR, configSwitchLScaleR);//switchLscaleR - 2
-			trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configSwitchRScaleR);//switchRscaleR
-			
-			//Switches
-			trajectorySwitchL = Pathfinder.generate(pointsSwitchL, configSwitchL);
-			trajectorySwitchR = Pathfinder.generate(pointsSwitchR, configSwitchR);
-			
-			
-			//SAVE TRAJECTORIES
-			//Two Cube Profiles
-			Pathfinder.writeToCSV(fileSwitchLScaleL, trajectorySwitchLScaleL);
-			Pathfinder.writeToCSV(fileSwitchRScaleL1, trajectorySwitchRScaleL1);
-			Pathfinder.writeToCSV(fileSwitchRScaleL2, trajectorySwitchRScaleL2);
-			Pathfinder.writeToCSV(fileSwitchLScaleR, trajectorySwitchLScaleR);
-			Pathfinder.writeToCSV(fileSwitchRScaleR, trajectorySwitchRScaleR);
-			
-			//Switch Profiles
-			Pathfinder.writeToCSV(fileSwitchL, trajectorySwitchL);
-			Pathfinder.writeToCSV(fileSwitchR, trajectorySwitchR);
+			ClassLoader classLoader = getClass().getClassLoader();
+			fileSwitchLScaleL = new File(classLoader.getResource("1360AutoPaths/switchLScaleL.csv").getFile());
+			fileSwitchRScaleR = new File(classLoader.getResource("1360AutoPaths/switchRScaleR.csv").getFile());
+			fileSwitchRScaleL1 = new File(classLoader.getResource("1360AutoPaths/switchRScaleL1.csv").getFile());
+			fileSwitchRScaleL2 = new File(classLoader.getResource("1360AutoPaths/switchRScaleL2.csv").getFile());
+			fileSwitchLScaleR = new File(classLoader.getResource("1360AutoPaths/switchLScaleR.csv").getFile());
+
+			fileSwitchL = new File(classLoader.getResource("1360AutoPaths/switchL.csv").getFile());
+			fileSwitchR = new File(classLoader.getResource("1360AutoPaths/switchR.csv").getFile());
+
 			
 		}
-		else {
-			//Two Cube Profiles
-			trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
-			trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
-			trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
-			trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
-			trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
+
+		trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
+		trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
+		trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
+		trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
+		trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
 			
-			//Switch Profiles
-			trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
-			trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
-		}
+		//Switch Profiles
+		trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
+		trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
+
 		
 
 	}

@@ -55,7 +55,7 @@ public class HumanInput implements HumanInputProvider {
 	 */
 	@Override
 	public boolean getRacingShift() {
-		return this.driver.getYButton();
+		return this.driver.getYButton(); //inversed for default high gear
 	}
 	//------------Halo--------------
 	/* (non-Javadoc)
@@ -235,13 +235,12 @@ public class HumanInput implements HumanInputProvider {
 	
 	@Override
 	public boolean getClimb() {
-		return false;
-//		return operator.getBumper(Hand.kRight);
+		return operator.getPOV(0) == 0;
 	}
 	
 	@Override
-	public boolean getDriverArmDown() {
-		return driver.getPOV(0) == 180;
+	public boolean getClimbRaw() {
+		return operator.getPOV(0) == 90;
 	}
 	
 	@Override

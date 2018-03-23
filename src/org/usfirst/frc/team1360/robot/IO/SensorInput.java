@@ -78,7 +78,7 @@ public class SensorInput implements SensorInputProvider {
 
 		ahrsThread = new Thread(() ->
 		{
-			ahrs = new AHRS(SPI.Port.kMXP); // THIS SHOULD BE THE ONLY AHRS CONSTRUCTOR BEING CALLED, IF IT IS NOT, DELETE THE OTHER ONE
+			ahrs = new AHRS(SPI.Port.kMXP, (byte) 127); // THIS SHOULD BE THE ONLY AHRS CONSTRUCTOR BEING CALLED, IF IT IS NOT, DELETE THE OTHER ONE
 			synchronized (this)
 			{
 				notify(); // Inform main thread that this thread has started, and that the AHRS object has been initialized
@@ -88,7 +88,7 @@ public class SensorInput implements SensorInputProvider {
 				synchronized (this)
 				{
 					// Get values from AHRS
-					ahrsValues[0] = ahrs.getYaw();
+					ahrsValues[0] = ahrs.getAngle();
 					ahrsValues[1] = ahrs.getPitch();
 					ahrsValues[2] = ahrs.getRoll();
 					ahrsValues[3] = ahrs.getWorldLinearAccelX();
@@ -171,6 +171,7 @@ public class SensorInput implements SensorInputProvider {
 	public synchronized void resetAHRS() // Queue operation to reset NavX
 	{
 		ahrsThreadDispatchQueue.add(ahrs::zeroYaw);
+		Thread.yield();
 	}
 	
 
@@ -180,6 +181,11 @@ public class SensorInput implements SensorInputProvider {
 		this.resetAHRS();
 		this.resetLeftEncoder();
 		this.resetRightEncoder();
+		this.resetElevatorEncoder();
+		rightDriveEnc.setSamplesToAverage(50);
+		leftDriveEnc.setSamplesToAverage(50);
+		rightDriveEnc.setMaxPeriod(1.0);
+		leftDriveEnc.setMaxPeriod(1.0);
 	}
 
 	@Override
@@ -195,13 +201,13 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public double getLeftEncoderVelocity() {
 		// TODO Auto-generated method stub
-		return 0;
+		return leftDriveEnc.getRate();
 	}
 
 	@Override
 	public double getRightEncoderVelocity() {
 		// TODO Auto-generated method stub
-		return 0;
+		return rightDriveEnc.getRate();
 	}
 
 	@Override

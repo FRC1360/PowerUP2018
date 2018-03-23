@@ -1,10 +1,15 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
+import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
+import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
 import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
-import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
+import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;
+import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
+import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
+import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
+import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 
 public class TwoCubeRight extends AutonRoutine{
 
@@ -17,139 +22,248 @@ public class TwoCubeRight extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
-		int offset;
-		double TICK_INCH = 5.30516;
 		new Calibrate().runNow("Calibrate");
 		
-		if(fms.plateLeft(1)) {
-			new DriveToDistance(5000, position.getX(), 145, 0, 20, true).runUntilFinish();
+		if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
+			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchLScaleL);
+			path.runNow("To Scale");
+			waitFor("To Scale", 0);
 			
-			new SweepTurn(2000, 48, true, false).runUntilFinish();
-			//elevator.goToTarget(elevator.ONE_FOOT*6);
-			new DriveToDistance(5000, -125-3, position.getY(), -90, 20, true).runUntilFinish();//-90
-			new SweepTurn(2000, 110, 40, false, false).runUntilFinish();
+			new FaceAngle(2000, 20).runNow("spin");
+			
+			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runUntilFinish();
+			
+			waitFor("spin", 0);
+			arm.goToPosition(-30);
+			
+			intake.setClamp(IntakeProvider.FREE);
+			intake.setIntake(1);
+			Thread.sleep(500);
+			intake.setIntake(0);
+			arm.goToPosition(ArmProvider.POS_TOP);
+			
+			new ElevatorToTarget(1000, ElevatorProvider.POS_BOTTOM).runNow("Elevator down");
+			while (sensorInput.getElevatorEncoder() > elevator.ONE_FOOT * 2) Thread.sleep(10);
+			arm.goToPosition(ArmProvider.POS_BOTTOM);
+			new FaceAngle(1000, 153).runUntilFinish();
+			
+			/*
+			intake.setIntake(-1);
+			new DriveToInch(1500, 53, 153, 6,  2, true, false).runUntilFinish();
+			Thread.sleep(200);
+			intake.setIntake(0);
+			intake.setClamp(IntakeProvider.CLOSED);
+			new ElevatorToTarget(1000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			
+			intake.setClamp(IntakeProvider.FREE);
+			intake.setIntake(1);
+			Thread.sleep(1000);
+			intake.setIntake(0);
+			*/
+		}
+		else if(fms.plateLeft(0) && !fms.plateLeft(1)) { //LR
+			/*
+			//Start of first scale
+			PathfindFromFile scalePath = new PathfindFromFile(4800, Robot.trajectorySwitchLScaleR1);
+			PathfindFromFile switchPath = new PathfindFromFile(4500, Robot.trajectorySwitchLScaleR2);
+			scalePath.runNow("To Scale");
+			
+//			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");
+			elevator.safety(0.15, false);
 			
 			waitFor("Calibrate", 0);
+			arm.goToPosition(-20);
 			
-			new ElevatorToTarget(2500, elevator.POS_TOP-50).runUntilFinish();
-			arm.goToPosition(-25);
+			waitFor("To Scale", 0);
+			robotOutput.tankDrive(0, 0);
 			
-			new DriveToDistance(1000, position.getX(), position.getY()+13, 0, 2, false).runUntilFinish();
+			//waitFor("Elevator Scale", 0);
+			matchLogger.writeClean("SCALE ELEVATOR DONE");
 			
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(500);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			arm.goToTop();
+			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
+			
+			new FaceAngle(1000, -150).runUntilFinish();
+			
+			//Start of switch
+			switchPath.runNow("To Switch");
+			arm.goToPosition(-45);
+			
+			waitFor("To Switch", 0);
+
+			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			new FaceAngle(1500, -150).runUntilFinish();
+			robotOutput.tankDrive(0, 0);
+			
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			new DriveToInch(2000, 4, -150, 5, true, false).runUntilFinish();
+			robotOutput.tankDrive(0, 0);
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			
+			Thread.sleep(1000);
+			intake.setIntake(0);
+			*/
+			/*
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchFar2CubeL1);
+			switch1.runNow("Switch 1");
+			waitFor("Calibrate", 0);
+			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);
+			waitFor("Switch 1", 0);
+			new FaceAngle(2000, 0).runUntilFinish();
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(1000);
+			arm.goToTop();
+			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();*/
+			
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchLScaleR);
+			switch1.runNow("Switch 1");
+			waitFor("Switch 1", 0);
+			
+			new ElevatorToTarget(2000, (int) (elevator.ONE_FOOT*2)).runUntilFinish();
+			robotOutput.setClamp(intake.FREE);
+			robotOutput.setIntake(0.5);
+			Thread.sleep(1000);
+			robotOutput.setClamp(intake.FREE);
+			robotOutput.setIntake(0);
+		}
+		else if(!fms.plateLeft(0) && !fms.plateLeft(1)) { //RR
+			//Start of first scale
+			PathfindFromFile scalePath = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleR);
+			scalePath.runNow("To Scale");
+			
+//			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");
+			elevator.safety(0.15, false);
+			
+			waitFor("Calibrate", 0);
+			arm.goToPosition(-20);
+			
+			waitFor("To Scale", 0);
+			robotOutput.tankDrive(0, 0);
+			
+			//waitFor("Elevator Scale", 0);
+			matchLogger.writeClean("SCALE ELEVATOR DONE");
+			
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(500);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			arm.goToTop();
+			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
+
+			arm.goToPosition(arm.POS_BOTTOM);
+			new FaceAngle(2000, -162).runUntilFinish();
+			
+			//Start of switch
+			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			new DriveToInch(10000, 40, -162, 10, 3, true, false).runUntilFinish();
+			robotOutput.tankDrive(0, 0);
+			matchLogger.writeClean("SCALE DONE DRIVING");
+			
+			Thread.sleep(500);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runNow("Elevator");
+			Thread.sleep(750);
+			new DriveToInch(1000, 3, -162, 4, true, false).runNow("Approach");
+			
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			waitFor("Approach", 0);
+			Thread.sleep(1000);
+			intake.setIntake(0);
+		}
+		else if(!fms.plateLeft(0) && fms.plateLeft(1)) { //RL
+			/*
+			//Run Switch
+			PathfindFromFile switchPath = new PathfindFromFile(5000, "lmao.csv");
+			PathfindFromFile cubePath = new PathfindFromFile(5000, "lmao.csv");
+			switchPath.runNow("To Switch");
+			
+			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+			waitFor("Calibrate", 0);
+			arm.goToPosition(-30);
+			
+			waitFor("To Switch", 0);
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(500);
+			
+			intake.setIntake(0);
+			arm.goToTop();
+			elevator.goToBottom();
+			
+			new FaceAngle(1000, 0).runUntilFinish();
+			
+			//Run Scale
+			cubePath.runNow("To Cube");
+			Thread.sleep(1000);
+			
+			arm.goToPosition(-45);
+			
+			waitFor("To Cube", 0);
+			intake.setIntake(-1);
+			intake.setClamp(intake.FREE);
+			
+			new FaceAngle(1000, -180).runUntilFinish();
+			new DriveToInch(1000, 6, -180, 6, false, false).runUntilFinish();
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			
+			new FaceAngle(1000, 0).runUntilFinish();
+			elevator.goToTop();
+			new DriveToInch(1000, 30, 0, 6, false, false).runUntilFinish();
+			
+			intake.setClamp(intake.FREE);
+			intake.setIntake(0.75);
+			Thread.sleep(1000);
+			intake.setIntake(0);
+			intake.setClamp(intake.CLOSED);
+			*/
+			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleL1);
+			PathfindFromFile switch2 = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleL2);
+			switch1.runNow("Switch 1");
+			waitFor("Calibrate", 0);
+			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);
+			waitFor("Switch 1", 0);
+			new FaceAngle(2000, -90).runUntilFinish();
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(1000);
+			intake.setIntake(0);
+			arm.goToTop();
+			new ElevatorToTarget(2000, elevator.POS_BOTTOM).runUntilFinish();
+			new FaceAngle(2000, 0).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);
+			switch2.runUntilFinish();
+			new FaceAngle(2000, -160).runUntilFinish();
+			intake.setIntake(-1);
+			new DriveToInch(2000, 24, -160, 5, true, false).runUntilFinish();
+			Thread.sleep(200);
+			intake.setClamp(intake.CLOSED);
+			intake.setIntake(0);
+			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			intake.setClamp(intake.FREE);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			intake.setIntake(0);
-			arm.goToTop();
-			Thread.sleep(500);
-			elevator.goToBottom();
-			
-			//-------------Grab Cube-------------
-			new SweepTurn(2000, 130,-20, true, false).runUntilFinish();
-			
-			
-			if(fms.plateLeft(0))
-			{
-				arm.goToPosition(arm.POS_BOTTOM);
-				new SweepTurn(2000, 30, 50, false, false).runUntilFinish();
-				
-				intake.setIntake(-1);
-				intake.setClamp(intake.FREE);
-				
-				new DriveToDistance(2000, position.getX(), position.getY()+30, 135, 2, false).runUntilFinish();
-				
-				robotOutput.tankDrive(0, 0);
-				elevator.upToTarget(elevator.SWITCH_HEIGHT);
-				while(elevator.isMovingToTarget()) Thread.sleep(10);
-				intake.setIntake(0.75);
-				intake.setClamp(intake.FREE);
-				Thread.sleep(3000);
-				intake.setIntake(0);
-				intake.setClamp(intake.CLOSED);
-			}
-			else
-			{
-				return;
-						/*
-				robotOutput.tankDrive(-0.5, -0.5);
-				offset = sensorInput.getLeftDriveEncoder();
-				while(Math.abs(sensorInput.getLeftDriveEncoder() - offset) < TICK_INCH*24) Thread.sleep(10);
-				robotOutput.tankDrive(0, 0);
-				
-				new SweepTurn45(10000, 40, false, false).runUntilFinish();
-				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveToDistance(10000, -20, position.getY(), 90, 20, false).runUntilFinish();
-				new SweepTurn45(10000, 40, false, false).runUntilFinish();
-				intake.setClamp(intake.FREE);
-				intake.setIntake(0.5);
-				Thread.sleep(1000);
-				intake.setClamp(intake.CLOSED);
-				intake.setIntake(0);
-				*/
-			}
-			
-			
 		}
-		else
-		{
-			//Tuned
-			elevator.goToTarget(elevator.ONE_FOOT*4);
-			new DriveToDistance(5000, position.getX(), 200, 0, 20, true).runUntilFinish();
-
-			new SweepTurn(2000, 45, 48, true, false).runUntilFinish();
-
-			arm.goToPosition(-40);
-			
-			new ElevatorToTarget(2500, elevator.POS_TOP-50).runUntilFinish();
-			
-			new DriveToDistance(2000, position.getX() + 20, position.getY() + 20, -45, 2, false).runUntilFinish();
-			intake.setClamp(intake.FREE);
-			robotOutput.setIntake(0.5);
-			Thread.sleep(500);
-			robotOutput.setIntake(0);
-
-			new SweepTurn(1000, 45, -48, false, false).runUntilFinish();
-			
-			elevator.goToBottom();
-			
-			
-			if(fms.plateLeft(0)) {
-				return;
-				/*new DriveBackwardsToDistance(10000, position.getX()-10, position.getY()-10, -135, 5, false).runUntilFinish();
-				new SweepTurn45(10000, 40, true, false).runUntilFinish();
-				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveToDistance(10000, -100, position.getY(), -90, 20, false).runUntilFinish();
-				new SweepTurn45(10000, 40, true, false).runUntilFinish();
-				intake.setClamp(intake.FREE);
-				intake.setIntake(0.5);
-				Thread.sleep(1000);
-				intake.setClamp(intake.CLOSED);
-				intake.setIntake(0);
-				*/
-				
-			}
-			else
-			{
-				
-				return;
-				//intake.setIntake(-1);
-				//new SweepTurn(1000, 45, 48, true, false).runUntilFinish();
-				
-				
-				/*
-				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				new DriveBackwardsToDistance(10000, position.getX()-10, position.getY()-10, -135, 5, false).runUntilFinish();
-				
-				intake.setClamp(intake.FREE);
-				intake.setIntake(0.5);
-				Thread.sleep(1000);
-				intake.setClamp(intake.CLOSED);
-				intake.setIntake(0);
-				*/
-				
-			}
-		}
-		
 	}
 
 }

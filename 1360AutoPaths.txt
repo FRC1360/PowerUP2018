@@ -1,0 +1,89 @@
+Motion Variables:
+
+Time Step: 0.025
+Velocity: 7
+Acceleration: 4
+Jerk: 100
+Wheel Base W: 2.05
+Fit Method: Cubic
+
+switchOneCubeRight: CONFIRMED
+
+x	y	Angle
+1.63	8.5	0
+10	8.5	0
+
+switchOneCubeLeft: CONFIRMED
+
+x	y	Angle
+1.63	8.5	0
+5.5	13	90
+10	18.25	0
+
+switchLscaleR-1: TESTING FPS=10 ACCEL=
+
+x	y	Angle
+1.63	4	0
+22	5.5	25
+
+switchLscaleR-2: TESTING
+
+x 	y 	angle
+
+22	5.5	180
+19.5	10	90
+20	19	90
+
+
+
+switchRscaleR: CONFIRMED NOTE: FPS=10 ACCEL=7
+
+x	y	Angle
+1.63	4	0
+22	5.5	25
+
+switchRscaleL-1:
+
+x	y	Angle
+1.63	4	0
+10	2.5	0
+14	5.5	90
+
+switchRscaleL-2:
+
+x	y	Angle
+14	5.5	0
+19	6	50
+20	10	90
+20	19	90
+
+switchLscaleL: CONFIRMED FPS=8 ACCEL=7
+
+x	y	Angle
+1.63	4	0
+12	2	0
+20	9	90
+19.5	19	90
+23	22	0
+
+switchFarR1: CONFIRMED FPS=6 ACCEL=6
+
+x	y	Angle
+1.63	4	0
+10	2.5	0
+14	6.5	90
+
+switchFarR2: CONFIRMED FPS=6 ACCEL=6
+
+x	y	Angle
+13	5.5	0
+17	4.5	0
+21	7	90
+
+switchFarL1: CONFIRMED FPS=6 ACCEL=6
+
+x	y	Angle
+1.63	4	0
+5.5	11	90
+5.5	15	90
+10	18	0

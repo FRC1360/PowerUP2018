@@ -1,8 +1,11 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
+import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
 import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToDistance;
+import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
+import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
+import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
 import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
 
@@ -15,49 +18,55 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		new Calibrate().runUntilFinish();
+		new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0)) {
-			elevator.goToTarget(700);
-			new SweepTurn(2500, 130/4, true, false).runUntilFinish();
-			new DriveToDistance(2500, -80, position.getY(), -80, 10, false).runUntilFinish();
+			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchL);
+			path.runNow("To Left Switch");
+			path.setWaypoint(7, "Start Elevator");
+			
+			waitFor("Calibrate", 0);
 			arm.goToPosition(-40);
-			new SweepTurn(2500, 130/4, false, false).runUntilFinish();
-			new DriveToDistance(2500, position.getX(), 80, 0, 10, false).runUntilFinish();
+			
+			new ElevatorToTarget(2000, elevator.ONE_FOOT*3).runAfter("Start Elevator", "Elevator Switch");
+
+			waitFor("To Left Switch", 0);
+			robotOutput.tankDrive(0, 0);
+			
+			new DriveToInch(750, 6, 0, 4, false, false).runUntilFinish();
 			
 			intake.setClamp(intake.FREE);
-			//intake.setIntake(0.5);
-			robotOutput.setIntake(0.5);
+			robotOutput.setIntake(0.75);
 			Thread.sleep(500);
-			//intake.setIntake(0);
 			robotOutput.setIntake(0);
 			arm.goToTop();
 			elevator.goToBottom();
-			Thread.sleep(1000);
 			
+			Thread.sleep(2000);
 			
 		} else {
 			
-			elevator.goToTarget(700);
+			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchR);
+			path.runNow("To Right Switch");
+			
+			waitFor("Calibrate", 0);
 			arm.goToPosition(-40);
-
-			new DriveToDistance(5000, 0, 90, 0, 10, false).runUntilFinish();//96 inches
+			
+			new ElevatorToTarget(2000, elevator.ONE_FOOT*2).runNow("Elevator");
+			
+			waitFor("Elevator", 0);
+			waitFor("To Right Switch", 0);
+			robotOutput.tankDrive(0, 0);
 	
 			intake.setClamp(intake.FREE);
-			//intake.setIntake(-1);
-			robotOutput.setIntake(1);
-			
+			robotOutput.setIntake(0.75);
 			Thread.sleep(500);
 			intake.setIntake(0);
 			arm.goToTop();
 			elevator.goToBottom();
 			
-			Thread.sleep(1000);
-			
+			Thread.sleep(2000);
 		}
-		
-		Thread.sleep(1000);
-	
 	}
 
 }

@@ -66,7 +66,7 @@ public class ArcToTargetTest {
         destX = 0;
         destY = 50;
 
-        new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
+        //new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
         checkTarget(2);
     }
@@ -76,7 +76,7 @@ public class ArcToTargetTest {
         destX = 50;
         destY = 50;
 
-        new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
+        //new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
         checkTarget(2);
     }
@@ -86,7 +86,7 @@ public class ArcToTargetTest {
         destX = -50;
         destY = 50;
 
-        new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
+        //new ArcToTarget(0, startX, startY, destX, destY, 0, 2).runUntilFinish();
 
         checkTarget(2);
     }

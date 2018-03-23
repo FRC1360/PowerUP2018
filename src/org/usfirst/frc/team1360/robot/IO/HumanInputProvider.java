@@ -51,8 +51,6 @@ public interface HumanInputProvider {
 	
 	//OTHER
 	
-	boolean getDriverArmDown();
-	
 	boolean getDriverOverride();
 	
 	//---------operator controls-------
@@ -82,6 +80,8 @@ public interface HumanInputProvider {
 
 	boolean getAutoDec();
 	double deadzone(double Input, double deadzone);
+
+	boolean getClimbRaw();
 
 	
 

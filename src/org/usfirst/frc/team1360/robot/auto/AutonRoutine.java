@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1360.robot.auto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -44,7 +45,11 @@ public abstract class AutonRoutine extends Thread {
 	
 	public final void runUntilFinish() throws InterruptedException
 	{
-		map.put(name.toLowerCase(), this);
+		AutonRoutine previous = map.put(name.toLowerCase(), this);
+		if (previous!=null) {
+			previous.interrupt();
+		}
+		
 		if (timeout != 0)
 		{
 			long start = System.currentTimeMillis();
@@ -52,6 +57,7 @@ public abstract class AutonRoutine extends Thread {
 			
 			
 			while(isAlive() && (System.currentTimeMillis()-start) < timeout) {
+//				System.out.println("waiting for: " + name);
 				Thread.sleep(10);
 			}
 			
@@ -190,16 +196,12 @@ public abstract class AutonRoutine extends Thread {
 		try
 		{
 			runCore();
-			synchronized(this)
-			{
-				notifyAll();
-				queue.forEach(AutonRoutine::start);
-				done = true;
-			}
+			onEnd();
 		}
 		catch (Throwable t)
 		{
 			matchLogger.write(t.toString());
+			Arrays.stream(t.getStackTrace()).map(StackTraceElement::toString).forEach(matchLogger::write);
 		}
 		matchLogger.write("End " + getClass().getSimpleName());
 	}
@@ -214,9 +216,20 @@ public abstract class AutonRoutine extends Thread {
 	{
 		System.out.printf("%s overriden: %s!\n", getClass().getSimpleName(), reason);
 		overrideCore();
+		onEnd();
 	}
 	
 	protected void overrideCore()
 	{
+	}
+	
+	private void onEnd()
+	{
+		synchronized(this)
+		{
+			notifyAll();
+			queue.forEach(AutonRoutine::start);
+			done = true;
+		}
 	}
 }

@@ -55,7 +55,7 @@ public final class Elevator implements ElevatorProvider {
 				}
 				int target = (Integer) context.getArg();
 
-				while(elevator.dampen(target, -0.75, false)) Thread.sleep(10);
+				while(elevator.dampen(target, -0.8, false)) Thread.sleep(10);
 				
 				context.nextState(HOLD);
 			}
@@ -84,13 +84,24 @@ public final class Elevator implements ElevatorProvider {
 			}
 		},
 		
+		CLIMB {
+			@Override
+			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
+				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+				while (sensorInput.getElevatorEncoder() > 25) {
+					robotOutput.setElevatorMotor(-1);
+					Thread.sleep(10);
+				}
+				
+				robotOutput.setElevatorMotor(0);
+				context.nextState(MANUAL);
+			}
+		},
+		
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				while (true) {
-					elevator.safety(-0.1);
-					Thread.sleep(10); // Tune this power to what we need to hold the robot up!
-				}
+				Singleton.get(RobotOutputProvider.class).setElevatorMotor(-0.3);
 			}
 		};
 		
@@ -130,7 +141,7 @@ public final class Elevator implements ElevatorProvider {
 		}
 		else
 		{
-			safety((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position));	
+			safety(((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position)) - 0.2);	
 			
 			return sensorInput.getElevatorEncoder() > position;
 		}
@@ -159,12 +170,12 @@ public final class Elevator implements ElevatorProvider {
 					robotOutput.setElevatorMotor(power);
 			}
 			
-			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*3 && sensorInput.getArmEncoder() >= -1) {
+			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
 				if(!arm.movingToPosition())
 					arm.goToPosition(-1);
 			}
 			else if(power < 0) {
-				if(0.002*sensorInput.getElevatorEncoder() < 0.2) 
+				if(Math.abs(0.002*sensorInput.getElevatorEncoder()) < 0.2) 
 					robotOutput.setElevatorMotor(-0.2);
 				else
 					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
@@ -296,7 +307,7 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public boolean isClimbing() {
-		return stateMachine.getState() == ElevatorState.CLIMB_HOLD;
+		return stateMachine.getState() == ElevatorState.CLIMB || stateMachine.getState() == ElevatorState.CLIMB_HOLD;
 	}
 	
 	@Override

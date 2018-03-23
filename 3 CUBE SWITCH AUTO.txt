@@ -1,0 +1,163 @@
+Copy pasta:
+
+	public static Trajectory trajectoryMidSwitch3Cube1;
+	public static Trajectory trajectoryMidSwitch3Cube2;
+	public static Trajectory trajectoryMidSwitch3Cube3;
+	public static Trajectory trajectoryMidSwitch3Cube4;
+	public static Trajectory trajectoryMidSwitch3Cube5;
+	public static Trajectory trajectoryMidSwitch3Cube6;
+	public static Trajectory trajectoryMidSwitch3Cube7;
+	public static Trajectory trajectoryMidSwitch3Cube8;
+	public static Trajectory trajectoryMidSwitch3Cube9;
+
+
+		Waypoint[] pointsMiddleSwitch3CubeLeft1 = new Waypoint[] {
+				new Waypoint(1.63, 12, 0),
+				new Waypoint(9.5, 18, 0)
+				
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft2 = new Waypoint[] {
+				new Waypoint(9.5, 18, 0),
+				new Waypoint(5.6, 19.4, Pathfinder.d2r(-55))
+				//BACKWARDS
+				
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft3 = new Waypoint[] {
+				new Waypoint(5.6, 19.4, Pathfinder.d2r(-55)),
+				new Waypoint(8.66, 16, Pathfinder.d2r(-64))
+				
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft4 = new Waypoint[] {
+				new Waypoint(8.66, 16, Pathfinder.d2r(-64)),
+				new Waypoint(5.91, 17.58, Pathfinder.d2r(5))
+				//BACKWARDS
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft5 = new Waypoint[] {
+				new Waypoint(5.91, 17.58, Pathfinder.d2r(5)),
+				new Waypoint(9.66, 17.91, Pathfinder.d2r(5))
+				
+		};		
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft6 = new Waypoint[] {
+				new Waypoint(9.66, 17.91, Pathfinder.d2r(5)),
+				new Waypoint(8, 19, Pathfinder.d2r(-57))
+				//BACKWARDS
+				
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft7 = new Waypoint[] {
+				new Waypoint(8, 19, Pathfinder.d2r(-57)),
+				new Waypoint(9.5, 16.5, Pathfinder.d2r(-57))
+				
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft8 = new Waypoint[] {
+				new Waypoint(9.5, 16.5, Pathfinder.d2r(-57)),
+				new Waypoint(7.5, 17.66, Pathfinder.d2r(5))
+				//BACKWARDS
+				
+		};
+		
+		Waypoint[] pointsMiddleSwitch3CubeLeft9 = new Waypoint[] {
+				new Waypoint(7.5, 17.66, Pathfinder.d2r(5)),
+				new Waypoint(9.83, 17.91, Pathfinder.d2r(5))
+				
+		};
+
+
+
+
+		Trajectory.Config configMidSwitch = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);
+
+
+		trajectoryMidSwitch3Cube1 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft1, configMidSwitch);
+		trajectoryMidSwitch3Cube2 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft2, configMidSwitch);
+		trajectoryMidSwitch3Cube3 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft3, configMidSwitch);
+		trajectoryMidSwitch3Cube4 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft4, configMidSwitch);
+		trajectoryMidSwitch3Cube5 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft5, configMidSwitch);
+		trajectoryMidSwitch3Cube6 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft6, configMidSwitch);
+		trajectoryMidSwitch3Cube7 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft7, configMidSwitch);
+		trajectoryMidSwitch3Cube8 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft8, configMidSwitch);
+		trajectoryMidSwitch3Cube9 = Pathfinder.generate(pointsMiddleSwitch3CubeLeft9, configMidSwitch);
+
+		
+
+		new Calibrate().runNow("Calibrate");
+		
+		PathfindFromFile path1 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube1);
+		path1.runNow("Move 1");
+		
+		new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+		arm.goToPosition(-35);
+		
+		waitFor("Move 1", 0);
+		
+		intake.setClamp(IntakeProvider.FREE);
+		intake.setIntake(1);
+		Thread.sleep(500);
+		intake.setIntake(0);
+		
+		PathfindFromFile path2 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube2);
+		path2.setReverse();
+		path2.runNow("Move 2");
+		
+		new ElevatorToTarget(2000, (int)(ElevatorProvider.ONE_FOOT*1.5)).runUntilFinish();
+		waitFor("Move 2", 0);
+		
+		PathfindFromFile path3 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube3);
+		path3.runNow("Move 3");
+		
+		intake.setIntake(-1);
+		waitFor("Move 3", 0);
+		intake.setIntake(0);
+		intake.setClamp(IntakeProvider.CLOSED);
+		
+		PathfindFromFile path4 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube4);
+		path4.setReverse();
+		path4.runNow("Move 4");
+		waitFor("Move 4", 0);
+		
+		new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+		
+		PathfindFromFile path5 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube5);
+		path5.runNow("Move 5");
+		waitFor("Move 5", 0);
+		
+		intake.setClamp(IntakeProvider.FREE);
+		intake.setIntake(1);
+		Thread.sleep(500);
+		intake.setIntake(0);
+		
+		PathfindFromFile path6 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube6);
+		path6.setReverse();
+		path6.runNow("Move 6");
+		
+		new ElevatorToTarget(2000, (int)(ElevatorProvider.ONE_FOOT*1.5)).runUntilFinish();
+		waitFor("Move 6", 0);
+		
+		PathfindFromFile path7 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube7);
+		path3.runNow("Move 7");
+		
+		intake.setIntake(-1);
+		waitFor("Move 7", 0);
+		intake.setIntake(0);
+		intake.setClamp(IntakeProvider.CLOSED);
+		
+		PathfindFromFile path8 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube8);
+		path8.setReverse();
+		path8.runNow("Move 8");
+		new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runUntilFinish();
+		waitFor("Move 8", 0);
+		
+		PathfindFromFile path9 = new PathfindFromFile(10000, Robot.trajectoryMidSwitch3Cube9);
+		path9.runNow("Move 9");
+		waitFor("Move 9", 0);
+		
+		intake.setClamp(IntakeProvider.FREE);
+		intake.setIntake(1);
+		Thread.sleep(500);
+		intake.setIntake(0);

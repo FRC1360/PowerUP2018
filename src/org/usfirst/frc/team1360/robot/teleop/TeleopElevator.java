@@ -16,7 +16,6 @@ public class TeleopElevator implements TeleopComponent {
 	RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
-	ArmProvider arm = Singleton.get(ArmProvider.class);
 	IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	
@@ -59,20 +58,17 @@ public class TeleopElevator implements TeleopComponent {
 		
 		if (speed == 0)
 		{
-			if(scaleMax && !arm.movingToPosition())
+			if(scaleMax )
 			{
 				elevator.goToTarget(elevator.SCALE_HIGH);
-				arm.goToTop();
 			}
-			else if(scaleLow && !arm.movingToPosition())
+			else if(scaleLow)
 			{
 				elevator.goToTarget(elevator.SCALE_LOW);
-				arm.goToPosition(arm.POS_BOTTOM);
 			}
-			else if(switchPreset && !arm.movingToPosition())
+			else if(switchPreset)
 			{
 				elevator.goToTarget(elevator.SWITCH_HEIGHT);
-				arm.goToPosition(arm.POS_BOTTOM);
 			}
 			else if(intakePreset)
 			{
@@ -82,10 +78,9 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				elevator.climb();
 			}
-			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
+			if (!elevator.isMovingToTarget() && !elevator.isClimbing() && !elevator.isHolding())
 			{
-				if(!elevator.isHolding())
-					elevator.hold();
+				elevator.hold();
 			}
 			
 		}

@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopClimber.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
-		//CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();

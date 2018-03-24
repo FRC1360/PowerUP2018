@@ -250,22 +250,23 @@ public class Robot extends TimedRobot {
 
 		}
 		
-		/*
-		try {
-		trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
-		trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
-		trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
-		trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
-		trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
-			
-		//Switch Profiles
-		trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
-		trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
-		} catch(Exception e) {
-			matchLog.writeClean("PATH ERROR: " + e.toString());
-		}
-		matchLog.writeClean("PATH reaching");
-		*/
+		if(fileSwitchLScaleL.exists()) {
+            try {
+                trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
+                trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
+                trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
+                trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
+                trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
+
+                //Switch Profiles
+                trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
+                trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
+            } catch (Throwable e) {
+                matchLog.writeClean("PATH ERROR: " + e.toString());
+            }
+            matchLog.writeClean("File Loading Finished");
+        }
+
 		
 
 	}

@@ -10,7 +10,7 @@ public class GeneratePaths {
 
     public static void main(String [] args){
 
-        String FILE_ROOT = "C:\\Users\\ethan\\Desktop\\";
+        String FILE_ROOT = "C:\\Users\\ethan\\Documents\\Github\\PowerUP2018\\1360AutoPaths";
 
         Trajectory trajectorySwitchLScaleL;
         Trajectory trajectorySwitchRScaleR;

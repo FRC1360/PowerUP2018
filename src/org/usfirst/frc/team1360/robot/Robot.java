@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
 
 	
 	private boolean IN_JAR = true;
-	private String FILE_ROOT = "~/";
+	private String FILE_ROOT = "/U/";
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -232,7 +232,9 @@ public class Robot extends TimedRobot {
 		
 		if(IN_JAR) {
 			//TRAJECTORY GENERATION
-			//Two Cubes
+			//Two Cubes/*
+			/*
+			try {
 			ClassLoader classLoader = getClass().getClassLoader();
 			fileSwitchLScaleL = new File(classLoader.getResource("1360AutoPaths/switchLScaleL.csv").getFile());
 			fileSwitchRScaleR = new File(classLoader.getResource("1360AutoPaths/switchRScaleR.csv").getFile());
@@ -242,10 +244,14 @@ public class Robot extends TimedRobot {
 
 			fileSwitchL = new File(classLoader.getResource("1360AutoPaths/switchL.csv").getFile());
 			fileSwitchR = new File(classLoader.getResource("1360AutoPaths/switchR.csv").getFile());
+			} catch(Exception  e) {
+				matchLog.writeClean("PATH ERROR: " + e.toString());
+			}*/
 
-			
 		}
-
+		
+		/*
+		try {
 		trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
 		trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
 		trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
@@ -255,7 +261,11 @@ public class Robot extends TimedRobot {
 		//Switch Profiles
 		trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
 		trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
-
+		} catch(Exception e) {
+			matchLog.writeClean("PATH ERROR: " + e.toString());
+		}
+		matchLog.writeClean("PATH reaching");
+		*/
 		
 
 	}

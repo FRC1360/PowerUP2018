@@ -36,7 +36,7 @@ public class AutonControl {
 		routines.add(new Switch());
 		routines.add(new CrossBaseline());
 		routines.add(new SwitchFromBehind());
-//		routines.add(new SwitchThreeCube());
+		routines.add(new SwitchThreeCube());
 		routines.add(new Default());
 	}
 	

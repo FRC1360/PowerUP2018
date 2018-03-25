@@ -234,13 +234,6 @@ public class Arm implements ArmProvider{
 				multiplier = 0.7;
 			}
 			
-			try {
-				if (sensorInput.getArmCurrent() > 200.0)
-					cooldown = System.currentTimeMillis() + 500;
-			} catch (Throwable t) {
-				matchLogger.write("Could not run current draw safety on arm!");
-			}
-			
 			if (System.currentTimeMillis() < cooldown) {
 				robotOutput.setArm(0);
 				return;

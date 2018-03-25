@@ -114,10 +114,22 @@ public class PathfindFromFile extends AutonRoutine{
 				//angleDifference = Pathfinder.boundHalfDegrees(Pathfinder.r2d(left.getHeading()) - sensorInput.getAHRSYaw());
 				
 				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
-				
-				double yaw = -sensorInput.getAHRSYaw();
-				turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
-				
+				double yaw;
+
+                if(this.reverse){
+                    yaw = sensorInput.getAHRSYaw();
+                }else {
+                    yaw = -sensorInput.getAHRSYaw();
+                }
+
+				if(this.reverse){
+					turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading())-180, yaw), yaw);
+				}
+				else {
+					turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
+
+				}
+
 				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
 				
 //				if (turn > 0)
@@ -129,6 +141,7 @@ public class PathfindFromFile extends AutonRoutine{
 				
 //				if (turn < 0 && l < 0)
 //					l = 0;
+				
 //				if (turn > 0 && r < 0)
 //					r = 0;
 				
@@ -157,6 +170,7 @@ public class PathfindFromFile extends AutonRoutine{
 	
 	private final class WaypointComponent extends AutonRoutine {
 		private double position;
+		
 		
 		public WaypointComponent(double position) {
 			super(null, 0);

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.hal.SolenoidJNI;
 
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.usfirst.frc.team1360.robot.IO.HumanInput;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 
@@ -16,6 +17,7 @@ import org.usfirst.frc.team1360.robot.util.SingletonSee;
 @SingletonSee(MatchLogProvider.class)
 public class MatchLogger implements MatchLogProvider {
 	private PrintStream file;
+//	private HumanInput humanInput = Singleton.get(HumanInput.class);
 	//private PrintStream tempFile;
 	private PrintStream tempFileComp;
 	
@@ -102,16 +104,18 @@ public class MatchLogger implements MatchLogProvider {
 
 	@Override
 	public void write(String msg) {
-		//tempFile.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
 		tempFileComp.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
-		tempFileComp.flush();
-		//tempFile.flush();
+
+			tempFileComp.flush();
+		
 	}
 	
 	@Override
 	public void writeClean(String msg) {
 		file.println(String.format("[t = %f] %s", ds.getMatchTime(), msg));
-		file.flush();
+
+			file.flush();
+		
 	}
 	
 	@Override

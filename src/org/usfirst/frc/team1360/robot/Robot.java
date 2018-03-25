@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopClimber.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
@@ -308,6 +308,7 @@ public class Robot extends TimedRobot {
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
@@ -316,8 +317,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
-		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
-		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
+//		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
+//		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
 	}
 	
 	@Override

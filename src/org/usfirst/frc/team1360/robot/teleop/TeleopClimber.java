@@ -16,6 +16,8 @@ public class TeleopClimber implements TeleopComponent {
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	
 	private boolean climbPressed = false;
+	private boolean climbLast = false;
+	private boolean climbValue = false;
 	private boolean climberLast = false;
 	private boolean holdClimb = false;
 	private long timer = 0;
@@ -61,8 +63,12 @@ public class TeleopClimber implements TeleopComponent {
 			
 		}
 		
-		climber.setBar(climbRaw);
-		
+//		climber.setBar(climbRaw);
+		if (climbRaw && !climbLast) {
+			climbValue = !climbValue;
+		}
+		climbLast = climbRaw;
+		climber.setBar(climbValue);
 		climberLast = climb;
 		
 	}

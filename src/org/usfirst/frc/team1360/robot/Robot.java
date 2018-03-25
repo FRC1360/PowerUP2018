@@ -77,11 +77,20 @@ public class Robot extends TimedRobot {
     public static Trajectory trajectorySwitchL3;
     public static Trajectory trajectorySwitchL4;
     public static Trajectory trajectorySwitchL5;
+    public static Trajectory trajectorySwitchL6;
+    public static Trajectory trajectorySwitchL7;
+    public static Trajectory trajectorySwitchL8;
+    public static Trajectory trajectorySwitchL9;
 
     public static Trajectory trajectorySwitchR2;
     public static Trajectory trajectorySwitchR3;
     public static Trajectory trajectorySwitchR4;
     public static Trajectory trajectorySwitchR5;
+    public static Trajectory trajectorySwitchR6;
+    public static Trajectory trajectorySwitchR7;
+    public static Trajectory trajectorySwitchR8;
+    public static Trajectory trajectorySwitchR9;
+
 
     public static boolean csvLoaded = false;
 
@@ -157,10 +166,22 @@ public class Robot extends TimedRobot {
         File fileSwitchL4 = new File(FILE_ROOT + "switchL4.csv");
         File fileSwitchL5 = new File(FILE_ROOT + "switchL5.csv");
 
+        File fileSwitchL6 = new File(FILE_ROOT + "switchL6.csv");
+        File fileSwitchL7 = new File(FILE_ROOT + "switchL7.csv");
+        File fileSwitchL8 = new File(FILE_ROOT + "switchL8.csv");
+        File fileSwitchL9 = new File(FILE_ROOT + "switchL9.csv");
+
+
         File fileSwitchR2 = new File(FILE_ROOT + "switchR2.csv");
         File fileSwitchR3 = new File(FILE_ROOT + "switchR3.csv");
         File fileSwitchR4 = new File(FILE_ROOT + "switchR4.csv");
         File fileSwitchR5 = new File(FILE_ROOT + "switchR5.csv");
+
+        File fileSwitchR6 = new File(FILE_ROOT + "switchR6.csv");
+        File fileSwitchR7 = new File(FILE_ROOT + "switchR7.csv");
+        File fileSwitchR8 = new File(FILE_ROOT + "switchR8.csv");
+        File fileSwitchR9 = new File(FILE_ROOT + "switchR9.csv");
+
 		
 		if(fileSwitchLScaleL.exists()) {
 		    trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
@@ -178,10 +199,21 @@ public class Robot extends TimedRobot {
             trajectorySwitchL4 = Pathfinder.readFromCSV(fileSwitchL4);
             trajectorySwitchL5 = Pathfinder.readFromCSV(fileSwitchL5);
 
+            trajectorySwitchL6 = Pathfinder.readFromCSV(fileSwitchL6);
+            trajectorySwitchL7 = Pathfinder.readFromCSV(fileSwitchL7);
+            trajectorySwitchL8 = Pathfinder.readFromCSV(fileSwitchL8);
+            trajectorySwitchL9 = Pathfinder.readFromCSV(fileSwitchL9);
+
+
             trajectorySwitchR2 = Pathfinder.readFromCSV(fileSwitchR2);
             trajectorySwitchR3 = Pathfinder.readFromCSV(fileSwitchR3);
             trajectorySwitchR4 = Pathfinder.readFromCSV(fileSwitchR4);
             trajectorySwitchR5 = Pathfinder.readFromCSV(fileSwitchR5);
+
+            trajectorySwitchR6 = Pathfinder.readFromCSV(fileSwitchR6);
+            trajectorySwitchR7 = Pathfinder.readFromCSV(fileSwitchR7);
+            trajectorySwitchR8 = Pathfinder.readFromCSV(fileSwitchR8);
+            trajectorySwitchR9 = Pathfinder.readFromCSV(fileSwitchR9);
 
             csvLoaded = true;
 

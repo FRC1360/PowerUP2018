@@ -117,6 +117,8 @@ public class SwitchThreeCube extends AutonRoutine {
 			arm.goToTop();
 			elevator.goToBottom();
 
+
+            //Second cube
             PathfindFromFile path2 = new PathfindFromFile(10000, Robot.trajectorySwitchR2);
             path2.setReverse();
             path2.runUntilFinish();

@@ -11,7 +11,9 @@ public class GeneratePaths {
 
     public static void main(String [] args){
 
-        String FILE_ROOT = "C:\\Users\\ethan\\Documents\\Github\\PowerUP2018\\1360AutoPaths\\";
+        String FILE_ROOT = "C:\\Users\\orbit\\Desktop\\PowerUP2018\\src\\1360AutoPaths\\";
+
+        System.out.println("CSV Generation starting to path " + FILE_ROOT);
 
         Trajectory trajectorySwitchLScaleL;
         Trajectory trajectorySwitchRScaleR;
@@ -308,6 +310,8 @@ public class GeneratePaths {
         Pathfinder.writeToCSV(fileSwitchR7, trajectorySwitchR7);
         Pathfinder.writeToCSV(fileSwitchR8, trajectorySwitchR8);
         Pathfinder.writeToCSV(fileSwitchR9, trajectorySwitchR9);
+
+        System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
     }
 
 }

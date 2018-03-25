@@ -117,65 +117,65 @@ public class GeneratePaths {
         };
 
         Waypoint[] pointsSwitchL6 = new Waypoint[] {
-                new Waypoint(10, 18.25, 0),
-                new Waypoint(5.6, 19.4, Pathfinder.d2r(-55))
+                new Waypoint(9.66, 17.91, 0),
+                new Waypoint(8, 19, Pathfinder.d2r(-57))
         };
 
         Waypoint[] pointsSwitchL7 = new Waypoint[] {
-                new Waypoint(5.6, 19.4, Pathfinder.d2r(-55)),
-                new Waypoint(8.66, 16, Pathfinder.d2r(-64))
+                new Waypoint(8, 19, Pathfinder.d2r(-57)),
+                new Waypoint(9.5, 16, Pathfinder.d2r(-57))
         };
 
         Waypoint[] pointsSwitchL8 = new Waypoint[] {
-                new Waypoint(8.66, 16, Pathfinder.d2r(-64)),
-                new Waypoint(5.91, 17.58, Pathfinder.d2r(5))
+                new Waypoint(9.5, 16, Pathfinder.d2r(-57)),
+                new Waypoint(7.5, 17.66, Pathfinder.d2r(5))
         };
 
         Waypoint[] pointsSwitchL9 = new Waypoint[] {
-                new Waypoint(5.91, 17.58, Pathfinder.d2r(5)),
-                new Waypoint(9.66, 17.91, 0)
+                new Waypoint(7.5, 17.66, Pathfinder.d2r(5)),
+                new Waypoint(9.83, 17.91, 0)
         };
 
 
 
         Waypoint[] pointsSwitchR2 = new Waypoint[] {
-                new Waypoint(9.66, 8.75, 0),
-                new Waypoint(5.6, 7.6, Pathfinder.d2r(55))
-        };
-
-        Waypoint[] pointsSwitchR3 = new Waypoint[] {
-                new Waypoint(5.6, 7.6, Pathfinder.d2r(55)),
-                new Waypoint(8.66, 11, Pathfinder.d2r(64))
-        };
-
-        Waypoint[] pointsSwitchR4 = new Waypoint[] {
-                new Waypoint(8.66, 11, Pathfinder.d2r(64)),
-                new Waypoint(5.91, 9.42, Pathfinder.d2r(-5))
-        };
-
-        Waypoint[] pointsSwitchR5 = new Waypoint[] {
-                new Waypoint(5.91, 9.42, Pathfinder.d2r(-5)),
-                new Waypoint(9.66, 9.09, 0)
-        };
-
-        Waypoint[] pointsSwitchR6 = new Waypoint[] {
                 new Waypoint(10, 8.5, 0),
                 new Waypoint(5.6, 7.35, Pathfinder.d2r(55))
         };
 
-        Waypoint[] pointsSwitchR7 = new Waypoint[] {
+        Waypoint[] pointsSwitchR3 = new Waypoint[] {
                 new Waypoint(5.6, 7.35, Pathfinder.d2r(55)),
                 new Waypoint(8.66, 10.75, Pathfinder.d2r(64))
         };
 
-        Waypoint[] pointsSwitchR8 = new Waypoint[] {
+        Waypoint[] pointsSwitchR4 = new Waypoint[] {
                 new Waypoint(8.66, 10.75, Pathfinder.d2r(64)),
                 new Waypoint(5.91, 9.17, Pathfinder.d2r(-5))
         };
 
-        Waypoint[] pointsSwitchR9 = new Waypoint[] {
+        Waypoint[] pointsSwitchR5 = new Waypoint[] {
                 new Waypoint(5.91, 9.17, Pathfinder.d2r(-5)),
                 new Waypoint(9.66, 8.5, 0)
+        };
+
+        Waypoint[] pointsSwitchR6 = new Waypoint[] {
+                new Waypoint(10, 8.75, 0),
+                new Waypoint(5.6, 7.6, Pathfinder.d2r(55))
+        };
+
+        Waypoint[] pointsSwitchR7 = new Waypoint[] {
+                new Waypoint(5.6, 7.6, Pathfinder.d2r(55)),
+                new Waypoint(8.66, 11, Pathfinder.d2r(64))
+        };
+
+        Waypoint[] pointsSwitchR8 = new Waypoint[] {
+                new Waypoint(8.66, 11, Pathfinder.d2r(64)),
+                new Waypoint(5.91, 9.42, Pathfinder.d2r(-5))
+        };
+
+        Waypoint[] pointsSwitchR9 = new Waypoint[] {
+                new Waypoint(5.91, 9.42, Pathfinder.d2r(-5)),
+                new Waypoint(9.66, 9.09, 0)
         };
 
         //CONFIGS

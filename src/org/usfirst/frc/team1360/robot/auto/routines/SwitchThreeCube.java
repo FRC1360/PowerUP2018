@@ -38,8 +38,6 @@ public class SwitchThreeCube extends AutonRoutine {
 			waitFor("To Left Switch", 0);
 			robotOutput.tankDrive(0, 0);
 			
-			new DriveToInch(750, 6, 0, 4, false, false).runUntilFinish();
-			
 			intake.setClamp(intake.FREE);
 			robotOutput.setIntake(0.75);
 			Thread.sleep(500);

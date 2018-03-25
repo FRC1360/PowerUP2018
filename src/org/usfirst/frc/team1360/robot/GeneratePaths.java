@@ -5,12 +5,13 @@ import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public class GeneratePaths {
 
     public static void main(String [] args){
 
-        String FILE_ROOT = "C:\\Users\\ethan\\Documents\\Github\\PowerUP2018\\1360AutoPaths";
+        String FILE_ROOT = "C:\\Users\\ethan\\Documents\\Github\\PowerUP2018\\1360AutoPaths\\";
 
         Trajectory trajectorySwitchLScaleL;
         Trajectory trajectorySwitchRScaleR;
@@ -86,36 +87,44 @@ public class GeneratePaths {
 
 
         Waypoint[] pointsSwitchL2 = new Waypoint[] {
-
+                new Waypoint(10, 18.25, 0),
+                new Waypoint(5.6, 19.4, Pathfinder.d2r(-55))
         };
 
         Waypoint[] pointsSwitchL3 = new Waypoint[] {
-
+                new Waypoint(5.6, 19.4, Pathfinder.d2r(-55)),
+                new Waypoint(8.66, 16, Pathfinder.d2r(-64))
         };
 
         Waypoint[] pointsSwitchL4 = new Waypoint[] {
-
+                new Waypoint(8.66, 16, Pathfinder.d2r(-64)),
+                new Waypoint(5.91, 17.58, Pathfinder.d2r(5))
         };
 
         Waypoint[] pointsSwitchL5 = new Waypoint[] {
-
+                new Waypoint(5.91, 17.58, Pathfinder.d2r(5)),
+                new Waypoint(9.66, 17.91, 0)
         };
 
 
         Waypoint[] pointsSwitchR2 = new Waypoint[] {
-
+                new Waypoint(10, 8.5, 0),
+                new Waypoint(5.6, 7.35, Pathfinder.d2r(55))
         };
 
         Waypoint[] pointsSwitchR3 = new Waypoint[] {
-
+                new Waypoint(5.6, 7.35, Pathfinder.d2r(55)),
+                new Waypoint(8.66, 10.75, Pathfinder.d2r(64))
         };
 
         Waypoint[] pointsSwitchR4 = new Waypoint[] {
-
+                new Waypoint(8.66, 10.75, Pathfinder.d2r(64)),
+                new Waypoint(5.91, 9.17, Pathfinder.d2r(-5))
         };
 
         Waypoint[] pointsSwitchR5 = new Waypoint[] {
-
+                new Waypoint(5.91, 9.17, Pathfinder.d2r(-5)),
+                new Waypoint(9.66, 8.5, 0)
         };
 
         //CONFIGS

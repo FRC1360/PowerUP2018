@@ -15,7 +15,6 @@ public class TwoCubeRight extends AutonRoutine{
 
 	public TwoCubeRight() {
 		super("Two Cube Right", 0);
-		// TODO Auto-generated constructor stub
 	}
 	
 

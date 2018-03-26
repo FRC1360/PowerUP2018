@@ -23,15 +23,12 @@ public interface SensorInputProvider {
 	double getRightEncoderVelocity();
 	void resetLeftEncoder();
 	void resetRightEncoder();
-	double getDriveCurrentLeft();
-	double getDriveCurrentRight();
-	
+
 	//Arm
 	boolean getArmSwitch();
 	int getArmEncoder();
 	double getArmEncoderVelocity();
 	void resetArmEncoder();
-	double getArmCurrent();
 
 	//Elevator
 	int getElevatorEncoder();
@@ -43,9 +40,7 @@ public interface SensorInputProvider {
 	
 	void calculate();
 	void reset();
-	
-	double getBatteryVoltage();
-	double getElevatorCurrent();
+
 
 	
 }

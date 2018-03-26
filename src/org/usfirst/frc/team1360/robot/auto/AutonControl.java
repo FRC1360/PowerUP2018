@@ -6,12 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
-import org.usfirst.frc.team1360.robot.auto.routines.CrossBaseline;
-import org.usfirst.frc.team1360.robot.auto.routines.Default;
-import org.usfirst.frc.team1360.robot.auto.routines.SolidworksTwoCube;
-import org.usfirst.frc.team1360.robot.auto.routines.Switch;
-import org.usfirst.frc.team1360.robot.auto.routines.Test;
-import org.usfirst.frc.team1360.robot.auto.routines.TwoCubeRight;
+import org.usfirst.frc.team1360.robot.auto.routines.*;
 import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
@@ -35,14 +30,14 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
-		//routines.add(new EncoderSwitch());
+		//routines.add(new Test());
 		routines.add(new TwoCubeRight());
-		routines.add(new Test());
+		routines.add(new Scale());
 		routines.add(new Switch());
-		//routines.add(new ScaleRightStart());
 		routines.add(new CrossBaseline());
+		routines.add(new SwitchFromBehind());
+		routines.add(new SwitchThreeCube());
 		routines.add(new Default());
-		routines.add(new SolidworksTwoCube());
 	}
 	
 	public static void select()

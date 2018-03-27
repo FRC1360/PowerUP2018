@@ -54,28 +54,47 @@ import jaci.pathfinder.Waypoint;
  */
 @SingletonStatic
 public class Robot extends TimedRobot {
-	private ElevatorProvider elevator;
-	private ArmProvider arm;
-	private MatchLogProvider matchLog;
-	private HumanInputProvider humanInput;
-	private SensorInputProvider sensorInput;
-	private RobotOutputProvider robotOutput;
-	private OrbitPositionProvider position;
-	private TeleopControl teleopControl;
-	
-	
+    private ElevatorProvider elevator;
+    private ArmProvider arm;
+    private MatchLogProvider matchLog;
+    private HumanInputProvider humanInput;
+    private SensorInputProvider sensorInput;
+    private RobotOutputProvider robotOutput;
+    private OrbitPositionProvider position;
+    private TeleopControl teleopControl;
 
-	public static Trajectory trajectorySwitchLScaleL;
-	public static Trajectory trajectorySwitchRScaleR;
-	public static Trajectory trajectorySwitchRScaleL1;
-	public static Trajectory trajectorySwitchRScaleL2;
-	public static Trajectory trajectorySwitchLScaleR;
-	public static Trajectory trajectorySwitchL;
-	public static Trajectory trajectorySwitchR;
 
-	
-	private boolean IN_JAR = true;
-	private String FILE_ROOT = "~/";
+
+    public static Trajectory trajectorySwitchLScaleL;
+    public static Trajectory trajectorySwitchRScaleR;
+    public static Trajectory trajectorySwitchRScaleL1;
+    public static Trajectory trajectorySwitchRScaleL2;
+    public static Trajectory trajectorySwitchLScaleR;
+    public static Trajectory trajectorySwitchL;
+    public static Trajectory trajectorySwitchR;
+
+    public static Trajectory trajectorySwitchL2;
+    public static Trajectory trajectorySwitchL3;
+    public static Trajectory trajectorySwitchL4;
+    public static Trajectory trajectorySwitchL5;
+    public static Trajectory trajectorySwitchL6;
+    public static Trajectory trajectorySwitchL7;
+    public static Trajectory trajectorySwitchL8;
+    public static Trajectory trajectorySwitchL9;
+
+    public static Trajectory trajectorySwitchR2;
+    public static Trajectory trajectorySwitchR3;
+    public static Trajectory trajectorySwitchR4;
+    public static Trajectory trajectorySwitchR5;
+    public static Trajectory trajectorySwitchR6;
+    public static Trajectory trajectorySwitchR7;
+    public static Trajectory trajectorySwitchR8;
+    public static Trajectory trajectorySwitchR9;
+
+
+    public static boolean csvLoaded = false;
+
+	private String FILE_ROOT = "/home/lvuser/";
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -100,7 +119,7 @@ public class Robot extends TimedRobot {
 		Singleton.configure(TeleopClimber.class);
 		teleopControl = Singleton.configure(TeleopControl.class);
 		
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 		
 		robotOutput.clearStickyFaults();
 		sensorInput.reset();
@@ -129,93 +148,6 @@ public class Robot extends TimedRobot {
 		 * 
 		 * 
 		 */
-		
-		//UNUSED
-		/*
-		//Switch Left Scale Right score on scale
-		Waypoint[] pointsSwitchLScaleR1 = new Waypoint[] {
-				new Waypoint(1.63, 4, 0),
-				new Waypoint(23, 5.5, Pathfinder.d2r(35))
-		};
-		
-		//Switch left scale right score on switch
-		Waypoint[] pointsSwitchLScaleR2 = new Waypoint[] {
-				new Waypoint(23, 5.5, Pathfinder.d2r(150)),
-				new Waypoint(19.5, 10, Pathfinder.d2r(90)),
-				new Waypoint(19.5, 15.5, Pathfinder.d2r(90))
-		};
-		*/
-		//UNUSED
-		
-		//Two Cube Switch Scale
-		//Switch Left Scale Left two cube
-		Waypoint[] pointsSwitchLScaleL = new Waypoint[] {
-				new Waypoint(1.63, 4, 0),
-				new Waypoint(12, 2, 0),
-				new Waypoint(20, 9, Pathfinder.d2r(90)),
-				new Waypoint(19.5, 19, Pathfinder.d2r(90)),
-				new Waypoint(23, 22, 0)
-		};
-		
-		//Switch Right Scale Right two cube
-		Waypoint[] pointsSwitchRScaleR = new Waypoint[] {
-				new Waypoint(1.63, 4, 0),
-				new Waypoint(23, 5.5, Pathfinder.d2r(35))
-		};
-		
-		
-		//Score first cube on switch right (Two cube)
-		Waypoint[] pointsSwitchRScaleL1 = new Waypoint[] {
-				new Waypoint(1.63, 4, 0),
-				new Waypoint(10, 2.5, 0),
-				new Waypoint(14, 6.5, Pathfinder.d2r(90))
-		};
-		
-		//Go to score second cube on switch right (Two cube)
-		Waypoint[] pointsSwitchRScaleL2 = new Waypoint[] {
-				new Waypoint(13, 5.5, 0),
-				new Waypoint(17, 4.5, 0),
-				new Waypoint(21, 7, Pathfinder.d2r(90))
-		};
-		
-		
-		Waypoint[] pointsSwitchLScaleR = new Waypoint[] {
-				new Waypoint(1.63, 4, 0),
-				new Waypoint(12, 2, 0),
-				new Waypoint(20, 9, Pathfinder.d2r(90)),
-				new Waypoint(19.5, 19, Pathfinder.d2r(90)),
-				new Waypoint(16.5, 23.5, Pathfinder.d2r(180)),
-				new Waypoint(14, 21.5, Pathfinder.d2r(270))
-		};
-		
-		
-		//SWITCH AUTO PATHS
-		Waypoint[] pointsSwitchR = new Waypoint[] {
-				new Waypoint(1.63, 8.5, 0),
-				new Waypoint(10, 8.5, 0)
-		};
-		
-		Waypoint[] pointsSwitchL = new Waypoint[] {
-				new Waypoint(1.63, 8.5, 0),
-				new Waypoint(5.5, 13, Pathfinder.d2r(90)),
-				new Waypoint(10, 18.25, 0)
-		};
-		
-
-		//CONFIGS
-		//Two Cube
-		Trajectory.Config configSwitchRScaleR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
-		Trajectory.Config configSwitchLScaleL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
-		Trajectory.Config configSwitchRScaleL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 4, 100);
-		Trajectory.Config configSwitchRScaleL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 5, 100);
-		Trajectory.Config configSwitchLScaleR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
-		
-		//Switch Only
-		Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);
-		Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 7, 4, 100);//jerk was 180
-		
-
-
 
 		//FILES
 		//TwoCubes
@@ -229,35 +161,67 @@ public class Robot extends TimedRobot {
 		File fileSwitchL = new File(FILE_ROOT + "switchL.csv");
 		File fileSwitchR = new File(FILE_ROOT + "switchR.csv");
 
-		
-		if(IN_JAR) {
-			//TRAJECTORY GENERATION
-			//Two Cubes
-			ClassLoader classLoader = getClass().getClassLoader();
-			fileSwitchLScaleL = new File(classLoader.getResource("1360AutoPaths/switchLScaleL.csv").getFile());
-			fileSwitchRScaleR = new File(classLoader.getResource("1360AutoPaths/switchRScaleR.csv").getFile());
-			fileSwitchRScaleL1 = new File(classLoader.getResource("1360AutoPaths/switchRScaleL1.csv").getFile());
-			fileSwitchRScaleL2 = new File(classLoader.getResource("1360AutoPaths/switchRScaleL2.csv").getFile());
-			fileSwitchLScaleR = new File(classLoader.getResource("1360AutoPaths/switchLScaleR.csv").getFile());
+        File fileSwitchL2 = new File(FILE_ROOT + "switchL2.csv");
+        File fileSwitchL3 = new File(FILE_ROOT + "switchL3.csv");
+        File fileSwitchL4 = new File(FILE_ROOT + "switchL4.csv");
+        File fileSwitchL5 = new File(FILE_ROOT + "switchL5.csv");
 
-			fileSwitchL = new File(classLoader.getResource("1360AutoPaths/switchL.csv").getFile());
-			fileSwitchR = new File(classLoader.getResource("1360AutoPaths/switchR.csv").getFile());
+        File fileSwitchL6 = new File(FILE_ROOT + "switchL6.csv");
+        File fileSwitchL7 = new File(FILE_ROOT + "switchL7.csv");
+        File fileSwitchL8 = new File(FILE_ROOT + "switchL8.csv");
+        File fileSwitchL9 = new File(FILE_ROOT + "switchL9.csv");
 
-			
-		}
 
-		trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
-		trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
-		trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
-		trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
-		trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
-			
-		//Switch Profiles
-		trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
-		trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
+        File fileSwitchR2 = new File(FILE_ROOT + "switchR2.csv");
+        File fileSwitchR3 = new File(FILE_ROOT + "switchR3.csv");
+        File fileSwitchR4 = new File(FILE_ROOT + "switchR4.csv");
+        File fileSwitchR5 = new File(FILE_ROOT + "switchR5.csv");
+
+        File fileSwitchR6 = new File(FILE_ROOT + "switchR6.csv");
+        File fileSwitchR7 = new File(FILE_ROOT + "switchR7.csv");
+        File fileSwitchR8 = new File(FILE_ROOT + "switchR8.csv");
+        File fileSwitchR9 = new File(FILE_ROOT + "switchR9.csv");
 
 		
+		if(fileSwitchLScaleL.exists()) {
+		    trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
+		    trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
+		    trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
+		    trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
+		    trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
 
+		    //Switch Profiles
+            trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
+            trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
+
+            trajectorySwitchL2 = Pathfinder.readFromCSV(fileSwitchL2);
+            trajectorySwitchL3 = Pathfinder.readFromCSV(fileSwitchL3);
+            trajectorySwitchL4 = Pathfinder.readFromCSV(fileSwitchL4);
+            trajectorySwitchL5 = Pathfinder.readFromCSV(fileSwitchL5);
+
+            trajectorySwitchL6 = Pathfinder.readFromCSV(fileSwitchL6);
+            trajectorySwitchL7 = Pathfinder.readFromCSV(fileSwitchL7);
+            trajectorySwitchL8 = Pathfinder.readFromCSV(fileSwitchL8);
+            trajectorySwitchL9 = Pathfinder.readFromCSV(fileSwitchL9);
+
+
+            trajectorySwitchR2 = Pathfinder.readFromCSV(fileSwitchR2);
+            trajectorySwitchR3 = Pathfinder.readFromCSV(fileSwitchR3);
+            trajectorySwitchR4 = Pathfinder.readFromCSV(fileSwitchR4);
+            trajectorySwitchR5 = Pathfinder.readFromCSV(fileSwitchR5);
+
+            trajectorySwitchR6 = Pathfinder.readFromCSV(fileSwitchR6);
+            trajectorySwitchR7 = Pathfinder.readFromCSV(fileSwitchR7);
+            trajectorySwitchR8 = Pathfinder.readFromCSV(fileSwitchR8);
+            trajectorySwitchR9 = Pathfinder.readFromCSV(fileSwitchR9);
+
+            csvLoaded = true;
+
+            matchLog.writeClean("File Loading Finished");
+        }
+        else{
+		    matchLog.writeClean("Failed to load files");
+        }
 	}
 	
 	
@@ -344,6 +308,7 @@ public class Robot extends TimedRobot {
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
+		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
 		SmartDashboard.putNumber("X", position.getX());
 		SmartDashboard.putNumber("Y", position.getY());
 		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
@@ -352,8 +317,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
-		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
-		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
+//		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
+//		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
 	}
 	
 	@Override

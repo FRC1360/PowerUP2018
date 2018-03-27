@@ -29,8 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(SensorInputProvider.class)
 public class SensorInput implements SensorInputProvider {
-	
-	private PowerDistributionPanel PDP; // PDP interface for accessing current draw
+
 	private AHRS ahrs; // NavX interface
 	
 	//Drive
@@ -62,7 +61,6 @@ public class SensorInput implements SensorInputProvider {
 	{
 		
 		matchLogger = Singleton.get(MatchLogProvider.class);
-		PDP = new PowerDistributionPanel();
 		
 		leftDriveEnc = new Encoder(0, 1);
 		rightDriveEnc = new Encoder(2, 3);
@@ -248,10 +246,7 @@ public class SensorInput implements SensorInputProvider {
 		armEnc.reset();
 	}
 
-	@Override
-	public double getArmCurrent() {
-		return PDP.getCurrent(4) + PDP.getCurrent(10);
-	}
+
 	
 	
 
@@ -278,28 +273,5 @@ public class SensorInput implements SensorInputProvider {
 	@Override
 	public boolean getBottomSwitch() {
 		return bottomSwitch.get() != true;
-	}
-
-	@Override
-	public double getBatteryVoltage() {
-		return PDP.getVoltage();
-	}
-
-	@Override
-	public double getElevatorCurrent() {
-		return PDP.getCurrent(3) + PDP.getCurrent(12);
-	}
-	
-	//Max Current Allowance per motor = 50A
-	//Total for DT = 300A
-	
-	@Override
-	public double getDriveCurrentLeft() {
-		return PDP.getCurrent(0) + PDP.getCurrent(1) + PDP.getCurrent(2);
-	}
-	
-	@Override
-	public double getDriveCurrentRight() {
-		return PDP.getCurrent(13) + PDP.getCurrent(14) + PDP.getCurrent(15);
 	}
 }

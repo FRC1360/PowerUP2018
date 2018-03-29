@@ -20,8 +20,6 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double MAX_FPS = 7;
 	
-	private boolean reverse;
-	
 	private Trajectory leftTraj;
 	private Trajectory rightTraj;
 	
@@ -30,7 +28,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 	private int direction = 1; //1=forward; -1=backward;
 
-	public PathfindFromFile(long timeout, String file, boolean reverse) {
+	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
 		File leftProfile;
 		File rightProfile;
@@ -40,8 +38,6 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		if (!leftProfile.exists() || !rightProfile.exists())
 			return;
-		
-		this.reverse = reverse;
 		
 		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
 		this.rightTraj = Pathfinder.readFromCSV(rightProfile);
@@ -116,19 +112,9 @@ public class PathfindFromFile extends AutonRoutine{
 				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
 				double yaw;
 
-                if(this.reverse){
-                    yaw = sensorInput.getAHRSYaw();
-                }else {
-                    yaw = -sensorInput.getAHRSYaw();
-                }
+				yaw = sensorInput.getAHRSYaw();
 
-				if(this.reverse){
-					turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading())-180, yaw), yaw);
-				}
-				else {
-					turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
-
-				}
+				turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
 
 				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
 				

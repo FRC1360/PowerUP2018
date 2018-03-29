@@ -26,7 +26,7 @@ public class SwitchThreeCube extends AutonRoutine {
 		if(!Robot.csvLoaded) return;
 		
 		if(fms.plateLeft(0)) {
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchL);
+			PathfindFromFile path = new PathfindFromFile(10000, "switchL");
 			path.runNow("To Left Switch");
 			path.setWaypoint(7, "Start Elevator");
 			
@@ -45,13 +45,13 @@ public class SwitchThreeCube extends AutonRoutine {
 			elevator.goToBottom();
 
             //Second Cube
-			PathfindFromFile path2 = new PathfindFromFile(10000, Robot.trajectorySwitchL2);
+			PathfindFromFile path2 = new PathfindFromFile(10000, "switchL2");
 			path2.setReverse();
 			path2.runUntilFinish();
 
             intake.setIntake(-1);
 
-            PathfindFromFile path3 = new PathfindFromFile(10000, Robot.trajectorySwitchL3);
+            PathfindFromFile path3 = new PathfindFromFile(10000, "switchL3");
             path3.runUntilFinish();
 
             intake.setIntake(0);
@@ -59,12 +59,12 @@ public class SwitchThreeCube extends AutonRoutine {
 
             new ElevatorToTarget(1500, elevator.ONE_FOOT*2).runNow("Elevator Switch2");
 
-            PathfindFromFile path4 = new PathfindFromFile(10000, Robot.trajectorySwitchL4);
+            PathfindFromFile path4 = new PathfindFromFile(10000, "switchL4");
             path4.setReverse();
             path3.runUntilFinish();
             waitFor("Elevator Switch2", 0);
 
-            PathfindFromFile path5 = new PathfindFromFile(10000, Robot.trajectorySwitchL5);
+            PathfindFromFile path5 = new PathfindFromFile(10000, "switchL5");
             path3.runUntilFinish();
 
             intake.setIntake(0.75);
@@ -73,23 +73,23 @@ public class SwitchThreeCube extends AutonRoutine {
 			intake.setIntake(0);
 
 			//Third Cube
-            PathfindFromFile path6 = new PathfindFromFile(10000, Robot.trajectorySwitchL6);
+            PathfindFromFile path6 = new PathfindFromFile(10000, "switchL6");
             path6.setReverse();
             elevator.goToBottom();
             path6.runUntilFinish();
 
-            PathfindFromFile path7 = new PathfindFromFile(10000, Robot.trajectorySwitchL7);
+            PathfindFromFile path7 = new PathfindFromFile(10000, "switchL7");
             intake.setIntake(-1);
             path7.runUntilFinish();
             intake.setClamp(intake.CLOSED);
             intake.setIntake(0);
 
-            PathfindFromFile path8 = new PathfindFromFile(10000, Robot.trajectorySwitchL8);
+            PathfindFromFile path8 = new PathfindFromFile(10000, "switchL8");
             path8.setReverse();
             new ElevatorToTarget(1500, elevator.ONE_FOOT*2).runNow("Elevator Switch3");
             path8.runUntilFinish();
 
-            PathfindFromFile path9 = new PathfindFromFile(10000, Robot.trajectorySwitchL9);
+            PathfindFromFile path9 = new PathfindFromFile(10000, "switchL9");
             path9.runUntilFinish();
             waitFor("Elevator Switch3", 0);
 
@@ -98,7 +98,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
 		} else {
 			
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchR);
+			PathfindFromFile path = new PathfindFromFile(10000, "switchR");
 			path.runNow("To Right Switch");
 			
 			waitFor("Calibrate", 0);
@@ -119,24 +119,24 @@ public class SwitchThreeCube extends AutonRoutine {
 
 
             //Second cube
-            PathfindFromFile path2 = new PathfindFromFile(10000, Robot.trajectorySwitchR2);
+            PathfindFromFile path2 = new PathfindFromFile(10000, "switchR2");
             path2.setReverse();
             path2.runUntilFinish();
 
             intake.setIntake(-1);
             intake.setClamp(intake.FREE);
-            PathfindFromFile path3 = new PathfindFromFile(10000, Robot.trajectorySwitchR3);
+            PathfindFromFile path3 = new PathfindFromFile(10000, "switchR3");
             path3.runUntilFinish();
 
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            PathfindFromFile path4 = new PathfindFromFile(10000, Robot.trajectorySwitchR4);
+            PathfindFromFile path4 = new PathfindFromFile(10000, "switchR4");
             path4.setReverse();
             new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 2");
             path4.runUntilFinish();
 
-            PathfindFromFile path5 = new PathfindFromFile(10000, Robot.trajectorySwitchR5);
+            PathfindFromFile path5 = new PathfindFromFile(10000, "switchR5");
             path5.runUntilFinish();
 
             waitFor("Elevator Switch 2", 0);
@@ -147,25 +147,25 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0);
 
             //Third cube
-            PathfindFromFile path6 = new PathfindFromFile(10000, Robot.trajectorySwitchR6);
+            PathfindFromFile path6 = new PathfindFromFile(10000, "switchR6");
             path6.setReverse();
             elevator.goToBottom();
             path6.runUntilFinish();
 
 
-            PathfindFromFile path7 = new PathfindFromFile(10000, Robot.trajectorySwitchR7);
+            PathfindFromFile path7 = new PathfindFromFile(10000, "switchR7");
             intake.setIntake(-1);
             path7.runUntilFinish();
 
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            PathfindFromFile path8 = new PathfindFromFile(10000, Robot.trajectorySwitchR8);
+            PathfindFromFile path8 = new PathfindFromFile(10000, "switchR8");
             path8.setReverse();
             new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 3");
             path8.runUntilFinish();
 
-            PathfindFromFile path9 = new PathfindFromFile(10000, Robot.trajectorySwitchR9);
+            PathfindFromFile path9 = new PathfindFromFile(10000, "switchR9");
             path8.setReverse();
             path8.runUntilFinish();
             waitFor("Elevator Switch 3", 0);

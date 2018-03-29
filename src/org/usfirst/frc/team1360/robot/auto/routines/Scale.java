@@ -21,7 +21,7 @@ public class Scale extends AutonRoutine {
         if(!Robot.csvLoaded) return;
 
         if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
-            PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchLScaleL);
+            PathfindFromFile path = new PathfindFromFile(10000, "switchLScaleL");
             path.runNow("To Scale");
             waitFor("To Scale", 0);
 
@@ -43,7 +43,7 @@ public class Scale extends AutonRoutine {
         }
         else if(!fms.plateLeft(0) && !fms.plateLeft(1)) { //RR
             //Start of first scale
-            PathfindFromFile scalePath = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleR);
+            PathfindFromFile scalePath = new PathfindFromFile(10000, "switchRScaleR");
             scalePath.runNow("To Scale");
 
 //			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");

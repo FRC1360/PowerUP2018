@@ -30,17 +30,15 @@ public class PathfindFromFile extends AutonRoutine{
 
 	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
-		File leftProfile;
-		File rightProfile;
+		File profile;
 		
-		leftProfile = new File("/U/L-" + file);	
-		rightProfile = new File("/U/R-" + file);
-		
-		if (!leftProfile.exists() || !rightProfile.exists())
+		profile = new File("/home/lvuser/" + file);
+
+		if (!profile.exists())
 			return;
 		
-		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
-		this.rightTraj = Pathfinder.readFromCSV(rightProfile);
+		this.leftTraj = Pathfinder.readFromCSV(profile);
+		this.rightTraj = Pathfinder.readFromCSV(profile);
 	}
 	
 	public PathfindFromFile(long timeout, Trajectory traj) {

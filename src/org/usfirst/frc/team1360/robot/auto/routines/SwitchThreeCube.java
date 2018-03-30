@@ -117,13 +117,14 @@ public class SwitchThreeCube extends AutonRoutine {
 			Thread.sleep(500);
 			intake.setIntake(0);
 
-			elevator.goToBottom();
+
 
             //Second cube
             PathfindFromFile path2 = new PathfindFromFile(10000, "switchR2");
             path2.setReverse();
             path2.runUntilFinish();
 
+            elevator.goToTarget(elevator.ONE_FOOT);
             arm.goToPosition(arm.POS_BOTTOM);
 
             intake.setIntake(-1);
@@ -151,13 +152,14 @@ public class SwitchThreeCube extends AutonRoutine {
             Thread.sleep(500);
             intake.setIntake(0);
 
-            /*
+
             //Third cube
             PathfindFromFile path6 = new PathfindFromFile(10000, "switchR6");
             path6.setReverse();
-            elevator.goToBottom();
             path6.runUntilFinish();
 
+            elevator.goToTarget(elevator.ONE_FOOT);
+            arm.goToPosition(arm.POS_BOTTOM);
 
             PathfindFromFile path7 = new PathfindFromFile(10000, "switchR7");
             intake.setIntake(-1);
@@ -172,13 +174,13 @@ public class SwitchThreeCube extends AutonRoutine {
             path8.runUntilFinish();
 
             PathfindFromFile path9 = new PathfindFromFile(10000, "switchR9");
-            path8.setReverse();
-            path8.runUntilFinish();
+            path9.runUntilFinish();
             waitFor("Elevator Switch 3", 0);
 
             intake.setClamp(intake.FREE);
             intake.setIntake(0.75);
-            */
+
+            Thread.sleep(1000);
 
 		}
 	}

@@ -2,7 +2,7 @@ package org.usfirst.frc.team1360.robot.subsystem;
 
 public interface ArmProvider {
 	public static final int POS_TOP = 1700;
-	public static final int POS_BOTTOM = 950;//-45
+	public static final int POS_BOTTOM = 870;//-45
 	
 	void safety(double power, boolean override);
 	boolean idle();

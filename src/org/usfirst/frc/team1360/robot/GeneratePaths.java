@@ -9,9 +9,7 @@ import java.nio.file.Path;
 
 public class GeneratePaths {
 
-    public static void main(String [] args){
-
-        String FILE_ROOT = "C:\\Users\\orbit\\Desktop\\PowerUP2018\\src\\1360AutoPaths\\";
+    public static void generatePaths(String FILE_ROOT){
 
         System.out.println("CSV Generation starting to path " + FILE_ROOT);
 
@@ -314,6 +312,13 @@ public class GeneratePaths {
         Pathfinder.writeToCSV(fileSwitchR9, trajectorySwitchR9);
 
         System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
+    }
+
+    public static void main(String [] args){
+
+        String FILE_ROOT = "C:\\Users\\orbit\\Desktop\\PowerUP2018\\src\\1360AutoPaths\\";
+
+        generatePaths(FILE_ROOT);
     }
 
 }

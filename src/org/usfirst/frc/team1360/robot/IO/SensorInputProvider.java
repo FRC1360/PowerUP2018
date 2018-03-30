@@ -37,7 +37,9 @@ public interface SensorInputProvider {
 	boolean getTopSwitch();
 	boolean getBottomSwitch();
 	
-	
+
+	int getAbsoluteEncoder();
+
 	void calculate();
 	void reset();
 

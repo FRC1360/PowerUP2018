@@ -32,7 +32,7 @@ public class PathfindFromFile extends AutonRoutine{
 		super("Pathfind From File", timeout);
 		File profile;
 		
-		profile = new File("/home/lvuser/" + file);
+		profile = new File("/home/lvuser/" + file + ".csv");
 
 		if (!profile.exists())
 			return;
@@ -94,8 +94,8 @@ public class PathfindFromFile extends AutonRoutine{
 		
 		matchLogger.write("PATHFINDER STARTING");
 		
-		//OrbitPID turnPID = new OrbitPID(0.3, 0.0, 0.15); Practice Bot TurnPID
-		OrbitPID turnPID = new OrbitPID(0.2, 0.0, 0.15); 
+		OrbitPID turnPID = new OrbitPID(0.3, 0.0, 0.15);
+		//OrbitPID turnPID = new OrbitPID(0.2, 0.0, 0.15); Comp Bot Turn PID
 		
 		while(!left.isFinished() || !right.isFinished()) {
 			
@@ -104,10 +104,7 @@ public class PathfindFromFile extends AutonRoutine{
 				time = System.currentTimeMillis();
 				l = left.calculate((direction>0?sensorInput.getLeftDriveEncoder():sensorInput.getRightDriveEncoder())*direction);
 				r = right.calculate((direction>0?sensorInput.getRightDriveEncoder():sensorInput.getLeftDriveEncoder())*direction);
-				
-				//angleDifference = Pathfinder.boundHalfDegrees(Pathfinder.r2d(left.getHeading()) - sensorInput.getAHRSYaw());
-				
-				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
+
 				double yaw;
 
 				yaw = sensorInput.getAHRSYaw();
@@ -115,20 +112,10 @@ public class PathfindFromFile extends AutonRoutine{
 				turn = turnPID.calculate(nearAngle(Pathfinder.r2d(left.getHeading()), yaw), yaw);
 
 				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
-				
-//				if (turn > 0)
-//					l *= Math.exp(-turn);
-//				else
-//					r *= Math.exp(turn);
+
 				l -= turn;
 				r += turn;
-				
-//				if (turn < 0 && l < 0)
-//					l = 0;
-				
-//				if (turn > 0 && r < 0)
-//					r = 0;
-				
+
 				if (Math.abs(l) > 1 || Math.abs(r) > 1)
 				{
 					if (Math.abs(l) > Math.abs(r))
@@ -142,7 +129,7 @@ public class PathfindFromFile extends AutonRoutine{
 						r = Math.signum(r);
 					}
 				}
-				
+
 				robotOutput.tankDrive((direction>0?l:r)*direction, (direction>0?r:l)*direction);
 			}
 			

@@ -18,15 +18,17 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		new Calibrate().runNow("Calibrate");
+		//new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0)) {
 			PathfindFromFile path = new PathfindFromFile(10000, "switchL");
+			//path.setReverse();
+
 			path.runNow("To Left Switch");
 			path.setWaypoint(7, "Start Elevator");
 			
-			waitFor("Calibrate", 0);
-			arm.goToPosition(-40);
+			//waitFor("Calibrate", 0);
+			//arm.goToPosition(-40);
 			
 			new ElevatorToTarget(2000, elevator.ONE_FOOT*3).runAfter("Start Elevator", "Elevator Switch");
 
@@ -39,7 +41,7 @@ public class Switch extends AutonRoutine{
 			robotOutput.setIntake(0.75);
 			Thread.sleep(500);
 			robotOutput.setIntake(0);
-			arm.goToTop();
+			//arm.goToTop();
 			elevator.goToBottom();
 			
 			Thread.sleep(2000);

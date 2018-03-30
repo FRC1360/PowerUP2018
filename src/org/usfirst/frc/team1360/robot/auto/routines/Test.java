@@ -31,7 +31,9 @@ public final class Test extends AutonRoutine {
 	@Override
 	protected void runCore() throws InterruptedException {
 
-		new FaceAngle(10000, 90).runUntilFinish();
+		PathfindFromFile path2 = new PathfindFromFile(10000, "switchR2");
+		path2.setReverse();
+		path2.runUntilFinish();
 		
 	}
 }

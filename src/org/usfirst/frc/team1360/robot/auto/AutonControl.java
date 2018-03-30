@@ -30,7 +30,7 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
-		//routines.add(new Test());
+		routines.add(new Test());
 		routines.add(new TwoCubeRight());
 		routines.add(new Scale());
 		routines.add(new Switch());

@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
 
 
-    public static boolean GENERATE = false;
+    public static boolean GENERATE = true;
     public static boolean csvLoaded = false;
 
 	private String FILE_ROOT = "/home/lvuser/";
@@ -221,6 +221,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+        SmartDashboard.putNumber("ABS ENC", sensorInput.getAbsoluteEncoder());
 
 	}
 	

@@ -201,11 +201,6 @@ public class Arm implements ArmProvider{
 	}
 
 	@Override
-	public boolean goToMiddle() {
-		return goToPosition(POS_MIDDLE);
-	}
-
-	@Override
 	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized(stateMachine) {
 			if(stateMachine.getState() == ArmState.MANUAL) {
@@ -224,26 +219,21 @@ public class Arm implements ArmProvider{
 		}
 		else
 		{
-			if(sensorInput.getArmSwitch())
-				sensorInput.resetArmEncoder();
-			if(sensorInput.getArmEncoderVelocity() <= -80) {
-				multiplier = 0.2;
-			}
-			
-			if(sensorInput.getArmEncoderVelocity() <= -30) {
-				multiplier = 0.7;
-			}
-			
-			if (System.currentTimeMillis() < cooldown) {
-				robotOutput.setArm(0);
-				return;
-			}
+
+//			if(sensorInput.getArmEncoderVelocity() <= -80) {
+//				multiplier = 0.2;
+//			}
+//
+//			if(sensorInput.getArmEncoderVelocity() <= -30) {
+//				multiplier = 0.7;
+//			}
+
 			
 			if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
 				multiplier = 1;
 			}
 			
-			if(power > 0 && sensorInput.getArmSwitch())
+			if(power > 0 && sensorInput.getArmEncoder() >= POS_TOP)
 				robotOutput.setArm(0);
 			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power <= 0) {
 				robotOutput.setArm(0);

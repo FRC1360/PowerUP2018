@@ -233,7 +233,7 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public int getArmEncoder() {
-		return armEnc.get();
+		return absoluteEnc.getValue();
 	}
 
 	@Override

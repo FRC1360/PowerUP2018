@@ -172,7 +172,7 @@ public final class Elevator implements ElevatorProvider {
 			
 			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
 				if(!arm.movingToPosition())
-					arm.goToPosition(-1);
+					arm.goToPosition(arm.POS_TOP-50);
 			}
 			else if(power < 0) {
 				if(Math.abs(0.002*sensorInput.getElevatorEncoder()) < 0.2) 

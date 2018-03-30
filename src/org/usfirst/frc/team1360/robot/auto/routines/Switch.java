@@ -22,7 +22,7 @@ public class Switch extends AutonRoutine{
 		
 		if(fms.plateLeft(0)) {
 			PathfindFromFile path = new PathfindFromFile(10000, "switchL");
-			//path.setReverse();
+			path.setReverse();
 
 			path.runNow("To Left Switch");
 			path.setWaypoint(7, "Start Elevator");

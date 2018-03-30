@@ -138,8 +138,8 @@ public class GeneratePaths {
 
         //Right Second Cube
         Waypoint[] pointsSwitchR2 = new Waypoint[] {
-                new Waypoint(5.6, 7.35, 0),
-                new Waypoint(14.4, 9.65, Pathfinder.d2r(55))
+                new Waypoint(10, 8.5, 0),
+                new Waypoint(5.6, 7.35, Pathfinder.d2r(55))
 
         };
 

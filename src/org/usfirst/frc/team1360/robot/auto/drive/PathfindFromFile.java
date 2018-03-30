@@ -84,6 +84,9 @@ public class PathfindFromFile extends AutonRoutine{
 		left = new EncoderFollower(modifierLeft.getLeftTrajectory());
 		right = new EncoderFollower(modifierRight.getRightTrajectory());
 
+		sensorInput.resetLeftEncoder();
+		sensorInput.resetRightEncoder();
+
 		left.configureEncoder(sensorInput.getLeftDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 		right.configureEncoder(sensorInput.getRightDriveEncoder(), TICKS_PER_REV, WHEEL_SIZE);
 
@@ -110,7 +113,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
 
-				double yaw = -sensorInput.getAHRSYaw();
+				double yaw = direction > 0 ? -sensorInput.getAHRSYaw() : -(sensorInput.getAHRSYaw()+180);
 				turn = turnPID.calculate(nearAngle(direction > 0 ? Pathfinder.r2d(left.getHeading()) : Pathfinder.r2d(left.getHeading()), yaw), yaw);
 
 				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));

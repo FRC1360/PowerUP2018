@@ -66,7 +66,7 @@ public final class Elevator implements ElevatorProvider {
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
 				int holdTarget = sensorInput.getElevatorEncoder();
-				OrbitPID elevatorPID = new OrbitPID(0.00425, 0.0, 1);
+				OrbitPID elevatorPID = new OrbitPID(0.001, 0.0, 0);
 				matchLogger.write("ELEVATOR TARGET == " + holdTarget);
 
 				while(true)
@@ -170,10 +170,11 @@ public final class Elevator implements ElevatorProvider {
 					robotOutput.setElevatorMotor(power);
 			}
 			
-			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
+			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= arm.POS_TOP-100) {
 				if(!arm.movingToPosition())
-					arm.goToPosition(arm.POS_TOP-50);
+					arm.goToPosition(arm.POS_TOP-100);
 			}
+
 			else if(power < 0) {
 				if(Math.abs(0.002*sensorInput.getElevatorEncoder()) < 0.2) 
 					robotOutput.setElevatorMotor(-0.2);
@@ -183,7 +184,7 @@ public final class Elevator implements ElevatorProvider {
 			
 			else if(power > 0 && !sensorInput.getTopSwitch()) {
 				if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
-					robotOutput.setElevatorMotor(0.3);
+					robotOutput.setElevatorMotor(0.2);
 				else
 					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
 			}

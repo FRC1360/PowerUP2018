@@ -21,7 +21,7 @@ public class TwoCubeRight extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException 
 	{
-		new Calibrate().runNow("Calibrate");
+		//new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
 			PathfindFromFile path = new PathfindFromFile(10000, "switchLScaleL");
@@ -68,8 +68,8 @@ public class TwoCubeRight extends AutonRoutine{
 			
 //			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");
 			elevator.safety(0.15, false);
-			
-			waitFor("Calibrate", 0);
+
+
 			arm.goToPosition(-20);
 			
 			waitFor("To Scale", 0);
@@ -116,7 +116,6 @@ public class TwoCubeRight extends AutonRoutine{
 			PathfindFromFile switch1 = new PathfindFromFile(10000, "switchRScaleL1");
 			PathfindFromFile switch2 = new PathfindFromFile(10000, "switchRScaleL2");
 			switch1.runNow("Switch 1");
-			waitFor("Calibrate", 0);
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			arm.goToPosition(arm.POS_BOTTOM);
 			waitFor("Switch 1", 0);

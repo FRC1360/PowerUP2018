@@ -20,8 +20,7 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double MAX_FPS = 7;
 
-	private Trajectory leftTraj;
-	private Trajectory rightTraj;
+	private Trajectory trajectory;
 
 	private EncoderFollower left;
 	private EncoderFollower right;
@@ -30,24 +29,25 @@ public class PathfindFromFile extends AutonRoutine{
 
 	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
-		File leftProfile;
+		File profile;
 		File rightProfile;
 
-		leftProfile = new File("/home/lvuser/" + file + ".csv");
-		rightProfile = new File("/home/lvuser/" + file + ".csv");
+		profile = new File("/home/lvuser/" + file + ".csv");
 
-		if (!leftProfile.exists() || !rightProfile.exists())
+		if (!profile.exists())
 			return;
 
-		this.leftTraj = Pathfinder.readFromCSV(leftProfile);
-		this.rightTraj = Pathfinder.readFromCSV(rightProfile);
+		this.trajectory = Pathfinder.readFromCSV(profile);
 	}
 
 	public PathfindFromFile(long timeout, Trajectory traj) {
 		super("Pathfind From File", timeout);
 
-		this.leftTraj = traj;
-		this.rightTraj = traj;
+		this.trajectory = traj;
+	}
+	
+	public int getNumberOfSegments() {
+		return this.trajectory.segments.length;
 	}
 
 	public double getPosition() {
@@ -73,16 +73,14 @@ public class PathfindFromFile extends AutonRoutine{
 	@Override
 	protected void runCore() throws InterruptedException {
 
-		if(leftTraj == null || rightTraj == null)
-		{
+		if(trajectory == null) {
 			return;
 		}
 
-		TankModifier modifierLeft = new TankModifier(leftTraj).modify(DT_WIDTH);
-		TankModifier modifierRight = new TankModifier(rightTraj).modify(DT_WIDTH);
+		TankModifier modifier = new TankModifier(trajectory).modify(DT_WIDTH);
 
-		left = new EncoderFollower(modifierLeft.getLeftTrajectory());
-		right = new EncoderFollower(modifierRight.getRightTrajectory());
+		left = new EncoderFollower(modifier.getLeftTrajectory());
+		right = new EncoderFollower(modifier.getRightTrajectory());
 
 		sensorInput.resetLeftEncoder();
 		sensorInput.resetRightEncoder();

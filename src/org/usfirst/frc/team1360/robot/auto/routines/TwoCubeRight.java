@@ -65,53 +65,57 @@ public class TwoCubeRight extends AutonRoutine{
 		}
 		else if(!fms.plateLeft(0) && !fms.plateLeft(1)) { //RR
 			//Start of first scale
-			PathfindFromFile scalePath = new PathfindFromFile(10000, "switchRScaleR");
+			PathfindFromFile scalePath = new PathfindFromFile(10000, "scaleRR1");
+			scalePath.setWaypoint(10, "Start Elevator");
 			scalePath.runNow("To Scale");
 			
-//			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");
-			elevator.safety(0.15, false);
-
-
-			arm.goToPosition(-20);
-			
+			//the practice bot can't go higher than about 1800
+			new ElevatorToTarget(1500, 1800).runAfter("Start Elevator", "Elevator Scale");
+            arm.goToPosition(arm.POS_BOTTOM+200);		
 			waitFor("To Scale", 0);
+			waitFor("Elevator Scale", 0);
 			robotOutput.tankDrive(0, 0);
+						
+			intake.setIntake(1);
+			intake.setClamp(intake.FREE);
+			Thread.sleep(400);
 			
-			//waitFor("Elevator Scale", 0);
 			matchLogger.writeClean("SCALE ELEVATOR DONE");
 			
-			intake.setIntake(1);
-			intake.setClamp(intake.FREE);
-			Thread.sleep(500);
-			intake.setIntake(0);
-			intake.setClamp(intake.CLOSED);
+			new ElevatorToTarget(1000, ElevatorProvider.POS_BOTTOM).runNow("Elevator down");
+			Thread.sleep(50);
+			arm.goToPosition(arm.POS_TOP-100);	
+			new FaceAngle(2000, -145).runUntilFinish();
+			arm.goToPosition(arm.POS_BOTTOM);	
 			
-			arm.goToTop();
-			new ElevatorToTarget(2000, ElevatorProvider.POS_BOTTOM).runUntilFinish();
-
-			arm.goToPosition(arm.POS_BOTTOM);
-			new FaceAngle(2000, -162).runUntilFinish();
-			
-			//Start of switch
 			intake.setIntake(-1);
-			intake.setClamp(intake.FREE);
-			new DriveToInch(10000, 40, -162, 10, 3, true, false).runUntilFinish();
+            intake.setClamp(intake.FREE);
+			PathfindFromFile scalePath2 = new PathfindFromFile(10000, "scaleRR2");
+			scalePath2.runNow("To Scale2");
+			waitFor("Elevator down", 0);
+			waitFor("To Scale2", 0);
 			robotOutput.tankDrive(0, 0);
-			matchLogger.writeClean("SCALE DONE DRIVING");
+
+			new ElevatorToTarget(1500, 1800).runNow("Elevator Scale");
+			Thread.sleep(800);
+			new FaceAngle(2000, 0).runUntilFinish();
 			
-			Thread.sleep(500);
-			intake.setIntake(0);
-			intake.setClamp(intake.CLOSED);
-			
-			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*3).runNow("Elevator");
-			Thread.sleep(750);
-			new DriveToInch(1000, 3, -162, 4, true, false).runNow("Approach");
+			PathfindFromFile scalePath3 = new PathfindFromFile(10000, "scaleRR3");
+			scalePath3.runNow("To Scale3");
+			waitFor("To Scale3", 0);
 			
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
-			waitFor("Approach", 0);
-			Thread.sleep(1000);
+			Thread.sleep(400);
+		
+			
 			intake.setIntake(0);
+            intake.setClamp(intake.CLOSED);
+	
+
+			
+			
+			
 		}
 		else if(!fms.plateLeft(0) && fms.plateLeft(1)) { //RL
 

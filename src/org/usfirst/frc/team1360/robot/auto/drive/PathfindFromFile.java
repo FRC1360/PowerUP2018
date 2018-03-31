@@ -145,7 +145,7 @@ public class PathfindFromFile extends AutonRoutine{
 				robotOutput.tankDrive((direction>0?l:r)*direction, (direction>0?r:l)*direction);
 			}
 
-			Thread.sleep(1);
+			Thread.sleep(5);
 		}
 
 		robotOutput.tankDrive(0, 0);

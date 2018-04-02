@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FaceAngle extends AutonRoutine{
 	
-	double eps = 2;
+	double eps = 3;
 	double gearRatio = 3.0 / 1.0;
 	double wheelDiameter = 5.0;
 	double ticksPerRotation = 250;
@@ -17,7 +17,7 @@ public class FaceAngle extends AutonRoutine{
 	double targetAngle;
 	double angleOffset;
 	boolean chain;
-	boolean reverse;
+	boolean lowGear = false;
 	
 	public FaceAngle(long timeout, double A) {
 		super("Face Angle", timeout);
@@ -29,11 +29,21 @@ public class FaceAngle extends AutonRoutine{
 		this(timeout, A);
 		this.eps = eps;
 	}
+	
+	public FaceAngle(long timeout, double A, double eps, boolean lowGear) {
+		this(timeout, A, eps);
+		this.lowGear = true;
+	}
 
 	@Override
 	protected void runCore() throws InterruptedException
 	{
-		OrbitPID pidAngle = new OrbitPID(0.2, 0.0, 0.175);//p = 4.7 i = 0.0025
+		OrbitPID pidAngle;
+		if (lowGear) {
+			pidAngle = new OrbitPID(0.03, 0.01, 1.2);
+		} else {
+			pidAngle = new OrbitPID(0.08, 0.05, 0.8);//p = 4.7 i = 0.0025
+		}
 
 		double lastSpeed = 0;
 
@@ -50,18 +60,17 @@ public class FaceAngle extends AutonRoutine{
 
 			double turn = pidAngle.calculate(targetAngle, sensorInput.getAHRSYaw());
 
-			robotOutput.arcadeDrive(0, turn);
+			robotOutput.arcadeDrivePID(0, turn);
 
-			if(Math.abs(sensorInput.getAHRSYaw() - targetAngle) < eps && !timerStarted) {
+			if(Math.abs(curA - targetAngle) < eps && !timerStarted) {
 				timer = System.currentTimeMillis();
 				timerStarted = true;
 			}
-			else if(Math.abs(sensorInput.getAHRSYaw() - targetAngle) > eps) {
+			else if(Math.abs(curA - targetAngle) > eps) {
 				timerStarted = false;
-				timer = System.currentTimeMillis();
 			}
 
-		} while (System.currentTimeMillis()-timer < 1000);
+		} while (!timerStarted || System.currentTimeMillis()-timer < 200);
 
 	}
 

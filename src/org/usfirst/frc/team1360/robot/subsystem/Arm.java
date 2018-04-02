@@ -42,7 +42,7 @@ public class Arm implements ArmProvider{
 				}
 
 				
-				context.nextState(HOLD);
+				context.nextState(HOLD, target);
 			}
 			
 		},
@@ -65,20 +65,8 @@ public class Arm implements ArmProvider{
 				}
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(HOLD);
+				context.nextState(HOLD, target);
 			}
-		},
-		UP_TO_TOP{
-			@Override
-			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				while(!sensorInput.getArmSwitch()) {
-					arm.safety(0.75);
-					Thread.sleep(10);
-				}
-				sensorInput.resetArmEncoder();
-				
-				context.nextState(HOLD);
-			}	
 		},
 		MANUAL{
 			@Override
@@ -94,8 +82,15 @@ public class Arm implements ArmProvider{
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				int target = context.getArg() instanceof Integer ? (int) context.getArg() : sensorInput.getArmEncoder();
 				while (true) {
-					arm.safety(0.05);
+					int enc = sensorInput.getArmEncoder();
+					if (enc > target + 20)
+						arm.safety(-0.2);
+					else if (enc < target - 20)
+						arm.safety(0.2);
+					else
+						arm.safety(0.05);
 					Thread.sleep(10);
 				}
 			}
@@ -192,12 +187,7 @@ public class Arm implements ArmProvider{
 	
 	@Override
 	public boolean goToTop() {
-		try {
-			stateMachine.setState(ArmState.UP_TO_TOP);
-			return true;
-		} catch(InterruptedException e) {
-			return false;
-		}
+		return goToPosition(POS_TOP);
 	}
 
 	@Override

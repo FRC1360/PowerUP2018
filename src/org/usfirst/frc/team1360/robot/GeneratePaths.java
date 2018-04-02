@@ -148,7 +148,7 @@ public class GeneratePaths {
         //SWITCH AUTO PATHS
         Waypoint[] pointsSwitchR = new Waypoint[] {
                 new Waypoint(1.63, 12.5, 0),
-                new Waypoint(9, 9.5, Pathfinder.d2r(-30))
+                new Waypoint(10, 9.5, Pathfinder.d2r(-30))
         };
 
         Waypoint[] pointsSwitchL = new Waypoint[] {
@@ -202,45 +202,45 @@ public class GeneratePaths {
 
         //Right Second Cube
         Waypoint[] pointsSwitchR2 = new Waypoint[] {
-                new Waypoint(9, 9.5, Pathfinder.d2r(-30)),
-                new Waypoint(5.5, 11.25,  Pathfinder.d2r(-30))
+                new Waypoint(10, 9.5, Pathfinder.d2r(-30)),
+                new Waypoint(5.5, 11.5,  Pathfinder.d2r(-30))
 
         };
 
         Waypoint[] pointsSwitchR3 = new Waypoint[] {
-                new Waypoint(5.5, 11.25, Pathfinder.d2r(35)),
-                new Waypoint(6.75, 11.88, Pathfinder.d2r(35))
+                new Waypoint(5.5, 11.5, Pathfinder.d2r(35)),
+                new Waypoint(6.75, 12.25, Pathfinder.d2r(35))
         };
 
         Waypoint[] pointsSwitchR4 = new Waypoint[] {
-                new Waypoint(6.75, 11.88, Pathfinder.d2r(35)),
-                new Waypoint(5.5, 11.25, Pathfinder.d2r(35))
+                new Waypoint(6.75, 12.25, Pathfinder.d2r(35)),
+                new Waypoint(6, 12, Pathfinder.d2r(30))
         };
 
         Waypoint[] pointsSwitchR5 = new Waypoint[] {
-                new Waypoint(5.5, 11.25, Pathfinder.d2r(-30)),
-                new Waypoint(9, 9.5, Pathfinder.d2r(-30))
+                new Waypoint(6, 12, Pathfinder.d2r(-30)),
+                new Waypoint(10, 9.5, Pathfinder.d2r(-20))
         };
 
         //Right Third Cube
         Waypoint[] pointsSwitchR6 = new Waypoint[] {
-                new Waypoint(9, 9.5, Pathfinder.d2r(-30)),
-                new Waypoint(7, 10.38, Pathfinder.d2r(-30))
+                new Waypoint(10, 9.5, Pathfinder.d2r(-20)),
+                new Waypoint(7.5, 10.5, Pathfinder.d2r(-25))
         };
 
         Waypoint[] pointsSwitchR7 = new Waypoint[] {
-                new Waypoint(7, 10.38, Pathfinder.d2r(40)),
-                new Waypoint(7.88, 11, Pathfinder.d2r(40))
+                new Waypoint(7.5, 10.5, Pathfinder.d2r(45)),
+                new Waypoint(8.5, 11.38, Pathfinder.d2r(45))
         };
 
         Waypoint[] pointsSwitchR8 = new Waypoint[] {
-                new Waypoint(7.88, 11, Pathfinder.d2r(40)),
-                new Waypoint(7, 10.38, Pathfinder.d2r(40))
+                new Waypoint(8.5, 11.38, Pathfinder.d2r(45)),
+                new Waypoint(8, 11, Pathfinder.d2r(45))
         };
 
         Waypoint[] pointsSwitchR9 = new Waypoint[] {
-                new Waypoint(7, 10.38, Pathfinder.d2r(-30)),
-                new Waypoint(9, 9.5, Pathfinder.d2r(-30))
+                new Waypoint(8, 11, Pathfinder.d2r(-25)),
+                new Waypoint(10, 9.5, Pathfinder.d2r(-20))
         };
 
         //CONFIGS
@@ -266,7 +266,7 @@ public class GeneratePaths {
 
         //Switch Only
         Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 6, 6, 100);//jerk was 180
+        Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 85);//jerk was 180
 
         Trajectory.Config configSwitchL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 100);//jerk was 180
         Trajectory.Config configSwitchL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 6, 100);//jerk was 180
@@ -278,14 +278,14 @@ public class GeneratePaths {
         Trajectory.Config configSwitchL9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 100);//jerk was 180
 
 
-        Trajectory.Config configSwitchR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR6 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR7 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR8 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
-        Trajectory.Config configSwitchR9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 15, 15, 50);//jerk was 180
+        Trajectory.Config configSwitchR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR6 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR7 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR8 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
 
 
         //FILES

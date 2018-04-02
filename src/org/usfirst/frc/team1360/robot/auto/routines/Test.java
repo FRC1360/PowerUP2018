@@ -101,7 +101,7 @@ public final class Test extends AutonRoutine {
 
         intake.setIntake(0.75);
         intake.setClamp(intake.FREE);
-        Thread.sleep(300);
+        Thread.sleep(200);
         waitFor("switchR5", 0);
         intake.setIntake(0);
 

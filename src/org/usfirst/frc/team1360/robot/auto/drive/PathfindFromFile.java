@@ -20,6 +20,8 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double MAX_FPS = 7;
 
+	private double totalLength;
+
 	private Trajectory trajectory;
 
 	private EncoderFollower left;
@@ -38,12 +40,24 @@ public class PathfindFromFile extends AutonRoutine{
 			return;
 
 		this.trajectory = Pathfinder.readFromCSV(profile);
+
+		TankModifier modifier = new TankModifier(trajectory).modify(DT_WIDTH);
+
+		left = new EncoderFollower(modifier.getLeftTrajectory());
+		right = new EncoderFollower(modifier.getRightTrajectory());
+
+		this.totalLength = trajectory.segments[trajectory.length()-1].position;
 	}
 
 	public PathfindFromFile(long timeout, Trajectory traj) {
 		super("Pathfind From File", timeout);
 
 		this.trajectory = traj;
+	}
+
+	public PathfindFromFile cutOffFeet(double feet){
+		this.totalLength -= feet;
+		return this;
 	}
 	
 	public int getNumberOfSegments() {
@@ -58,8 +72,9 @@ public class PathfindFromFile extends AutonRoutine{
 		}
 	}
 
-	public void setReverse() {
+	public PathfindFromFile setReverse() {
 		this.direction = -1;
+		return this;
 	}
 
 	public void setWaypoint(double position, String name) {
@@ -77,10 +92,7 @@ public class PathfindFromFile extends AutonRoutine{
 			return;
 		}
 
-		TankModifier modifier = new TankModifier(trajectory).modify(DT_WIDTH);
 
-		left = new EncoderFollower(modifier.getLeftTrajectory());
-		right = new EncoderFollower(modifier.getRightTrajectory());
 
 		sensorInput.resetLeftEncoder();
 		sensorInput.resetRightEncoder();
@@ -99,7 +111,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 		OrbitPID turnPID = new OrbitPID(0.01, 0.01, 0.0);
 
-		while(!left.isFinished() || !right.isFinished()) {
+		while((!left.isFinished() || !right.isFinished()) && isLessThanTargetFeet()) {
 
 			if(System.currentTimeMillis() - time >= TIME_STEP * 1000)
 			{
@@ -113,6 +125,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 				double yaw = direction > 0 ? -sensorInput.getAHRSYaw() : -(sensorInput.getAHRSYaw()+180);
 				turn = turnPID.calculate(nearAngle(direction > 0 ? Pathfinder.r2d(left.getHeading()) : Pathfinder.r2d(left.getHeading()), yaw), yaw);
+				//turn = 0;
 
 				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
 
@@ -149,6 +162,10 @@ public class PathfindFromFile extends AutonRoutine{
 		}
 
 		robotOutput.tankDrive(0, 0);
+	}
+
+	private boolean isLessThanTargetFeet() {
+		return (left.getSegment().position + right.getSegment().position) / 2 < totalLength;
 	}
 
 	private final class WaypointComponent extends AutonRoutine {

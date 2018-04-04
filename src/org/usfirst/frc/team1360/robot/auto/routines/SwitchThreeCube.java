@@ -40,21 +40,21 @@ public class SwitchThreeCube extends AutonRoutine {
 
         pathR = new PathfindFromFile(10000, "switchR").cutOffFeet(0.1);
         pathR2 = new PathfindFromFile(10000, "switchR2").cutOffFeet(0.1).setReverse();
-        pathR3 = new PathfindFromFile(10000, "switchR3").cutOffFeet(0.1);
+        pathR3 = new PathfindFromFile(10000, "switchR3")/*.cutOffFeet(0.1)*/;
         pathR4 = new PathfindFromFile(10000, "switchR4").cutOffFeet(0.1).setReverse();
         pathR5 = new PathfindFromFile(10000, "switchR5").cutOffFeet(0.1);
         pathR6 = new PathfindFromFile(10000, "switchR6").cutOffFeet(0.1).setReverse();
-        pathR7 = new PathfindFromFile(10000, "switchR7").cutOffFeet(0.1);
+        pathR7 = new PathfindFromFile(10000, "switchR7")/*.cutOffFeet(0.1)*/;
         pathR8 = new PathfindFromFile(10000, "switchR8").cutOffFeet(0.1).setReverse();
         pathR9 = new PathfindFromFile(10000, "switchR9").cutOffFeet(0.1);
 
         pathL = new PathfindFromFile(10000, "switchL").cutOffFeet(0.1);
         pathL2 = new PathfindFromFile(10000, "switchL2").cutOffFeet(0.1).setReverse();
-        pathL3 = new PathfindFromFile(10000, "switchL3").cutOffFeet(0.1);
+        pathL3 = new PathfindFromFile(10000, "switchL3")/*.cutOffFeet(0.1)*/;
         pathL4 = new PathfindFromFile(10000, "switchL4").cutOffFeet(0.1).setReverse();
         pathL5 = new PathfindFromFile(10000, "switchL5").cutOffFeet(0.1);
         pathL6 = new PathfindFromFile(10000, "switchL6").cutOffFeet(0.1).setReverse();
-        pathL7 = new PathfindFromFile(10000, "switchL7").cutOffFeet(0.1);
+        pathL7 = new PathfindFromFile(10000, "switchL7")/*.cutOffFeet(0.1)*/;
         pathL8 = new PathfindFromFile(10000, "switchL8").cutOffFeet(0.1).setReverse();
         pathL9 = new PathfindFromFile(10000, "switchL9").cutOffFeet(0.1);
 	}

@@ -14,9 +14,29 @@ import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 
 public class SwitchThreeCube extends AutonRoutine {
-	
-	public SwitchThreeCube() {
+
+    private final PathfindFromFile path;
+    private final PathfindFromFile path2;
+    private final PathfindFromFile path3;
+    private final PathfindFromFile path4;
+    private final PathfindFromFile path5;
+    private final PathfindFromFile path6;
+    private final PathfindFromFile path7;
+    private final PathfindFromFile path8;
+    private final PathfindFromFile path9;
+
+    public SwitchThreeCube() {
 	    super("Switch Three Cube", 0);
+
+        path = new PathfindFromFile(10000, "switchR").cutOffFeet(0.1);
+        path2 = new PathfindFromFile(10000, "switchR2").cutOffFeet(0.1).setReverse();
+        path3 = new PathfindFromFile(10000, "switchR3").cutOffFeet(0.1);
+        path4 = new PathfindFromFile(10000, "switchR4").cutOffFeet(0.1).setReverse();
+        path5 = new PathfindFromFile(10000, "switchR5").cutOffFeet(0.1);
+        path6 = new PathfindFromFile(10000, "switchR6").cutOffFeet(0.1).setReverse();
+        path7 = new PathfindFromFile(10000, "switchR7").cutOffFeet(0.1);
+        path8 = new PathfindFromFile(10000, "switchR8").cutOffFeet(0.1).setReverse();
+        path9 = new PathfindFromFile(10000, "switchR9").cutOffFeet(0.1);
 	}
 
 	@Override
@@ -26,154 +46,105 @@ public class SwitchThreeCube extends AutonRoutine {
 		if(!Robot.csvLoaded) return;
 		
 		if(fms.plateLeft(0)) {
-			PathfindFromFile path = new PathfindFromFile(10000, "switchL");
-			path.runNow("To Left Switch");
-			path.setWaypoint(7, "Start Elevator");
-			
-			//waitFor("Calibrate", 0);
 
-			
-			new ElevatorToTarget(1500, elevator.ONE_FOOT*2).runAfter("Start Elevator", "Elevator Switch");
-            arm.goToPosition(arm.POS_BOTTOM);
-
-			waitFor("To Left Switch", 0);
-			robotOutput.tankDrive(0, 0);
-			
-			intake.setClamp(intake.FREE);
-			robotOutput.setIntake(0.75);
-			Thread.sleep(500);
-			robotOutput.setIntake(0);
-			elevator.goToBottom();
-
-            //Second Cube
-			PathfindFromFile path2 = new PathfindFromFile(10000, "switchL2");
-			path2.setReverse();
-			path2.runUntilFinish();
-
-            intake.setIntake(-1);
-
-            PathfindFromFile path3 = new PathfindFromFile(10000, "switchL3");
-            path3.runUntilFinish();
-
-            intake.setIntake(0);
-            intake.setClamp(intake.CLOSED);
-
-            new ElevatorToTarget(1500, elevator.ONE_FOOT*2).runNow("Elevator Switch2");
-
-            PathfindFromFile path4 = new PathfindFromFile(10000, "switchL4");
-            path4.setReverse();
-            path4.runUntilFinish();
-            waitFor("Elevator Switch2", 0);
-
-            PathfindFromFile path5 = new PathfindFromFile(10000, "switchL5");
-            path5.runUntilFinish();
-
-            intake.setIntake(0.75);
-            intake.setClamp(intake.FREE);
-			Thread.sleep(500);
-			intake.setIntake(0);
-
-			//Third Cube
-            PathfindFromFile path6 = new PathfindFromFile(10000, "switchL6");
-            path6.setReverse();
-            elevator.goToBottom();
-            path6.runUntilFinish();
-
-            PathfindFromFile path7 = new PathfindFromFile(10000, "switchL7");
-            intake.setIntake(-1);
-            path7.runUntilFinish();
-            intake.setClamp(intake.CLOSED);
-            intake.setIntake(0);
-
-            PathfindFromFile path8 = new PathfindFromFile(10000, "switchL8");
-            path8.setReverse();
-            new ElevatorToTarget(1500, elevator.ONE_FOOT*2).runNow("Elevator Switch3");
-            path8.runUntilFinish();
-
-            PathfindFromFile path9 = new PathfindFromFile(10000, "switchL9");
-            path9.runUntilFinish();
-            waitFor("Elevator Switch3", 0);
-
-            intake.setClamp(intake.FREE);
-            intake.setIntake(0.75);
 
 		} else {
-			
-			PathfindFromFile path = new PathfindFromFile(10000, "switchR");
-			path.runNow("To Right Switch");
-			
-			//waitFor("Calibrate", 0);
+            robotOutput.shiftGear(true);
 
-			
-			new ElevatorToTarget(1500, elevator.ONE_FOOT*2).runNow("Elevator");
-			arm.goToPosition(arm.POS_BOTTOM);
+            path.setWaypoint(7, "Start Intake");
+            path.runNow("To Right Switch");
 
-			waitFor("Elevator", 0);
-			waitFor("To Right Switch", 0);
-			robotOutput.tankDrive(0, 0);
-	
-			intake.setClamp(intake.FREE);
-			robotOutput.setIntake(0.75);
-			Thread.sleep(500);
-			intake.setIntake(0);
+            new ElevatorToTarget(1500, elevator.ONE_FOOT*3).runNow("Elevator");
+            arm.goToPosition(arm.POS_BOTTOM);
 
+            waitFor("Elevator", 0);
+            waitFor("Start Intake", 0);
+
+            intake.setClamp(intake.FREE);
+            robotOutput.setIntake(0.75);
+
+            waitFor("To Right Switch", 0);
+
+            intake.setIntake(0);
+            robotOutput.tankDrive(-0.1, -0.1);
 
 
             //Second cube
-            PathfindFromFile path2 = new PathfindFromFile(10000, "switchR2");
-            path2.setReverse();
-            path2.runUntilFinish();
+            path2.setWaypoint(0.5, "Start elevator");
 
-            elevator.goToTarget(elevator.ONE_FOOT);
+            path2.runNow("switchR2");
+            waitFor("Start elevator", 0);
+            elevator.goToTarget(elevator.POS_BOTTOM);
             arm.goToPosition(arm.POS_BOTTOM);
+            waitFor("switchR2", 0);
+
+            new FaceAngle(800, -30, 2)
+                    .setLowGear()
+                    .runNow("spin");
 
             intake.setIntake(-1);
             intake.setClamp(intake.FREE);
-            PathfindFromFile path3 = new PathfindFromFile(10000, "switchR3");
+            arm.goToPosition(arm.POS_BOTTOM);
+
+            waitFor("spin", 0);
+
             path3.runUntilFinish();
-
-            intake.setIntake(0);
-            intake.setClamp(intake.CLOSED);
-
-            PathfindFromFile path4 = new PathfindFromFile(10000, "switchR4");
-            path4.setReverse();
-
-            new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 2");
 
             path4.runUntilFinish();
 
-            PathfindFromFile path5 = new PathfindFromFile(10000, "switchR5");
-            path5.runUntilFinish();
+            intake.setIntake(0);
+            intake.setClamp(intake.CLOSED);
+            arm.goToPosition(arm.POS_BOTTOM);
+
+            new FaceAngle(1200, 30, 5)
+                    .setLowGear()
+                    .runNow("spin2");
+            waitFor("spin2", 0);
+
+            new ElevatorToTarget(1500, Elevator.ONE_FOOT*3).runNow("Elevator Switch 2");
+
+
+            path5.setWaypoint(2, "Early outtake 2");
+            path5.runNow("switchR5");
 
             waitFor("Elevator Switch 2", 0);
+            waitFor("Early outtake 2", 0);
 
             intake.setIntake(0.75);
             intake.setClamp(intake.FREE);
-            Thread.sleep(500);
+
+
+            waitFor("switchR5", 0);
             intake.setIntake(0);
 
 
             //Third cube
-            PathfindFromFile path6 = new PathfindFromFile(10000, "switchR6");
-            path6.setReverse();
-            path6.runUntilFinish();
+            path6.setWaypoint(0.5, "Start Elevator cube 2");
+            path6.runNow("path6R");
 
-            elevator.goToTarget(elevator.ONE_FOOT);
+            waitFor("Start Elevator cube 2", 0);
+            elevator.goToTarget(elevator.POS_BOTTOM);
             arm.goToPosition(arm.POS_BOTTOM);
+            waitFor("path6R", 0);
 
-            PathfindFromFile path7 = new PathfindFromFile(10000, "switchR7");
+            new FaceAngle(800, -45, 2)
+                    .setLowGear()
+                    .runUntilFinish();
+
             intake.setIntake(-1);
+            arm.goToPosition(arm.POS_BOTTOM);
             path7.runUntilFinish();
+
+            path8.runUntilFinish();
 
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            PathfindFromFile path8 = new PathfindFromFile(10000, "switchR8");
-            path8.setReverse();
-            new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 3");
-            path8.runUntilFinish();
+            new FaceAngle(1200, 25, 5).setLowGear().runNow("spin4");
+            waitFor("spin4", 0);
 
-            PathfindFromFile path9 = new PathfindFromFile(10000, "switchR9");
+            new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 3");
+
             path9.runUntilFinish();
             waitFor("Elevator Switch 3", 0);
 
@@ -181,7 +152,6 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0.75);
 
             Thread.sleep(1000);
-
 		}
 	}
 }

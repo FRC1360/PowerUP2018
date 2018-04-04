@@ -148,7 +148,7 @@ public class GeneratePaths {
         //SWITCH AUTO PATHS
         Waypoint[] pointsSwitchR = new Waypoint[] {
                 new Waypoint(1.63, 12.5, 0),
-                new Waypoint(10, 9.5, Pathfinder.d2r(-30))
+                new Waypoint(9.5, 9.5, Pathfinder.d2r(-30))
         };
 
         Waypoint[] pointsSwitchL = new Waypoint[] {
@@ -202,7 +202,7 @@ public class GeneratePaths {
 
         //Right Second Cube
         Waypoint[] pointsSwitchR2 = new Waypoint[] {
-                new Waypoint(10, 9.5, Pathfinder.d2r(-30)),
+                new Waypoint(9.5, 9.5, Pathfinder.d2r(-30)),
                 new Waypoint(5.5, 11.5,  Pathfinder.d2r(-30))
 
         };
@@ -266,7 +266,7 @@ public class GeneratePaths {
 
         //Switch Only
         Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 300);//jerk was 180
+        Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
 
         Trajectory.Config configSwitchL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 100);//jerk was 180
         Trajectory.Config configSwitchL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 6, 100);//jerk was 180
@@ -278,14 +278,14 @@ public class GeneratePaths {
         Trajectory.Config configSwitchL9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 100);//jerk was 180
 
 
-        Trajectory.Config configSwitchR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
-        Trajectory.Config configSwitchR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
-        Trajectory.Config configSwitchR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
         Trajectory.Config configSwitchR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
-        Trajectory.Config configSwitchR6 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
-        Trajectory.Config configSwitchR7 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
-        Trajectory.Config configSwitchR8 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
-        Trajectory.Config configSwitchR9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 15, 75);//jerk was 180
+        Trajectory.Config configSwitchR6 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR7 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR8 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
 
 
         //FILES

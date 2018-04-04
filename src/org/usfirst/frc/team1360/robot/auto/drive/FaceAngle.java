@@ -29,10 +29,10 @@ public class FaceAngle extends AutonRoutine{
 		this(timeout, A);
 		this.eps = eps;
 	}
-	
-	public FaceAngle(long timeout, double A, double eps, boolean lowGear) {
-		this(timeout, A, eps);
+
+	public FaceAngle setLowGear(){
 		this.lowGear = true;
+		return this;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class FaceAngle extends AutonRoutine{
 				timerStarted = false;
 			}
 
-		} while (!timerStarted || System.currentTimeMillis()-timer < 200);
+		} while (!timerStarted || System.currentTimeMillis()-timer < 100);
 
 	}
 

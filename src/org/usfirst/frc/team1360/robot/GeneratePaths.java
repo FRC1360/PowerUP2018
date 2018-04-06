@@ -279,11 +279,11 @@ public class GeneratePaths {
 
 
         Trajectory.Config configSwitchR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
-        Trajectory.Config configSwitchR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 75);//jerk was 180
         Trajectory.Config configSwitchR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
         Trajectory.Config configSwitchR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
         Trajectory.Config configSwitchR6 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
-        Trajectory.Config configSwitchR7 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
+        Trajectory.Config configSwitchR7 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 75);//jerk was 180
         Trajectory.Config configSwitchR8 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
         Trajectory.Config configSwitchR9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
 
@@ -360,15 +360,15 @@ public class GeneratePaths {
         trajectorySwitchL = Pathfinder.generate(pointsSwitchL, configSwitchL);
         trajectorySwitchR = Pathfinder.generate(pointsSwitchR, configSwitchR);
 
-//        trajectorySwitchL2 = Pathfinder.generate(pointsSwitchL2, configSwitchL2);
-//        trajectorySwitchL3 = Pathfinder.generate(pointsSwitchL3, configSwitchL3);
-//        trajectorySwitchL4 = Pathfinder.generate(pointsSwitchL4, configSwitchL4);
-//        trajectorySwitchL5  = Pathfinder.generate(pointsSwitchL5, configSwitchL5);
-//
-//        trajectorySwitchL6 = Pathfinder.generate(pointsSwitchL6, configSwitchL6);
-//        trajectorySwitchL7 = Pathfinder.generate(pointsSwitchL7, configSwitchL7);
-//        trajectorySwitchL8 = Pathfinder.generate(pointsSwitchL8, configSwitchL8);
-//        trajectorySwitchL9  = Pathfinder.generate(pointsSwitchL9, configSwitchL9);
+        trajectorySwitchL2 = Pathfinder.generate(pointsSwitchL2, configSwitchL2);
+        trajectorySwitchL3 = Pathfinder.generate(pointsSwitchL3, configSwitchL3);
+        trajectorySwitchL4 = Pathfinder.generate(pointsSwitchL4, configSwitchL4);
+        trajectorySwitchL5  = Pathfinder.generate(pointsSwitchL5, configSwitchL5);
+
+        trajectorySwitchL6 = Pathfinder.generate(pointsSwitchL6, configSwitchL6);
+        trajectorySwitchL7 = Pathfinder.generate(pointsSwitchL7, configSwitchL7);
+        trajectorySwitchL8 = Pathfinder.generate(pointsSwitchL8, configSwitchL8);
+        trajectorySwitchL9  = Pathfinder.generate(pointsSwitchL9, configSwitchL9);
 
 
         trajectorySwitchR2 = Pathfinder.generate(pointsSwitchR2, configSwitchR2);
@@ -407,15 +407,15 @@ public class GeneratePaths {
         Pathfinder.writeToCSV(fileSwitchL, trajectorySwitchL);
         Pathfinder.writeToCSV(fileSwitchR, trajectorySwitchR);
 
-//        Pathfinder.writeToCSV(fileSwitchL2, trajectorySwitchL2);
-//        Pathfinder.writeToCSV(fileSwitchL3, trajectorySwitchL3);
-//        Pathfinder.writeToCSV(fileSwitchL4, trajectorySwitchL4);
-//        Pathfinder.writeToCSV(fileSwitchL5, trajectorySwitchL5);
-//
-//        Pathfinder.writeToCSV(fileSwitchL6, trajectorySwitchL6);
-//        Pathfinder.writeToCSV(fileSwitchL7, trajectorySwitchL7);
-//        Pathfinder.writeToCSV(fileSwitchL8, trajectorySwitchL8);
-//        Pathfinder.writeToCSV(fileSwitchL9, trajectorySwitchL9);
+        Pathfinder.writeToCSV(fileSwitchL2, trajectorySwitchL2);
+        Pathfinder.writeToCSV(fileSwitchL3, trajectorySwitchL3);
+        Pathfinder.writeToCSV(fileSwitchL4, trajectorySwitchL4);
+        Pathfinder.writeToCSV(fileSwitchL5, trajectorySwitchL5);
+
+        Pathfinder.writeToCSV(fileSwitchL6, trajectorySwitchL6);
+        Pathfinder.writeToCSV(fileSwitchL7, trajectorySwitchL7);
+        Pathfinder.writeToCSV(fileSwitchL8, trajectorySwitchL8);
+        Pathfinder.writeToCSV(fileSwitchL9, trajectorySwitchL9);
 
 
         Pathfinder.writeToCSV(fileSwitchR2, trajectorySwitchR2);

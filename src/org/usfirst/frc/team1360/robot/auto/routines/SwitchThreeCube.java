@@ -81,19 +81,16 @@ public class SwitchThreeCube extends AutonRoutine {
             robotOutput.setIntake(0.75);
 
             waitFor("To Right Switch", 0);
-
             intake.setIntake(0);
-            robotOutput.tankDrive(-0.1, -0.1);
-
 
             //Second cube
             pathL2.setWaypoint(0.5, "Start elevator");
 
-            pathL2.runNow("switchR2");
+            pathL2.runNow("switchL2");
             waitFor("Start elevator", 0);
             elevator.goToTarget(elevator.POS_BOTTOM);
             arm.goToPosition(arm.POS_BOTTOM);
-            waitFor("switchR2", 0);
+            waitFor("switchL2", 0);
 
             new FaceAngle(800, 30, 2)
                     .setLowGear()
@@ -120,29 +117,26 @@ public class SwitchThreeCube extends AutonRoutine {
 
             new ElevatorToTarget(1500, Elevator.ONE_FOOT*3).runNow("Elevator Switch 2");
 
+            pathL5.setWaypoint(2.3, "Early outtake 2");
+            pathL5.runNow("switchL5");
 
-            pathL5.setWaypoint(2, "Early outtake 2");
-            pathL5.runNow("switchR5");
-
-            waitFor("Elevator Switch 2", 0);
             waitFor("Early outtake 2", 0);
 
-            intake.setIntake(0.75);
             intake.setClamp(intake.FREE);
+            intake.setIntake(0.75);
 
-
-            waitFor("switchR5", 0);
+            waitFor("Elevator Switch 2", 0);
+            waitFor("switchL5", 0);
             intake.setIntake(0);
-
 
             //Third cube
             pathL6.setWaypoint(0.5, "Start Elevator cube 2");
-            pathL6.runNow("path6R");
+            pathL6.runNow("pathL6");
 
             waitFor("Start Elevator cube 2", 0);
             elevator.goToTarget(elevator.POS_BOTTOM);
             arm.goToPosition(arm.POS_BOTTOM);
-            waitFor("path6R", 0);
+            waitFor("pathL6", 0);
 
             new FaceAngle(800, 45, 2)
                     .setLowGear()
@@ -157,7 +151,7 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            new FaceAngle(1200, -25, 5).setLowGear().runNow("spin4");
+            new FaceAngle(1200, 25, 5).setLowGear().runNow("spin4");
             waitFor("spin4", 0);
 
             new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 3");
@@ -188,8 +182,6 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("To Right Switch", 0);
 
             intake.setIntake(0);
-            robotOutput.tankDrive(-0.1, -0.1);
-
 
             //Second cube
             pathR2.setWaypoint(0.5, "Start elevator");

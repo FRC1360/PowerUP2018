@@ -53,6 +53,13 @@ public class PathfindFromFile extends AutonRoutine{
 		super("Pathfind From File", timeout);
 
 		this.trajectory = traj;
+
+		TankModifier modifier = new TankModifier(trajectory).modify(DT_WIDTH);
+
+		left = new EncoderFollower(modifier.getLeftTrajectory());
+		right = new EncoderFollower(modifier.getRightTrajectory());
+
+		this.totalLength = trajectory.segments[trajectory.length()-1].position;
 	}
 
 	public PathfindFromFile cutOffFeet(double feet){

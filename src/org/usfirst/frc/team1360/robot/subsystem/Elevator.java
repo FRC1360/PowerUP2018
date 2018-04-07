@@ -197,25 +197,25 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 
-	private final double DELTA_VOLTAGE = 0.25; //change in voltage every ~20 msec
+	private final double DELTA_VBUS = 0.25; //change in voltage every ~20 msec
 	private long lastMsec = 0;
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 
-	private void handleElevator(double targetVoltage, double deltaVoltage) {
+	private void handleElevator(double targetVoltage, double deltaVBus) {
 
 		if(System.currentTimeMillis() - lastMsec >= 20)
 		{
-			if(robotOutput.getElevatorVBus() + deltaVoltage > targetVoltage && robotOutput.getElevatorVBus() - deltaVoltage < targetVoltage)
+			if(robotOutput.getElevatorVBus() + deltaVBus > targetVoltage && robotOutput.getElevatorVBus() - deltaVBus < targetVoltage)
 			{
 				robotOutput.setElevatorMotor(targetVoltage);
 			}
 
 			else if(robotOutput.getElevatorVBus() < targetVoltage) {
-				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + deltaVoltage);
+				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + deltaVBus);
 			}
 
 			else if(robotOutput.getElevatorVBus() > targetVoltage) {
-				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - deltaVoltage);
+				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - deltaVBus);
 			}
 
 			lastMsec = System.currentTimeMillis();
@@ -223,7 +223,7 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	private void handleElevator(double targetVoltage) {
-		handleElevator(targetVoltage, DELTA_VOLTAGE);
+		handleElevator(targetVoltage, DELTA_VBUS);
 	}
 
 

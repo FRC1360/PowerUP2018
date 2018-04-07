@@ -141,7 +141,7 @@ public final class Elevator implements ElevatorProvider {
 		}
 		else
 		{
-			safety(((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position)) - 0.2);	
+			safety(((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position)) - 0.2);
 			
 			return sensorInput.getElevatorEncoder() > position;
 		}
@@ -191,39 +191,41 @@ public final class Elevator implements ElevatorProvider {
 			else
 				handleElevator(power);
 		}
-
-
-
 	}
-	
 	private void safety(double power) {
 		safety(power, false);
 	}
+
 
 	private final double DELTA_VOLTAGE = 0.25; //change in voltage every ~20 msec
 	private long lastMsec = 0;
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 
-	private void handleElevator(double targetVoltage) {
+	private void handleElevator(double targetVoltage, double deltaVoltage) {
 
 		if(System.currentTimeMillis() - lastMsec >= 20)
 		{
-			if(robotOutput.getElevatorVBus() + DELTA_VOLTAGE > targetVoltage && robotOutput.getElevatorVBus() - DELTA_VOLTAGE < targetVoltage)
+			if(robotOutput.getElevatorVBus() + deltaVoltage > targetVoltage && robotOutput.getElevatorVBus() - deltaVoltage < targetVoltage)
 			{
 				robotOutput.setElevatorMotor(targetVoltage);
 			}
 
 			else if(robotOutput.getElevatorVBus() < targetVoltage) {
-				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + DELTA_VOLTAGE);
+				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + deltaVoltage);
 			}
 
 			else if(robotOutput.getElevatorVBus() > targetVoltage) {
-				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - DELTA_VOLTAGE);
+				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - deltaVoltage);
 			}
 
 			lastMsec = System.currentTimeMillis();
 		}
 	}
+
+	private void handleElevator(double targetVoltage) {
+		handleElevator(targetVoltage, DELTA_VOLTAGE);
+	}
+
 
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
 	@Override

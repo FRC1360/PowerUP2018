@@ -2,6 +2,7 @@ package org.usfirst.frc.team1360.robot.subsystem;
 
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
+import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
@@ -13,7 +14,6 @@ import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 @SingletonSee(ElevatorProvider.class)
 public final class Elevator implements ElevatorProvider {
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	private ArmProvider arm = Singleton.get(ArmProvider.class);
 	private MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 
@@ -132,7 +132,7 @@ public final class Elevator implements ElevatorProvider {
 	private boolean dampen(int position, double power, boolean up) {
 		if (up) {
 			if (Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
-				robotOutput.setElevatorMotor(0.3);
+				handleElevator(0.3);
 			else {
 				safety((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
 			}
@@ -151,23 +151,23 @@ public final class Elevator implements ElevatorProvider {
 	public void safety(double power, boolean override) {
 		
 		if(override) {
-			robotOutput.setElevatorMotor(power);
+			handleElevator(power);
 			matchLogger.writeClean("Overriding Elevator");
 		}
 		else {
 			if(sensorInput.getBottomSwitch()) {
 				sensorInput.resetElevatorEncoder();
 				if(power < 0)
-					robotOutput.setElevatorMotor(0);
+					handleElevator(0);
 				else
-					robotOutput.setElevatorMotor(power);
+					handleElevator(power);
 			}
 			else if(sensorInput.getTopSwitch()) {
 				topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
 				if(power > 0)
-					robotOutput.setElevatorMotor(0.15);//prevent jiggle
+					handleElevator(0.15);//prevent jiggle
 				else
-					robotOutput.setElevatorMotor(power);
+					handleElevator(power);
 			}
 			
 			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= -1) {
@@ -176,27 +176,55 @@ public final class Elevator implements ElevatorProvider {
 			}
 			else if(power < 0) {
 				if(Math.abs(0.002*sensorInput.getElevatorEncoder()) < 0.2) 
-					robotOutput.setElevatorMotor(-0.2);
+					handleElevator(-0.2);
 				else
-					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
+					handleElevator((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
 			}
 			
 			else if(power > 0 && !sensorInput.getTopSwitch()) {
 				if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
-					robotOutput.setElevatorMotor(0.3);
+					handleElevator(0.3);
 				else
-					robotOutput.setElevatorMotor((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
+					handleElevator((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
 			}
 		
 			else
-				robotOutput.setElevatorMotor(power);
+				handleElevator(power);
 		}
+
+
+
 	}
 	
 	private void safety(double power) {
 		safety(power, false);
 	}
-	
+
+	private final double DELTA_VOLTAGE = 0.25; //change in voltage every ~20 msec
+	private long lastMsec = 0;
+	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
+
+	private void handleElevator(double targetVoltage) {
+
+		if(System.currentTimeMillis() - lastMsec >= 20)
+		{
+			if(robotOutput.getElevatorVBus() + DELTA_VOLTAGE > targetVoltage && robotOutput.getElevatorVBus() - DELTA_VOLTAGE < targetVoltage)
+			{
+				robotOutput.setElevatorMotor(targetVoltage);
+			}
+
+			else if(robotOutput.getElevatorVBus() < targetVoltage) {
+				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + DELTA_VOLTAGE);
+			}
+
+			else if(robotOutput.getElevatorVBus() > targetVoltage) {
+				robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - DELTA_VOLTAGE);
+			}
+
+			lastMsec = System.currentTimeMillis();
+		}
+	}
+
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
 	@Override
 	public boolean goToTarget(int target) {

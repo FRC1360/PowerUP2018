@@ -124,28 +124,27 @@ public class GeneratePaths {
         //Right
         Waypoint[] pointsScaleRRR1 = new Waypoint[] {
                 new Waypoint(1.63, 4.5, 0),
-                new Waypoint(17, 3, 0),
-                new Waypoint(23, 4.5, Pathfinder.d2r(45)),
+                new Waypoint(25, 7, Pathfinder.d2r(15)),
         };
 
         Waypoint[] pointsScaleRRR2 = new Waypoint[] {
-                new Waypoint(23, 4.5, Pathfinder.d2r(145)),
-                new Waypoint(18.5, 6.5, Pathfinder.d2r(145)),
+                new Waypoint(25, 7.7, Pathfinder.d2r(15)),
+                new Waypoint(19, 7, Pathfinder.d2r(-20)),
         };
 
         Waypoint[] pointsScaleRRR3 = new Waypoint[] {
-                new Waypoint(18.5, 6, Pathfinder.d2r(0)),
-                new Waypoint(23, 6.5, Pathfinder.d2r(0)),
+                new Waypoint(19, 7, Pathfinder.d2r(-20)),
+                new Waypoint(25, 7.7, Pathfinder.d2r(15)),
         };
 
         Waypoint[] pointsScaleRRR4 = new Waypoint[] {
-                new Waypoint(18.5, 6, Pathfinder.d2r(135)),
-                new Waypoint(22, 2, Pathfinder.d2r(90)),
+                new Waypoint(23, 5.5, Pathfinder.d2r(15)),
+                new Waypoint(18, 9, Pathfinder.d2r(-40)),
         };
 
         Waypoint[] pointsScaleRRR5 = new Waypoint[] {
-                new Waypoint(22, 2, Pathfinder.d2r(90)),
-                new Waypoint(24, 5, Pathfinder.d2r(45)),
+                new Waypoint(18, 9, Pathfinder.d2r(-40)),
+                new Waypoint(23, 5.5, Pathfinder.d2r(15)),
         };
 
 
@@ -256,17 +255,17 @@ public class GeneratePaths {
         Trajectory.Config configSwitchLScaleR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
 
         //Two Cube Scale
-        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLLL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLLL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLLL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLLL5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleLLL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleLLL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleLLL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleLLL5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
 
-        Trajectory.Config configScaleRRR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRRR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRRR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRRR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRRR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleRRR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleRRR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleRRR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleRRR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
+        Trajectory.Config configScaleRRR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 10, 75);
 
         //Switch Only
         Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);
@@ -301,17 +300,17 @@ public class GeneratePaths {
         File fileSwitchLScaleR = new File(FILE_ROOT + "switchLScaleR.csv");
 
         //Two Cube Scale
-        File fileScaleLLL1 = new File(FILE_ROOT + "scaleLL1.csv");
-        File fileScaleLLL2 = new File(FILE_ROOT + "scaleLL2.csv");
-        File fileScaleLLL3 = new File(FILE_ROOT + "scaleLL3.csv");
-        File fileScaleLLL4 = new File(FILE_ROOT + "scaleLL4.csv");
-        File fileScaleLLL5 = new File(FILE_ROOT + "scaleLL5.csv");
+        File fileScaleLLL1 = new File(FILE_ROOT + "scaleLLL1.csv");
+        File fileScaleLLL2 = new File(FILE_ROOT + "scaleLLL2.csv");
+        File fileScaleLLL3 = new File(FILE_ROOT + "scaleLLL3.csv");
+        File fileScaleLLL4 = new File(FILE_ROOT + "scaleLLL4.csv");
+        File fileScaleLLL5 = new File(FILE_ROOT + "scaleLLL5.csv");
 
-        File fileScaleRRR1 = new File(FILE_ROOT + "scaleRR1.csv");
-        File fileScaleRRR2 = new File(FILE_ROOT + "scaleRR2.csv");
-        File fileScaleRRR3 = new File(FILE_ROOT + "scaleRR3.csv");
-        File fileScaleRRR4 = new File(FILE_ROOT + "scaleRR4.csv");
-        File fileScaleRRR5 = new File(FILE_ROOT + "scaleRR5.csv");
+        File fileScaleRRR1 = new File(FILE_ROOT + "scaleRRR1.csv");
+        File fileScaleRRR2 = new File(FILE_ROOT + "scaleRRR2.csv");
+        File fileScaleRRR3 = new File(FILE_ROOT + "scaleRRR3.csv");
+        File fileScaleRRR4 = new File(FILE_ROOT + "scaleRRR4.csv");
+        File fileScaleRRR5 = new File(FILE_ROOT + "scaleRRR5.csv");
 
         //Switch Only
         File fileSwitchL = new File(FILE_ROOT + "switchL.csv");

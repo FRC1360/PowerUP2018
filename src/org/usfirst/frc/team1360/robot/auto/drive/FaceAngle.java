@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FaceAngle extends AutonRoutine{
 	
-	double eps;
+	double eps = 3;
 	double gearRatio = 3.0 / 1.0;
 	double wheelDiameter = 5.0;
 	double ticksPerRotation = 250;
@@ -17,51 +17,61 @@ public class FaceAngle extends AutonRoutine{
 	double targetAngle;
 	double angleOffset;
 	boolean chain;
-	boolean reverse;
+	boolean lowGear = false;
 	
 	public FaceAngle(long timeout, double A) {
 		super("Face Angle", timeout);
 		
-		this.targetAngle = Math.toRadians(A);
+		this.targetAngle = A;
+	}
+
+	public FaceAngle(long timeout, double A, double eps) {
+		this(timeout, A);
+		this.eps = eps;
+	}
+
+	public FaceAngle setLowGear(){
+		this.lowGear = true;
+		return this;
 	}
 
 	@Override
 	protected void runCore() throws InterruptedException
 	{
-		OrbitPID pidAngle = new OrbitPID(1.0, 0.0, 1.0);//p = 4.7 i = 0.0025
-		
+		OrbitPID pidAngle;
+		if (lowGear) {
+			pidAngle = new OrbitPID(0.03, 0.01, 1.2);
+		} else {
+			pidAngle = new OrbitPID(0.08, 0.05, 0.8);//p = 4.7 i = 0.0025
+		}
+
 		double lastSpeed = 0;
-		
-		long lastTime = System.currentTimeMillis();
-		
-		double lastA = Math.toRadians(sensorInput.getAHRSYaw());
-		
+
+		long timer = System.currentTimeMillis();
+
+		boolean timerStarted = false;
+
 		double err, velA;
-		
+
 		do {
 			Thread.sleep(10);
-			
-			double curA = Math.toRadians(sensorInput.getAHRSYaw());
-			err = targetAngle - curA;
-			double vTarget = 0.6 * Math.copySign(1 - Math.exp(-1.5 * Math.abs(err)), err);
-			
-			final double kB = 1;//2 Practice Bot
-			final double kP = 1;//1 Practice Bot
-			long time = System.currentTimeMillis();
-			velA = (curA - lastA) / (time - lastTime);
-			double turn = kB * vTarget + kP * (vTarget - velA);
-			
-			lastA = curA;
-			lastTime = time;
-			
-			robotOutput.arcadeDrive(0, turn);
-			
-			SmartDashboard.putNumber("FaceAngle Error", err);
-		} while (Math.abs(err) > 0.1);
-		
-		robotOutput.arcadeDrive(0, -0.2 * Math.signum(velA));
-		Thread.sleep(200);
-		robotOutput.tankDrive(0, 0);
+
+			double curA = sensorInput.getAHRSYaw();
+
+			double turn = pidAngle.calculate(targetAngle, sensorInput.getAHRSYaw());
+
+			robotOutput.arcadeDrivePID(0, turn);
+
+			if(Math.abs(curA - targetAngle) < eps && !timerStarted) {
+				timer = System.currentTimeMillis();
+				timerStarted = true;
+			}
+			else if(Math.abs(curA - targetAngle) > eps) {
+				timerStarted = false;
+			}
+
+		} while (!timerStarted || System.currentTimeMillis()-timer < 100);
+
 	}
 
 	@Override

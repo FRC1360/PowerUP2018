@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.subsystem;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.Robot;
@@ -66,12 +67,18 @@ public final class Elevator implements ElevatorProvider {
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
 				int holdTarget = sensorInput.getElevatorEncoder();
-				OrbitPID elevatorPID = new OrbitPID(0.001, 0.0, 0);
-				matchLogger.write("ELEVATOR TARGET == " + holdTarget);
+				if(sensorInput.getArmEncoder() < Arm.POS_TOP-200)
+					holdTarget = POS_TOP;
+
+				OrbitPID elevatorPID = new OrbitPID(0.002, 0.0, 0.0);
+				matchLogger.writeClean("ELEVATOR TARGET == " + holdTarget);
 
 				while(true)
 				{
-					elevator.safety(elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder()));
+					double applyPower = elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder());
+					if (applyPower > 0.1) applyPower = 0.1;
+					if (applyPower < -0.1) applyPower = -0.1;
+					elevator.safety(applyPower, true);
 					Thread.sleep(10);
 				}
 			}
@@ -127,26 +134,40 @@ public final class Elevator implements ElevatorProvider {
 	public void start() {
 		stateMachine = new OrbitStateMachine<Elevator.ElevatorState>(ElevatorState.IDLE);
 	}
-	
-	
+
+
 	private boolean dampen(int position, double power, boolean up) {
 		if (up) {
-			if (Math.abs(0.004*(position - sensorInput.getElevatorEncoder())) < 0.3)
-				handleElevator(0.3);
-			else {
-				safety((0.004*Math.abs(power))*(position - sensorInput.getElevatorEncoder()));
+			double dampenPwr = (0.005*Math.abs(power))*(position - sensorInput.getElevatorEncoder());
+
+			if(dampenPwr >= 1.0) {
+				handleElevator(power);
 			}
-			
+			else {
+				handleElevator(dampenPwr);
+				//handleElevator(power);
+			}
+
 			return sensorInput.getElevatorEncoder() < position;
 		}
 		else
 		{
-			safety(((-0.001*Math.abs(power))*(sensorInput.getElevatorEncoder() - position)) - 0.2);
-			
+			double dampenPwr = (-0.001*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
+
+			if(dampenPwr <= -1.0){
+				handleElevator(power);
+			}
+			else {
+				handleElevator(dampenPwr);
+				//handleElevator(power);
+			}
+
 			return sensorInput.getElevatorEncoder() > position;
 		}
 	}
-	
+
+
+
 	@Override
 	public void safety(double power, boolean override) {
 		
@@ -164,34 +185,21 @@ public final class Elevator implements ElevatorProvider {
 			}
 			else if(sensorInput.getTopSwitch()) {
 				topPosOffset = POS_TOP - sensorInput.getElevatorEncoder();
-				if(power > 0)
-					handleElevator(0.15);//prevent jiggle
-				else
-					handleElevator(power);
-			}
-			
-			if(sensorInput.getElevatorEncoder() > ONE_FOOT*1.5 && sensorInput.getElevatorEncoder() < ONE_FOOT*4 && sensorInput.getArmEncoder() >= arm.POS_TOP-100) {
-				if(!arm.movingToPosition())
-					arm.goToPosition(arm.POS_TOP-100);
-			}
 
-			else if(power < 0) {
-				if(Math.abs(0.002*sensorInput.getElevatorEncoder()) < 0.2) 
-					handleElevator(-0.2);
-				else
-					handleElevator((-0.002*Math.abs(power))*sensorInput.getElevatorEncoder());
-			}
-			
-			else if(power > 0 && !sensorInput.getTopSwitch()) {
-				if(-0.002*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)) < 0.4) 
-					robotOutput.setElevatorMotor(0.2);
-
-				else
-					handleElevator((-0.002*Math.abs(power))*(sensorInput.getElevatorEncoder()-(POS_TOP + topPosOffset)));
-			}
-		
-			else
 				handleElevator(power);
+			}
+
+			if(sensorInput.getElevatorEncoder() >= POS_TOP && power > 0) {
+				this.hold();
+			}
+			if(sensorInput.getArmEncoder() < Arm.POS_TOP - 200){
+				this.hold();
+			}
+			else
+				if(power > 0)
+					dampen(POS_TOP, power, true);
+				if(power < 0)
+					dampen(0, power, false);
 		}
 	}
 	private void safety(double power) {
@@ -199,12 +207,16 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 
-	private final double DELTA_VBUS = 0.25; //change in voltage every ~20 msec
+	private final double DELTA_VBUS = 0.5; //change in voltage every ~20 msec
 	private long lastMsec = 0;
 	private RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 
 	private void handleElevator(double targetVoltage, double deltaVBus) {
 
+		robotOutput.setElevatorMotor(targetVoltage);
+		SmartDashboard.putNumber("elevator Voltage", targetVoltage);
+
+		/*
 		if(System.currentTimeMillis() - lastMsec >= 20)
 		{
 			if(robotOutput.getElevatorVBus() + deltaVBus > targetVoltage && robotOutput.getElevatorVBus() - deltaVBus < targetVoltage)
@@ -222,6 +234,7 @@ public final class Elevator implements ElevatorProvider {
 
 			lastMsec = System.currentTimeMillis();
 		}
+		*/
 	}
 
 	private void handleElevator(double targetVoltage) {
@@ -295,7 +308,9 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean hold() {
 		try {
-			stateMachine.setState(ElevatorState.HOLD);
+			matchLogger.writeClean("ELEVATOR TARGET: "+ isHolding());
+			if(!isHolding())
+				stateMachine.setState(ElevatorState.HOLD);
 		} catch (InterruptedException e) {
 			return false;
 		}

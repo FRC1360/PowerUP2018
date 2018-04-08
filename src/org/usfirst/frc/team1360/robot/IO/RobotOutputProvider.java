@@ -5,6 +5,9 @@ public interface RobotOutputProvider {
 	void clearStickyFaults();
 	void setDriveLeft(double speed);
 	void setDriveRight(double speed);
+
+	double getElevatorVBus();
+
 	void tankDrive(double left, double right);
 	void arcadeDrive(double speed, double turn);
 	void arcadeDrivePID(double speed, double turn);

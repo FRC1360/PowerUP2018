@@ -20,20 +20,19 @@ public class ThreeCubeScale extends AutonRoutine{
 	private PathfindFromFile scalePathR5;
 
     public ThreeCubeScale() {
-    	super("Two Cube Scale", 0);
+    	super("Three Cube Scale", 0);
 
-    	scalePathR1 = new PathfindFromFile(10000, "ScaleRRR1").setReverse();
-		scalePathR2 = new PathfindFromFile(10000, "ScaleRRR2");
-		scalePathR3 = new PathfindFromFile(10000, "ScaleRRR3").setReverse();
-		scalePathR4 = new PathfindFromFile(10000, "ScaleRRR4");
-		scalePathR5 = new PathfindFromFile(10000, "ScaleRRR5").setReverse();
-
-
+    	scalePathR1 = new PathfindFromFile(10000, "scaleRRR1").startAndGoReverse();
+		scalePathR2 = new PathfindFromFile(10000, "scaleRRR2").startReverse();
+		scalePathR3 = new PathfindFromFile(10000, "scaleRRR3").startAndGoReverse();
+		scalePathR4 = new PathfindFromFile(10000, "scaleRRR4").startReverse();
+		scalePathR5 = new PathfindFromFile(10000, "scaleRRR5").startAndGoReverse();
     }
 
     @Override
     protected void runCore() throws InterruptedException
     {
+		arm.goToPosition(arm.POS_TOP-200);
 
         if(fms.plateLeft(1)) { //L
         	
@@ -42,22 +41,21 @@ public class ThreeCubeScale extends AutonRoutine{
         }
         else { //R
         	//Start of first cube
-			scalePathR1.setWaypoint(10, "Start Cube");
-			scalePathR1.runNow("To Scale");
+			scalePathR1.runUntilFinish();
 
-			waitFor("Start Cube", 0);
-			new ElevatorToTarget(1500, elevator.POS_TOP).runUntilFinish();
+			elevator.goToTarget(elevator.POS_TOP);
+
 			arm.goToPosition(arm.POS_BEHIND);
-			waitFor("To Scale", 0);
+			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
 			intake.setClamp(intake.FREE);
-			intake.setIntake(0.5);
+			intake.setIntake(1);
+			Thread.sleep(1000);
 
 			arm.goToPosition(arm.POS_BOTTOM);
 			Thread.sleep(500);
 			elevator.goToBottom();
 
-			new FaceAngle(5000, 20, 2).runUntilFinish();
 
 			//2nd Cube
 			intake.setIntake(-1);
@@ -70,11 +68,9 @@ public class ThreeCubeScale extends AutonRoutine{
 			scalePathR3.runNow("Cube 2");
 			waitFor("Cube 2", 0);
 
-			new ElevatorToTarget(1500, elevator.POS_TOP).runNow("Elevator Up");
-			new FaceAngle(5000, -10, 2).runUntilFinish();
-			Thread.sleep(500);
+			elevator.goToTarget(elevator.POS_TOP);
 			arm.goToPosition(arm.POS_BEHIND);
-			waitFor("Elevator Up", 0);
+			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
 			intake.setClamp(intake.FREE);
 			intake.setIntake(0.5);
@@ -82,7 +78,9 @@ public class ThreeCubeScale extends AutonRoutine{
 			arm.goToPosition(arm.POS_BOTTOM);
 			Thread.sleep(500);
 			elevator.goToBottom();
+			Thread.sleep(1300);
 
+			/*
 			//3rd Cube
 			new FaceAngle(5000, 20, 2).runUntilFinish();
 
@@ -107,6 +105,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			arm.goToPosition(arm.POS_BOTTOM);
 			Thread.sleep(500);
 			elevator.goToBottom();
+			*/
 
         }
 

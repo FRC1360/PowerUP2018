@@ -71,10 +71,10 @@ public class SwitchThreeCube extends AutonRoutine {
             pathL.setWaypoint(7, "Start Intake");
             pathL.runNow("To Right Switch");
 
-            new ElevatorToTarget(1500, elevator.ONE_FOOT*3).runNow("Elevator");
+            elevator.goToTarget(elevator.ONE_FOOT*3);
+
             arm.goToPosition(arm.POS_BOTTOM);
 
-            waitFor("Elevator", 0);
             waitFor("Start Intake", 0);
 
             intake.setClamp(intake.FREE);
@@ -92,7 +92,7 @@ public class SwitchThreeCube extends AutonRoutine {
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("switchL2", 0);
 
-            new FaceAngle(800, 30, 2)
+            new FaceAngle(1200, 30, 2)
                     .setLowGear()
                     .runNow("spin");
 
@@ -115,9 +115,10 @@ public class SwitchThreeCube extends AutonRoutine {
                     .runNow("spin2");
             waitFor("spin2", 0);
 
-            new ElevatorToTarget(1500, Elevator.ONE_FOOT*3).runNow("Elevator Switch 2");
+            elevator.goToTarget(elevator.ONE_FOOT*3);
 
-            pathL5.setWaypoint(2.3, "Early outtake 2");
+
+            pathL5.setWaypoint(3, "Early outtake 2");
             pathL5.runNow("switchL5");
 
             waitFor("Early outtake 2", 0);
@@ -125,7 +126,6 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setClamp(intake.FREE);
             intake.setIntake(0.75);
 
-            waitFor("Elevator Switch 2", 0);
             waitFor("switchL5", 0);
             intake.setIntake(0);
 
@@ -154,10 +154,9 @@ public class SwitchThreeCube extends AutonRoutine {
             new FaceAngle(1200, 25, 5).setLowGear().runNow("spin4");
             waitFor("spin4", 0);
 
-            new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 3");
+            elevator.goToTarget(elevator.ONE_FOOT*3);
 
             pathL9.runUntilFinish();
-            waitFor("Elevator Switch 3", 0);
 
             intake.setClamp(intake.FREE);
             intake.setIntake(0.75);
@@ -170,10 +169,10 @@ public class SwitchThreeCube extends AutonRoutine {
             pathR.setWaypoint(7, "Start Intake");
             pathR.runNow("To Right Switch");
 
-            new ElevatorToTarget(1500, elevator.ONE_FOOT*3).runNow("Elevator");
+            elevator.goToTarget(elevator.ONE_FOOT*3);
+
             arm.goToPosition(arm.POS_BOTTOM);
 
-            waitFor("Elevator", 0);
             waitFor("Start Intake", 0);
 
             intake.setClamp(intake.FREE);
@@ -188,7 +187,9 @@ public class SwitchThreeCube extends AutonRoutine {
 
             pathR2.runNow("switchR2");
             waitFor("Start elevator", 0);
+
             elevator.goToTarget(elevator.POS_BOTTOM);
+
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("switchR2", 0);
 
@@ -210,18 +211,16 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setClamp(intake.CLOSED);
             arm.goToPosition(arm.POS_BOTTOM);
 
-            new FaceAngle(1200, 30, 5)
+            new FaceAngle(1500, 30, 5)
                     .setLowGear()
                     .runNow("spin2");
             waitFor("spin2", 0);
 
-            new ElevatorToTarget(1500, Elevator.ONE_FOOT*3).runNow("Elevator Switch 2");
+            elevator.goToTarget(Elevator.ONE_FOOT*3);
 
-
-            pathR5.setWaypoint(2, "Early outtake 2");
+            pathR5.setWaypoint(3, "Early outtake 2");
             pathR5.runNow("switchR5");
 
-            waitFor("Elevator Switch 2", 0);
             waitFor("Early outtake 2", 0);
 
             intake.setIntake(0.75);
@@ -241,7 +240,7 @@ public class SwitchThreeCube extends AutonRoutine {
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("path6R", 0);
 
-            new FaceAngle(800, -45, 2)
+            new FaceAngle(1500, -45, 2)
                     .setLowGear()
                     .runUntilFinish();
 
@@ -254,13 +253,12 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            new FaceAngle(1200, 25, 5).setLowGear().runNow("spin4");
+            new FaceAngle(1500, 25, 5).setLowGear().runNow("spin4");
             waitFor("spin4", 0);
 
-            new ElevatorToTarget(1500, Elevator.ONE_FOOT*2).runNow("Elevator Switch 3");
+            elevator.goToTarget(elevator.ONE_FOOT*3);
 
             pathR9.runUntilFinish();
-            waitFor("Elevator Switch 3", 0);
 
             intake.setClamp(intake.FREE);
             intake.setIntake(0.75);

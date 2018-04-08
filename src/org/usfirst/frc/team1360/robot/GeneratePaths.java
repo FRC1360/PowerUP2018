@@ -20,17 +20,17 @@ public class GeneratePaths {
         Trajectory trajectorySwitchRScaleL2;
         Trajectory trajectorySwitchLScaleR;
 
-        Trajectory trajectoryScaleLL1;
-        Trajectory trajectoryScaleLL2;
-        Trajectory trajectoryScaleLL3;
-        Trajectory trajectoryScaleLL4;
-        Trajectory trajectoryScaleLL5;
+        Trajectory trajectoryScaleLLL1;
+        Trajectory trajectoryScaleLLL2;
+        Trajectory trajectoryScaleLLL3;
+        Trajectory trajectoryScaleLLL4;
+        Trajectory trajectoryScaleLLL5;
 
-        Trajectory trajectoryScaleRR1;
-        Trajectory trajectoryScaleRR2;
-        Trajectory trajectoryScaleRR3;
-        Trajectory trajectoryScaleRR4;
-        Trajectory trajectoryScaleRR5;
+        Trajectory trajectoryScaleRRR1;
+        Trajectory trajectoryScaleRRR2;
+        Trajectory trajectoryScaleRRR3;
+        Trajectory trajectoryScaleRRR4;
+        Trajectory trajectoryScaleRRR5;
 
         Trajectory trajectorySwitchL;
         Trajectory trajectorySwitchR;
@@ -96,50 +96,54 @@ public class GeneratePaths {
 
         //DOUBLE CUBE SCALE AUTO PATHS
         //Left
-        Waypoint[] pointsScaleLL1 = new Waypoint[] {
-
+        Waypoint[] pointsScaleLLL1 = new Waypoint[] {
+                new Waypoint(1.63, 4.00, 0),
+                new Waypoint(23, 5.5, Pathfinder.d2r(15))
         };
 
-        Waypoint[] pointsScaleLL2 = new Waypoint[] {
-                new Waypoint(1.63, 12.5, 0),
-                new Waypoint(10, 9.0, 0)
+        Waypoint[] pointsScaleLLL2 = new Waypoint[] {
+                new Waypoint(23, 5.5, Pathfinder.d2r(-20)),
+                new Waypoint(18, 7, Pathfinder.d2r(-20))
         };
 
-        Waypoint[] pointsScaleLL3 = new Waypoint[] {
-
+        Waypoint[] pointsScaleLLL3 = new Waypoint[] {
+                new Waypoint(18, 7, Pathfinder.d2r(-20)),
+                new Waypoint(23, 5.5, Pathfinder.d2r(-20))
         };
 
-        Waypoint[] pointsScaleLL4 = new Waypoint[] {
-
+        Waypoint[] pointsScaleLLL4 = new Waypoint[] {
+                new Waypoint(23, 5.5, Pathfinder.d2r(-20)),
+                new Waypoint(18, 9, Pathfinder.d2r(-40))
         };
 
-        Waypoint[] pointsScaleLL5 = new Waypoint[] {
-
+        Waypoint[] pointsScaleLLL5 = new Waypoint[] {
+                new Waypoint(18, 9, Pathfinder.d2r(-40)),
+                new Waypoint(23, 5.5, Pathfinder.d2r(-20)),
         };
 
         //Right
-        Waypoint[] pointsScaleRR1 = new Waypoint[] {
+        Waypoint[] pointsScaleRRR1 = new Waypoint[] {
                 new Waypoint(1.63, 4.5, 0),
                 new Waypoint(17, 3, 0),
                 new Waypoint(23, 4.5, Pathfinder.d2r(45)),
         };
 
-        Waypoint[] pointsScaleRR2 = new Waypoint[] {
+        Waypoint[] pointsScaleRRR2 = new Waypoint[] {
                 new Waypoint(23, 4.5, Pathfinder.d2r(145)),
                 new Waypoint(18.5, 6.5, Pathfinder.d2r(145)),
         };
 
-        Waypoint[] pointsScaleRR3 = new Waypoint[] {
+        Waypoint[] pointsScaleRRR3 = new Waypoint[] {
                 new Waypoint(18.5, 6, Pathfinder.d2r(0)),
                 new Waypoint(23, 6.5, Pathfinder.d2r(0)),
         };
 
-        Waypoint[] pointsScaleRR4 = new Waypoint[] {
+        Waypoint[] pointsScaleRRR4 = new Waypoint[] {
                 new Waypoint(18.5, 6, Pathfinder.d2r(135)),
                 new Waypoint(22, 2, Pathfinder.d2r(90)),
         };
 
-        Waypoint[] pointsScaleRR5 = new Waypoint[] {
+        Waypoint[] pointsScaleRRR5 = new Waypoint[] {
                 new Waypoint(22, 2, Pathfinder.d2r(90)),
                 new Waypoint(24, 5, Pathfinder.d2r(45)),
         };
@@ -252,17 +256,17 @@ public class GeneratePaths {
         Trajectory.Config configSwitchLScaleR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 7, 100);
 
         //Two Cube Scale
-        Trajectory.Config configScaleLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleLL5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleLLL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleLLL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleLLL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleLLL5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
 
-        Trajectory.Config configScaleRR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
-        Trajectory.Config configScaleRR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleRRR1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleRRR2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleRRR3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleRRR4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
+        Trajectory.Config configScaleRRR5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 12, 8, 100);
 
         //Switch Only
         Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);
@@ -297,17 +301,17 @@ public class GeneratePaths {
         File fileSwitchLScaleR = new File(FILE_ROOT + "switchLScaleR.csv");
 
         //Two Cube Scale
-        File fileScaleLL1 = new File(FILE_ROOT + "scaleLL1.csv");
-        File fileScaleLL2 = new File(FILE_ROOT + "scaleLL2.csv");
-        File fileScaleLL3 = new File(FILE_ROOT + "scaleLL3.csv");
-        File fileScaleLL4 = new File(FILE_ROOT + "scaleLL4.csv");
-        File fileScaleLL5 = new File(FILE_ROOT + "scaleLL5.csv");
+        File fileScaleLLL1 = new File(FILE_ROOT + "scaleLL1.csv");
+        File fileScaleLLL2 = new File(FILE_ROOT + "scaleLL2.csv");
+        File fileScaleLLL3 = new File(FILE_ROOT + "scaleLL3.csv");
+        File fileScaleLLL4 = new File(FILE_ROOT + "scaleLL4.csv");
+        File fileScaleLLL5 = new File(FILE_ROOT + "scaleLL5.csv");
 
-        File fileScaleRR1 = new File(FILE_ROOT + "scaleRR1.csv");
-        File fileScaleRR2 = new File(FILE_ROOT + "scaleRR2.csv");
-        File fileScaleRR3 = new File(FILE_ROOT + "scaleRR3.csv");
-        File fileScaleRR4 = new File(FILE_ROOT + "scaleRR4.csv");
-        File fileScaleRR5 = new File(FILE_ROOT + "scaleRR5.csv");
+        File fileScaleRRR1 = new File(FILE_ROOT + "scaleRR1.csv");
+        File fileScaleRRR2 = new File(FILE_ROOT + "scaleRR2.csv");
+        File fileScaleRRR3 = new File(FILE_ROOT + "scaleRR3.csv");
+        File fileScaleRRR4 = new File(FILE_ROOT + "scaleRR4.csv");
+        File fileScaleRRR5 = new File(FILE_ROOT + "scaleRR5.csv");
 
         //Switch Only
         File fileSwitchL = new File(FILE_ROOT + "switchL.csv");
@@ -344,17 +348,17 @@ public class GeneratePaths {
         trajectorySwitchRScaleR = Pathfinder.generate(pointsSwitchRScaleR, configSwitchRScaleR);//switchRscaleR
 
         //Two Cube Scale
-        trajectoryScaleLL1 = Pathfinder.generate(pointsScaleLL1, configScaleLL1);
-        trajectoryScaleLL2 = Pathfinder.generate(pointsScaleLL2, configScaleLL2);
-        trajectoryScaleLL3 = Pathfinder.generate(pointsScaleLL3, configScaleLL3);
-        trajectoryScaleLL4 = Pathfinder.generate(pointsScaleLL4, configScaleLL4);
-        trajectoryScaleLL5 = Pathfinder.generate(pointsScaleLL5, configScaleLL5);
+        trajectoryScaleLLL1 = Pathfinder.generate(pointsScaleLLL1, configScaleLLL1);
+        trajectoryScaleLLL2 = Pathfinder.generate(pointsScaleLLL2, configScaleLLL2);
+        trajectoryScaleLLL3 = Pathfinder.generate(pointsScaleLLL3, configScaleLLL3);
+        trajectoryScaleLLL4 = Pathfinder.generate(pointsScaleLLL4, configScaleLLL4);
+        trajectoryScaleLLL5 = Pathfinder.generate(pointsScaleLLL5, configScaleLLL5);
 
-        trajectoryScaleRR1 = Pathfinder.generate(pointsScaleRR1, configScaleRR1);
-        trajectoryScaleRR2 = Pathfinder.generate(pointsScaleRR2, configScaleRR2);
-        trajectoryScaleRR3 = Pathfinder.generate(pointsScaleRR3, configScaleRR3);
-        trajectoryScaleRR4 = Pathfinder.generate(pointsScaleRR4, configScaleRR4);
-        trajectoryScaleRR5 = Pathfinder.generate(pointsScaleRR5, configScaleRR5);
+        trajectoryScaleRRR1 = Pathfinder.generate(pointsScaleRRR1, configScaleRRR1);
+        trajectoryScaleRRR2 = Pathfinder.generate(pointsScaleRRR2, configScaleRRR2);
+        trajectoryScaleRRR3 = Pathfinder.generate(pointsScaleRRR3, configScaleRRR3);
+        trajectoryScaleRRR4 = Pathfinder.generate(pointsScaleRRR4, configScaleRRR4);
+        trajectoryScaleRRR5 = Pathfinder.generate(pointsScaleRRR5, configScaleRRR5);
 
         //Switches
         trajectorySwitchL = Pathfinder.generate(pointsSwitchL, configSwitchL);
@@ -391,17 +395,17 @@ public class GeneratePaths {
         Pathfinder.writeToCSV(fileSwitchRScaleR, trajectorySwitchRScaleR);
 
         //Two Cube Scale
-        Pathfinder.writeToCSV(fileScaleLL1, trajectoryScaleLL1);
-        Pathfinder.writeToCSV(fileScaleLL2, trajectoryScaleLL2);
-        Pathfinder.writeToCSV(fileScaleLL3, trajectoryScaleLL3);
-        Pathfinder.writeToCSV(fileScaleLL4, trajectoryScaleLL4);
-        Pathfinder.writeToCSV(fileScaleLL5, trajectoryScaleLL5);
+        Pathfinder.writeToCSV(fileScaleLLL1, trajectoryScaleLLL1);
+        Pathfinder.writeToCSV(fileScaleLLL2, trajectoryScaleLLL2);
+        Pathfinder.writeToCSV(fileScaleLLL3, trajectoryScaleLLL3);
+        Pathfinder.writeToCSV(fileScaleLLL4, trajectoryScaleLLL4);
+        Pathfinder.writeToCSV(fileScaleLLL5, trajectoryScaleLLL5);
 
-        Pathfinder.writeToCSV(fileScaleRR1, trajectoryScaleRR1);
-        Pathfinder.writeToCSV(fileScaleRR2, trajectoryScaleRR2);
-        Pathfinder.writeToCSV(fileScaleRR3, trajectoryScaleRR3);
-        Pathfinder.writeToCSV(fileScaleRR4, trajectoryScaleRR4);
-        Pathfinder.writeToCSV(fileScaleRR5, trajectoryScaleRR5);
+        Pathfinder.writeToCSV(fileScaleRRR1, trajectoryScaleRRR1);
+        Pathfinder.writeToCSV(fileScaleRRR2, trajectoryScaleRRR2);
+        Pathfinder.writeToCSV(fileScaleRRR3, trajectoryScaleRRR3);
+        Pathfinder.writeToCSV(fileScaleRRR4, trajectoryScaleRRR4);
+        Pathfinder.writeToCSV(fileScaleRRR5, trajectoryScaleRRR5);
 
         //Switch Profiles
         Pathfinder.writeToCSV(fileSwitchL, trajectorySwitchL);

@@ -31,6 +31,7 @@ public class AutonControl {
 	{
 		routines.clear();
 		routines.add(new SwitchThreeCube());
+		routines.add(new ThreeCubeScale());
 		routines.add(new Test());
 		routines.add(new TwoCubeRight());
 		routines.add(new Scale());

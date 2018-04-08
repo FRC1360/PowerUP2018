@@ -28,6 +28,7 @@ public class PathfindFromFile extends AutonRoutine{
 	private EncoderFollower right;
 
 	private int direction = 1; //1=forward; -1=backward;
+	private double subtractFromNavx = 0;
 
 	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
@@ -84,6 +85,17 @@ public class PathfindFromFile extends AutonRoutine{
 		return this;
 	}
 
+	public PathfindFromFile startAndGoReverse() {
+		this.direction = -1;
+		this.subtractFromNavx = 180;
+		return this;
+	}
+
+	public PathfindFromFile startReverse() {
+		this.subtractFromNavx = 180;
+		return this;
+	}
+
 	public void setWaypoint(double position, String name) {
 		new WaypointComponent(position).runNow(name);
 	}
@@ -130,7 +142,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
 
-				double yaw = direction > 0 ? -sensorInput.getAHRSYaw() : -(sensorInput.getAHRSYaw()+180);
+				double yaw = direction > 0 ? -(sensorInput.getAHRSYaw()+180) : -(sensorInput.getAHRSYaw()+(180-subtractFromNavx));
 				turn = turnPID.calculate(nearAngle(direction > 0 ? Pathfinder.r2d(left.getHeading()) : Pathfinder.r2d(left.getHeading()), yaw), yaw);
 				//turn = 0;
 

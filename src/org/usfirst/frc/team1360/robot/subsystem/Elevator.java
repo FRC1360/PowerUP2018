@@ -91,24 +91,24 @@ public final class Elevator implements ElevatorProvider {
 			}
 		},
 		
-		CLIMB {
-			@Override
-			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
-				while (sensorInput.getElevatorEncoder() > 25) {
-					robotOutput.setElevatorMotor(-1);
-					Thread.sleep(10);
-				}
-				
-				robotOutput.setElevatorMotor(0);
-				context.nextState(MANUAL);
-			}
-		},
-		
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				Singleton.get(RobotOutputProvider.class).setElevatorMotor(-0.3);
+				int holdTarget = sensorInput.getElevatorEncoder();
+				if(sensorInput.getArmEncoder() < Arm.POS_TOP-200)
+					holdTarget = POS_TOP;
+
+				OrbitPID elevatorPID = new OrbitPID(0.01, 0.0, 0.0);
+				matchLogger.writeClean("ELEVATOR TARGET == " + holdTarget);
+
+				while(true)
+				{
+					double applyPower = elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder());
+					if (applyPower > 0.2) applyPower = 0.2;
+					if (applyPower < -0.2) applyPower = -0.2;
+					elevator.safety(applyPower, true);
+					Thread.sleep(10);
+				}
 			}
 		};
 		

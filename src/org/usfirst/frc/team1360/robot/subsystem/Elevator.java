@@ -31,15 +31,17 @@ public final class Elevator implements ElevatorProvider {
 		UP_TO_TARGET {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-				
-				matchLogger.write("Lift up to target: " + (Integer) context.getArg());
-				
-				if (!(context.getArg() instanceof Integer)) {
+
+				if (!(context.getArg() instanceof targetObject)) {
+					matchLogger.write("No target provided to ElevatorState.UP_TO_TARGET!");
 					context.nextState(IDLE);
 				}
-				int target = (Integer) context.getArg();
+				matchLogger.write("Lifting elevator up to target");
 
-				while(elevator.dampen(target, 0.9, true)) Thread.sleep(10);;
+				int target = ((targetObject) context.getArg()).target;
+				double power = ((targetObject) context.getArg()).power;
+
+				while(elevator.dampen(target, power, true)) Thread.sleep(10);;
 				
 				context.nextState(HOLD);
 			}
@@ -50,13 +52,19 @@ public final class Elevator implements ElevatorProvider {
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
 				
-				if (!(context.getArg() instanceof Integer)) {
+				if (!(context.getArg() instanceof targetObject)) {
 					matchLogger.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
 					context.nextState(IDLE);
 				}
-				int target = (Integer) context.getArg();
+				matchLogger.write("Dropping elevator down to target");
 
-				while(elevator.dampen(target, -1, false)) Thread.sleep(10);
+				int target = ((targetObject) context.getArg()).target;
+				double power = ((targetObject) context.getArg()).power;
+
+				if (power < 0)
+					power = -power;
+
+				while(elevator.dampen(target, -power, false)) Thread.sleep(10);
 				
 				context.nextState(HOLD);
 			}
@@ -241,16 +249,18 @@ public final class Elevator implements ElevatorProvider {
 		handleElevator(targetVoltage, DELTA_VBUS);
 	}
 
-
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
-	@Override
-	public boolean goToTarget(int target) {
-		// TODO Auto-generated method stub
+	public boolean goToTarget(int target, double speed) {
+
+		targetObject targ = new targetObject();
+		targ.power = speed;
+		targ.target = target;
+
 		if (sensorInput.getElevatorEncoder() > target) {
-			downToTarget(target);
+			downToTarget(targ);
 		}
 		else if (sensorInput.getElevatorEncoder() <= target) {
-			upToTarget(target);
+			upToTarget(targ);
 		}
 		else {
 			try {
@@ -264,7 +274,12 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	@Override
-	public boolean upToTarget(int target) {
+	public boolean goToTarget(int target){
+		return this.goToTarget(target, 1.0);
+	}
+
+	@Override
+	public boolean upToTarget(targetObject target) {
 		try {
 			stateMachine.setState(ElevatorState.UP_TO_TARGET, target);
 		} catch (InterruptedException e) {
@@ -274,7 +289,7 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	@Override
-	public boolean downToTarget(int target) {
+	public boolean downToTarget(targetObject target) {
 		try {
 			stateMachine.setState(ElevatorState.DOWN_TO_TARGET, target);
 		} catch (InterruptedException e) {
@@ -285,12 +300,12 @@ public final class Elevator implements ElevatorProvider {
 
 	@Override
 	public boolean goToTop() {
-		return upToTarget(POS_TOP);
+		return goToTarget(POS_TOP);
 	}
 
 	@Override
 	public boolean goToBottom() {
-		return downToTarget(POS_BOTTOM);
+		return goToTarget(POS_BOTTOM);
 	}
 
 	@Override
@@ -345,7 +360,8 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean climb() {
 		try {
-			stateMachine.setState(ElevatorState.CLIMB_HOLD);
+			if(stateMachine.getState() != ElevatorState.CLIMB_HOLD)
+				stateMachine.setState(ElevatorState.CLIMB_HOLD);
 		} catch (InterruptedException e) {
 			return false;
 		}

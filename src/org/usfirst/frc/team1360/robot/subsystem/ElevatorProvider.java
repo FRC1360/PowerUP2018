@@ -17,11 +17,17 @@ public interface ElevatorProvider {
 	public static final int POS_CLIMB = ONE_FOOT * 2; // how far above the bottom the elevator should be when the climb is complete
 	
 	public static final boolean IS_COMP_BOT = false;
+
+	static class targetObject{
+		double power;
+		int target;
+	}
 	
 	void safety(double power, boolean override);
 	boolean goToTarget(int target);
-	boolean upToTarget(int target);
-	boolean downToTarget(int target);
+
+	boolean upToTarget(targetObject target);
+	boolean downToTarget(targetObject target);
 	boolean goToTop();
 	boolean goToBottom();
 	boolean setManualSpeed(double speed, boolean override);

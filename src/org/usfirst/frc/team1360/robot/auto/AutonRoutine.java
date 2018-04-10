@@ -162,8 +162,9 @@ public abstract class AutonRoutine extends Thread {
 		map.get(name.toLowerCase()).kill();
 	}
 	
-	public static void waitFor(String name, long timeout) throws InterruptedException
+	public static void waitFor(String name) throws InterruptedException
 	{
+		long timeout = 0;
 		System.out.println("Waiting for " + name);
 		AutonRoutine routine = map.get(name.toLowerCase());
 		synchronized (routine)

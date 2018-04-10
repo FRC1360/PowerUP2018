@@ -26,13 +26,13 @@ public class TwoCubeRight extends AutonRoutine{
 		if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
 			PathfindFromFile path = new PathfindFromFile(10000, "switchLScaleL");
 			path.runNow("To Scale");
-			waitFor("To Scale", 0);
+			waitFor("To Scale");
 			
 			new FaceAngle(2000, 20).runNow("spin");
 			
 			new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runUntilFinish();
 			
-			waitFor("spin", 0);
+			waitFor("spin");
 			arm.goToPosition(-30);
 			
 			intake.setClamp(IntakeProvider.FREE);
@@ -54,7 +54,7 @@ public class TwoCubeRight extends AutonRoutine{
 			
 			PathfindFromFile switch1 = new PathfindFromFile(10000, "switchLScaleR");
 			switch1.runNow("Switch 1");
-			waitFor("Switch 1", 0);
+			waitFor("Switch 1");
 			
 			new ElevatorToTarget(2000, (int) (elevator.ONE_FOOT*2)).runUntilFinish();
 			robotOutput.setClamp(intake.FREE);
@@ -72,8 +72,8 @@ public class TwoCubeRight extends AutonRoutine{
 			//the practice bot can't go higher than about 1800
 			new ElevatorToTarget(1500, 1800).runAfter("Start Elevator", "Elevator Scale");
             arm.goToPosition(arm.POS_BOTTOM+200);		
-			waitFor("To Scale", 0);
-			waitFor("Elevator Scale", 0);
+			waitFor("To Scale");
+			waitFor("Elevator Scale");
 			robotOutput.tankDrive(0, 0);
 						
 			intake.setIntake(1);
@@ -92,8 +92,8 @@ public class TwoCubeRight extends AutonRoutine{
             intake.setClamp(intake.FREE);
 			PathfindFromFile scalePath2 = new PathfindFromFile(10000, "scaleRR2");
 			scalePath2.runNow("To Scale2");
-			waitFor("Elevator down", 0);
-			waitFor("To Scale2", 0);
+			waitFor("Elevator down");
+			waitFor("To Scale2");
 			robotOutput.tankDrive(0, 0);
 
 			new ElevatorToTarget(1500, 1800).runNow("Elevator Scale");
@@ -102,7 +102,7 @@ public class TwoCubeRight extends AutonRoutine{
 			
 			PathfindFromFile scalePath3 = new PathfindFromFile(10000, "scaleRR3");
 			scalePath3.runNow("To Scale3");
-			waitFor("To Scale3", 0);
+			waitFor("To Scale3");
 			
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);
@@ -124,7 +124,7 @@ public class TwoCubeRight extends AutonRoutine{
 			switch1.runNow("Switch 1");
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			arm.goToPosition(arm.POS_BOTTOM);
-			waitFor("Switch 1", 0);
+			waitFor("Switch 1");
 			new FaceAngle(2000, -90).runUntilFinish();
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);

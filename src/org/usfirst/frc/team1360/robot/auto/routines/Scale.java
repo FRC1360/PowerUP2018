@@ -23,13 +23,13 @@ public class Scale extends AutonRoutine {
         if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
             PathfindFromFile path = new PathfindFromFile(10000, "switchLScaleL");
             path.runNow("To Scale");
-            waitFor("To Scale", 0);
+            waitFor("To Scale");
 
             new FaceAngle(2000, 20).runNow("spin");
 
             new ElevatorToTarget(2000, ElevatorProvider.SCALE_HIGH-50).runUntilFinish();
 
-            waitFor("spin", 0);
+            waitFor("spin");
             arm.goToPosition(-30);
 
             intake.setClamp(IntakeProvider.FREE);
@@ -49,10 +49,10 @@ public class Scale extends AutonRoutine {
 //			new ElevatorToTarget(2000, ElevatorProvider.ONE_FOOT*2).runNow("Elevator Scale");
             elevator.safety(0.15, false);
 
-            waitFor("Calibrate", 0);
+            waitFor("Calibrate");
             arm.goToPosition(-20);
 
-            waitFor("To Scale", 0);
+            waitFor("To Scale");
             robotOutput.tankDrive(0, 0);
 
             //waitFor("Elevator Scale", 0);

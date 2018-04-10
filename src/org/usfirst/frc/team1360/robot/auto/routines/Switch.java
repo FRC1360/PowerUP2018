@@ -32,7 +32,7 @@ public class Switch extends AutonRoutine{
 			
 			new ElevatorToTarget(2000, elevator.ONE_FOOT*3).runAfter("Start Elevator", "Elevator Switch");
 
-			waitFor("To Left Switch", 0);
+			waitFor("To Left Switch");
 			robotOutput.tankDrive(0, 0);
 			
 			new DriveToInch(750, 6, 0, 4, false, false).runUntilFinish();
@@ -51,13 +51,13 @@ public class Switch extends AutonRoutine{
 			PathfindFromFile path = new PathfindFromFile(10000, "switchR");
 			path.runNow("To Right Switch");
 			
-			waitFor("Calibrate", 0);
+			waitFor("Calibrate");
 			arm.goToPosition(-40);
 			
 			new ElevatorToTarget(2000, elevator.ONE_FOOT*2).runNow("Elevator");
 			
-			waitFor("Elevator", 0);
-			waitFor("To Right Switch", 0);
+			waitFor("Elevator");
+			waitFor("To Right Switch");
 			robotOutput.tankDrive(0, 0);
 	
 			intake.setClamp(intake.FREE);

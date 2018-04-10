@@ -92,7 +92,7 @@ public class SwitchThreeCube extends AutonRoutine {
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("switchL2", 0);
 
-            new FaceAngle(1200, 30, 2)
+            new FaceAngle(800, 30, 2)
                     .setLowGear()
                     .runNow("spin");
 
@@ -110,7 +110,7 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setClamp(intake.CLOSED);
             arm.goToPosition(arm.POS_BOTTOM);
 
-            new FaceAngle(1200, -30, 5)
+            new FaceAngle(1500, -30, 5)
                     .setLowGear()
                     .runNow("spin2");
             waitFor("spin2", 0);
@@ -123,11 +123,13 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2", 0);
 
-            intake.setClamp(intake.FREE);
             intake.setIntake(0.75);
+            intake.setClamp(intake.FREE);
+
 
             waitFor("switchL5", 0);
             intake.setIntake(0);
+
 
             //Third cube
             pathL6.setWaypoint(0.5, "Start Elevator cube 2");
@@ -138,7 +140,7 @@ public class SwitchThreeCube extends AutonRoutine {
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("pathL6", 0);
 
-            new FaceAngle(800, 45, 2)
+            new FaceAngle(1500, 45, 2)
                     .setLowGear()
                     .runUntilFinish();
 
@@ -151,7 +153,7 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            new FaceAngle(1200, 25, 5).setLowGear().runNow("spin4");
+            new FaceAngle(1500, -25, 5).setLowGear().runNow("spin4");
             waitFor("spin4", 0);
 
             elevator.goToTarget(elevator.ONE_FOOT*3);
@@ -179,7 +181,6 @@ public class SwitchThreeCube extends AutonRoutine {
             robotOutput.setIntake(0.75);
 
             waitFor("To Right Switch", 0);
-
             intake.setIntake(0);
 
             //Second cube
@@ -187,9 +188,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             pathR2.runNow("switchR2");
             waitFor("Start elevator", 0);
-
             elevator.goToTarget(elevator.POS_BOTTOM);
-
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("switchR2", 0);
 

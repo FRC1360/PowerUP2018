@@ -370,7 +370,7 @@ public final class Elevator implements ElevatorProvider {
 	
 	@Override
 	public boolean isClimbing() {
-		return stateMachine.getState() == ElevatorState.CLIMB || stateMachine.getState() == ElevatorState.CLIMB_HOLD;
+		return stateMachine.getState() == ElevatorState.CLIMB_HOLD;
 	}
 	
 	@Override

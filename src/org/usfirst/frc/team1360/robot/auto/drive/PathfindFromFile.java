@@ -142,7 +142,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 				//turn = 0.0375 * angleDifference + (0.0025 * (angleDifference / 0.05));
 
-				double yaw = direction > 0 ? -(sensorInput.getAHRSYaw()+180) : -(sensorInput.getAHRSYaw()+(180-subtractFromNavx));
+				double yaw = direction > 0 ? -sensorInput.getAHRSYaw()+subtractFromNavx : -(sensorInput.getAHRSYaw()+(180-subtractFromNavx));
 				turn = turnPID.calculate(nearAngle(direction > 0 ? Pathfinder.r2d(left.getHeading()) : Pathfinder.r2d(left.getHeading()), yaw), yaw);
 				//turn = 0;
 

@@ -41,6 +41,7 @@ public class ThreeCubeScale extends AutonRoutine{
         }
         else { //R
         	//Start of first cube
+			scale
 			scalePathR1.runUntilFinish();
 
 			elevator.goToTarget(elevator.POS_TOP);

@@ -41,6 +41,8 @@ public class ThreeCubeScale extends AutonRoutine{
         }
         else { //R
         	//Start of first cube
+			robotOutput.shiftGear(true);
+
 			scalePathR1.setWaypoint(20, "start elevator 1");
 			scalePathR1.runNow("Scale Path 1");
 
@@ -56,6 +58,9 @@ public class ThreeCubeScale extends AutonRoutine{
 			arm.goToPosition(arm.POS_BOTTOM);
 			Thread.sleep(500);
 			elevator.goToBottom();
+
+
+			/*
 
 			//2nd Cube
 			intake.setIntake(-1);
@@ -105,6 +110,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			Thread.sleep(500);
 			elevator.goToBottom();
 			*/
+			Thread.sleep(2000);
 
         }
 

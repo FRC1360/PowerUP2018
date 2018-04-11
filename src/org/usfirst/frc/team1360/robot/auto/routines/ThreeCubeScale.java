@@ -20,6 +20,10 @@ public class ThreeCubeScale extends AutonRoutine{
 	private PathfindFromFile scalePathR5;
 
 	private PathfindFromFile scalePathL1;
+	private PathfindFromFile scalePathL2;
+	private PathfindFromFile scalePathL3;
+	private PathfindFromFile scalePathL4;
+	private PathfindFromFile scalePathL5;
 
     public ThreeCubeScale() {
     	super("Three Cube Scale", 0);
@@ -31,6 +35,10 @@ public class ThreeCubeScale extends AutonRoutine{
 		scalePathR5 = new PathfindFromFile(10000, "scaleRRR5").startAndGoReverse();
 
 		scalePathL1 = new PathfindFromFile(10000, "scaleLLL1").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL2 = new PathfindFromFile(10000, "scaleLLL2").cutOffFeet(0.1).startReverse();
+		scalePathL3 = new PathfindFromFile(10000, "scaleLLL3").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL4 = new PathfindFromFile(10000, "scaleLLL4").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL5 = new PathfindFromFile(10000, "scaleLLL5").cutOffFeet(0.1).startAndGoReverse();
     }
 
     @Override
@@ -42,6 +50,8 @@ public class ThreeCubeScale extends AutonRoutine{
         	robotOutput.shiftGear(false);
 
         	scalePathL1.runUntilFinish();
+
+        	scalePathL2.runUntilFinish();
 
         	/*
         	scalePathL1.setWaypoint(20, "Elevator Up");

@@ -148,17 +148,9 @@ public class PathfindFromFile extends AutonRoutine{
 
 				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
 
-//				if (turn > 0)
-//					l *= Math.exp(-turn);
-//				else
-//					r *= Math.exp(turn);
 				l -= turn;
 				r += turn;
 
-//				if (turn < 0 && l < 0)
-//					l = 0;
-//				if (turn > 0 && r < 0)
-//					r = 0;
 
 				if (Math.abs(l) > 1 || Math.abs(r) > 1)
 				{

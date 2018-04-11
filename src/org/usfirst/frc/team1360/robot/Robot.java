@@ -254,6 +254,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		
 		SmartDashboard.putNumber("VEL RIGHT", sensorInput.getRightEncoderVelocity());
+
+		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());

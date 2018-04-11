@@ -33,16 +33,20 @@ public class Arm implements ArmProvider{
 				
 				int target = (Integer) context.getArg();
 				
-				while(sensorInput.getArmEncoder() > target)	{
+				while(sensorInput.getArmEncoder() < target)	{
+					arm.safety(-1.0);
+					Thread.sleep(10);
+					/*
 					int pos = sensorInput.getArmEncoder();
-					double vTarget = 70 * (Math.exp(target - pos) - 1);
+					double vTarget = 70 * (Math.exp(pos - target) - 1);
 					arm.safety(0.005 * vTarget + 0.0025 * (vTarget - sensorInput.getArmEncoderVelocity()), true);
 					matchLogger.write("Arm Currently at: " + pos);
 					Thread.sleep(10);
+					*/
 				}
 
 				
-				context.nextState(HOLD);
+				context.nextState(HOLD, target);
 			}
 			
 		},
@@ -56,29 +60,22 @@ public class Arm implements ArmProvider{
 				
 				int target = (Integer) context.getArg();
 				
-				while(sensorInput.getArmEncoder() < target)	{
+				while(sensorInput.getArmEncoder() > target)	{
+					arm.safety(1.0);
+					Thread.sleep(10);
+
+					/*
 					int pos = sensorInput.getArmEncoder();
-					double vTarget = 70 * (1 - Math.exp(pos - target));
+					double vTarget = 70 * (1 - Math.exp(target - pos));
 					arm.safety(0.005 * vTarget + 0.0025 * (vTarget - sensorInput.getArmEncoderVelocity()));
 					matchLogger.write("Arm Currently at: " + pos);
 					Thread.sleep(10);
+					*/
 				}
 				matchLogger.write(String.format("Arm reached target %d | %d", target, sensorInput.getArmEncoder()));
 				
-				context.nextState(HOLD);
+				context.nextState(HOLD, target);
 			}
-		},
-		UP_TO_TOP{
-			@Override
-			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
-				while(!sensorInput.getArmSwitch()) {
-					arm.safety(0.75);
-					Thread.sleep(10);
-				}
-				sensorInput.resetArmEncoder();
-				
-				context.nextState(HOLD);
-			}	
 		},
 		MANUAL{
 			@Override
@@ -94,8 +91,15 @@ public class Arm implements ArmProvider{
 		HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ArmState> context) throws InterruptedException {
+				int target = context.getArg() instanceof Integer ? (int) context.getArg() : sensorInput.getArmEncoder();
 				while (true) {
-					arm.safety(0.05);
+					int enc = sensorInput.getArmEncoder();
+					if (enc < target + 20)
+						arm.safety(-0.1);
+					else if (enc > target - 20)
+						arm.safety(0.1);
+					else
+						arm.safety(0.05);
 					Thread.sleep(10);
 				}
 			}
@@ -176,7 +180,7 @@ public class Arm implements ArmProvider{
 	@Override
 	public boolean goToPosition(int position) {
 		try {
-			if(sensorInput.getArmEncoder() > position) {
+			if(sensorInput.getArmEncoder() < position) {
 				stateMachine.setState(ArmState.DOWN_TO_TARGET, position);
 			}
 			else {
@@ -192,17 +196,7 @@ public class Arm implements ArmProvider{
 	
 	@Override
 	public boolean goToTop() {
-		try {
-			stateMachine.setState(ArmState.UP_TO_TOP);
-			return true;
-		} catch(InterruptedException e) {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean goToMiddle() {
-		return goToPosition(POS_MIDDLE);
+		return goToPosition(POS_TOP);
 	}
 
 	@Override
@@ -224,34 +218,14 @@ public class Arm implements ArmProvider{
 		}
 		else
 		{
-			if(sensorInput.getArmSwitch())
-				sensorInput.resetArmEncoder();
-			if(sensorInput.getArmEncoderVelocity() <= -80) {
-				multiplier = 0.2;
-			}
-			
-			if(sensorInput.getArmEncoderVelocity() <= -30) {
-				multiplier = 0.7;
-			}
-			
-			if (System.currentTimeMillis() < cooldown) {
+
+
+			if(power > 0 && sensorInput.getArmEncoder() <= (sensorInput.getElevatorEncoder() > Elevator.POS_TOP-100 ? POS_BEHIND : POS_TOP))
 				robotOutput.setArm(0);
-				return;
-			}
-			
-			if(sensorInput.getArmEncoder() <= POS_BOTTOM) {
-				multiplier = 1;
-			}
-			
-			if(power > 0 && sensorInput.getArmSwitch())
-				robotOutput.setArm(0);
-			else if(sensorInput.getArmEncoder() <= POS_BOTTOM && power <= 0) {
-				robotOutput.setArm(0);
-			}
-			else if(sensorInput.getElevatorEncoder() > Elevator.ONE_FOOT*1.25 && sensorInput.getElevatorEncoder() < Elevator.ONE_FOOT*4 && sensorInput.getArmEncoder() >= -5 && power > 0)
+			else if(sensorInput.getArmEncoder() >= POS_BOTTOM && power <= 0)
 				robotOutput.setArm(0);
 			else
-				robotOutput.setArm(power * multiplier);
+				robotOutput.setArm(power);
 		}
 	}
 	

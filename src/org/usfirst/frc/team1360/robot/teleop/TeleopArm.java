@@ -47,6 +47,8 @@ public final class TeleopArm implements TeleopComponent {
 	@Override
 	public void disable() {
 		arm.idle();
+		overrideHeld = false;
+		overrideToggle = false;
 	}
 
 }

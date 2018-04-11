@@ -64,34 +64,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
 
 
-
-    public static Trajectory trajectorySwitchLScaleL;
-    public static Trajectory trajectorySwitchRScaleR;
-    public static Trajectory trajectorySwitchRScaleL1;
-    public static Trajectory trajectorySwitchRScaleL2;
-    public static Trajectory trajectorySwitchLScaleR;
-    public static Trajectory trajectorySwitchL;
-    public static Trajectory trajectorySwitchR;
-
-    public static Trajectory trajectorySwitchL2;
-    public static Trajectory trajectorySwitchL3;
-    public static Trajectory trajectorySwitchL4;
-    public static Trajectory trajectorySwitchL5;
-    public static Trajectory trajectorySwitchL6;
-    public static Trajectory trajectorySwitchL7;
-    public static Trajectory trajectorySwitchL8;
-    public static Trajectory trajectorySwitchL9;
-
-    public static Trajectory trajectorySwitchR2;
-    public static Trajectory trajectorySwitchR3;
-    public static Trajectory trajectorySwitchR4;
-    public static Trajectory trajectorySwitchR5;
-    public static Trajectory trajectorySwitchR6;
-    public static Trajectory trajectorySwitchR7;
-    public static Trajectory trajectorySwitchR8;
-    public static Trajectory trajectorySwitchR9;
-
-
+    public static boolean GENERATE = false;
     public static boolean csvLoaded = false;
 
 	private String FILE_ROOT = "/home/lvuser/";
@@ -149,79 +122,14 @@ public class Robot extends TimedRobot {
 		 * 
 		 */
 
-		//FILES
-		//TwoCubes
-		File fileSwitchLScaleL = new File(FILE_ROOT + "switchLScaleL.csv");
-		File fileSwitchRScaleR = new File(FILE_ROOT + "switchRScaleR.csv");
-		File fileSwitchRScaleL1 = new File(FILE_ROOT + "switchRScaleL1.csv");
-		File fileSwitchRScaleL2 = new File(FILE_ROOT + "switchRScaleL2.csv");
-		File fileSwitchLScaleR = new File(FILE_ROOT + "switchLScaleR.csv");
-		
-		//Switch Only
-		File fileSwitchL = new File(FILE_ROOT + "switchL.csv");
-		File fileSwitchR = new File(FILE_ROOT + "switchR.csv");
+		if(GENERATE) {
+			GeneratePaths.generateScaleSwitchPaths("/home/lvuser/");
+			GeneratePaths.generateSwitchPaths("/home/lvuser/");
+			GeneratePaths.generateScalePaths("/home/lvuser/");
+		}
 
-        File fileSwitchL2 = new File(FILE_ROOT + "switchL2.csv");
-        File fileSwitchL3 = new File(FILE_ROOT + "switchL3.csv");
-        File fileSwitchL4 = new File(FILE_ROOT + "switchL4.csv");
-        File fileSwitchL5 = new File(FILE_ROOT + "switchL5.csv");
-
-        File fileSwitchL6 = new File(FILE_ROOT + "switchL6.csv");
-        File fileSwitchL7 = new File(FILE_ROOT + "switchL7.csv");
-        File fileSwitchL8 = new File(FILE_ROOT + "switchL8.csv");
-        File fileSwitchL9 = new File(FILE_ROOT + "switchL9.csv");
-
-
-        File fileSwitchR2 = new File(FILE_ROOT + "switchR2.csv");
-        File fileSwitchR3 = new File(FILE_ROOT + "switchR3.csv");
-        File fileSwitchR4 = new File(FILE_ROOT + "switchR4.csv");
-        File fileSwitchR5 = new File(FILE_ROOT + "switchR5.csv");
-
-        File fileSwitchR6 = new File(FILE_ROOT + "switchR6.csv");
-        File fileSwitchR7 = new File(FILE_ROOT + "switchR7.csv");
-        File fileSwitchR8 = new File(FILE_ROOT + "switchR8.csv");
-        File fileSwitchR9 = new File(FILE_ROOT + "switchR9.csv");
-
-		
-		if(fileSwitchLScaleL.exists()) {
-		    trajectorySwitchLScaleL = Pathfinder.readFromCSV(fileSwitchLScaleL);
-		    trajectorySwitchRScaleL1 = Pathfinder.readFromCSV(fileSwitchRScaleL1);
-		    trajectorySwitchRScaleL2 = Pathfinder.readFromCSV(fileSwitchRScaleL2);
-		    trajectorySwitchLScaleR = Pathfinder.readFromCSV(fileSwitchLScaleR);
-		    trajectorySwitchRScaleR = Pathfinder.readFromCSV(fileSwitchRScaleR);
-
-		    //Switch Profiles
-            trajectorySwitchL = Pathfinder.readFromCSV(fileSwitchL);
-            trajectorySwitchR = Pathfinder.readFromCSV(fileSwitchR);
-
-            trajectorySwitchL2 = Pathfinder.readFromCSV(fileSwitchL2);
-            trajectorySwitchL3 = Pathfinder.readFromCSV(fileSwitchL3);
-            trajectorySwitchL4 = Pathfinder.readFromCSV(fileSwitchL4);
-            trajectorySwitchL5 = Pathfinder.readFromCSV(fileSwitchL5);
-
-            trajectorySwitchL6 = Pathfinder.readFromCSV(fileSwitchL6);
-            trajectorySwitchL7 = Pathfinder.readFromCSV(fileSwitchL7);
-            trajectorySwitchL8 = Pathfinder.readFromCSV(fileSwitchL8);
-            trajectorySwitchL9 = Pathfinder.readFromCSV(fileSwitchL9);
-
-
-            trajectorySwitchR2 = Pathfinder.readFromCSV(fileSwitchR2);
-            trajectorySwitchR3 = Pathfinder.readFromCSV(fileSwitchR3);
-            trajectorySwitchR4 = Pathfinder.readFromCSV(fileSwitchR4);
-            trajectorySwitchR5 = Pathfinder.readFromCSV(fileSwitchR5);
-
-            trajectorySwitchR6 = Pathfinder.readFromCSV(fileSwitchR6);
-            trajectorySwitchR7 = Pathfinder.readFromCSV(fileSwitchR7);
-            trajectorySwitchR8 = Pathfinder.readFromCSV(fileSwitchR8);
-            trajectorySwitchR9 = Pathfinder.readFromCSV(fileSwitchR9);
-
-            csvLoaded = true;
-
-            matchLog.writeClean("File Loading Finished");
-        }
-        else{
-		    matchLog.writeClean("Failed to load files");
-        }
+		if(new File("/home/lvuser/switchL.csv").exists())
+			csvLoaded = true;
 	}
 	
 	
@@ -317,8 +225,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
-//		SmartDashboard.putNumber("Elevator current", sensorInput.getElevatorCurrent());
-//		matchLog.write("Elevator current:" + sensorInput.getElevatorCurrent());
+        SmartDashboard.putNumber("ABS ENC", sensorInput.getAbsoluteEncoder());
+
 	}
 	
 	@Override
@@ -347,6 +255,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		
 		SmartDashboard.putNumber("VEL RIGHT", sensorInput.getRightEncoderVelocity());
+
+		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
@@ -360,6 +270,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
+
+		SmartDashboard.putNumber("ABS ENC", sensorInput.getAbsoluteEncoder());
 	}
 
 	/**

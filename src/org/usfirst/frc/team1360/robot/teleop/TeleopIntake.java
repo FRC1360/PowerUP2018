@@ -36,7 +36,7 @@ public class TeleopIntake implements TeleopComponent {
 	@Override
 	public void disable() {
 		// TODO Auto-generated method stub
-		intake.setClamp(intake.FREE);
+		intake.setClamp(intake.CLOSED);
 		intake.setIntake(0);
 	}
 

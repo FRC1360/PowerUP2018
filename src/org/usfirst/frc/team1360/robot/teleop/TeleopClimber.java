@@ -15,12 +15,12 @@ public class TeleopClimber implements TeleopComponent {
 	private HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
 	
-	private boolean climbPressed = false;
-	private boolean climbLast = false;
-	private boolean climbValue = false;
+
+	private boolean barLast = false;
+	private boolean barValue = false;
 	private boolean climberLast = false;
-	private boolean holdClimb = false;
-	private long timer = 0;
+	private boolean climbValue = false;
+
 	
 	@Override
 	public void calculate() {
@@ -30,45 +30,21 @@ public class TeleopClimber implements TeleopComponent {
 		boolean climbRaw = humanInput.getClimbRaw();
 	
 		if(!climberLast && climb) {
-			climbPressed = !climbPressed;
-		}
-		
-		if(climbPressed) {
-			
-			if(sensorInput.getElevatorEncoder() > 300 && !elevator.isMovingToTarget())
-				elevator.safety(-1.0, true);
-			if(sensorInput.getElevatorEncoder() <= 350) {
-				elevator.startManual();
-				elevator.setIdle();
-				climber.setBar(true);
-				
-				if(timer == 0)
-					timer = System.currentTimeMillis();
-				
-				if(System.currentTimeMillis() - timer > 1000) {
-					elevator.setManualSpeed(-0.75, true);
-				}
-				
-				if(sensorInput.getArmEncoder() <= -45) {
-					arm.goToTop();
-					holdClimb = true;
-				}
-			}
-			
-			if(sensorInput.getArmEncoder() > -45 && !arm.movingToPosition() && !holdClimb) {
-				arm.goToPosition(-50);
-			}
-			
-			
-			
-		}
-		
-//		climber.setBar(climbRaw);
-		if (climbRaw && !climbLast) {
 			climbValue = !climbValue;
 		}
-		climbLast = climbRaw;
+
+		if (climbRaw && !barLast) {
+			barValue = !barValue;
+		}
+
+		
 		climber.setBar(climbValue);
+
+		if(climbValue) {
+			elevator.climb();
+		}
+
+		barLast = climbRaw;
 		climberLast = climb;
 		
 	}
@@ -79,9 +55,8 @@ public class TeleopClimber implements TeleopComponent {
 		climber.setBar(false);
 		
 		climberLast = false;
-		climbPressed = false;
-		holdClimb = false;
-		timer = 0;
+		barLast = false;
+		climbValue = false;
 	}
 
 }

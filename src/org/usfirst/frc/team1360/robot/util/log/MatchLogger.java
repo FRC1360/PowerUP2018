@@ -93,10 +93,10 @@ public class MatchLogger implements MatchLogProvider {
 		
 		file.println("PCM Blacklist: " + Integer.toString(SolenoidJNI.getPCMSolenoidBlackList(0)));
 
-		file.println("PDP Report");
-		file.println("PDP Battery Voltage: " + PDPJNI.getPDPTotalCurrent(0));
-		file.println("PDP Current Draw: " + PDPJNI.getPDPTotalCurrent(0));
-		file.println("PDP Temperature: " + PDPJNI.getPDPTemperature(0));
+//		file.println("PDP Report");
+//		file.println("PDP Battery Voltage: " + PDPJNI.getPDPTotalCurrent(0));
+//		file.println("PDP Current Draw: " + PDPJNI.getPDPTotalCurrent(0));
+//		file.println("PDP Temperature: " + PDPJNI.getPDPTemperature(0));
 		
 		file.println("----------STARTING ROBOT LOG----------");
 		file.flush();

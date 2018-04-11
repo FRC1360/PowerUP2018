@@ -18,19 +18,21 @@ public class Switch extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		new Calibrate().runNow("Calibrate");
+		//new Calibrate().runNow("Calibrate");
 		
 		if(fms.plateLeft(0)) {
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchL);
+			PathfindFromFile path = new PathfindFromFile(10000, "switchL");
+			path.setReverse();
+
 			path.runNow("To Left Switch");
 			path.setWaypoint(7, "Start Elevator");
 			
-			waitFor("Calibrate", 0);
-			arm.goToPosition(-40);
+			//waitFor("Calibrate", 0);
+			//arm.goToPosition(-40);
 			
 			new ElevatorToTarget(2000, elevator.ONE_FOOT*3).runAfter("Start Elevator", "Elevator Switch");
 
-			waitFor("To Left Switch", 0);
+			waitFor("To Left Switch");
 			robotOutput.tankDrive(0, 0);
 			
 			new DriveToInch(750, 6, 0, 4, false, false).runUntilFinish();
@@ -39,23 +41,23 @@ public class Switch extends AutonRoutine{
 			robotOutput.setIntake(0.75);
 			Thread.sleep(500);
 			robotOutput.setIntake(0);
-			arm.goToTop();
+			//arm.goToTop();
 			elevator.goToBottom();
 			
 			Thread.sleep(2000);
 			
 		} else {
 			
-			PathfindFromFile path = new PathfindFromFile(10000, Robot.trajectorySwitchR);
+			PathfindFromFile path = new PathfindFromFile(10000, "switchR");
 			path.runNow("To Right Switch");
 			
-			waitFor("Calibrate", 0);
+			waitFor("Calibrate");
 			arm.goToPosition(-40);
 			
 			new ElevatorToTarget(2000, elevator.ONE_FOOT*2).runNow("Elevator");
 			
-			waitFor("Elevator", 0);
-			waitFor("To Right Switch", 0);
+			waitFor("Elevator");
+			waitFor("To Right Switch");
 			robotOutput.tankDrive(0, 0);
 	
 			intake.setClamp(intake.FREE);

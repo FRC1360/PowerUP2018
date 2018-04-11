@@ -27,9 +27,9 @@ public class SwitchFromBehind extends AutonRoutine {
 		
 		if(fms.plateLeft(0)) { //LR
 			
-			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchLScaleR);
+			PathfindFromFile switch1 = new PathfindFromFile(10000, "switchLScaleR");
 			switch1.runNow("Switch 1");
-			waitFor("Switch 1", 0);
+			waitFor("Switch 1");
 			
 			new ElevatorToTarget(2000, (int) (elevator.ONE_FOOT*2)).runUntilFinish();
 			robotOutput.setClamp(intake.FREE);
@@ -40,12 +40,12 @@ public class SwitchFromBehind extends AutonRoutine {
 		}
 		else if(!fms.plateLeft(0) && fms.plateLeft(1)) { //RL
 	
-			PathfindFromFile switch1 = new PathfindFromFile(10000, Robot.trajectorySwitchRScaleL1);
+			PathfindFromFile switch1 = new PathfindFromFile(10000, "switchRScaleL1");
 			switch1.runNow("Switch 1");
-			waitFor("Calibrate", 0);
+			waitFor("Calibrate");
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			arm.goToPosition(arm.POS_BOTTOM);
-			waitFor("Switch 1", 0);
+			waitFor("Switch 1");
 			new FaceAngle(2000, -90).runUntilFinish();
 			intake.setIntake(1);
 			intake.setClamp(intake.FREE);

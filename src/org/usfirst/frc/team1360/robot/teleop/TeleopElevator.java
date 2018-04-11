@@ -10,11 +10,14 @@ import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
+import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
 
 public class TeleopElevator implements TeleopComponent {
 
 	RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
+	MatchLogProvider matchLog = Singleton.get(MatchLogger.class);
 	ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
 	IntakeProvider intake = Singleton.get(IntakeProvider.class);
 	SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
@@ -32,6 +35,8 @@ public class TeleopElevator implements TeleopComponent {
 	@Override
 	public void disable() {
 		elevator.setIdle();
+		overrideHeld = false;
+		overrideToggle = false;
 		lastSpeed = 0;
 	}
 	
@@ -78,7 +83,7 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				elevator.climb();
 			}
-			if (!elevator.isMovingToTarget() && !elevator.isClimbing() && !elevator.isHolding())
+			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
 			{
 				elevator.hold();
 			}

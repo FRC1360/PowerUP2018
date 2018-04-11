@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import edu.wpi.first.wpilibj.*;
 import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.util.NavxIO;
@@ -20,11 +21,6 @@ import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.ITimestampedDataSubscriber;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SingletonSee(SensorInputProvider.class)
@@ -41,7 +37,10 @@ public class SensorInput implements SensorInputProvider {
 	private Encoder elevatorEnc;
 	private DigitalInput bottomSwitch;
 	private DigitalInput topSwitch;
-	
+
+	private AnalogInput absoluteEnc;
+
+
 	//Arm
 	private DigitalInput armTopSwitch;
 	private Encoder armEnc;
@@ -59,7 +58,8 @@ public class SensorInput implements SensorInputProvider {
 	
 	public SensorInput()								//Constructor to initialize fields  
 	{
-		
+		absoluteEnc = new AnalogInput(0);
+
 		matchLogger = Singleton.get(MatchLogProvider.class);
 		
 		leftDriveEnc = new Encoder(0, 1);
@@ -233,7 +233,7 @@ public class SensorInput implements SensorInputProvider {
 
 	@Override
 	public int getArmEncoder() {
-		return armEnc.get();
+		return absoluteEnc.getValue();
 	}
 
 	@Override
@@ -247,7 +247,10 @@ public class SensorInput implements SensorInputProvider {
 	}
 
 
-	
+	@Override
+	public int getAbsoluteEncoder() {
+		return absoluteEnc.getValue();
+	}
 	
 
 	@Override

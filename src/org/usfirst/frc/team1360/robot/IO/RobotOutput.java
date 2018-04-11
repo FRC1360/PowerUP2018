@@ -342,8 +342,12 @@ public class RobotOutput implements RobotOutputProvider {
 		setDriveLeft(leftPwm);
 		setDriveRight(rightPwm);
 	}
-	
-	
+
+	@Override
+	public double getElevatorVBus(){
+		return (elevatorLeft.get() + elevatorRight.get()) / 2;
+	}
+
 	public double handleDeadzone(double val, double deadzone)
 	{
 		return (Math.abs(val) > Math.abs(deadzone)) ? val : 0.0;

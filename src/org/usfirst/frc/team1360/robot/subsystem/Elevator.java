@@ -3,7 +3,6 @@ package org.usfirst.frc.team1360.robot.subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team1360.robot.IO.RobotOutputProvider;
 import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
-import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachine;
 import org.usfirst.frc.team1360.robot.util.OrbitStateMachineContext;
@@ -32,14 +31,14 @@ public final class Elevator implements ElevatorProvider {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 
-				if (!(context.getArg() instanceof targetObject)) {
+				if (!(context.getArg() instanceof TargetObject)) {
 					matchLogger.write("No target provided to ElevatorState.UP_TO_TARGET!");
 					context.nextState(IDLE);
 				}
 				matchLogger.write("Lifting elevator up to target");
 
-				int target = ((targetObject) context.getArg()).target;
-				double power = ((targetObject) context.getArg()).power;
+				int target = ((TargetObject) context.getArg()).target;
+				double power = ((TargetObject) context.getArg()).power;
 
 				while(elevator.dampen(target, power, true)) Thread.sleep(10);;
 				
@@ -52,14 +51,14 @@ public final class Elevator implements ElevatorProvider {
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
 				
 				
-				if (!(context.getArg() instanceof targetObject)) {
+				if (!(context.getArg() instanceof TargetObject)) {
 					matchLogger.write("No target provided to ElevatorState.DOWN_TO_TARGET!");
 					context.nextState(IDLE);
 				}
 				matchLogger.write("Dropping elevator down to target");
 
-				int target = ((targetObject) context.getArg()).target;
-				double power = ((targetObject) context.getArg()).power;
+				int target = ((TargetObject) context.getArg()).target;
+				double power = ((TargetObject) context.getArg()).power;
 
 				if (power < 0)
 					power = -power;
@@ -252,7 +251,7 @@ public final class Elevator implements ElevatorProvider {
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
 	public boolean goToTarget(int target, double speed) {
 
-		targetObject targ = new targetObject();
+		TargetObject targ = new TargetObject();
 		targ.power = speed;
 		targ.target = target;
 
@@ -278,7 +277,7 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	@Override
-	public boolean upToTarget(targetObject target) {
+	public boolean upToTarget(TargetObject target) {
 		try {
 			stateMachine.setState(ElevatorState.UP_TO_TARGET, target);
 		} catch (InterruptedException e) {
@@ -288,7 +287,7 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 	@Override
-	public boolean downToTarget(targetObject target) {
+	public boolean downToTarget(TargetObject target) {
 		try {
 			stateMachine.setState(ElevatorState.DOWN_TO_TARGET, target);
 		} catch (InterruptedException e) {

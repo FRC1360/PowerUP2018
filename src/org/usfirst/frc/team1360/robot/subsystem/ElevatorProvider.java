@@ -18,7 +18,7 @@ public interface ElevatorProvider {
 	
 	public static final boolean IS_COMP_BOT = false;
 
-	static class targetObject{
+	static class TargetObject {
 		double power;
 		int target;
 	}
@@ -27,8 +27,8 @@ public interface ElevatorProvider {
 	boolean goToTarget(int target);
 	boolean goToTarget(int target, double speed);
 
-	boolean upToTarget(targetObject target);
-	boolean downToTarget(targetObject target);
+	boolean upToTarget(TargetObject target);
+	boolean downToTarget(TargetObject target);
 	boolean goToTop();
 	boolean goToBottom();
 	boolean setManualSpeed(double speed, boolean override);

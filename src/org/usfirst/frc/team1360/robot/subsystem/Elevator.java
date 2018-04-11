@@ -273,7 +273,6 @@ public final class Elevator implements ElevatorProvider {
 		return true;
 	}
 
-	@Override
 	public boolean goToTarget(int target){
 		return this.goToTarget(target, 1.0);
 	}

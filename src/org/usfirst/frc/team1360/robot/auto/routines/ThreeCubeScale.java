@@ -19,43 +19,75 @@ public class ThreeCubeScale extends AutonRoutine{
 	private PathfindFromFile scalePathR4;
 	private PathfindFromFile scalePathR5;
 
+	private PathfindFromFile scalePathL1;
+
     public ThreeCubeScale() {
     	super("Three Cube Scale", 0);
 
-    	scalePathR1 = new PathfindFromFile(10000, "scaleRRR1").startAndGoReverse();
+    	scalePathR1 = new PathfindFromFile(10000, "scaleRRR1").cutOffFeet(0.1).startAndGoReverse();
 		scalePathR2 = new PathfindFromFile(10000, "scaleRRR2").startReverse();
 		scalePathR3 = new PathfindFromFile(10000, "scaleRRR3").startAndGoReverse();
 		scalePathR4 = new PathfindFromFile(10000, "scaleRRR4").startReverse();
 		scalePathR5 = new PathfindFromFile(10000, "scaleRRR5").startAndGoReverse();
+
+		scalePathL1 = new PathfindFromFile(10000, "scaleLLL1").cutOffFeet(0.1).startAndGoReverse();
     }
 
     @Override
     protected void runCore() throws InterruptedException
     {
-		arm.goToPosition(arm.POS_TOP-200);
+		//arm.goToPosition(arm.POS_TOP-200);
 
         if(fms.plateLeft(1)) { //L
-        	
+        	robotOutput.shiftGear(false);
 
+        	scalePathL1.runUntilFinish();
+
+        	/*
+        	scalePathL1.setWaypoint(20, "Elevator Up");
+        	scalePathL1.runNow("Scale Path 1");
+
+        	waitFor("Elevator Up");
+			elevator.goToTarget(elevator.POS_TOP);
+			arm.goToPosition(arm.POS_BEHIND);
+
+			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+
+			waitFor("Scale Path 1");
+
+			Thread.sleep(500);
+
+			intake.setClamp(intake.FREE);
+			intake.setIntake(1.0);
+			Thread.sleep(1000);
+
+			arm.goToPosition(arm.POS_BOTTOM);
+			/**/
 
         }
         else { //R
         	//Start of first cube
-			robotOutput.shiftGear(true);
+			robotOutput.shiftGear(false);
 
-			scalePathR1.setWaypoint(20, "start elevator 1");
+			scalePathR1.setWaypoint(10, "Elevator Up");
 			scalePathR1.runNow("Scale Path 1");
 
-			waitFor("start elevator 1");
+			waitFor("Elevator Up");
 			elevator.goToTarget(elevator.POS_TOP);
 			arm.goToPosition(arm.POS_BEHIND);
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+
 			waitFor("Scale Path 1");
 
-			intake.setClamp(intake.OPEN);
+			Thread.sleep(500);
+
+			intake.setClamp(intake.FREE);
+			intake.setIntake(1.0);
 			Thread.sleep(1000);
 
+
 			arm.goToPosition(arm.POS_BOTTOM);
+			/*
 			Thread.sleep(500);
 			elevator.goToBottom();
 

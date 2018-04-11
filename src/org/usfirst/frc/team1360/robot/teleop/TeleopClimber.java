@@ -57,8 +57,6 @@ public class TeleopClimber implements TeleopComponent {
 		climberLast = false;
 		barLast = false;
 		climbValue = false;
-		climbValue = false;
-
 	}
 
 }

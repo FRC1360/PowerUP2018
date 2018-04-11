@@ -35,6 +35,8 @@ public class TeleopElevator implements TeleopComponent {
 	@Override
 	public void disable() {
 		elevator.setIdle();
+		overrideHeld = false;
+		overrideToggle = false;
 		lastSpeed = 0;
 	}
 	

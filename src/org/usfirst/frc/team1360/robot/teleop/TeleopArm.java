@@ -37,8 +37,12 @@ public final class TeleopArm implements TeleopComponent {
 		}
 		else if(speed != 0)
 		{
-			if (lastSpeed == 0)
-				arm.startManual();
+		    if(sensorInput.getArmEncoder() >= arm.POS_BOTTOM && speed < 0){
+		        arm.hold();
+		    }
+		    else {
+		        arm.startManual();
+		    }
 			arm.setManualSpeed(speed, overrideToggle);
 		}
 		lastSpeed = speed;

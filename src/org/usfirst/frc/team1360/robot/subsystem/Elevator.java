@@ -300,7 +300,7 @@ public final class Elevator implements ElevatorProvider {
             }
 
 			if (stateMachine.getState() == ElevatorState.MANUAL) {
-				safety(override ? speed * 0.3 : speed, override);
+				safety(override ? speed * 0.5 : speed, override);
 
 				return true;
 			}

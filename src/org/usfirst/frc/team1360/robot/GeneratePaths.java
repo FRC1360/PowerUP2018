@@ -123,6 +123,7 @@ public class GeneratePaths {
 
         Waypoint[] pointsSwitchL = new Waypoint[] {
                 new Waypoint(1.63, 12.5, 0),
+                new Waypoint( 5  , 14, Pathfinder.d2r(30)),
                 new Waypoint(9.5, 17.5, Pathfinder.d2r(30)),
         };
 

@@ -44,7 +44,8 @@ public class ThreeCubeScale extends AutonRoutine{
     @Override
     protected void runCore() throws InterruptedException
     {
-		//arm.goToPosition(arm.POS_TOP-200);
+		arm.goToPosition(arm.POS_TOP);
+
 
         if(fms.plateLeft(1)) { //L
         	robotOutput.shiftGear(false);

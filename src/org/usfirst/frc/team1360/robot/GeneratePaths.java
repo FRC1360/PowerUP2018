@@ -92,6 +92,8 @@ public class GeneratePaths {
     }
 
     public static void generateSwitchPaths(String FILE_ROOT) {
+        System.out.println("Starting Switch Path Generation");
+
         Trajectory trajectorySwitchL;
         Trajectory trajectorySwitchR;
 
@@ -262,41 +264,55 @@ public class GeneratePaths {
         trajectorySwitchL = Pathfinder.generate(pointsSwitchL, configSwitchL);
         trajectorySwitchR = Pathfinder.generate(pointsSwitchR, configSwitchR);
 
+        System.out.println("REACHED 1");
+
         trajectorySwitchL2 = Pathfinder.generate(pointsSwitchL2, configSwitchL2);
         trajectorySwitchL3 = Pathfinder.generate(pointsSwitchL3, configSwitchL3);
         trajectorySwitchL4 = Pathfinder.generate(pointsSwitchL4, configSwitchL4);
         trajectorySwitchL5  = Pathfinder.generate(pointsSwitchL5, configSwitchL5);
+
+        System.out.println("REACHED 2");
 
         trajectorySwitchL6 = Pathfinder.generate(pointsSwitchL6, configSwitchL6);
         trajectorySwitchL7 = Pathfinder.generate(pointsSwitchL7, configSwitchL7);
         trajectorySwitchL8 = Pathfinder.generate(pointsSwitchL8, configSwitchL8);
         trajectorySwitchL9  = Pathfinder.generate(pointsSwitchL9, configSwitchL9);
 
+        System.out.println("REACHED 3");
 
         trajectorySwitchR2 = Pathfinder.generate(pointsSwitchR2, configSwitchR2);
         trajectorySwitchR3 = Pathfinder.generate(pointsSwitchR3, configSwitchR3);
         trajectorySwitchR4 = Pathfinder.generate(pointsSwitchR4, configSwitchR4);
         trajectorySwitchR5 = Pathfinder.generate(pointsSwitchR5, configSwitchR5);
 
+        System.out.println("REACHED 4");
+
         trajectorySwitchR6 = Pathfinder.generate(pointsSwitchR6, configSwitchR6);
         trajectorySwitchR7 = Pathfinder.generate(pointsSwitchR7, configSwitchR7);
         trajectorySwitchR8 = Pathfinder.generate(pointsSwitchR8, configSwitchR8);
         trajectorySwitchR9 = Pathfinder.generate(pointsSwitchR9, configSwitchR9);
 
+        System.out.println("REACHED 5");
+
         //Switch Profiles
         Pathfinder.writeToCSV(fileSwitchL, trajectorySwitchL);
         Pathfinder.writeToCSV(fileSwitchR, trajectorySwitchR);
+
+        System.out.println("REACHED 6");
 
         Pathfinder.writeToCSV(fileSwitchL2, trajectorySwitchL2);
         Pathfinder.writeToCSV(fileSwitchL3, trajectorySwitchL3);
         Pathfinder.writeToCSV(fileSwitchL4, trajectorySwitchL4);
         Pathfinder.writeToCSV(fileSwitchL5, trajectorySwitchL5);
 
+        System.out.println("REACHED 7");
+
         Pathfinder.writeToCSV(fileSwitchL6, trajectorySwitchL6);
         Pathfinder.writeToCSV(fileSwitchL7, trajectorySwitchL7);
         Pathfinder.writeToCSV(fileSwitchL8, trajectorySwitchL8);
         Pathfinder.writeToCSV(fileSwitchL9, trajectorySwitchL9);
 
+        System.out.println("REACHED 8");
 
         Pathfinder.writeToCSV(fileSwitchR2, trajectorySwitchR2);
         Pathfinder.writeToCSV(fileSwitchR3, trajectorySwitchR3);

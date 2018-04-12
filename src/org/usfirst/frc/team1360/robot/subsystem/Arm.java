@@ -94,10 +94,10 @@ public class Arm implements ArmProvider{
 				int target = context.getArg() instanceof Integer ? (int) context.getArg() : sensorInput.getArmEncoder();
 				while (true) {
 					int enc = sensorInput.getArmEncoder();
-					if (enc < target + 20)
-						arm.safety(-0.1);
-					else if (enc > target - 20)
-						arm.safety(0.1);
+					if (enc < target + 10)
+						arm.safety(0);
+					else if (enc > target - 10)
+						arm.safety(0.075);
 					else
 						arm.safety(0.05);
 					Thread.sleep(10);

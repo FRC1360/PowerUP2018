@@ -239,7 +239,7 @@ public class HumanInput implements HumanInputProvider {
 	}
 	
 	@Override
-	public boolean getClimbRaw() {
+	public boolean getBar() {
 		return operator.getPOV(0) == 90;
 	}
 	

@@ -38,7 +38,7 @@ public class TeleopClimber implements TeleopComponent {
 		}
 
 		
-		climber.setBar(climbValue);
+		climber.setBar(barValue);
 
 		if(climbValue) {
 			elevator.climb();

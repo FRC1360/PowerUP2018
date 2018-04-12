@@ -359,8 +359,8 @@ public class GeneratePaths {
         //Right
         Waypoint[] pointsScaleRRR1 = new Waypoint[] {
                 new Waypoint(1.63, 4.5, 0),
-                new Waypoint(18, 4.5, Pathfinder.d2r(15)),
-                new Waypoint(24.25, 6.5, Pathfinder.d2r(15)),
+                new Waypoint(18, 4.5, Pathfinder.d2r(25)),
+                new Waypoint(24.25, 6.5, Pathfinder.d2r(25)),
         };
 
         Waypoint[] pointsScaleRRR2 = new Waypoint[] {

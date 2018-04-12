@@ -92,7 +92,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			Thread.sleep(500);
 
 			intake.setClamp(intake.FREE);
-			intake.setIntake(1.0);
+			intake.setIntake(0.5);
 			Thread.sleep(1000);
 
 

@@ -128,7 +128,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 		matchLogger.write("PATHFINDER STARTING");
 
-		OrbitPID turnPID = new OrbitPID(0.01, 0.01, 0.0);
+		OrbitPID turnPID = new OrbitPID(0.01, 0.03, 0.0);
 
 		while((!left.isFinished() || !right.isFinished()) && isLessThanTargetFeet()) {
 

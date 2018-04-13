@@ -381,6 +381,7 @@ public class GeneratePaths {
                 new Waypoint(24.25, 6.5, Pathfinder.d2r(25)),
         };
 
+
         Waypoint[] pointsScaleRRR2 = new Waypoint[] {
                 new Waypoint(24.25, 6.5, Pathfinder.d2r(25)),
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
@@ -404,7 +405,7 @@ public class GeneratePaths {
 
         //CONFIGS
         //Two Cube Scale
-        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 5, 4, 50);
+        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
         Trajectory.Config configScaleLLL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
         Trajectory.Config configScaleLLL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
         Trajectory.Config configScaleLLL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);

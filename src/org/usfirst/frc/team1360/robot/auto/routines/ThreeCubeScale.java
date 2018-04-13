@@ -114,6 +114,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			waitFor("Elevator Up");
 			elevator.goToTarget(elevator.POS_TOP);
 			arm.goToPosition(arm.POS_BEHIND);
+
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
 			waitFor("Scale Path 1");
@@ -124,6 +125,7 @@ public class ThreeCubeScale extends AutonRoutine{
 
 
 			arm.goToPosition(arm.POS_BOTTOM);
+			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
 			elevator.goToBottom();
 			
 
@@ -146,7 +148,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			intake.setIntake(0.5);
 
 			arm.goToPosition(arm.POS_BOTTOM);
-			Thread.sleep(500);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
 			elevator.goToBottom();
 			Thread.sleep(1300);
 			/*

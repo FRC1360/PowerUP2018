@@ -347,15 +347,15 @@ public class GeneratePaths {
         //Left
         Waypoint[] pointsScaleLLL1 = new Waypoint[] {
                 new Waypoint(1.63, 4.50, 0),
-                new Waypoint(15, 3, 0),
-                new Waypoint(19.5, 9, Pathfinder.d2r(90)),
-                new Waypoint(19.5, 17.0, Pathfinder.d2r(90)),
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
+                new Waypoint(13.5, 3, 0),
+                new Waypoint(18, 9, Pathfinder.d2r(90)),
+                new Waypoint(18, 17.0, Pathfinder.d2r(90)),
+                new Waypoint(23, 21, Pathfinder.d2r(-30)),
         };
 
         Waypoint[] pointsScaleLLL2 = new Waypoint[] {
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
-                new Waypoint(18, 20, Pathfinder.d2r(20))
+                new Waypoint(23, 21, Pathfinder.d2r(-30)),
+                new Waypoint(16.5, 20, Pathfinder.d2r(20))
         };
 
         Waypoint[] pointsScaleLLL3 = new Waypoint[] {
@@ -388,7 +388,7 @@ public class GeneratePaths {
 
         Waypoint[] pointsScaleRRR3 = new Waypoint[] {
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
-                new Waypoint(24.25, 6.9, Pathfinder.d2r(25)),
+                new Waypoint(24.25, 6.5, Pathfinder.d2r(35)),
         };
 
         Waypoint[] pointsScaleRRR4 = new Waypoint[] {
@@ -404,7 +404,7 @@ public class GeneratePaths {
 
         //CONFIGS
         //Two Cube Scale
-        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
+        Trajectory.Config configScaleLLL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 5, 4, 50);
         Trajectory.Config configScaleLLL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
         Trajectory.Config configScaleLLL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
         Trajectory.Config configScaleLLL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);

@@ -66,6 +66,7 @@ public class SwitchThreeCube extends AutonRoutine {
 		if(!Robot.csvLoaded) return;
 		
 		if(fms.plateLeft(0)) {
+		    matchLogger.writeClean("LEFT SIDE SWITCH");
             robotOutput.shiftGear(true);
 
             pathL.setWaypoint(7, "Start Intake");
@@ -166,6 +167,7 @@ public class SwitchThreeCube extends AutonRoutine {
             Thread.sleep(1000);
 
 		} else {
+            matchLogger.writeClean("RIGHT SIDE SWITCH");
             robotOutput.shiftGear(true);
 
             pathR.setWaypoint(7, "Start Intake");

@@ -48,6 +48,10 @@ public class ThreeCubeScale extends AutonRoutine{
 
 
         if(fms.plateLeft(1)) { //L
+
+
+
+        	/*
         	robotOutput.shiftGear(false);
 
         	scalePathL1.setWaypoint(30, "Elevator Up");

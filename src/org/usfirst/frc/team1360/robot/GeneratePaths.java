@@ -326,6 +326,89 @@ public class GeneratePaths {
         Pathfinder.writeToCSV(fileSwitchR9, trajectorySwitchR9);
     }
 
+    public static void generateScaleLeftPaths(String FILE_ROOT){
+        System.out.println("CSV Generation starting to path " + FILE_ROOT);
+
+
+        Trajectory trajectoryScaleL1;
+        Trajectory trajectoryScaleL2;
+        Trajectory trajectoryScaleL3;
+        Trajectory trajectoryScaleL4;
+        Trajectory trajectoryScaleL5;
+
+
+        //DOUBLE CUBE SCALE AUTO PATHS
+
+        //Right
+        Waypoint[] pointsScaleL1 = new Waypoint[] {
+                new Waypoint(1.63, 22.5, 0),
+                new Waypoint(13, 23.5, Pathfinder.d2r(0)),
+                new Waypoint(24.25, 20.5, Pathfinder.d2r(-30)),
+        };
+
+
+        Waypoint[] pointsScaleL2 = new Waypoint[] {
+                new Waypoint(24.25, 20.5, Pathfinder.d2r(-30)),
+                new Waypoint(18.75, 20.1, Pathfinder.d2r(20)),
+        };
+
+        Waypoint[] pointsScaleL3 = new Waypoint[] {
+                new Waypoint(18.75, 20.1, Pathfinder.d2r(20)),
+                new Waypoint(24.25, 20.5, Pathfinder.d2r(-30)),
+        };
+
+        Waypoint[] pointsScaleL4 = new Waypoint[] {
+                new Waypoint(24.25, 6.9, Pathfinder.d2r(25)),
+                new Waypoint(18, 8.75, Pathfinder.d2r(-60)),
+        };
+
+        Waypoint[] pointsScaleL5 = new Waypoint[] {
+                new Waypoint(18, 8.75, Pathfinder.d2r(-60)),
+                new Waypoint(24.25, 6.9, Pathfinder.d2r(25)),
+        };
+
+
+        //CONFIGS
+        //Two Cube Scale
+        Trajectory.Config configScaleL1 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 5, 4, 50);
+        Trajectory.Config configScaleL2 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 5, 4, 50);
+        Trajectory.Config configScaleL3 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
+        Trajectory.Config configScaleL4 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
+        Trajectory.Config configScaleL5 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
+
+
+        //FILES
+
+        //Two Cube Scale
+        File fileScaleL1 = new File(FILE_ROOT + "scaleL1.csv");
+        File fileScaleL2 = new File(FILE_ROOT + "scaleL2.csv");
+        File fileScaleL3 = new File(FILE_ROOT + "scaleL3.csv");
+        File fileScaleL4 = new File(FILE_ROOT + "scaleL4.csv");
+        File fileScaleL5 = new File(FILE_ROOT + "scaleL5.csv");
+
+
+
+        //TRAJECTORY GENERATION
+
+        //Two Cube Scale
+        trajectoryScaleL1 = Pathfinder.generate(pointsScaleL1, configScaleL1);
+        trajectoryScaleL2 = Pathfinder.generate(pointsScaleL2, configScaleL2);
+        trajectoryScaleL3 = Pathfinder.generate(pointsScaleL3, configScaleL3);
+        trajectoryScaleL4 = Pathfinder.generate(pointsScaleL4, configScaleL4);
+        trajectoryScaleL5 = Pathfinder.generate(pointsScaleL5, configScaleL5);
+
+
+        //SAVE TRAJECTORIES
+        //Two Cube Scale
+        Pathfinder.writeToCSV(fileScaleL1, trajectoryScaleL1);
+        Pathfinder.writeToCSV(fileScaleL2, trajectoryScaleL2);
+        Pathfinder.writeToCSV(fileScaleL3, trajectoryScaleL3);
+        Pathfinder.writeToCSV(fileScaleL4, trajectoryScaleL4);
+        Pathfinder.writeToCSV(fileScaleL5, trajectoryScaleL5);
+
+        System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
+    }
+
     public static void generateScalePaths(String FILE_ROOT){
 
         System.out.println("CSV Generation starting to path " + FILE_ROOT);
@@ -467,6 +550,8 @@ public class GeneratePaths {
 
         System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
     }
+
+
 
 
 

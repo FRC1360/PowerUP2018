@@ -79,7 +79,7 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("Start Intake");
 
             intake.setClamp(intake.FREE);
-            robotOutput.setIntake(0.5);
+            robotOutput.setIntake(0.3);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -124,7 +124,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2");
 
-            intake.setIntake(0.5);
+            intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
 
 
@@ -162,7 +162,7 @@ public class SwitchThreeCube extends AutonRoutine {
             pathL9.runUntilFinish();
 
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.5);
+            intake.setIntake(0.3);
 
             Thread.sleep(1000);
 
@@ -180,7 +180,7 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("Start Intake");
 
             intake.setClamp(intake.FREE);
-            robotOutput.setIntake(0.5);
+            robotOutput.setIntake(0.3);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -224,7 +224,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2");
 
-            intake.setIntake(0.5);
+            intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
 
 
@@ -262,7 +262,7 @@ public class SwitchThreeCube extends AutonRoutine {
             pathR9.runUntilFinish();
 
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.5);
+            intake.setIntake(0.3);
 
             Thread.sleep(1000);
 		}

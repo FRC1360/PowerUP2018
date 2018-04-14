@@ -127,7 +127,12 @@ public class ThreeCubeScale extends AutonRoutine{
 			arm.goToPosition(arm.POS_BOTTOM);
 			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
 			elevator.goToBottom();
-			
+
+            robotOutput.shiftGear(true);
+
+
+            while (sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM+100) Thread.sleep(10);
+
 
 			//2nd Cube
 			intake.setIntake(-1);

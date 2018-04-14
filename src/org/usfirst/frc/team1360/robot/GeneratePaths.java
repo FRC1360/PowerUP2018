@@ -115,6 +115,8 @@ public class GeneratePaths {
         Trajectory trajectorySwitchR8;
         Trajectory trajectorySwitchR9;
 
+        Trajectory trajectoryDcmpSfRL;
+
         //SWITCH AUTO PATHS
         Waypoint[] pointsSwitchR = new Waypoint[] {
                 new Waypoint(1.63, 12.5, 0),
@@ -213,6 +215,12 @@ public class GeneratePaths {
                 new Waypoint(10, 9.5, Pathfinder.d2r(-20))
         };
 
+        // DCMP Semifinals RL
+        Waypoint[] pointsDcmpSfRL = new Waypoint[] {
+                new Waypoint(1.63, 4.5, 0),
+                new Waypoint(13, 4.5, 0)
+        };
+
         //Switch Only
         Trajectory.Config configSwitchL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);
         Trajectory.Config configSwitchR = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
@@ -235,6 +243,7 @@ public class GeneratePaths {
         Trajectory.Config configSwitchR8 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
         Trajectory.Config configSwitchR9 = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 10, 75);//jerk was 180
 
+        Trajectory.Config configDcmpSfRL = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.025, 8, 6, 50);
 
         //Switch Only
         File fileSwitchL = new File(FILE_ROOT + "switchL.csv");
@@ -260,6 +269,8 @@ public class GeneratePaths {
         File fileSwitchR7 = new File(FILE_ROOT + "switchR7.csv");
         File fileSwitchR8 = new File(FILE_ROOT + "switchR8.csv");
         File fileSwitchR9 = new File(FILE_ROOT + "switchR9.csv");
+
+        File fileDcmpSfRL = new File(FILE_ROOT + "dcmpSfRL.csv");
 
         //Switches
         trajectorySwitchL = Pathfinder.generate(pointsSwitchL, configSwitchL);
@@ -293,6 +304,8 @@ public class GeneratePaths {
         trajectorySwitchR8 = Pathfinder.generate(pointsSwitchR8, configSwitchR8);
         trajectorySwitchR9 = Pathfinder.generate(pointsSwitchR9, configSwitchR9);
 
+        trajectoryDcmpSfRL = Pathfinder.generate(pointsDcmpSfRL, configDcmpSfRL);
+
         System.out.println("REACHED 5");
 
         //Switch Profiles
@@ -324,6 +337,8 @@ public class GeneratePaths {
         Pathfinder.writeToCSV(fileSwitchR7, trajectorySwitchR7);
         Pathfinder.writeToCSV(fileSwitchR8, trajectorySwitchR8);
         Pathfinder.writeToCSV(fileSwitchR9, trajectorySwitchR9);
+
+        Pathfinder.writeToCSV(fileDcmpSfRL, trajectoryDcmpSfRL);
     }
 
     public static void generateScaleLeftPaths(String FILE_ROOT){

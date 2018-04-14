@@ -124,8 +124,8 @@ public class Robot extends TimedRobot {
 
 		if(GENERATE) {
 			//GeneratePaths.generateScaleSwitchPaths("/home/lvuser/");
-			//GeneratePaths.generateSwitchPaths("/home/lvuser/");
-			GeneratePaths.generateScalePaths("/home/lvuser/");
+			GeneratePaths.generateSwitchPaths("/home/lvuser/");
+			//GeneratePaths.generateScalePaths("/home/lvuser/");
 		}
 
 		if(new File("/home/lvuser/switchL.csv").exists())

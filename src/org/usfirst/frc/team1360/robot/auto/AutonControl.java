@@ -30,6 +30,7 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
+		routines.add(new DCMPSF());
 		routines.add(new ScaleLeft());
 		routines.add(new SwitchThreeCube());
 		routines.add(new ThreeCubeScale());

@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
 
 
-    public static boolean GENERATE = true;
+    public static boolean GENERATE = false;
     public static boolean csvLoaded = false;
 
 	private String FILE_ROOT = "/home/lvuser/";

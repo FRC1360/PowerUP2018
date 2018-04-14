@@ -150,7 +150,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
 			intake.setClamp(intake.FREE);
-			intake.setIntake(0.5);
+			intake.setIntake(0.7);
 
 			arm.goToPosition(arm.POS_BOTTOM);
             while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);

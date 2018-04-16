@@ -21,14 +21,12 @@ public class GeneratePaths {
     }
 
     //Code that will generate a path given input and a specified path
-    public static void generatePath(String name, Waypoint[] points, double velocity, double acceleration, double jerk){
-        Trajectory trajectory;
-
+    public static void generatePath(String name, double velocity, double acceleration, double jerk, Waypoint... points){
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, TIME_STEP, velocity, acceleration, jerk);
 
         File file = new File(fileRoot + name);
 
-        trajectory = Pathfinder.generate(points, config);
+        Trajectory trajectory = Pathfinder.generate(points, config);
 
         Pathfinder.writeToCSV(file, trajectory);
     }
@@ -223,8 +221,13 @@ public class GeneratePaths {
                 new Waypoint(13, 4.5, 0)
         };
 
-        generatePath("switchL.csv", pointsSwitchL, 8, 10, 75);
-        generatePath("switchL2.csv", pointsSwitchL2, 8, 10, 75);
+        generatePath("switchL.csv", 8, 10, 75,
+                new Waypoint(1.63, 12.5, 0),
+                new Waypoint( 5  , 14, Pathfinder.d2r(30)),
+                new Waypoint(9.5, 17.5, Pathfinder.d2r(30))
+        );
+
+        generatePath("switchL2.csv", 8, 10, 75, pointsSwitchL2);
         generatePath("switchL3.csv", pointsSwitchL3, 8, 6, 75);
         generatePath("switchL4.csv", pointsSwitchL4, 8, 10, 75);
         generatePath("switchL5.csv", pointsSwitchL5, 8, 10, 75);

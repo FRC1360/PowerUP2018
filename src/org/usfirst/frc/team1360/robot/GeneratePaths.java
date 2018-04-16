@@ -20,6 +20,7 @@ public class GeneratePaths {
         return points;
     }
 
+    //Code that will generate a path given input and a specified path
     public static void generatePath(String name, Waypoint[] points, double velocity, double acceleration, double jerk){
         Trajectory trajectory;
 
@@ -31,7 +32,6 @@ public class GeneratePaths {
 
         Pathfinder.writeToCSV(file, trajectory);
     }
-
 
     public static void generateScaleSwitchPaths(String FILE_ROOT){
         System.out.println("CSV Generation starting for scale switch paths at " + FILE_ROOT);
@@ -311,30 +311,30 @@ public class GeneratePaths {
                 new Waypoint(24.25, 6.9, Pathfinder.d2r(25)),
         };
 
-        generatePath("scaleLLL1", pointsScaleCross1, 8, 6, 50);
-        generatePath("scaleLLL2", pointsScaleCross2, 8, 6, 50);
-        generatePath("scaleLLL3", pointsScaleCross3, 8, 6, 50);
-        generatePath("scaleLLL4", pointsScaleCross4, 8, 6, 50);
-        generatePath("scaleLLL5", pointsScaleCross5, 8, 6, 50);
+        generatePath("scaleCrossRight1", pointsScaleCross1, 8, 6, 50);
+        generatePath("scaleCrossRight2", pointsScaleCross2, 8, 6, 50);
+        generatePath("scaleCrossRight3", pointsScaleCross3, 8, 6, 50);
+        generatePath("scaleCrossRight4", pointsScaleCross4, 8, 6, 50);
+        generatePath("scaleCrossRight5", pointsScaleCross5, 8, 6, 50);
 
-        generatePath("scaleRRR1", pointsScaleNear1, 8, 6, 50);
-        generatePath("scaleRRR2", pointsScaleNear2, 8, 6, 50);
-        generatePath("scaleRRR3", pointsScaleNear3, 8, 6, 50);
-        generatePath("scaleRRR4", pointsScaleNear4, 8, 6, 50);
-        generatePath("scaleRRR5", pointsScaleNear5, 8, 6, 50);
+        generatePath("scaleNearRight1", pointsScaleNear1, 8, 6, 50);
+        generatePath("scaleNearRight2", pointsScaleNear2, 8, 6, 50);
+        generatePath("scaleNearRight3", pointsScaleNear3, 8, 6, 50);
+        generatePath("scaleNearRight4", pointsScaleNear4, 8, 6, 50);
+        generatePath("scaleNearRight5", pointsScaleNear5, 8, 6, 50);
 
 
-        generatePath("scaleRRR1Left", mirrorPoints(pointsScaleCross1), 8, 6, 50);
-        generatePath("scaleRRR2Left", mirrorPoints(pointsScaleCross2), 8, 6, 50);
-        generatePath("scaleRRR3Left", mirrorPoints(pointsScaleCross3), 8, 6, 50);
-        generatePath("scaleRRR4Left", mirrorPoints(pointsScaleCross4), 8, 6, 50);
-        generatePath("scaleRRR5Left", mirrorPoints(pointsScaleCross5), 8, 6, 50);
+        generatePath("scaleCrossLeft1", mirrorPoints(pointsScaleCross1), 8, 6, 50);
+        generatePath("scaleCrossLeft2", mirrorPoints(pointsScaleCross2), 8, 6, 50);
+        generatePath("scaleCrossLeft3", mirrorPoints(pointsScaleCross3), 8, 6, 50);
+        generatePath("scaleCrossLeft4", mirrorPoints(pointsScaleCross4), 8, 6, 50);
+        generatePath("scaleCrossLeft5", mirrorPoints(pointsScaleCross5), 8, 6, 50);
 
-        generatePath("scaleLLL1Left", mirrorPoints(pointsScaleNear1), 8, 6, 50);
-        generatePath("scaleLLL2Left", mirrorPoints(pointsScaleNear2), 8, 6, 50);
-        generatePath("scaleLLL3Left", mirrorPoints(pointsScaleNear3), 8, 6, 50);
-        generatePath("scaleLLL4Left", mirrorPoints(pointsScaleNear4), 8, 6, 50);
-        generatePath("scaleLLL5Left", mirrorPoints(pointsScaleNear5), 8, 6, 50);
+        generatePath("scaleNearLeft1", mirrorPoints(pointsScaleNear1), 8, 6, 50);
+        generatePath("scaleNearLeft2", mirrorPoints(pointsScaleNear2), 8, 6, 50);
+        generatePath("scaleNearLeft3", mirrorPoints(pointsScaleNear3), 8, 6, 50);
+        generatePath("scaleNearLeft4", mirrorPoints(pointsScaleNear4), 8, 6, 50);
+        generatePath("scaleNearLeft5", mirrorPoints(pointsScaleNear5), 8, 6, 50);
 
         System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
     }

@@ -45,10 +45,6 @@ public class TwoCubeRight extends AutonRoutine{
 			while (sensorInput.getElevatorEncoder() > elevator.ONE_FOOT * 2) Thread.sleep(10);
 			arm.goToPosition(ArmProvider.POS_BOTTOM);
 			new FaceAngle(1000, 153).runUntilFinish();
-
-
-			
-
 		}
 		else if(fms.plateLeft(0) && !fms.plateLeft(1)) { //LR
 			

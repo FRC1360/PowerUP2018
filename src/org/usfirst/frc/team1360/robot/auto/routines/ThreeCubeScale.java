@@ -28,17 +28,17 @@ public class ThreeCubeScale extends AutonRoutine{
     public ThreeCubeScale() {
     	super("Three Cube Scale", 0);
 
-    	scalePathR1 = new PathfindFromFile(10000, "scaleRRR1").cutOffFeet(0.1).startAndGoReverse();
-		scalePathR2 = new PathfindFromFile(10000, "scaleRRR2").startReverse();
-		scalePathR3 = new PathfindFromFile(10000, "scaleRRR3").startAndGoReverse();
-		scalePathR4 = new PathfindFromFile(10000, "scaleRRR4").startReverse();
-		scalePathR5 = new PathfindFromFile(10000, "scaleRRR5").startAndGoReverse();
+    	scalePathR1 = new PathfindFromFile(10000, "scaleNearRight1").cutOffFeet(0.1).startAndGoReverse();
+		scalePathR2 = new PathfindFromFile(10000, "scaleNearRight2").startReverse();
+		scalePathR3 = new PathfindFromFile(10000, "scaleNearRight3").startAndGoReverse();
+		scalePathR4 = new PathfindFromFile(10000, "scaleNearRight4").startReverse();
+		scalePathR5 = new PathfindFromFile(10000, "scaleNearRight5").startAndGoReverse();
 
-		scalePathL1 = new PathfindFromFile(10000, "scaleLLL1").cutOffFeet(0.1).startAndGoReverse();
-		scalePathL2 = new PathfindFromFile(10000, "scaleLLL2").cutOffFeet(0.1).startReverse();
-		scalePathL3 = new PathfindFromFile(10000, "scaleLLL3").cutOffFeet(0.1).startAndGoReverse();
-		scalePathL4 = new PathfindFromFile(10000, "scaleLLL4").cutOffFeet(0.1).startAndGoReverse();
-		scalePathL5 = new PathfindFromFile(10000, "scaleLLL5").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL1 = new PathfindFromFile(10000, "scaleCrossLeft1").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL2 = new PathfindFromFile(10000, "scaleCrossLeft2").cutOffFeet(0.1).startReverse();
+		scalePathL3 = new PathfindFromFile(10000, "scaleCrossLeft3").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL4 = new PathfindFromFile(10000, "scaleCrossLeft4").cutOffFeet(0.1).startAndGoReverse();
+		scalePathL5 = new PathfindFromFile(10000, "scaleCrossLeft5").cutOffFeet(0.1).startAndGoReverse();
     }
 
     @Override
@@ -47,7 +47,6 @@ public class ThreeCubeScale extends AutonRoutine{
 		arm.goToPosition(arm.POS_TOP);
 
         if(fms.plateLeft(1)) { //L
-
         	robotOutput.shiftGear(false);
 
         	scalePathL1.setWaypoint(30, "Elevator Up");
@@ -97,13 +96,7 @@ public class ThreeCubeScale extends AutonRoutine{
 
             arm.goToPosition(arm.POS_BOTTOM);
             elevator.goToTarget(elevator.POS_BOTTOM);
-
-
-
-
-
 			/**/
-
         }
         else { //R
         	//Start of first cube
@@ -124,13 +117,11 @@ public class ThreeCubeScale extends AutonRoutine{
 			intake.setIntake(0.5);
 			Thread.sleep(200);
 
-
 			arm.goToPosition(arm.POS_BOTTOM);
 			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
 			elevator.goToBottom();
 
             robotOutput.shiftGear(true);
-
 
             while (sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM+100) Thread.sleep(10);
 

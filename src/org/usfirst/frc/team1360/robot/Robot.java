@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
 
 
-    public static boolean GENERATE = false;
+    public static boolean GENERATE = true;
     public static boolean csvLoaded = false;
 
 	private String FILE_ROOT = "/home/lvuser/";
@@ -125,7 +125,7 @@ public class Robot extends TimedRobot {
 		if(GENERATE) {
 			//GeneratePaths.generateScaleSwitchPaths("/home/lvuser/");
 			GeneratePaths.generateSwitchPaths("/home/lvuser/");
-			//GeneratePaths.generateScalePaths("/home/lvuser/");
+			GeneratePaths.generateScalePaths("/home/lvuser/");
 		}
 
 		if(new File("/home/lvuser/switchL.csv").exists())

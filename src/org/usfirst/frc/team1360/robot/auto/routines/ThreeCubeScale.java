@@ -46,12 +46,8 @@ public class ThreeCubeScale extends AutonRoutine{
     {
 		arm.goToPosition(arm.POS_TOP);
 
-
         if(fms.plateLeft(1)) { //L
 
-
-
-        	/*
         	robotOutput.shiftGear(false);
 
         	scalePathL1.setWaypoint(30, "Elevator Up");
@@ -72,6 +68,7 @@ public class ThreeCubeScale extends AutonRoutine{
 			Thread.sleep(1000);
 
 			arm.goToPosition(arm.POS_BOTTOM);
+			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
 			elevator.goToTarget(elevator.POS_BOTTOM);
 
 			intake.setClamp(intake.FREE);

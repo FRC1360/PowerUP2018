@@ -66,6 +66,7 @@ public class SwitchThreeCube extends AutonRoutine {
 		if(!Robot.csvLoaded) return;
 		
 		if(fms.plateLeft(0)) {
+		    matchLogger.writeClean("LEFT SIDE SWITCH");
             robotOutput.shiftGear(true);
 
             pathL.setWaypoint(7, "Start Intake");
@@ -78,7 +79,7 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("Start Intake");
 
             intake.setClamp(intake.FREE);
-            robotOutput.setIntake(0.75);
+            robotOutput.setIntake(0.3);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -123,7 +124,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2");
 
-            intake.setIntake(0.75);
+            intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
 
 
@@ -160,12 +161,15 @@ public class SwitchThreeCube extends AutonRoutine {
 
             pathL9.runUntilFinish();
 
+            /* Hold the last Cube change requested by 5406
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.75);
+            intake.setIntake(0.3);
+            */
 
             Thread.sleep(1000);
 
 		} else {
+            matchLogger.writeClean("RIGHT SIDE SWITCH");
             robotOutput.shiftGear(true);
 
             pathR.setWaypoint(7, "Start Intake");
@@ -178,7 +182,7 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("Start Intake");
 
             intake.setClamp(intake.FREE);
-            robotOutput.setIntake(0.75);
+            robotOutput.setIntake(0.3);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -222,7 +226,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2");
 
-            intake.setIntake(0.75);
+            intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
 
 
@@ -259,8 +263,10 @@ public class SwitchThreeCube extends AutonRoutine {
 
             pathR9.runUntilFinish();
 
+            /* Hold last cube change requested by 5406
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.75);
+            intake.setIntake(0.3);
+            */
 
             Thread.sleep(1000);
 		}

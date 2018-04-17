@@ -49,7 +49,6 @@ public class TeleopElevator implements TeleopComponent {
 		boolean scaleLow = humanInput.getScaleLow();
 		boolean switchPreset = humanInput.getSwitch();
 		boolean intakePreset = humanInput.getIntake();
-		boolean climb = humanInput.getClimb();
 		boolean override = humanInput.getDriverOverride();
 		
 		if(override && !overrideHeld) {
@@ -78,10 +77,6 @@ public class TeleopElevator implements TeleopComponent {
 			else if(intakePreset)
 			{
 				elevator.goToTarget(elevator.INTAKE_HEIGHT);
-			}
-			if (climb && !elevator.isClimbing())
-			{
-				elevator.climb();
 			}
 			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
 			{

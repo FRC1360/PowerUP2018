@@ -95,11 +95,16 @@ public class Arm implements ArmProvider{
 				while (true) {
 					int enc = sensorInput.getArmEncoder();
 					if (enc < target + 20)
-						arm.safety(-0.1);
-					else if (enc > target - 20)
-						arm.safety(0.1);
+						arm.safety(0);
+					else if (enc > target - 10)
+						arm.safety(0.075);
 					else
 						arm.safety(0.05);
+
+					if(sensorInput.getArmEncoder() > POS_BOTTOM){
+						arm.safety(0.2);
+					}
+
 					Thread.sleep(10);
 				}
 			}

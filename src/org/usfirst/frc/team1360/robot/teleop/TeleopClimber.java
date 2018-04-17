@@ -5,7 +5,6 @@ import org.usfirst.frc.team1360.robot.IO.SensorInputProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ClimberProvider;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
-import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 
 public class TeleopClimber implements TeleopComponent {
@@ -14,12 +13,10 @@ public class TeleopClimber implements TeleopComponent {
 	private ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
 	private HumanInputProvider humanInput = Singleton.get(HumanInputProvider.class);
 	private SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-	
 
-	private boolean barLast = false;
 	private boolean barValue = false;
-	private boolean climberLast = false;
-	private boolean climbValue = false;
+	private boolean barLast = false;
+	private boolean climbLast = false;
 
 	
 	@Override
@@ -27,36 +24,26 @@ public class TeleopClimber implements TeleopComponent {
 		// TODO Auto-generated method stub
 		
 		boolean climb = humanInput.getClimb();
-		boolean climbRaw = humanInput.getClimbRaw();
+		boolean bar = humanInput.getBar();
 	
-		if(!climberLast && climb) {
-			climbValue = !climbValue;
-		}
-
-		if (climbRaw && !barLast) {
-			barValue = !barValue;
-		}
-
-		
-		climber.setBar(climbValue);
-
-		if(climbValue) {
+		if(!climbLast && climb) {
 			elevator.climb();
 		}
 
-		barLast = climbRaw;
-		climberLast = climb;
-		
+		if (!barLast && bar) {
+			barValue = !barValue;
+			climber.setBar(barValue);
+		}
+
+		barLast = bar;
+		climbLast = climb;
 	}
 
 	@Override
 	public void disable() {
 		// TODO Auto-generated method stub
 		climber.setBar(false);
-		
-		climberLast = false;
-		barLast = false;
-		climbValue = false;
+		barValue = false;
 	}
 
 }

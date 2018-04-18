@@ -13,8 +13,9 @@ public interface RobotOutputProvider {
 	void arcadeDrivePID(double speed, double turn);
 	void shiftGear(boolean shift);
 	void stopAll();
-	void setClamp(int clamp); 
+	void setClamp(int clamp);
 	void setIntake(double speed);
+	void setIntake(double speed, double spin);
 	void setElevatorMotor(double motorValue);
 	void cheesyDrive(double speed, double turn, boolean quickturn, boolean highgear);
 	double handleDeadzone(double val, double deadzone);

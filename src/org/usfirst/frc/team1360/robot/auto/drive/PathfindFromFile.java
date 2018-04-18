@@ -1,16 +1,13 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
+import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 public class PathfindFromFile extends AutonRoutine{
 
@@ -50,28 +47,11 @@ public class PathfindFromFile extends AutonRoutine{
 		this.totalLength = trajectory.segments[trajectory.length()-1].position;
 	}
 
-	public PathfindFromFile(long timeout, Trajectory traj) {
-		super("Pathfind From File", timeout);
-
-		this.trajectory = traj;
-
-		TankModifier modifier = new TankModifier(trajectory).modify(DT_WIDTH);
-
-		left = new EncoderFollower(modifier.getLeftTrajectory());
-		right = new EncoderFollower(modifier.getRightTrajectory());
-
-		this.totalLength = trajectory.segments[trajectory.length()-1].position;
-	}
-
 	public PathfindFromFile cutOffFeet(double feet){
 		this.totalLength -= feet;
 		return this;
 	}
 	
-	public int getNumberOfSegments() {
-		return this.trajectory.segments.length;
-	}
-
 	public double getPosition() {
 		try {
 			return left == null ? 0 : left.getSegment().position;
@@ -106,12 +86,9 @@ public class PathfindFromFile extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-
 		if(trajectory == null) {
 			return;
 		}
-
-
 
 		sensorInput.resetLeftEncoder();
 		sensorInput.resetRightEncoder();
@@ -151,16 +128,11 @@ public class PathfindFromFile extends AutonRoutine{
 				l -= turn;
 				r += turn;
 
-
-				if (Math.abs(l) > 1 || Math.abs(r) > 1)
-				{
-					if (Math.abs(l) > Math.abs(r))
-					{
+				if (Math.abs(l) > 1 || Math.abs(r) > 1) {
+					if (Math.abs(l) > Math.abs(r)) {
 						r /= Math.abs(l);
 						l = Math.signum(l);
-					}
-					else
-					{
+					} else {
 						l /= Math.abs(r);
 						r = Math.signum(r);
 					}

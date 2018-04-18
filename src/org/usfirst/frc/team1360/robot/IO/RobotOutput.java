@@ -96,7 +96,8 @@ public class RobotOutput implements RobotOutputProvider {
 		rightIntake.set(speed);
 	}
 
-	public void setInake(double speed, double spin){
+	@Override
+	public void setIntake(double speed, double spin){
 		leftIntake.set(speed + spin);
 		rightIntake.set(speed - spin);
 	}

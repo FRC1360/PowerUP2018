@@ -242,7 +242,7 @@ public class GeneratePaths {
         System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
     }
 
-    public static void main(String [] args){
+    public static void main(String[] args){
         String FILE_ROOT = "C:\\Users\\orbit\\Desktop\\PowerUP2018\\src\\1360AutoPaths\\";
 
         generateScalePaths(FILE_ROOT);

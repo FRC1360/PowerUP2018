@@ -64,8 +64,8 @@ public class RobotOutput implements RobotOutputProvider {
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
-		arm1.setInverted(false);
-		arm2.setInverted(false);
+		arm1.setInverted(true);//COMP BOT IS FALSE
+		arm2.setInverted(true);
 
 		leftIntake = new Victor(6);
 		rightIntake = new Victor(7);
@@ -94,6 +94,11 @@ public class RobotOutput implements RobotOutputProvider {
 	public void setIntake(double speed) {  // sets the speed of the rollers
 		leftIntake.set(speed);
 		rightIntake.set(speed);
+	}
+
+	public void setInake(double speed, double spin){
+		leftIntake.set(speed + spin);
+		rightIntake.set(speed - spin);
 	}
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off

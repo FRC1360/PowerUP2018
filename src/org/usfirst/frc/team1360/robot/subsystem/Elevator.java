@@ -78,6 +78,7 @@ public final class Elevator implements ElevatorProvider {
 				if(sensorInput.getArmEncoder() < Arm.POS_TOP-200)
 					holdTarget = POS_TOP;
 
+
 				OrbitPID elevatorPID = new OrbitPID(0.002, 0.0, 0.0);
 				matchLogger.writeClean("ELEVATOR TARGET == " + holdTarget);
 
@@ -102,7 +103,7 @@ public final class Elevator implements ElevatorProvider {
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-			    elevator.safety(-0.2, true);
+			    elevator.safety(-0.2, false);
 			}
 		};
 		
@@ -135,10 +136,10 @@ public final class Elevator implements ElevatorProvider {
 			double dampenPwr = (0.005*Math.abs(power))*(position - sensorInput.getElevatorEncoder());
 
 			if(dampenPwr >= 1.0) {
-				safety(power);
+                robotOutput.setElevatorMotor(power);
 			}
 			else {
-				safety(dampenPwr);
+                robotOutput.setElevatorMotor(dampenPwr);
 				//handleElevator(power);
 			}
 
@@ -149,10 +150,10 @@ public final class Elevator implements ElevatorProvider {
 			double dampenPwr = (-0.001*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
 
 			if(dampenPwr <= -1.0){
-				safety(power);
+                robotOutput.setElevatorMotor(power);
 			}
 			else {
-				safety(dampenPwr);
+				robotOutput.setElevatorMotor(dampenPwr);
 				//handleElevator(power);
 			}
 
@@ -164,12 +165,13 @@ public final class Elevator implements ElevatorProvider {
 
 	@Override
 	public void safety(double power, boolean override) {
-		
+        matchLogger.writeClean("CY: safety " + power + ":" + override);
 		if(override) {
 			robotOutput.setElevatorMotor(power);
 			matchLogger.writeClean("Overriding Elevator");
 		}
 		else {
+            matchLogger.writeClean("CY: safety bottomSwitch" + sensorInput.getBottomSwitch());
 			if(sensorInput.getBottomSwitch()) {
 				sensorInput.resetElevatorEncoder();
 				if(power < 0)
@@ -183,17 +185,19 @@ public final class Elevator implements ElevatorProvider {
 				robotOutput.setElevatorMotor(power);
 			}
 
-			if(sensorInput.getElevatorEncoder() >= POS_TOP && power > 0) {
+            matchLogger.writeClean("CY: safety ElevatorEncoder" + sensorInput.getElevatorEncoder());
+            if(sensorInput.getElevatorEncoder() >= POS_TOP && power > 0) {
 				this.hold();
 			}
 			if(sensorInput.getArmEncoder() < Arm.POS_TOP - 100){
 				this.hold();
 			}
-			else
-				if(power > 0)
-					dampen(POS_TOP, power, true);
-				if(power < 0)
-					dampen(0, power, false);
+			else {
+                if (power > 0)
+                    dampen(POS_TOP, power, true);
+                if (power < 0)
+                    dampen(0, power, false);
+            }
 		}
 	}
 	private void safety(double power) {
@@ -262,7 +266,7 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized (stateMachine) {
-		    if(stateMachine.getState() != ElevatorState.MANUAL){
+            if(stateMachine.getState() != ElevatorState.MANUAL){
 		        startManual();
             }
 

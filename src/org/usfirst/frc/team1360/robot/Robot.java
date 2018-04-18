@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
 
 
-    public static boolean GENERATE = true;
+    public static boolean GENERATE = false;
     public static boolean csvLoaded = false;
 
 	private String FILE_ROOT = "/home/lvuser/";
@@ -205,15 +205,15 @@ public class Robot extends TimedRobot {
 		
 		elevator.logState();
 		arm.logState();
-		
-		matchLog.writeClean(String.format("Elevator Enc = %d, Arm Enc = %d", 
+
+		matchLog.writeClean(String.format("Elevator Enc = %d, Arm Enc = %d",
 				sensorInput.getElevatorEncoder(), sensorInput.getArmEncoder()));
-		matchLog.writeClean("Bottom Switch: " + sensorInput.getBottomSwitch() + 
-						", Top Switch: " + sensorInput.getTopSwitch() + 
+		matchLog.writeClean("Bottom Switch: " + sensorInput.getBottomSwitch() +
+						", Top Switch: " + sensorInput.getTopSwitch() +
 						", Arm Switch: " + sensorInput.getArmSwitch());
-		
+
 		SmartDashboard.putNumber("Arm Velocity", sensorInput.getArmEncoderVelocity());
-		
+
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());

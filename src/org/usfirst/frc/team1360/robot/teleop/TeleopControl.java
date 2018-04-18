@@ -26,6 +26,7 @@ public class TeleopControl {
 		matchLog.write("Teleop runCycle");
 		for (TeleopComponent t: this.components)
 		{
+			matchLog.writeClean("CY: " + t.getClass().getCanonicalName());
 			t.calculate();
 		}
 	}

@@ -62,13 +62,15 @@ public final class OrbitStateMachine<T extends OrbitStateMachineState<T>> {
 	 */
 	public synchronized void setState(T state, Object arg) throws InterruptedException {
 		matchLogger.write("Switching state " + state + " passing argument " + arg);
-		
+
+		matchLogger.writeClean("CY: killing thread " + thread.getName());
 		thread.interrupt();
 
 		this.state = state;
 		this.arg = arg;
-		
+
 		thread = new RunThread();
+		matchLogger.writeClean("CY: starting thread " + thread.getName());
 		thread.start();
 	}
 	

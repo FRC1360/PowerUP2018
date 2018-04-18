@@ -50,6 +50,8 @@ public class TeleopElevator implements TeleopComponent {
 		boolean switchPreset = humanInput.getSwitch();
 		boolean intakePreset = humanInput.getIntake();
 		boolean override = humanInput.getDriverOverride();
+
+        matchLog.writeClean("CY: " + speed + ":" + elevator.isClimbing() + ":" + elevator.isMovingToTarget()+ ":" + overrideToggle);
 		
 		if(override && !overrideHeld) {
 			overrideToggle = !overrideToggle;
@@ -59,9 +61,10 @@ public class TeleopElevator implements TeleopComponent {
 		if(!override) {
 			overrideHeld = false;
 		}
-		
-		if (speed == 0)
+
+        if (speed == 0)
 		{
+            matchLog.writeClean("ELEVATOR: Speed is Zero");
 			if(scaleMax )
 			{
 				elevator.goToTarget(elevator.SCALE_HIGH);
@@ -78,16 +81,22 @@ public class TeleopElevator implements TeleopComponent {
 			{
 				elevator.goToTarget(elevator.INTAKE_HEIGHT);
 			}
+
 			if (!elevator.isMovingToTarget() && !elevator.isClimbing())
 			{
+			    matchLog.writeClean("CY: holding");
 				elevator.hold();
 			}
 			
 		}
 		else
 		{
-			if (lastSpeed == 0)
-				elevator.startManual();
+			if (lastSpeed == 0) {
+                matchLog.writeClean("CY: starting manual");
+
+                elevator.startManual();
+			}
+
 			elevator.setManualSpeed((speed > 0) ? speed * speed : (speed * speed) * -1, overrideToggle);
 		}
 		lastSpeed = speed;

@@ -34,8 +34,10 @@ public class PathfindFromFile extends AutonRoutine{
 
 		profile = new File("/home/lvuser/" + file + ".csv");
 
-		if (!profile.exists())
+		if (!profile.exists()) {
+			matchLogger.writeClean("PATHFINDER ERROR CAN'T FIND FILE");
 			return;
+		}
 
 		this.trajectory = Pathfinder.readFromCSV(profile);
 

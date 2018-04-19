@@ -111,7 +111,9 @@ public class DCMPSF extends AutonRoutine {
         } else { //RL
             PathfindFromFile switch1 = new PathfindFromFile(10000, "dcmpSfRL").startAndGoReverse();
             switch1.runNow("Switch");
-            elevator.goToTarget(elevator.ONE_FOOT*3);
+            Thread.sleep(10000);
+
+            /*elevator.goToTarget(elevator.ONE_FOOT*3);
             arm.goToPosition(arm.POS_BOTTOM);
             waitFor("Switch");
             new FaceAngle(1000, 90, 2).runUntilFinish();
@@ -121,6 +123,7 @@ public class DCMPSF extends AutonRoutine {
             intake.setIntake(0.5);
             intake.setClamp(intake.FREE);
             Thread.sleep(1000);
+            */
         }
     }
 }

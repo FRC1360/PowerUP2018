@@ -24,8 +24,8 @@ public class GeneratePaths {
     public static void generatePathWithMirr(String name, double velocity, double acceleration, double jerk, Waypoint... points){
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, TIME_STEP, velocity, acceleration, jerk);
 
-        File file = new File(fileRoot + name);
-        File fileMir = new File(fileRoot + "M" + name);
+        File file = new File(fileRoot + name + ".csv");
+        File fileMir = new File(fileRoot + "M" + name + ".csv");
 
         Trajectory trajectoryMir = Pathfinder.generate(mirrorPoint(points), config);
         Trajectory trajectory = Pathfinder.generate(points, config);
@@ -224,8 +224,7 @@ public class GeneratePaths {
         //Near
         generatePathWithMirr("scaleNearRight1", 8, 6, 50,
                 new Waypoint(1.63, 4.5, 0),
-                new Waypoint(13, 3.5, Pathfinder.d2r(0)),
-                new Waypoint(24.25, 6.5, Pathfinder.d2r(30)));
+                new Waypoint(22.5, 6, Pathfinder.d2r(10)));
         generatePathWithMirr("scaleNearRight2", 8, 6, 50,
                 new Waypoint(24.25, 6.5, Pathfinder.d2r(30)),
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)));

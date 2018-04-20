@@ -187,6 +187,11 @@ public class Scale extends AutonRoutine{
                 elevator.goToBottom();
 
                 waitFor("Drive to Cube 2");
+
+                //Wait for the intake
+                Thread.sleep(100);
+
+                //Stop the intake we have the cube
                 intake.setClamp(intake.CLOSED);
                 intake.setIntake(0);
 
@@ -225,6 +230,9 @@ public class Scale extends AutonRoutine{
                 while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
                 elevator.goToBottom();
                 waitFor("Drive to Cube 3");
+
+                //Wait for the cube to intake
+                Thread.sleep(100);
 
                 //Stop intake the cube is now in the bot
                 intake.setIntake(0);

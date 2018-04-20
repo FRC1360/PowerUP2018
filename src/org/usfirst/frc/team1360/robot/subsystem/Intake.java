@@ -18,6 +18,7 @@ public class Intake implements IntakeProvider {
 		robotOutput.setIntake(speed);
 	}
 
+	@Override
 	public void setIntake(double speed, double spin) {
 		robotOutput.setIntake(speed, spin);
 	}

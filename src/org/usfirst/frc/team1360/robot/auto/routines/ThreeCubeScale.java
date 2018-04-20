@@ -25,20 +25,24 @@ public class ThreeCubeScale extends AutonRoutine{
 	private PathfindFromFile scalePathL4;
 	private PathfindFromFile scalePathL5;
 
-    public ThreeCubeScale() {
-    	super("Three Cube Scale", 0);
+    public ThreeCubeScale(boolean leftStart) {
+        super(leftStart ? "Three Cube Scale Left Start" : "Three Cube Scale Right Start", 0);
 
-    	scalePathR1 = new PathfindFromFile(10000, "scaleNearRight1").cutOffFeet(0.2).startAndGoReverse();
-		scalePathR2 = new PathfindFromFile(10000, "scaleNearRight2").startReverse();
-		scalePathR3 = new PathfindFromFile(10000, "scaleNearRight3").cutOffFeet(0.2).startAndGoReverse();
-		scalePathR4 = new PathfindFromFile(10000, "scaleNearRight4").startReverse();
-		scalePathR5 = new PathfindFromFile(10000, "scaleNearRight5").startAndGoReverse();
+        String modifier = "";
+        if (leftStart)
+            modifier = "M";
 
-		scalePathL1 = new PathfindFromFile(10000, "scaleCrossLeft1").cutOffFeet(0.1).startAndGoReverse();
-		scalePathL2 = new PathfindFromFile(10000, "scaleCrossLeft2").cutOffFeet(0.1).startReverse();
-		scalePathL3 = new PathfindFromFile(10000, "scaleCrossLeft3").cutOffFeet(0.1).startAndGoReverse();
-		scalePathL4 = new PathfindFromFile(10000, "scaleCrossLeft4").cutOffFeet(0.1).startAndGoReverse();
-		scalePathL5 = new PathfindFromFile(10000, "scaleCrossLeft5").cutOffFeet(0.1).startAndGoReverse();
+    	scalePathR1 = new PathfindFromFile(10000, modifier+"scaleNearRight1").cutOffFeet(0.2).startAndGoReverse();
+		scalePathR2 = new PathfindFromFile(10000, modifier+"scaleNearRight2").startReverse();
+		scalePathR3 = new PathfindFromFile(10000, modifier+"scaleNearRight3").cutOffFeet(0.2).startAndGoReverse();
+		scalePathR4 = new PathfindFromFile(10000, modifier+"scaleNearRight4").startReverse();
+		scalePathR5 = new PathfindFromFile(10000, modifier+"scaleNearRight5").cutOffFeet(0.2).startAndGoReverse();
+
+		scalePathL1 = new PathfindFromFile(10000, modifier+"scaleCrossLeft1").cutOffFeet(0.2).startAndGoReverse();
+		scalePathL2 = new PathfindFromFile(10000, modifier+"scaleCrossLeft2").startReverse();
+		scalePathL3 = new PathfindFromFile(10000, modifier+"scaleCrossLeft3").cutOffFeet(0.2).startAndGoReverse();
+		scalePathL4 = new PathfindFromFile(10000, modifier+"scaleCrossLeft4").startReverse();
+		scalePathL5 = new PathfindFromFile(10000, modifier+"scaleCrossLeft5").cutOffFeet(0.2).startAndGoReverse();
     }
 
     @Override
@@ -99,11 +103,13 @@ public class ThreeCubeScale extends AutonRoutine{
 			/**/
         }
         else { //R
-        	//Start of first cube
+        	//1st Cube
 			robotOutput.shiftGear(false);
 
+			//Drive to scale
 			scalePathR1.setWaypoint(10, "Elevator Up");
 			scalePathR1.runNow("Scale Path 1");
+
 
 			waitFor("Elevator Up");
 			elevator.goToTarget(elevator.POS_TOP);
@@ -114,70 +120,95 @@ public class ThreeCubeScale extends AutonRoutine{
             intake.setIntake(1.0, 0.9);
 
 			waitFor("Scale Path 1");
-
 			Thread.sleep(200);
 
-            //while (sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM+100) Thread.sleep(10);
+
 
 			//2nd Cube
 			intake.setIntake(-1);
-			scalePathR2.runNow("Cube 2 Grab");
+			scalePathR2.runNow("Drive to Cube 2");
             arm.goToPosition(arm.POS_BOTTOM);
             while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
             elevator.goToBottom();
 
-            waitFor("Cube 2 Grab");
+            waitFor("Drive to Cube 2");
 			intake.setClamp(intake.CLOSED);
 			intake.setIntake(0);
 
+			//Drive to the scale to score cube
+			scalePathR3.runNow("Drive to Scale 2");
+
+			//Put elevator and arm up
             elevator.goToTarget(elevator.POS_TOP);
             arm.goToPosition(arm.POS_TOP);
-
-			scalePathR3.runNow("Cube 2");
             while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
             arm.goToPosition(arm.POS_BEHIND);
-			waitFor("Cube 2");
 
-			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+            //Wait for arm to go up
+            while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
-			intake.setClamp(intake.FREE);
-			intake.setIntake(0.9, 0.8);
+            //Yeet when ready
+            intake.setClamp(intake.FREE);
+            intake.setIntake(0.9, 0.8);
+
+            //Wait for path
+			waitFor("Drive to Scale 2");
+
+			//Sleep for outtake
+            Thread.sleep(200);
+
+
+
+
+			//3rd Cube
+			intake.setIntake(-1);
+
+			//Start driving to the 3rd cube
+			scalePathR4.runNow("Drive to Cube 3");
+
+			//Move elevator and arm down
+            arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToBottom();
+            waitFor("Drive to Cube 3");
+
+            //Stop intake the cube is now in the bot
+            intake.setIntake(0);
+            intake.setClamp(intake.CLOSED);
+
+            //Drive back to the scale
+			scalePathR5.runNow("Drive to Scale 3");
+
+			//Move arm and elevator up
+			arm.goToPosition(arm.POS_TOP);
+			elevator.goToTarget(elevator.POS_TOP);
+			while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
+			arm.goToPosition(arm.POS_BEHIND);
+
+			//Wait for arm to go back
+            while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+
+			//Outtake when ready
+            intake.setIntake(0.9, 0.8);
+            intake.setClamp(intake.FREE);
+
+			//Wait to reach the scale
+			waitFor("Drive to Scale 3");
+
+			//Wait for intake
 			Thread.sleep(200);
 
+			//Put arm and elevator down
 			arm.goToPosition(arm.POS_BOTTOM);
-            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
-			elevator.goToBottom();
-			Thread.sleep(1300);
-			/*
+			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToBottom();
 
-			/*
-			//3rd Cube
-			new FaceAngle(5000, 20, 2).runUntilFinish();
+            //Turn the intake off
+            intake.setClamp(intake.CLOSED);
+            intake.setIntake(0);
 
-			intake.setIntake(-1);
-			scalePathR4.runUntilFinish();
-			intake.setClamp(intake.CLOSED);
-			Thread.sleep(500);
-			intake.setIntake(0);
 
-			new ElevatorToTarget(1500, elevator.POS_TOP).runNow("Elevator Up2");
-			scalePathR5.runNow("Cube 3");
-			Thread.sleep(500);
-			arm.goToPosition(arm.POS_BEHIND);
-			waitFor("Cube 3", 0);
-
-			new FaceAngle(5000, -10, 2).runUntilFinish();
-			waitFor("Elevator Up2", 0);
-
-			intake.setClamp(intake.FREE);
-			intake.setIntake(0.5);
-
-			arm.goToPosition(arm.POS_BOTTOM);
-			Thread.sleep(500);
-			elevator.goToBottom();
-			*/
-			Thread.sleep(2000);
-
+			/**/
         }
 
     }

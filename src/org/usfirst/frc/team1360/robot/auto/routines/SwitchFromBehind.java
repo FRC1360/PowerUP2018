@@ -12,25 +12,26 @@ import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 
 public class SwitchFromBehind extends AutonRoutine {
-	
+	private PathfindFromFile switchLScaleR;
+	private PathfindFromFile switchRScaleL1;
+
 	public SwitchFromBehind() {
 		super("Switch From Behind", 0);
-		// TODO Auto-generated constructor stub
+
+		switchLScaleR = new PathfindFromFile(10000, "switchLScaleR");
+		switchRScaleL1 = new PathfindFromFile(10000, "switchRScaleL1");
 	}
-	
+
 	@Override
-	protected void runCore() throws InterruptedException 
+	protected void runCore() throws InterruptedException
 	{
 		new Calibrate().runNow("Calibrate");
-		
-		if(!Robot.csvLoaded) return;
-		
+
 		if(fms.plateLeft(0)) { //LR
-			
-			PathfindFromFile switch1 = new PathfindFromFile(10000, "switchLScaleR");
-			switch1.runNow("Switch 1");
+			if (switchLScaleR.notLoaded()) return;
+			switchLScaleR.runNow("Switch 1");
 			waitFor("Switch 1");
-			
+
 			new ElevatorToTarget(2000, (int) (elevator.ONE_FOOT*2)).runUntilFinish();
 			robotOutput.setClamp(intake.FREE);
 			robotOutput.setIntake(0.5);
@@ -39,9 +40,8 @@ public class SwitchFromBehind extends AutonRoutine {
 			robotOutput.setIntake(0);
 		}
 		else if(!fms.plateLeft(0) && fms.plateLeft(1)) { //RL
-	
-			PathfindFromFile switch1 = new PathfindFromFile(10000, "switchRScaleL1");
-			switch1.runNow("Switch 1");
+			if (switchRScaleL1.notLoaded()) return;
+			switchRScaleL1.runNow("Switch 1");
 			waitFor("Calibrate");
 			new ElevatorToTarget(2000, elevator.ONE_FOOT * 3).runUntilFinish();
 			arm.goToPosition(arm.POS_BOTTOM);

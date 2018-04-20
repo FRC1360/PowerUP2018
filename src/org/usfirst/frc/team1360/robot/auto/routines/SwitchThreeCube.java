@@ -61,9 +61,27 @@ public class SwitchThreeCube extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
-		//new Calibrate().runNow("Calibrate");
-		
-		if(!Robot.csvLoaded) return;
+		if(pathR.notLoaded()
+                || pathR2.notLoaded()
+                || pathR3.notLoaded()
+                || pathR4.notLoaded()
+                || pathR5.notLoaded()
+                || pathR6.notLoaded()
+                || pathR7.notLoaded()
+                || pathR8.notLoaded()
+                || pathR9.notLoaded()
+
+                || pathL.notLoaded()
+                || pathL2.notLoaded()
+                || pathL3.notLoaded()
+                || pathL4.notLoaded()
+                || pathL5.notLoaded()
+                || pathL6.notLoaded()
+                || pathL7.notLoaded()
+                || pathL8.notLoaded()
+                || pathL9.notLoaded() ) {
+		    return;
+        }
 		
 		if(fms.plateLeft(0)) {
 		    matchLogger.writeClean("LEFT SIDE SWITCH");

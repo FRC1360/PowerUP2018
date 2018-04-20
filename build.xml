@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="FRC Deployment" default="deploy">
+<project name="FRC Deployment" default="deploy-with-paths">
 
   <!--
   The following properties can be defined to override system level
@@ -27,4 +27,59 @@
 
   <import file="${wpilib.ant.dir}/build.xml"/>
 
+  <target name="generate-paths.switch" depends="compile">
+    <mkdir dir="${build.dir}/paths"/>
+    <java classname="org.usfirst.frc.team1360.robot.GeneratePaths" fork="true">
+      <arg value="switch"/>
+      <arg value="${build.dir}/paths"/>
+      <classpath>
+        <pathelement path="${build.dir}"/>
+        <path refid="classpath.path"/>
+      </classpath>
+    </java>
+    <jar destfile="${build.jars}/paths.jar" update="false">
+      <fileset dir="${build.dir}" includes="paths/*" />
+    </jar>
+  </target>
+
+  <target name="generate-paths.scale" depends="compile">
+    <mkdir dir="${build.dir}/paths"/>
+    <java classname="org.usfirst.frc.team1360.robot.GeneratePaths" fork="true">
+      <arg value="scale"/>
+      <arg value="${build.dir}/paths"/>
+      <classpath>
+        <pathelement path="${build.dir}"/>
+        <path refid="classpath.path"/>
+      </classpath>
+    </java>
+    <jar destfile="${build.jars}/paths.jar" update="false">
+      <fileset dir="${build.dir}" includes="paths/*" />
+    </jar>
+  </target>
+
+  <target name="generate-paths.switch-scale" depends="compile">
+    <mkdir dir="${build.dir}/paths"/>
+    <java classname="org.usfirst.frc.team1360.robot.GeneratePaths" fork="true">
+      <arg value="switch-scale"/>
+      <arg value="${build.dir}/paths"/>
+      <classpath>
+        <pathelement path="${build.dir}"/>
+        <path refid="classpath.path"/>
+      </classpath>
+    </java>
+    <jar destfile="${build.jars}/paths.jar" update="false">
+      <fileset dir="${build.dir}" includes="paths/*" />
+    </jar>
+  </target>
+
+  <target name="generate-paths.all"
+          depends="generate-paths.switch,
+                   generate-paths.scale"
+  />
+
+  <!-- Use this target instead of deploy to include all paths-->
+  <target name="deploy-with-paths"
+          depends="clean,generate-paths.all,jar,get-target-ip,dependencies">
+    <antcall target="athena-project-build.deploy"/>
+  </target>
 </project>

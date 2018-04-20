@@ -23,7 +23,13 @@ public class DCMPSF extends AutonRoutine {
 
     @Override
     protected void runCore() throws InterruptedException {
-        if (!Robot.csvLoaded) return;
+        if (scalePathR1.notLoaded()
+                ||scalePathR2.notLoaded()
+                ||scalePathR3.notLoaded()
+                ||scalePathR4.notLoaded()
+                ||scalePathR5.notLoaded() ) {
+            return;
+        }
 
         if (!fms.plateLeft(1)) { //LR+RR
             //Start of first cube

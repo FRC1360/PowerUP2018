@@ -31,10 +31,6 @@ public final class Test extends AutonRoutine {
 
 	@Override
 	protected void runCore() throws InterruptedException {
-//		new FaceAngle(1500, 90).runUntilFinish();
-		
-//		/*
 
-//        */
 	}
 }

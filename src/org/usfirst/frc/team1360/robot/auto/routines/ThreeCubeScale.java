@@ -13,6 +13,8 @@ import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
 import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 
 public class ThreeCubeScale extends AutonRoutine{
+    private boolean leftStart;
+
 	private PathfindFromFile scalePathR1;
 	private PathfindFromFile scalePathR2;
 	private PathfindFromFile scalePathR3;
@@ -27,6 +29,8 @@ public class ThreeCubeScale extends AutonRoutine{
 
     public ThreeCubeScale(boolean leftStart) {
         super(leftStart ? "Three Cube Scale Left Start" : "Three Cube Scale Right Start", 0);
+
+        this.leftStart = leftStart;
 
         String modifier = "";
         if (leftStart)
@@ -50,7 +54,7 @@ public class ThreeCubeScale extends AutonRoutine{
     {
 		arm.goToPosition(arm.POS_TOP);
 
-        if(fms.plateLeft(1)) { //L
+        if(fms.plateLeft(1) != leftStart) { //L
         	robotOutput.shiftGear(false);
 
         	//Drive to the scale

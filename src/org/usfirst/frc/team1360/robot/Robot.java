@@ -7,8 +7,8 @@
 
 package org.usfirst.frc.team1360.robot;
 
-import java.io.File;
-
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team1360.robot.IO.HumanInput;
 import org.usfirst.frc.team1360.robot.IO.HumanInputProvider;
 import org.usfirst.frc.team1360.robot.IO.RobotOutput;
@@ -29,21 +29,12 @@ import org.usfirst.frc.team1360.robot.teleop.TeleopControl;
 import org.usfirst.frc.team1360.robot.teleop.TeleopDrive;
 import org.usfirst.frc.team1360.robot.teleop.TeleopElevator;
 import org.usfirst.frc.team1360.robot.teleop.TeleopIntake;
-import org.usfirst.frc.team1360.robot.util.OrbitCamera;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
 import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
 import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
-
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -63,11 +54,7 @@ public class Robot extends TimedRobot {
     private OrbitPositionProvider position;
     private TeleopControl teleopControl;
 
-
-    public static boolean GENERATE = true;
-    public static boolean csvLoaded = false;
-
-	private String FILE_ROOT = "/home/lvuser/";
+    public static boolean GENERATE = false;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -100,40 +87,13 @@ public class Robot extends TimedRobot {
 		arm.start();
 		elevator.start();
 		
-		/**Auto Path Naming System
-		 * 
-		 * waypoint "point+name"
-		 * Trajectory "trajectory+name"
-		 * Config "config+name"
-		 * File "file+name"
-		 * 
-		 * Auto Routines 2018 root names
-		 * 
-		 * Two Cubes Switch Scale
-		 * SwitchLScaleL - Two cube
-		 * SwitchRScaleR - Two cube
-		 * SwitchLScaleR - Single Switch
-		 * SwitchRScaleL - Double Switch
-		 * 
-		 * Single Cube Switch
-		 * SwitchL
-		 * SwitchR
-		 * 
-		 * 
-		 */
-
 		if(GENERATE) {
-			//GeneratePaths.generateScaleSwitchPaths("/home/lvuser/");
-//			GeneratePaths.generateSwitchPaths("/home/lvuser/");
-			GeneratePaths.generateScalePaths("/home/lvuser/");
+			GeneratePaths generator = new GeneratePaths("/home/lvuser/");
+			//generator.generateScaleSwitchPaths();
+			//generator.generateSwitchPaths();
+			generator.generateScalePaths();
 		}
-
-		if(new File("/home/lvuser/switchL.csv").exists())
-			csvLoaded = true;
 	}
-	
-	
-	
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
@@ -407,9 +367,5 @@ public class Robot extends TimedRobot {
 		}
 
 		matchLog.writeClean("SELF TEST COMPLETE LOG ENDING");
-		
-		
-		
-		
 	}
 }

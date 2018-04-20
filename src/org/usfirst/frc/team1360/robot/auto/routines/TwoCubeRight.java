@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
-import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
 import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
 import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;
@@ -17,12 +15,8 @@ public class TwoCubeRight extends AutonRoutine{
 		super("Two Cube Right", 0);
 	}
 	
-
 	@Override
-	protected void runCore() throws InterruptedException 
-	{
-		//new Calibrate().runNow("Calibrate");
-		
+	protected void runCore() throws InterruptedException {
 		if(fms.plateLeft(0) && fms.plateLeft(1)) { //LL
 			PathfindFromFile path = new PathfindFromFile(10000, "switchLScaleL");
 			path.runNow("To Scale");

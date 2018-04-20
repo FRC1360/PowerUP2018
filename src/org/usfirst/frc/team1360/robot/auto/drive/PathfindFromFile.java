@@ -1,12 +1,14 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
 import java.io.File;
+import java.io.InputStream;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.auto.util.Pathloader;
 import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 public class PathfindFromFile extends AutonRoutine{
@@ -17,12 +19,12 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double MAX_FPS = 7;
 
-	private double totalLength;
+	double totalLength;
 
-	private Trajectory trajectory;
+	Trajectory trajectory;
 
-	private EncoderFollower left;
-	private EncoderFollower right;
+	EncoderFollower left;
+	EncoderFollower right;
 
 	private int direction = 1; //1=forward; -1=backward;
 	private double subtractFromNavx = 0;
@@ -30,7 +32,6 @@ public class PathfindFromFile extends AutonRoutine{
 	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
 		File profile;
-		File rightProfile;
 
 		profile = new File("/home/lvuser/" + file + ".csv");
 
@@ -47,6 +48,14 @@ public class PathfindFromFile extends AutonRoutine{
 		right = new EncoderFollower(modifier.getRightTrajectory());
 
 		this.totalLength = trajectory.segments[trajectory.length()-1].position;
+	}
+
+	protected PathfindFromFile(String name, long timeout) {
+		super(name, timeout);
+	}
+
+	public boolean notLoaded() {
+		return trajectory==null || trajectory.length()==0;
 	}
 
 	public PathfindFromFile cutOffFeet(double feet){

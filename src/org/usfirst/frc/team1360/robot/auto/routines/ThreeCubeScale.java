@@ -53,63 +53,107 @@ public class ThreeCubeScale extends AutonRoutine{
         if(fms.plateLeft(1)) { //L
         	robotOutput.shiftGear(false);
 
+        	//Drive to the scale
         	scalePathL1.setWaypoint(30, "Elevator Up");
         	scalePathL1.runNow("Scale Path 1");
 
+        	//Put arm and elevator up
         	waitFor("Elevator Up");
-			elevator.goToTarget(elevator.POS_TOP, 0.5);
+			elevator.goToTarget(elevator.POS_TOP);
+			arm.goToPosition(arm.POS_TOP);
+			while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
 			arm.goToPosition(arm.POS_BEHIND);
 
+			//Shoot cube when ready
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+            intake.setClamp(intake.FREE);
+            intake.setIntake(1.0, -0.9);
+            Thread.sleep(200);
 
 			waitFor("Scale Path 1");
 
-			Thread.sleep(500);
-
-			intake.setClamp(intake.FREE);
-			intake.setIntake(0.5);
-			Thread.sleep(1000);
-
-			arm.goToPosition(arm.POS_BOTTOM);
-			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
-			elevator.goToTarget(elevator.POS_BOTTOM);
-
-			intake.setClamp(intake.FREE);
-			intake.setIntake(-1);
 
 			//2nd Cube
-			scalePathL2.runUntilFinish();
+			scalePathL2.runNow("Drive to Cube 2");
 
-			/*
+            //Get intake spinning
+            intake.setClamp(intake.FREE);
+            intake.setIntake(-1);
+
+            //Put arm back down
+            arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToTarget(elevator.POS_BOTTOM);
+
+            waitFor("Drive to Cube 2");
 
 			intake.setClamp(intake.CLOSED);
 			intake.setIntake(0);
 
+
+            scalePathL3.runNow("Drive to Scale 2");
+			arm.goToPosition(arm.POS_TOP);
+            elevator.goToTarget(elevator.POS_TOP);
+			while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
 			arm.goToPosition(arm.POS_BEHIND);
-			elevator.goToTarget(elevator.POS_TOP);
-			scalePathL2.runUntilFinish();
 
             while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.5);
-            Thread.sleep(1000);
+            intake.setIntake(1.0, -0.9);
+            Thread.sleep(200);
 
-            intake.setIntake(0);
-            intake.setClamp(intake.CLOSED);
+            waitFor("Drive to Scale 2");
 
+
+
+            //3rd Cube
+            scalePathL4.runNow("Drive to Cube 3");
+
+            //Get intake spinning
+            intake.setClamp(intake.FREE);
+            intake.setIntake(-1);
+
+            //Put arm back down
             arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
             elevator.goToTarget(elevator.POS_BOTTOM);
-			/**/
+
+            waitFor("Drive to Cube 3");
+
+            intake.setClamp(intake.CLOSED);
+            intake.setIntake(0);
+
+            //Drive back with cube
+            scalePathL5.runNow("Drive to Scale 3");
+
+            //Put the arm and elevator back up
+            arm.goToPosition(arm.POS_TOP);
+            elevator.goToTarget(elevator.POS_TOP);
+            while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
+            arm.goToPosition(arm.POS_BEHIND);
+
+            //Wait for the arm to be in position
+            while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+
+            //Outtake cube
+            intake.setClamp(intake.FREE);
+            intake.setIntake(1.0, -0.9);
+            Thread.sleep(200);
+
+            waitFor("Drive to Scale 4");
+            /**/
+
+            Thread.sleep(500);
+            intake.setIntake(0);
         }
         else { //R
         	//1st Cube
 			robotOutput.shiftGear(false);
 
 			//Drive to scale
-			scalePathR1.setWaypoint(10, "Elevator Up");
+			scalePathR1.setWaypoint(8, "Elevator Up");
 			scalePathR1.runNow("Scale Path 1");
-
 
 			waitFor("Elevator Up");
 			elevator.goToTarget(elevator.POS_TOP);

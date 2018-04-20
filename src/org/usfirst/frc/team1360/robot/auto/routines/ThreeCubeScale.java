@@ -28,9 +28,9 @@ public class ThreeCubeScale extends AutonRoutine{
     public ThreeCubeScale() {
     	super("Three Cube Scale", 0);
 
-    	scalePathR1 = new PathfindFromFile(10000, "scaleNearRight1").cutOffFeet(0.1).startAndGoReverse();
+    	scalePathR1 = new PathfindFromFile(10000, "scaleNearRight1").cutOffFeet(0.2).startAndGoReverse();
 		scalePathR2 = new PathfindFromFile(10000, "scaleNearRight2").startReverse();
-		scalePathR3 = new PathfindFromFile(10000, "scaleNearRight3").startAndGoReverse();
+		scalePathR3 = new PathfindFromFile(10000, "scaleNearRight3").cutOffFeet(0.2).startAndGoReverse();
 		scalePathR4 = new PathfindFromFile(10000, "scaleNearRight4").startReverse();
 		scalePathR5 = new PathfindFromFile(10000, "scaleNearRight5").startAndGoReverse();
 
@@ -114,17 +114,14 @@ public class ThreeCubeScale extends AutonRoutine{
 			waitFor("Scale Path 1");
 
 			intake.setClamp(intake.FREE);
-			intake.setIntake(0.5);
-			Thread.sleep(200);
+			intake.setIntake(1.0, 0.9);
+			Thread.sleep(100);
 
 			arm.goToPosition(arm.POS_BOTTOM);
 			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
 			elevator.goToBottom();
 
-            robotOutput.shiftGear(true);
-
-            while (sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM+100) Thread.sleep(10);
-
+            //while (sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM+100) Thread.sleep(10);
 
 			//2nd Cube
 			intake.setIntake(-1);
@@ -133,16 +130,18 @@ public class ThreeCubeScale extends AutonRoutine{
 			Thread.sleep(250);
 			intake.setIntake(0);
 
+            elevator.goToTarget(elevator.POS_TOP);
 
 			scalePathR3.runNow("Cube 2");
 			waitFor("Cube 2");
 
-			elevator.goToTarget(elevator.POS_TOP);
+            while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
 			arm.goToPosition(arm.POS_BEHIND);
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
 			intake.setClamp(intake.FREE);
-			intake.setIntake(0.7);
+			intake.setIntake(0.9, 0.8);
+			Thread.sleep(100);
 
 			arm.goToPosition(arm.POS_BOTTOM);
             while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);

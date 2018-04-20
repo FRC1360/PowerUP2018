@@ -235,7 +235,7 @@ public class GeneratePaths {
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
                 new Waypoint(24.25, 6.4, Pathfinder.d2r(15)));
         generatePathWithMirr("scaleNearRight4", 8, 6, 50,
-                new Waypoint(24.25, 6.9, Pathfinder.d2r(25)),
+                new Waypoint(24.25, 6.4, Pathfinder.d2r(15)),
                 new Waypoint(18, 6.25, Pathfinder.d2r(-60)));
         generatePathWithMirr("scaleNearRight5", 8, 6, 50,
                 new Waypoint(18, 8.75, Pathfinder.d2r(-60)),

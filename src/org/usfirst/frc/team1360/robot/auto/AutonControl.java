@@ -30,14 +30,16 @@ public class AutonControl {
 	private static void setup()
 	{
 		routines.clear();
-		routines.add(new ThreeCubeScale(false));
-		routines.add(new ThreeCubeScale(true));
+		routines.add(new Scale(false, 1));
+        routines.add(new Scale(false, 2));
+        routines.add(new Scale(false, 3));
+        routines.add(new Scale(true, 1));
+        routines.add(new Scale(true, 2));
+		routines.add(new Scale(true, 3));
 		routines.add(new DCMPSF());
-		routines.add(new ScaleLeft());
 		routines.add(new SwitchThreeCube());
 		routines.add(new Test());
 		routines.add(new TwoCubeRight());
-		routines.add(new Scale());
 		routines.add(new Switch());
 		routines.add(new CrossBaseline());
 		routines.add(new SwitchFromBehind());

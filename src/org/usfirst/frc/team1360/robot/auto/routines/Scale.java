@@ -29,7 +29,7 @@ public class Scale extends AutonRoutine{
 	private PathfindFromFile scalePathL5;
 
     public Scale(boolean leftStart, int amtOfCubes) {
-        super(leftStart ? amtOfCubes + " Cube Scale Left Start" : amtOfCubes + " Cube Scale Right Start", 0);
+        super(leftStart ? amtOfCubes + " Cube Scale, Left Start" : amtOfCubes + " Cube Scale, Right Start", 0);
 
         this.leftStart = leftStart;
         this.amtOfCubes = amtOfCubes;

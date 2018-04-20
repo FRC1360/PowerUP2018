@@ -7,6 +7,9 @@ import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GeneratePaths {
 
@@ -14,10 +17,9 @@ public class GeneratePaths {
     public static final double TIME_STEP = 0.025;
 
     public static Waypoint[] mirrorPoint(Waypoint[] points){
-        for(int i = 0; i < points.length; i++){
-            points[i].y = 27 - points[i].y;
-        }
-        return points;
+        return Stream.of(points)
+                .map(p -> new Waypoint(p.x, 27-p.y, Pathfinder.d2r(-Pathfinder.r2d(p.angle))))
+                .toArray(Waypoint[]::new);
     }
 
     //Code that will generate a path given input and a specified path
@@ -27,8 +29,8 @@ public class GeneratePaths {
         File file = new File(fileRoot + name + ".csv");
         File fileMir = new File(fileRoot + "M" + name + ".csv");
 
-        Trajectory trajectoryMir = Pathfinder.generate(mirrorPoint(points), config);
         Trajectory trajectory = Pathfinder.generate(points, config);
+        Trajectory trajectoryMir = Pathfinder.generate(mirrorPoint(points), config);
 
         Pathfinder.writeToCSV(file, trajectory);
         Pathfinder.writeToCSV(fileMir, trajectoryMir);
@@ -222,21 +224,22 @@ public class GeneratePaths {
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
 
         //Near
-        generatePathWithMirr("scaleNearRight1", 8, 6, 50,
-                new Waypoint(1.63, 4.5, 0),
-                new Waypoint(22.5, 6, Pathfinder.d2r(10)));
-        generatePathWithMirr("scaleNearRight2", 8, 6, 50,
-                new Waypoint(24.25, 6.5, Pathfinder.d2r(30)),
+        generatePathWithMirr("scaleNearRight1", 10, 7, 50,
+                new Waypoint(1.63, 6.03, 0),
+                new Waypoint(14, 5, 0),
+                new Waypoint(24.25, 6.25, Pathfinder.d2r(15)));
+        generatePathWithMirr("scaleNearRight2", 10, 7, 50,
+                new Waypoint(24.25, 6.25, Pathfinder.d2r(15)),
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)));
-        generatePathWithMirr("scaleNearRight3", 8, 6, 50,
+        generatePathWithMirr("scaleNearRight3", 10, 7, 50,
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
-                new Waypoint(24.25, 6.5, Pathfinder.d2r(45)));
+                new Waypoint(24.25, 6.25, Pathfinder.d2r(15)));
         generatePathWithMirr("scaleNearRight4", 8, 6, 50,
                 new Waypoint(24.25, 6.9, Pathfinder.d2r(25)),
-                new Waypoint(18, 8.75, Pathfinder.d2r(-60)));
+                new Waypoint(18, 6.25, Pathfinder.d2r(-60)));
         generatePathWithMirr("scaleNearRight5", 8, 6, 50,
                 new Waypoint(18, 8.75, Pathfinder.d2r(-60)),
-                new Waypoint(24.25, 6.9, Pathfinder.d2r(25)));
+                new Waypoint(24.25, 6.25, Pathfinder.d2r(25)));
 
         System.out.println("CSVs GENERATED TO PATH " + FILE_ROOT);
     }

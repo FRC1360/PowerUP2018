@@ -110,38 +110,39 @@ public class ThreeCubeScale extends AutonRoutine{
 			arm.goToPosition(arm.POS_BEHIND);
 
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
+            intake.setClamp(intake.FREE);
+            intake.setIntake(1.0, 0.9);
 
 			waitFor("Scale Path 1");
 
-			intake.setClamp(intake.FREE);
-			intake.setIntake(1.0, 0.9);
-			Thread.sleep(100);
-
-			arm.goToPosition(arm.POS_BOTTOM);
-			while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
-			elevator.goToBottom();
+			Thread.sleep(200);
 
             //while (sensorInput.getElevatorEncoder() > elevator.POS_BOTTOM+100) Thread.sleep(10);
 
 			//2nd Cube
 			intake.setIntake(-1);
-			scalePathR2.runUntilFinish();
+			scalePathR2.runNow("Cube 2 Grab");
+            arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToBottom();
+
+            waitFor("Cube 2 Grab");
 			intake.setClamp(intake.CLOSED);
-			Thread.sleep(250);
 			intake.setIntake(0);
 
             elevator.goToTarget(elevator.POS_TOP);
+            arm.goToPosition(arm.POS_TOP);
 
 			scalePathR3.runNow("Cube 2");
+            while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
+            arm.goToPosition(arm.POS_BEHIND);
 			waitFor("Cube 2");
 
-            while (sensorInput.getElevatorEncoder() < elevator.POS_TOP-100) Thread.sleep(10);
-			arm.goToPosition(arm.POS_BEHIND);
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
 
 			intake.setClamp(intake.FREE);
 			intake.setIntake(0.9, 0.8);
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			arm.goToPosition(arm.POS_BOTTOM);
             while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);

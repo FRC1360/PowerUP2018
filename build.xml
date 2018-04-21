@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="FRC Deployment" default="deploy-with-paths">
+<project name="FRC Deployment" default="deploy">
 
   <!--
   The following properties can be defined to override system level
@@ -77,9 +77,12 @@
                    generate-paths.scale"
   />
 
-  <!-- Use this target instead of deploy to include all paths-->
-  <target name="deploy-with-paths"
-          depends="clean,generate-paths.all,jar,get-target-ip,dependencies">
-    <antcall target="athena-project-build.deploy"/>
+  <!-- Overwrites imported clean target -->
+  <target name="clean" description="Clean up all build and distribution artifacts.">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+
+    <!-- This is the only place where we can inject path generation in deployment process -->
+    <antcall target="generate-paths.all"/>
   </target>
 </project>

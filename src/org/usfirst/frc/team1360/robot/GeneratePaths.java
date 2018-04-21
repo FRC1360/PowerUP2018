@@ -159,40 +159,40 @@ public class GeneratePaths {
 
         //DOUBLE CUBE SCALE AUTO PATHS
         //Cross
-        generatePathWithMirr("scaleCrossRight1", 10, 7, 50,
+        generatePathWithMirr("scaleCross1", 10, 7, 50,
                 new Waypoint(1.63, 4.50, 0),
                 new Waypoint(15, 3, 0),
                 new Waypoint(19.5, 9, Pathfinder.d2r(90)),
                 new Waypoint(19.5, 17.0, Pathfinder.d2r(90)),
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
-        generatePathWithMirr("scaleCrossRight2", 10, 7, 50,
+        generatePathWithMirr("scaleCross2", 10, 7, 50,
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
                 new Waypoint(18, 20, Pathfinder.d2r(20)));
-        generatePathWithMirr("scaleCrossRight3", 10, 7, 50,
+        generatePathWithMirr("scaleCross3", 10, 7, 50,
                 new Waypoint(18, 20, Pathfinder.d2r(20)),
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
-        generatePathWithMirr("scaleCrossRight4", 10, 7, 50,
+        generatePathWithMirr("scaleCross4", 10, 7, 50,
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
                 new Waypoint(18.25, 18, Pathfinder.d2r(40)));
-        generatePathWithMirr("scaleCrossRight5", 10, 7, 50,
+        generatePathWithMirr("scaleCross5", 10, 7, 50,
                 new Waypoint(18.25, 18, Pathfinder.d2r(40)),
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
 
         //Near
-        generatePathWithMirr("scaleNearRight1", 10, 7, 50,
+        generatePathWithMirr("scaleNear1", 10, 7, 50,
                 new Waypoint(1.63, 6.03, 0),
                 new Waypoint(14, 5, 0),
                 new Waypoint(24.25, 6.25, Pathfinder.d2r(25)));
-        generatePathWithMirr("scaleNearRight2", 5, 5, 50,
+        generatePathWithMirr("scaleNear2", 5, 5, 50,
                 new Waypoint(24.25, 6.25, Pathfinder.d2r(25)),
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)));
-        generatePathWithMirr("scaleNearRight3", 5, 5, 50,
+        generatePathWithMirr("scaleNear3", 5, 5, 50,
                 new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
                 new Waypoint(24.25, 7, Pathfinder.d2r(25)));
-        generatePathWithMirr("scaleNearRight4", 5, 5, 50,
+        generatePathWithMirr("scaleNear4", 5, 5, 50,
                 new Waypoint(24.25, 7, Pathfinder.d2r(25)),
                 new Waypoint(18, 8.75, Pathfinder.d2r(-50)));
-        generatePathWithMirr("scaleNearRight5", 5, 5, 50,
+        generatePathWithMirr("scaleNear5", 5, 5, 50,
                 new Waypoint(18, 8.75, Pathfinder.d2r(-50)),
                 new Waypoint(24, 3, Pathfinder.d2r(-50)));
 

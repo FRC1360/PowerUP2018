@@ -35,17 +35,21 @@ public class Scale extends AutonRoutine{
         if (leftStart)
             modifier = "M";
 
-    	scalePathR1 = new PathfindFromFile(10000, modifier+"scaleNearRight1").cutOffFeet(0.2).startAndGoReverse();
-		scalePathR2 = new PathfindFromFile(10000, modifier+"scaleNearRight2").startReverse();
-		scalePathR3 = new PathfindFromFile(10000, modifier+"scaleNearRight3").cutOffFeet(0.2).startAndGoReverse();
-		scalePathR4 = new PathfindFromFile(10000, modifier+"scaleNearRight4").startReverse();
-		scalePathR5 = new PathfindFromFile(10000, modifier+"scaleNearRight5").cutOffFeet(0.2).startAndGoReverse();
+        try {
+            scalePathR1 = new PathfindFromClasspath(10000, modifier + "scaleNear1").cutOffFeet(0.2).startAndGoReverse();
+            scalePathR2 = new PathfindFromClasspath(10000, modifier + "scaleNear2").startReverse();
+            scalePathR3 = new PathfindFromClasspath(10000, modifier + "scaleNear3").cutOffFeet(0.2).startAndGoReverse();
+            scalePathR4 = new PathfindFromClasspath(10000, modifier + "scaleNear4").startReverse();
+            scalePathR5 = new PathfindFromClasspath(10000, modifier + "scaleNear5").cutOffFeet(0.2).startAndGoReverse();
 
-		scalePathL1 = new PathfindFromFile(10000, modifier+"scaleCrossLeft1").cutOffFeet(0.2).startAndGoReverse();
-		scalePathL2 = new PathfindFromFile(10000, modifier+"scaleCrossLeft2").startReverse();
-		scalePathL3 = new PathfindFromFile(10000, modifier+"scaleCrossLeft3").cutOffFeet(0.2).startAndGoReverse();
-		scalePathL4 = new PathfindFromFile(10000, modifier+"scaleCrossLeft4").startReverse();
-		scalePathL5 = new PathfindFromFile(10000, modifier+"scaleCrossLeft5").cutOffFeet(0.2).startAndGoReverse();
+            scalePathL1 = new PathfindFromClasspath(10000, modifier + "scaleCross1").cutOffFeet(0.2).startAndGoReverse();
+            scalePathL2 = new PathfindFromClasspath(10000, modifier + "scaleCross2").startReverse();
+            scalePathL3 = new PathfindFromClasspath(10000, modifier + "scaleCross3").cutOffFeet(0.2).startAndGoReverse();
+            scalePathL4 = new PathfindFromClasspath(10000, modifier + "scaleCross4").startReverse();
+            scalePathL5 = new PathfindFromClasspath(10000, modifier + "scaleCross5").cutOffFeet(0.2).startAndGoReverse();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -241,17 +241,14 @@ public class Scale extends AutonRoutine{
                 //Drive back to the scale
                 scalePathR5.runNow("Drive to Scale 3");
 
+                //Move arm and elevator up
                 arm.goToPosition(arm.POS_TOP);
-                elevator.goToTarget(elevator.ONE_FOOT*5);
+                elevator.goToTarget(elevator.POS_TOP);
                 while (sensorInput.getElevatorEncoder() < elevator.POS_TOP - 100) Thread.sleep(10);
-
-
-                new FaceAngle(10000, -135, 5).runUntilFinish();
-
-                arm.goToPosition(arm.POS_TOP+400);
+                arm.goToPosition(arm.POS_BEHIND);
 
                 //Wait for arm to go back
-                while (sensorInput.getArmEncoder() < arm.POS_TOP + 300) Thread.sleep(10);
+                while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
 
                 //Outtake when ready
                 intake.setIntake(0.9, 0.8);

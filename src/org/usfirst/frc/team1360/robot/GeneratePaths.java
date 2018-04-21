@@ -194,7 +194,7 @@ public class GeneratePaths {
                 new Waypoint(18, 8.75, Pathfinder.d2r(-50)));
         generatePathWithMirr("scaleNear5", 5, 5, 50,
                 new Waypoint(18, 8.75, Pathfinder.d2r(-50)),
-                new Waypoint(24, 3, Pathfinder.d2r(-50)));
+                new Waypoint(24.25, 7, Pathfinder.d2r(25)));
 
         System.out.println("CSVs GENERATED TO PATH " + fileRoot);
     }

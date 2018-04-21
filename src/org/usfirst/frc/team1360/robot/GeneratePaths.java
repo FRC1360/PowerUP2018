@@ -182,19 +182,19 @@ public class GeneratePaths {
         generatePathWithMirr("scaleNearRight1", 10, 7, 50,
                 new Waypoint(1.63, 6.03, 0),
                 new Waypoint(14, 5, 0),
-                new Waypoint(24.25, 6.25, Pathfinder.d2r(15)));
-        generatePathWithMirr("scaleNearRight2", 10, 7, 50,
-                new Waypoint(24.25, 6.25, Pathfinder.d2r(15)),
-                new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)));
-        generatePathWithMirr("scaleNearRight3", 10, 7, 50,
-                new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
-                new Waypoint(24.25, 6.4, Pathfinder.d2r(15)));
-        generatePathWithMirr("scaleNearRight4", 10, 7, 50,
-                new Waypoint(24.25, 6.4, Pathfinder.d2r(15)),
-                new Waypoint(18, 9, Pathfinder.d2r(-50)));
-        generatePathWithMirr("scaleNearRight5", 10, 7, 50,
-                new Waypoint(18, 9, Pathfinder.d2r(-50)),
                 new Waypoint(24.25, 6.25, Pathfinder.d2r(25)));
+        generatePathWithMirr("scaleNearRight2", 5, 5, 50,
+                new Waypoint(24.25, 6.25, Pathfinder.d2r(25)),
+                new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)));
+        generatePathWithMirr("scaleNearRight3", 5, 5, 50,
+                new Waypoint(18.75, 6.9, Pathfinder.d2r(-20)),
+                new Waypoint(24.25, 7, Pathfinder.d2r(25)));
+        generatePathWithMirr("scaleNearRight4", 5, 5, 50,
+                new Waypoint(24.25, 7, Pathfinder.d2r(25)),
+                new Waypoint(18, 8.75, Pathfinder.d2r(-50)));
+        generatePathWithMirr("scaleNearRight5", 5, 5, 50,
+                new Waypoint(18, 8.75, Pathfinder.d2r(-50)),
+                new Waypoint(24, 3, Pathfinder.d2r(-50)));
 
         System.out.println("CSVs GENERATED TO PATH " + fileRoot);
     }

@@ -2,11 +2,7 @@ package org.usfirst.frc.team1360.robot.auto.routines;
 
 import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
-import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
-import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
-import org.usfirst.frc.team1360.robot.auto.drive.FaceAngle;
-import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
+import org.usfirst.frc.team1360.robot.auto.drive.*;
 import org.usfirst.frc.team1360.robot.subsystem.ArmProvider;
 import org.usfirst.frc.team1360.robot.subsystem.Elevator;
 import org.usfirst.frc.team1360.robot.subsystem.ElevatorProvider;
@@ -74,7 +70,7 @@ public class Scale extends AutonRoutine{
 			//Shoot cube when ready
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
             intake.setClamp(intake.FREE);
-            intake.setIntake(1.0, -0.9);
+            intake.setIntake(0.8, -0.7);
             Thread.sleep(200);
 
 			waitFor("Scale Path 1");
@@ -241,14 +237,17 @@ public class Scale extends AutonRoutine{
                 //Drive back to the scale
                 scalePathR5.runNow("Drive to Scale 3");
 
-                //Move arm and elevator up
                 arm.goToPosition(arm.POS_TOP);
-                elevator.goToTarget(elevator.POS_TOP);
+                elevator.goToTarget(elevator.ONE_FOOT*5);
                 while (sensorInput.getElevatorEncoder() < elevator.POS_TOP - 100) Thread.sleep(10);
-                arm.goToPosition(arm.POS_BEHIND);
+
+
+                new FaceAngle(10000, -135, 5).runUntilFinish();
+
+                arm.goToPosition(arm.POS_TOP+400);
 
                 //Wait for arm to go back
-                while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
+                while (sensorInput.getArmEncoder() < arm.POS_TOP + 300) Thread.sleep(10);
 
                 //Outtake when ready
                 intake.setIntake(0.9, 0.8);

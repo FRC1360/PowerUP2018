@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 		
 		//CameraServer.getInstance().startAutomaticCapture();
 		
-		robotOutput.clearStickyFaults();
+		//robotOutput.clearStickyFaults();
 		sensorInput.reset();
 		
 		arm.start();

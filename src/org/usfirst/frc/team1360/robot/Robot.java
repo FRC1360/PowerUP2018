@@ -54,8 +54,6 @@ public class Robot extends TimedRobot {
     private OrbitPositionProvider position;
     private TeleopControl teleopControl;
 
-    public static boolean GENERATE = false;
-
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -86,13 +84,6 @@ public class Robot extends TimedRobot {
 		
 		arm.start();
 		elevator.start();
-		
-		if(GENERATE) {
-			GeneratePaths generator = new GeneratePaths("/home/lvuser/");
-			//generator.generateScaleSwitchPaths();
-			//generator.generateSwitchPaths();
-			generator.generateScalePaths();
-		}
 	}
 
 	/**

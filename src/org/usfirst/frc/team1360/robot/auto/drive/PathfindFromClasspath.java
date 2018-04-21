@@ -19,6 +19,8 @@ public class PathfindFromClasspath extends PathfindFromFile {
 		left = new EncoderFollower(modifier.getLeftTrajectory());
 		right = new EncoderFollower(modifier.getRightTrajectory());
 
-		this.totalLength = trajectory.segments[trajectory.length()-1].position;
+		if(this.trajectory.length() > 0) {
+			this.totalLength = trajectory.segments[trajectory.length()-1].position;
+		}
 	}
 }

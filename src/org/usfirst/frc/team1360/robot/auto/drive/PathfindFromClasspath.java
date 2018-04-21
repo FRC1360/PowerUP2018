@@ -6,7 +6,7 @@ import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team1360.robot.auto.util.Pathloader;
 
-public class PathfindFromClasspath extends PathfindFromFile{
+public class PathfindFromClasspath extends PathfindFromFile {
 
 	public PathfindFromClasspath(long timeout, String file) {
 		super("Pathfind From Classpath", timeout);

@@ -170,13 +170,13 @@ public class GeneratePaths {
                 new Waypoint(18.5, 20.25, Pathfinder.d2r(30)));
         generatePathWithMirr("scaleCross3", 10, 7, 50,
                 new Waypoint(18.5, 20.25, Pathfinder.d2r(30)),
-                new Waypoint(24.5, 20.6, Pathfinder.d2r(-20)));
+                new Waypoint(24, 20.6, Pathfinder.d2r(-20)));
         generatePathWithMirr("scaleCross4", 10, 7, 50,
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
+                new Waypoint(24, 21, Pathfinder.d2r(-30)),
                 new Waypoint(18.25, 18, Pathfinder.d2r(40)));
         generatePathWithMirr("scaleCross5", 10, 7, 50,
                 new Waypoint(18.25, 18, Pathfinder.d2r(40)),
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
+                new Waypoint(24, 21, Pathfinder.d2r(-30)));
 
         //Near
         generatePathWithMirr("scaleNear1", 10, 7, 50,

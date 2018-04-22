@@ -23,7 +23,9 @@ public interface ElevatorProvider {
 		int target;
 	}
 	
+	void safety(double power, boolean override, boolean overrideDampen);
 	void safety(double power, boolean override);
+	void safety(double power);
 	boolean goToTarget(int target);
 	boolean goToTarget(int target, double speed);
 

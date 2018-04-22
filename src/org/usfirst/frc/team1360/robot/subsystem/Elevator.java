@@ -158,7 +158,7 @@ public final class Elevator implements ElevatorProvider {
 		}
 		else
 		{
-			double dampenPwr = (-0.001*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
+			double dampenPwr = (-0.0005*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
 
 
 

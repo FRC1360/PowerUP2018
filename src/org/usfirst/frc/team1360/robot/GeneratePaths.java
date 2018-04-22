@@ -160,17 +160,17 @@ public class GeneratePaths {
         //DOUBLE CUBE SCALE AUTO PATHS
         //Cross
         generatePathWithMirr("scaleCross1", 10, 7, 50,
-                new Waypoint(1.63, 4.50, 0),
-                new Waypoint(15, 3, 0),
+                new Waypoint(1.63, 6.03, 0),
+                new Waypoint(15, 4, 0),
                 new Waypoint(19.5, 9, Pathfinder.d2r(90)),
                 new Waypoint(19.5, 17.0, Pathfinder.d2r(90)),
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
+                new Waypoint(24.5, 20.6, Pathfinder.d2r(-20)));
         generatePathWithMirr("scaleCross2", 10, 7, 50,
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
-                new Waypoint(18, 20, Pathfinder.d2r(20)));
+                new Waypoint(24.5, 20.6, Pathfinder.d2r(-20)),
+                new Waypoint(18.5, 20.25, Pathfinder.d2r(30)));
         generatePathWithMirr("scaleCross3", 10, 7, 50,
-                new Waypoint(18, 20, Pathfinder.d2r(20)),
-                new Waypoint(24.5, 21, Pathfinder.d2r(-30)));
+                new Waypoint(18.5, 20.25, Pathfinder.d2r(30)),
+                new Waypoint(24.5, 20.6, Pathfinder.d2r(-20)));
         generatePathWithMirr("scaleCross4", 10, 7, 50,
                 new Waypoint(24.5, 21, Pathfinder.d2r(-30)),
                 new Waypoint(18.25, 18, Pathfinder.d2r(40)));

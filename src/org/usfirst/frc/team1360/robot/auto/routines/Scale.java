@@ -74,7 +74,7 @@ public class Scale extends AutonRoutine{
 			//Shoot cube when ready
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.8, -0.7);
+            intake.setIntake(1.0, -0.9);
             Thread.sleep(200);
 
 			waitFor("Scale Path 1");
@@ -107,12 +107,13 @@ public class Scale extends AutonRoutine{
                 while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
 
                 intake.setClamp(intake.FREE);
-                intake.setIntake(1.0, -0.9);
+                intake.setIntake(0.8, -0.7);
                 Thread.sleep(200);
 
                 waitFor("Drive to Scale 2");
             }
 
+            /*
             if(amtOfCubes > 2) {
                 //3rd Cube
                 scalePathL4.runNow("Drive to Cube 3");
@@ -152,11 +153,12 @@ public class Scale extends AutonRoutine{
 
             }
 
-            /**/
+            /*
             arm.goToPosition(arm.POS_BOTTOM);
             while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
             elevator.goToTarget(elevator.POS_BOTTOM);
             intake.setIntake(0);
+            */
         }
         else { //R
         	//1st Cube

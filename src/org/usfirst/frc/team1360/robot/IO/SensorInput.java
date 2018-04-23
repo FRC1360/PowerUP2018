@@ -1,8 +1,4 @@
 package org.usfirst.frc.team1360.robot.IO;
-/*****
- * Author: Tatiana Tomas Zahhar
- * Date 30 Jan 2017 - added pdp variable; getClimberFrontCurrent method; getClimberBackCurrent method; removed calculate
- *****/
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -38,12 +34,10 @@ public class SensorInput implements SensorInputProvider {
 	private DigitalInput bottomSwitch;
 	private DigitalInput topSwitch;
 
-	private AnalogInput absoluteEnc;
-
 
 	//Arm
 	private DigitalInput armTopSwitch;
-	private Encoder armEnc;
+	private AnalogInput absoluteEnc;
 	
 	// Drive PID values
 	public static final double driveP = 0.1;
@@ -65,14 +59,11 @@ public class SensorInput implements SensorInputProvider {
 		leftDriveEnc = new Encoder(0, 1);
 		rightDriveEnc = new Encoder(2, 3);
 		elevatorEnc = new Encoder(4, 5);
-		armEnc = new Encoder(7, 6);
 
 		bottomSwitch = new DigitalInput(NavxIO.dio(1)); // change ports as needed
 		topSwitch = new DigitalInput(NavxIO.dio(0)); //change ports as needed
 		
 		armTopSwitch = new DigitalInput(NavxIO.dio(2));
-//		solDriveEnc = new Encoder(0);
-//		armEnc = new Encoder(NavxIO.dio(1), NavxIO.dio(2));
 
 		ahrsThread = new Thread(() ->
 		{
@@ -228,27 +219,9 @@ public class SensorInput implements SensorInputProvider {
 	public boolean getArmSwitch() {
 		return !armTopSwitch.get();
 	}
-	
-	
 
 	@Override
 	public int getArmEncoder() {
-		return absoluteEnc.getValue();
-	}
-
-	@Override
-	public double getArmEncoderVelocity() {
-		return armEnc.getRate();
-	}
-
-	@Override
-	public void resetArmEncoder() {
-		armEnc.reset();
-	}
-
-
-	@Override
-	public int getAbsoluteEncoder() {
 		return absoluteEnc.getValue();
 	}
 	

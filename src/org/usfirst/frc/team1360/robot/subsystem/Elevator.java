@@ -146,11 +146,9 @@ public final class Elevator implements ElevatorProvider {
 			double dampenPwr = (0.005*Math.abs(power))*(position - sensorInput.getElevatorEncoder());
 
 			if(dampenPwr >= 1.0) {
-                //robotOutput.setElevatorMotor(power);
                 handleElevator(power);
 			}
 			else {
-                //robotOutput.setElevatorMotor(dampenPwr);
                 handleElevator(dampenPwr);
 			}
 
@@ -160,17 +158,11 @@ public final class Elevator implements ElevatorProvider {
 		{
 			double dampenPwr = (-0.0005*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
 
-
-
 			if(dampenPwr <= -1.0){
-                //robotOutput.setElevatorMotor(power);
                 handleElevator(power);
-				matchLogger.writeClean("DAMPEN: " + dampenPwr + " acc: " + power);
 			}
 			else {
-				//robotOutput.setElevatorMotor(dampenPwr);
                 handleElevator(dampenPwr);
-				matchLogger.writeClean("DAMPEN: " + dampenPwr);
 			}
 
 			return sensorInput.getElevatorEncoder() > position;
@@ -184,13 +176,13 @@ public final class Elevator implements ElevatorProvider {
 
 	@Override
 	public void safety(double power, boolean override, boolean overrideDampen) {
-        matchLogger.writeClean("CY: safety " + power + ":" + override);
+        matchLogger.write("CY: safety " + power + ":" + override);
 		if(override) {
 			robotOutput.setElevatorMotor(power);
 			matchLogger.writeClean("Overriding Elevator");
 		}
 		else {
-            matchLogger.writeClean("CY: safety bottomSwitch" + sensorInput.getBottomSwitch());
+            matchLogger.write("CY: safety bottomSwitch" + sensorInput.getBottomSwitch());
 			if(sensorInput.getBottomSwitch()) {
 				sensorInput.resetElevatorEncoder();
 				if(power < 0)
@@ -204,7 +196,7 @@ public final class Elevator implements ElevatorProvider {
 				robotOutput.setElevatorMotor(power);
 			}
 
-            matchLogger.writeClean("CY: safety ElevatorEncoder" + sensorInput.getElevatorEncoder());
+            matchLogger.write("CY: safety ElevatorEncoder" + sensorInput.getElevatorEncoder());
             if(sensorInput.getElevatorEncoder() >= POS_TOP && power > 0) {
 				this.hold();
 			}
@@ -231,24 +223,22 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 
-    private final double DELTA_VBUS = 0.05; //change in voltage every ~20 msec
-    private long lastMsec = 0;
 
+    private final double DELTA_VBUS = 0.05; //change in voltage every ~20 msec
+    private long lastMsec = 0;	//Last time stamp
+
+    //Acceleration limiting
     private void handleElevator(double targetVoltage) {
-        if(System.currentTimeMillis() - lastMsec >= 20) {
-            if(robotOutput.getElevatorVBus() + DELTA_VBUS > targetVoltage && robotOutput.getElevatorVBus() - DELTA_VBUS < targetVoltage)
-            {
+        if(System.currentTimeMillis() - lastMsec >= 20) { //waits 20msec between changes
+
+            if(Math.abs(robotOutput.getElevatorVBus() - targetVoltage) <= 0.05) { //if the VBus is within 0.05 of the target it will set the power to target
                 robotOutput.setElevatorMotor(targetVoltage);
             }
-
-            else if(robotOutput.getElevatorVBus() < targetVoltage) {
-//                double extraPower = (targetVoltage - robotOutput.getElevatorVBus()) * 0.75;
-                robotOutput.setElevatorMotor(robotOutput.getElevatorVBus());
+            else if(robotOutput.getElevatorVBus() < targetVoltage) { //if you are lower than your target add
+                robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + DELTA_VBUS);
             }
-
-            else if(robotOutput.getElevatorVBus() > targetVoltage) {
-//                double extraPower = (robotOutput.getElevatorVBus() - targetVoltage) * 0.75;
-                robotOutput.setElevatorMotor(robotOutput.getElevatorVBus());
+            else if(robotOutput.getElevatorVBus() > targetVoltage) { // if you are higher than your target subtract
+                robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - DELTA_VBUS);
             }
 
             lastMsec = System.currentTimeMillis();

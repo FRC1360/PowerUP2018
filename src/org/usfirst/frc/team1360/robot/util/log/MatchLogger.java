@@ -46,31 +46,7 @@ public class MatchLogger implements MatchLogProvider {
 		
 		//tempFile = new PrintStream("/tmp/1360.log");
 	}
-	
-	@Override
-	public void startVideoCache() {
-		enabled = true;
-	}
-	
-	@Override
-	public void stopVideoCache() {
-		enabled = false;
-	}
-	
-	@Override
-	public void cacheImage(Mat image) {
-//		if(enabled) {
-//			try {
-//				Imgcodecs.imwrite("/U/"+frameNumber+".jpg", image);
-//				write("frame " + frameNumber);
-//				frameNumber++;
-//			} catch(RuntimeException e) {
-//				write("frame"+frameNumber+" not saved");
-//			}
-//
-//		}
-	}
-	
+
 	@Override
 	public void writeHead() {
 		

@@ -33,8 +33,6 @@ import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.SingletonStatic;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogger;
-import org.usfirst.frc.team1360.robot.util.position.DriveEncoderPositionProvider;
-import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -51,7 +49,6 @@ public class Robot extends TimedRobot {
     private HumanInputProvider humanInput;
     private SensorInputProvider sensorInput;
     private RobotOutputProvider robotOutput;
-    private OrbitPositionProvider position;
     private TeleopControl teleopControl;
 
 	/**
@@ -64,7 +61,6 @@ public class Robot extends TimedRobot {
 		humanInput = Singleton.configure(HumanInput.class);
 		sensorInput = Singleton.configure(SensorInput.class);
 		robotOutput = Singleton.configure(RobotOutput.class);
-		position = Singleton.configure(DriveEncoderPositionProvider.class);
 		Singleton.configure(Drive.class);
 		Singleton.configure(Intake.class);
 		arm = Singleton.configure(Arm.class);
@@ -101,7 +97,6 @@ public class Robot extends TimedRobot {
 		matchLog.writeHead();
 		
 		matchLog.writeClean("----------STARTING AUTO PERIOD----------");
-		matchLog.startVideoCache();
 		
 		sensorInput.reset();
 		
@@ -117,17 +112,14 @@ public class Robot extends TimedRobot {
 		elevator.logState();
 		arm.logState();
 		
-		matchLog.writeClean(String.format("X Pos = %f inches, Y Pos = %f inches,  Left Enc = %d ticks, Right Enc = %d ticks", 
-				position.getX(), position.getY(), sensorInput.getLeftDriveEncoder(), sensorInput.getRightDriveEncoder()));
+		matchLog.writeClean(String.format("Left Enc = %d ticks, Right Enc = %d ticks",
+				sensorInput.getLeftDriveEncoder(), sensorInput.getRightDriveEncoder()));
 		
 		SmartDashboard.putNumber("Left Velocity", Math.abs(sensorInput.getLeftEncoderVelocity()));
 		SmartDashboard.putNumber("Right Velocity", Math.abs(sensorInput.getRightEncoderVelocity()));
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
-		SmartDashboard.putNumber("X", position.getX());
-		SmartDashboard.putNumber("Y", position.getY());
-		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
 		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
 		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
 		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
@@ -142,7 +134,6 @@ public class Robot extends TimedRobot {
 		disabledInit();
 		
 		matchLog.write("----------STARTING TELEOP PERIOD----------");
-		matchLog.startVideoCache();
 		
 		arm.calibrate(false);
 	}
@@ -163,27 +154,21 @@ public class Robot extends TimedRobot {
 						", Top Switch: " + sensorInput.getTopSwitch() +
 						", Arm Switch: " + sensorInput.getArmSwitch());
 
-		SmartDashboard.putNumber("Arm Velocity", sensorInput.getArmEncoderVelocity());
 
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
 		SmartDashboard.putNumber("Angle NAVX", sensorInput.getAHRSYaw());
-		SmartDashboard.putNumber("X", position.getX());
-		SmartDashboard.putNumber("Y", position.getY());
-		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
 		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
 		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
-        SmartDashboard.putNumber("ABS ENC", sensorInput.getAbsoluteEncoder());
 
 	}
 	
 	@Override
 	public void disabledInit() {
 		matchLog.writeClean("----------ROBOT DISABLED LOG ENDING----------");
-		matchLog.stopVideoCache();
 
 		try {
 			AutonControl.stop();
@@ -193,8 +178,7 @@ public class Robot extends TimedRobot {
 		
 		elevator.stop();
 		arm.stop();
-		position.stop();
-		
+
 		teleopControl.disable();
 	}
 	
@@ -211,18 +195,12 @@ public class Robot extends TimedRobot {
 		
 		SmartDashboard.putNumber("Left", sensorInput.getLeftDriveEncoder());
 		SmartDashboard.putNumber("Right", sensorInput.getRightDriveEncoder());
-		SmartDashboard.putNumber("X", position.getX());
-		SmartDashboard.putNumber("Y", position.getY());
-		SmartDashboard.putNumber("A", position.getA() * 180 / Math.PI);
 
 		SmartDashboard.putNumber("Elevator Encoder", sensorInput.getElevatorEncoder());
 		SmartDashboard.putNumber("Arm Encoder", sensorInput.getArmEncoder());
-		SmartDashboard.putNumber("Arm Velocity", sensorInput.getArmEncoderVelocity());
 		SmartDashboard.putBoolean("Arm Switch", sensorInput.getArmSwitch());
 		SmartDashboard.putBoolean("Top Switch", sensorInput.getTopSwitch());
 		SmartDashboard.putBoolean("BottomSwitch", sensorInput.getBottomSwitch());
-
-		SmartDashboard.putNumber("ABS ENC", sensorInput.getAbsoluteEncoder());
 	}
 
 	/**
@@ -232,131 +210,5 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 		
 		
-	}
-	
-	@Override
-	public void testInit() {
-		int armEps = 1;
-		int elevatorEps = 10;
-		int driveEps = 20;
-		
-		boolean armNominal = false;
-		boolean elevatorNominal = false;
-		
-		
-		sensorInput.resetArmEncoder();
-		
-		matchLog.writeHead();
-		
-		matchLog.writeClean("STARTING ARM SELF CHECK");
-		
-		arm.safety(0.5, false);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		//Check the arm encoder
-		if(Math.abs(sensorInput.getArmEncoder()) <= armEps) {
-			matchLog.writeClean("Arm Encoder: FAILURE");
-		}
-		else {
-			matchLog.writeClean("Arm Encoder: Ready for Orbit");
-			armNominal = true;
-		}
-		
-		if(armNominal) {
-			arm.safety(0.1, false);
-			while(sensorInput.getArmEncoderVelocity() > 0 && !sensorInput.getArmSwitch()) {
-				arm.safety(0.1, false);
-			}
-			
-			if(!sensorInput.getArmSwitch()) {
-				matchLog.writeClean("Arm Switch: FAILURE");
-			}
-			else
-			{
-				matchLog.writeClean("Arm Switch: Ready for Orbit");
-			}
-			
-			arm.safety(0, false);
-			
-		}
-		
-		matchLog.writeClean("STARTING ELEVATOR SELF CHECK");
-		
-		sensorInput.resetElevatorEncoder();
-		elevator.safety(0.25, false);
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		if(Math.abs(sensorInput.getElevatorEncoder()) <= elevatorEps) {
-			matchLog.writeClean("Elevator Encoder: FAILURE");
-		}
-		else {
-			matchLog.writeClean("Elevator Encoder: Ready for Orbit");
-			elevatorNominal = true;
-		}
-		
-		if(elevatorNominal) {
-			elevator.safety(-0.1, false);
-			
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			while(sensorInput.getElevatorVelocity() > 0 && !sensorInput.getBottomSwitch()) {
-				elevator.safety(-0.1, false);
-			}
-			
-			if(!sensorInput.getBottomSwitch()) {
-				matchLog.writeClean("Elevator Bottom Switch: FAILURE");
-			} else {
-				matchLog.writeClean("Elevator Bottom Switch: Ready for Orbit");
-			}
-		}
-		
-		matchLog.writeClean("STARTING DRIVE SELF CHECK");
-		
-		sensorInput.resetLeftEncoder();
-		
-		robotOutput.tankDrive(0.5, 0);
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		robotOutput.tankDrive(0, 0);
-		
-		if(Math.abs(sensorInput.getLeftDriveEncoder()) > driveEps) {
-			matchLog.writeClean("Left Drive: Ready for Orbit");
-		}
-		else {
-			matchLog.writeClean("Left Drive: FAILURE");
-		}
-		
-		robotOutput.tankDrive(0, 0.5);
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		robotOutput.tankDrive(0, 0);
-		
-		if(Math.abs(sensorInput.getRightDriveEncoder()) > driveEps) {
-			matchLog.writeClean("Right Drive: Ready for Orbit");
-		}
-		else {
-			matchLog.writeClean("Right Drive: FAILURE");
-		}
-
-		matchLog.writeClean("SELF TEST COMPLETE LOG ENDING");
 	}
 }

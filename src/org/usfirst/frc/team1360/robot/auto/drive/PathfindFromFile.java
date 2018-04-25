@@ -1,16 +1,15 @@
 package org.usfirst.frc.team1360.robot.auto.drive;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.util.OrbitPID;
+import java.io.InputStream;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
+import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
+import org.usfirst.frc.team1360.robot.auto.util.Pathloader;
+import org.usfirst.frc.team1360.robot.util.OrbitPID;
 
 public class PathfindFromFile extends AutonRoutine{
 
@@ -20,12 +19,12 @@ public class PathfindFromFile extends AutonRoutine{
 	final double TIME_STEP = 0.025;
 	final double MAX_FPS = 7;
 
-	private double totalLength;
+	double totalLength;
 
-	private Trajectory trajectory;
+	Trajectory trajectory;
 
-	private EncoderFollower left;
-	private EncoderFollower right;
+	EncoderFollower left;
+	EncoderFollower right;
 
 	private int direction = 1; //1=forward; -1=backward;
 	private double subtractFromNavx = 0;
@@ -33,12 +32,13 @@ public class PathfindFromFile extends AutonRoutine{
 	public PathfindFromFile(long timeout, String file) {
 		super("Pathfind From File", timeout);
 		File profile;
-		File rightProfile;
 
 		profile = new File("/home/lvuser/" + file + ".csv");
 
-		if (!profile.exists())
+		if (!profile.exists()) {
+			matchLogger.writeClean("PATHFINDER ERROR CAN'T FIND FILE");
 			return;
+		}
 
 		this.trajectory = Pathfinder.readFromCSV(profile);
 
@@ -50,17 +50,12 @@ public class PathfindFromFile extends AutonRoutine{
 		this.totalLength = trajectory.segments[trajectory.length()-1].position;
 	}
 
-	public PathfindFromFile(long timeout, Trajectory traj) {
-		super("Pathfind From File", timeout);
+	protected PathfindFromFile(String name, long timeout) {
+		super(name, timeout);
+	}
 
-		this.trajectory = traj;
-
-		TankModifier modifier = new TankModifier(trajectory).modify(DT_WIDTH);
-
-		left = new EncoderFollower(modifier.getLeftTrajectory());
-		right = new EncoderFollower(modifier.getRightTrajectory());
-
-		this.totalLength = trajectory.segments[trajectory.length()-1].position;
+	public boolean notLoaded() {
+		return trajectory==null || trajectory.length()==0;
 	}
 
 	public PathfindFromFile cutOffFeet(double feet){
@@ -68,10 +63,6 @@ public class PathfindFromFile extends AutonRoutine{
 		return this;
 	}
 	
-	public int getNumberOfSegments() {
-		return this.trajectory.segments.length;
-	}
-
 	public double getPosition() {
 		try {
 			return left == null ? 0 : left.getSegment().position;
@@ -106,12 +97,9 @@ public class PathfindFromFile extends AutonRoutine{
 
 	@Override
 	protected void runCore() throws InterruptedException {
-
 		if(trajectory == null) {
 			return;
 		}
-
-
 
 		sensorInput.resetLeftEncoder();
 		sensorInput.resetRightEncoder();
@@ -128,7 +116,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 		matchLogger.write("PATHFINDER STARTING");
 
-		OrbitPID turnPID = new OrbitPID(0.075, 0.03, 0.0);
+		OrbitPID turnPID = new OrbitPID(0.12, 0.03, 0.0);
 
 		while((!left.isFinished() || !right.isFinished()) && isLessThanTargetFeet()) {
 
@@ -151,16 +139,11 @@ public class PathfindFromFile extends AutonRoutine{
 				l -= turn;
 				r += turn;
 
-
-				if (Math.abs(l) > 1 || Math.abs(r) > 1)
-				{
-					if (Math.abs(l) > Math.abs(r))
-					{
+				if (Math.abs(l) > 1 || Math.abs(r) > 1) {
+					if (Math.abs(l) > Math.abs(r)) {
 						r /= Math.abs(l);
 						l = Math.signum(l);
-					}
-					else
-					{
+					} else {
 						l /= Math.abs(r);
 						r = Math.signum(r);
 					}

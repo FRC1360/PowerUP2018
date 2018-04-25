@@ -1,12 +1,9 @@
 package org.usfirst.frc.team1360.robot.auto.routines;
 
-import org.usfirst.frc.team1360.robot.Robot;
 import org.usfirst.frc.team1360.robot.auto.AutonRoutine;
-import org.usfirst.frc.team1360.robot.auto.drive.Calibrate;
 import org.usfirst.frc.team1360.robot.auto.drive.DriveToInch;
 import org.usfirst.frc.team1360.robot.auto.drive.ElevatorToTarget;
 import org.usfirst.frc.team1360.robot.auto.drive.PathfindFromFile;
-import org.usfirst.frc.team1360.robot.auto.drive.SweepTurn;
 
 
 public class Switch extends AutonRoutine{

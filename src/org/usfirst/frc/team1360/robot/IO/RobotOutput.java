@@ -59,12 +59,11 @@ public class RobotOutput implements RobotOutputProvider {
 		elevatorLeft = new Victor(2);
 		elevatorRight = new Victor(3);
 		elevatorLeft.setInverted(true);
-		
-		
 
 		arm1 = new Victor(4);
 		arm2 = new Victor(5);
-		arm1.setInverted(false);
+
+		arm1.setInverted(false);//COMP BOT IS FALSE
 		arm2.setInverted(false);
 
 		leftIntake = new Victor(6);
@@ -95,6 +94,12 @@ public class RobotOutput implements RobotOutputProvider {
 		leftIntake.set(speed);
 		rightIntake.set(speed);
 	}
+
+	@Override
+	public void setIntake(double speed, double spin){
+		leftIntake.set(speed + spin);
+		rightIntake.set(speed - spin);
+	}
 	
 	public void setClamp(int clamp) {  //sets whether the clamp is on or off
 		if(clamp == IntakeProvider.FREE)	{
@@ -109,14 +114,13 @@ public class RobotOutput implements RobotOutputProvider {
 			intakeClamp1.set(false);
 			intakeClamp2.set(false);
 		}
-		//Weird One =
-		//1 = false
-		//2 = true
 	}
 	
 	//set the speed of the elevator motors
 	@Override
 	public void setElevatorMotor(double motorValue) {
+		matchLogger.write("Applying Elevator Power: " + motorValue);
+
 		elevatorRight.set(motorValue);
 		elevatorLeft.set(motorValue);
 	}
@@ -125,12 +129,9 @@ public class RobotOutput implements RobotOutputProvider {
 	{
 		matchLogger.write("LEFT " + speed);
 		SmartDashboard.putNumber("DL", speed);
-		
-		
-		
+
 		leftDrive.set(speed);
-		
-		
+
 		SmartDashboard.putNumber("Left Voltage", -speed);
 	}
 	
@@ -144,19 +145,6 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public void tankDrive(double left, double right) // Basic tank drive helper
 	{
-		/*
-		double leftPercent = sensorInput.getLeftEncoderVelocity() / MAX_VELOCITY_LOW;
-		double rightPercent = sensorInput.getRightEncoderVelocity() / MAX_VELOCITY_LOW;
-		
-		double outLeft = driveLeft.calculate(left, leftPercent);
-		double outRight = driveRight.calculate(right, rightPercent);
-		
-		SmartDashboard.putNumber("Left Speed", outLeft);
-		SmartDashboard.putNumber("Right Speed", outRight);
-		
-		SmartDashboard.putNumber("Outer Velocity", sensorInput.getLeftEncoderVelocity());
-		SmartDashboard.putNumber("Inner Velocity", sensorInput.getRightEncoderVelocity());
-		*/
 		setDriveLeft(left);
 		setDriveRight(right);	
 	}
@@ -361,11 +349,9 @@ public class RobotOutput implements RobotOutputProvider {
 	
 	public void stopAll() // Stops all motors and resets all solenoids
 	{
-		
 		leftDrive.set(0);
 		rightDrive.set(0);
 		driveShift.set(false);
-		
 	}
 
 	@Override

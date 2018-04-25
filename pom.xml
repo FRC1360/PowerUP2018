@@ -14,6 +14,11 @@
     <build>
         <sourceDirectory>src</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>test-resources</directory>
+            </testResource>
+        </testResources>
     </build>
 
     <dependencies>
@@ -59,7 +64,14 @@
             <scope>system</scope>
             <systemPath>${user.home}/wpilib/user/java/lib/navx_frc.jar</systemPath>
         </dependency>
-        
+        <dependency>
+            <groupId>jaci</groupId>
+            <artifactId>Pathfinder</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${user.home}/wpilib/user/java/lib/Pathfinder-Java-1.8.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

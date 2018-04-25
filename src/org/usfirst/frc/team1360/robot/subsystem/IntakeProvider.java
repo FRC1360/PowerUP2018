@@ -7,4 +7,5 @@ public interface IntakeProvider{    // setting up intake interface
 	
 	void setClamp(int clamp);
 	void setIntake(double speed);
+	void setIntake(double speed, double spin);
 }

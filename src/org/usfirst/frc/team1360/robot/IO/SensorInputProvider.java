@@ -27,8 +27,6 @@ public interface SensorInputProvider {
 	//Arm
 	boolean getArmSwitch();
 	int getArmEncoder();
-	double getArmEncoderVelocity();
-	void resetArmEncoder();
 
 	//Elevator
 	int getElevatorEncoder();
@@ -36,13 +34,8 @@ public interface SensorInputProvider {
 	void resetElevatorEncoder();
 	boolean getTopSwitch();
 	boolean getBottomSwitch();
-	
 
-	int getAbsoluteEncoder();
-
+	//Misc
 	void calculate();
 	void reset();
-
-
-	
 }

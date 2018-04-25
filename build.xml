@@ -27,4 +27,62 @@
 
   <import file="${wpilib.ant.dir}/build.xml"/>
 
+  <target name="generate-paths.switch" depends="compile">
+    <mkdir dir="${build.dir}/paths"/>
+    <java classname="org.usfirst.frc.team1360.robot.GeneratePaths" fork="true">
+      <arg value="switch"/>
+      <arg value="${build.dir}/paths"/>
+      <classpath>
+        <pathelement path="${build.dir}"/>
+        <path refid="classpath.path"/>
+      </classpath>
+    </java>
+    <jar destfile="${build.jars}/paths.jar" update="false">
+      <fileset dir="${build.dir}" includes="paths/*" />
+    </jar>
+  </target>
+
+  <target name="generate-paths.scale" depends="compile">
+    <mkdir dir="${build.dir}/paths"/>
+    <java classname="org.usfirst.frc.team1360.robot.GeneratePaths" fork="true">
+      <arg value="scale"/>
+      <arg value="${build.dir}/paths"/>
+      <classpath>
+        <pathelement path="${build.dir}"/>
+        <path refid="classpath.path"/>
+      </classpath>
+    </java>
+    <jar destfile="${build.jars}/paths.jar" update="false">
+      <fileset dir="${build.dir}" includes="paths/*" />
+    </jar>
+  </target>
+
+  <target name="generate-paths.switch-scale" depends="compile">
+    <mkdir dir="${build.dir}/paths"/>
+    <java classname="org.usfirst.frc.team1360.robot.GeneratePaths" fork="true">
+      <arg value="switch-scale"/>
+      <arg value="${build.dir}/paths"/>
+      <classpath>
+        <pathelement path="${build.dir}"/>
+        <path refid="classpath.path"/>
+      </classpath>
+    </java>
+    <jar destfile="${build.jars}/paths.jar" update="false">
+      <fileset dir="${build.dir}" includes="paths/*" />
+    </jar>
+  </target>
+
+  <target name="generate-paths.all"
+          depends="generate-paths.switch,
+                   generate-paths.scale"
+  />
+
+  <!-- Overwrites imported clean target -->
+  <target name="clean" description="Clean up all build and distribution artifacts.">
+    <delete dir="${build.dir}" />
+    <delete dir="${dist.dir}" />
+
+    <!-- This is the only place where we can inject path generation in deployment process -->
+    <antcall target="generate-paths.all"/>
+  </target>
 </project>

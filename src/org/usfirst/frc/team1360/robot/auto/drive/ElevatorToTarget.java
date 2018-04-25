@@ -20,7 +20,5 @@ public final class ElevatorToTarget extends AutonRoutine {
 	}
 
 	@Override
-	protected void overrideCore() {
-		robotOutput.arcadeDrivePID(0, 0);
-	}
+	protected void overrideCore() { elevator.hold(); }
 }

@@ -78,6 +78,7 @@ public final class Elevator implements ElevatorProvider {
 				if(sensorInput.getArmEncoder() < Arm.POS_TOP-200)
 					holdTarget = POS_TOP;
 
+
 				OrbitPID elevatorPID = new OrbitPID(0.002, 0.0, 0.0);
 				matchLogger.writeClean("ELEVATOR TARGET == " + holdTarget);
 
@@ -86,7 +87,7 @@ public final class Elevator implements ElevatorProvider {
 					double applyPower = elevatorPID.calculate(holdTarget, sensorInput.getElevatorEncoder());
 					if (applyPower > 0.1) applyPower = 0.1;
 					if (applyPower < -0.1) applyPower = -0.1;
-					elevator.safety(applyPower, true);
+					elevator.safety(applyPower, false, true);
 					Thread.sleep(10);
 				}
 			}
@@ -102,7 +103,7 @@ public final class Elevator implements ElevatorProvider {
 		CLIMB_HOLD {
 			@Override
 			public void run(OrbitStateMachineContext<ElevatorState> context) throws InterruptedException {
-			    elevator.safety(-0.2, true);
+			    elevator.safety(-0.2);
 			}
 		};
 		
@@ -130,46 +131,58 @@ public final class Elevator implements ElevatorProvider {
 	}
 
 
-	private boolean dampen(int position, double power, boolean up) {
-		if (up) {
+	private boolean dampen(int position, double power, boolean up, boolean override) {
+		if(override){
+            handleElevator(power);
+
+            if(up){
+                return sensorInput.getElevatorEncoder() < position;
+            }
+            else {
+                return sensorInput.getElevatorEncoder() > position;
+            }
+        }
+	    else if (up) {
 			double dampenPwr = (0.005*Math.abs(power))*(position - sensorInput.getElevatorEncoder());
 
 			if(dampenPwr >= 1.0) {
-				safety(power);
+                handleElevator(power);
 			}
 			else {
-				safety(dampenPwr);
-				//handleElevator(power);
+                handleElevator(dampenPwr);
 			}
 
 			return sensorInput.getElevatorEncoder() < position;
 		}
 		else
 		{
-			double dampenPwr = (-0.001*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
+			double dampenPwr = (-0.0005*Math.abs(power))*Math.abs(position - sensorInput.getElevatorEncoder());
 
 			if(dampenPwr <= -1.0){
-				safety(power);
+                handleElevator(power);
 			}
 			else {
-				safety(dampenPwr);
-				//handleElevator(power);
+                handleElevator(dampenPwr);
 			}
 
 			return sensorInput.getElevatorEncoder() > position;
 		}
 	}
 
+    private boolean dampen(int position, double power, boolean up) {
+	    return dampen(position, power, up, false);
+    }
 
 
 	@Override
-	public void safety(double power, boolean override) {
-		
+	public void safety(double power, boolean override, boolean overrideDampen) {
+        matchLogger.write("CY: safety " + power + ":" + override);
 		if(override) {
 			robotOutput.setElevatorMotor(power);
 			matchLogger.writeClean("Overriding Elevator");
 		}
 		else {
+            matchLogger.write("CY: safety bottomSwitch" + sensorInput.getBottomSwitch());
 			if(sensorInput.getBottomSwitch()) {
 				sensorInput.resetElevatorEncoder();
 				if(power < 0)
@@ -183,23 +196,54 @@ public final class Elevator implements ElevatorProvider {
 				robotOutput.setElevatorMotor(power);
 			}
 
-			if(sensorInput.getElevatorEncoder() >= POS_TOP && power > 0) {
+            matchLogger.write("CY: safety ElevatorEncoder" + sensorInput.getElevatorEncoder());
+            if(sensorInput.getElevatorEncoder() >= POS_TOP && power > 0) {
 				this.hold();
 			}
 			if(sensorInput.getArmEncoder() < Arm.POS_TOP - 100){
 				this.hold();
 			}
-			else
-				if(power > 0)
-					dampen(POS_TOP, power, true);
-				if(power < 0)
-					dampen(0, power, false);
+			else {
+                if (power > 0)
+                    dampen(POS_TOP, power, true, overrideDampen);
+                if (power < 0)
+                    dampen(0, power, false, overrideDampen);
+            }
 		}
 	}
-	private void safety(double power) {
-		safety(power, false);
+
+	@Override
+    public void safety(double power, boolean override) {
+        safety(power, override, false);
+    }
+
+    @Override
+	public void safety(double power) {
+		safety(power, false, false);
 	}
 
+
+
+    private final double DELTA_VBUS = 0.05; //change in voltage every ~20 msec
+    private long lastMsec = 0;	//Last time stamp
+
+    //Acceleration limiting
+    private void handleElevator(double targetVoltage) {
+        if(System.currentTimeMillis() - lastMsec >= 20) { //waits 20msec between changes
+
+            if(Math.abs(robotOutput.getElevatorVBus() - targetVoltage) <= 0.05) { //if the VBus is within 0.05 of the target it will set the power to target
+                robotOutput.setElevatorMotor(targetVoltage);
+            }
+            else if(robotOutput.getElevatorVBus() < targetVoltage) { //if you are lower than your target add
+                robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() + DELTA_VBUS);
+            }
+            else if(robotOutput.getElevatorVBus() > targetVoltage) { // if you are higher than your target subtract
+                robotOutput.setElevatorMotor(robotOutput.getElevatorVBus() - DELTA_VBUS);
+            }
+
+            lastMsec = System.currentTimeMillis();
+        }
+    }
 
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached
 	public boolean goToTarget(int target, double speed) {
@@ -262,12 +306,12 @@ public final class Elevator implements ElevatorProvider {
 	@Override
 	public boolean setManualSpeed(double speed, boolean override) {
 		synchronized (stateMachine) {
-		    if(stateMachine.getState() != ElevatorState.MANUAL){
+            if(stateMachine.getState() != ElevatorState.MANUAL){
 		        startManual();
             }
 
 			if (stateMachine.getState() == ElevatorState.MANUAL) {
-				safety(override ? speed * 0.5 : speed, override);
+				safety(override ? speed * 0.3 : speed, override, false);
 
 				return true;
 			}

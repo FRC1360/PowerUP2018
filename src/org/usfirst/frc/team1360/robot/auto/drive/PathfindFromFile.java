@@ -134,7 +134,7 @@ public class PathfindFromFile extends AutonRoutine{
 				turn = turnPID.calculate(nearAngle(direction > 0 ? Pathfinder.r2d(left.getHeading()) : Pathfinder.r2d(left.getHeading()), yaw), yaw);
 				//turn = 0;
 
-				matchLogger.write(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
+				matchLogger.writeClean(String.format("PATHFINDER heading = %f3, actual = %f3, turn = %f3, l = %f3, r = %f3, pos = %f3", Pathfinder.r2d(left.getHeading()), -sensorInput.getAHRSYaw(), turn/10, l, r, getPosition()));
 
 				l -= turn;
 				r += turn;

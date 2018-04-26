@@ -152,13 +152,12 @@ public class Scale extends AutonRoutine{
                 waitFor("Drive to Scale 4");
 
             }
+            */
 
-            /*
             arm.goToPosition(arm.POS_BOTTOM);
             while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
             elevator.goToTarget(elevator.POS_BOTTOM);
             intake.setIntake(0);
-            */
         }
         else { //R
         	//1st Cube

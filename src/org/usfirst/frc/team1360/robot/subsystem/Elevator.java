@@ -229,6 +229,9 @@ public final class Elevator implements ElevatorProvider {
 
     //Acceleration limiting
     private void handleElevator(double targetVoltage) {
+    	robotOutput.setElevatorMotor(targetVoltage);
+
+    	/*
         if(System.currentTimeMillis() - lastMsec >= 20) { //waits 20msec between changes
 
             if(Math.abs(robotOutput.getElevatorVBus() - targetVoltage) <= 0.05) { //if the VBus is within 0.05 of the target it will set the power to target
@@ -243,6 +246,7 @@ public final class Elevator implements ElevatorProvider {
 
             lastMsec = System.currentTimeMillis();
         }
+        /**/
     }
 
 	//sends the elevator to a specific target by setting Rising or descending states which set the state to hold when target is reached

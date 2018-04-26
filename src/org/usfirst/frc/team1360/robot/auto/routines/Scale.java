@@ -74,7 +74,7 @@ public class Scale extends AutonRoutine{
 			//Shoot cube when ready
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
             intake.setClamp(intake.FREE);
-            intake.setIntake(1.0, -0.9);
+            intake.setIntake(0.7, -0.6);
             Thread.sleep(200);
 
 			waitFor("Scale Path 1");
@@ -107,7 +107,7 @@ public class Scale extends AutonRoutine{
                 while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
 
                 intake.setClamp(intake.FREE);
-                intake.setIntake(0.8, -0.7);
+                intake.setIntake(0.5, -0.4);
                 Thread.sleep(200);
 
                 waitFor("Drive to Scale 2");
@@ -174,7 +174,7 @@ public class Scale extends AutonRoutine{
 
 			while (sensorInput.getArmEncoder() > arm.POS_BEHIND+50) Thread.sleep(10);
             intake.setClamp(intake.FREE);
-            intake.setIntake(1.0, 0.9);
+            intake.setIntake(0.7, 0.6);
 
 			waitFor("Scale Path 1");
 			Thread.sleep(200);
@@ -211,7 +211,7 @@ public class Scale extends AutonRoutine{
 
                 //Yeet when ready
                 intake.setClamp(intake.FREE);
-                intake.setIntake(0.9, 0.8);
+                intake.setIntake(0.5, 0.4);
 
                 //Wait for path
                 waitFor("Drive to Scale 2");
@@ -253,7 +253,7 @@ public class Scale extends AutonRoutine{
                 while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
 
                 //Outtake when ready
-                intake.setIntake(0.9, 0.8);
+                intake.setIntake(0.4, 0.3);
                 intake.setClamp(intake.FREE);
 
                 //Wait to reach the scale

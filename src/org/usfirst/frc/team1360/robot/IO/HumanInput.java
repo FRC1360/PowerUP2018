@@ -22,6 +22,11 @@ public class HumanInput implements HumanInputProvider {
 	}
 	
 	//Driver Controls
+
+	@Override
+	public boolean getFileOverride(){
+		return driver.getStartButtonPressed() && driver.getBackButtonPressed();
+	}
 	
 	//---------Racing--------------
 	/* (non-Javadoc)

@@ -13,7 +13,6 @@ import org.usfirst.frc.team1360.robot.subsystem.IntakeProvider;
 import org.usfirst.frc.team1360.robot.util.GetFMS;
 import org.usfirst.frc.team1360.robot.util.Singleton;
 import org.usfirst.frc.team1360.robot.util.log.MatchLogProvider;
-import org.usfirst.frc.team1360.robot.util.position.OrbitPositionProvider;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -28,7 +27,6 @@ public abstract class AutonRoutine extends Thread {
 	protected MatchLogProvider matchLogger = Singleton.get(MatchLogProvider.class);
 	protected RobotOutputProvider robotOutput = Singleton.get(RobotOutputProvider.class);
 	protected SensorInputProvider sensorInput = Singleton.get(SensorInputProvider.class);
-	protected OrbitPositionProvider position = Singleton.get(OrbitPositionProvider.class);
 	protected ElevatorProvider elevator = Singleton.get(ElevatorProvider.class);
 	protected ArmProvider arm = Singleton.get(ArmProvider.class);
 	protected IntakeProvider intake = Singleton.get(IntakeProvider.class);

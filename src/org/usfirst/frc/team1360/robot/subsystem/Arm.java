@@ -118,7 +118,6 @@ public class Arm implements ArmProvider{
 					calibrated = false;
 				if (calibrated)
 					return;
-				sensorInput.resetArmEncoder();
 				robotOutput.setArm(-1);
 				try {
 					while(sensorInput.getArmEncoder() > -5) 
@@ -136,7 +135,6 @@ public class Arm implements ArmProvider{
 				
 				robotOutput.setArm(0.75);
 				while(!sensorInput.getArmSwitch()) robotOutput.setArm(0.75);
-				sensorInput.resetArmEncoder();
 				robotOutput.setArm(0);
 				context.nextState(IDLE);
 			}

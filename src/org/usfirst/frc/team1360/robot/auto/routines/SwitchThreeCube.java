@@ -98,6 +98,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             intake.setClamp(intake.FREE);
             robotOutput.setIntake(0.3);
+            Thread.sleep(300);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -144,7 +145,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
-            Thread.sleep(500);
+            Thread.sleep(300);
 
 
             waitFor("switchL5");
@@ -173,8 +174,7 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            new FaceAngle(1500, -25, 5).setLowGear().runNow("spin4");
-            waitFor("spin4");
+            new FaceAngle(1500, -25, 5).setLowGear().runUntilFinish();
 
             elevator.goToTarget(elevator.ONE_FOOT*3);
 

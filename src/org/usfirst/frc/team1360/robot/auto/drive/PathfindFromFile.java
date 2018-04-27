@@ -114,7 +114,7 @@ public class PathfindFromFile extends AutonRoutine{
 
 		long time = System.currentTimeMillis();
 
-		matchLogger.write("PATHFINDER STARTING");
+		matchLogger.writeClean("PATHFINDER STARTING");
 
 		OrbitPID turnPID = new OrbitPID(0.12, 0.03, 0.0);
 

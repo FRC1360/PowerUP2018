@@ -144,6 +144,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
+            Thread.sleep(500);
 
 
             waitFor("switchL5");
@@ -179,10 +180,8 @@ public class SwitchThreeCube extends AutonRoutine {
 
             pathL9.runUntilFinish();
 
-            /* Hold the last Cube change requested by 5406
             intake.setClamp(intake.FREE);
             intake.setIntake(0.3);
-            */
 
             Thread.sleep(1000);
 
@@ -246,6 +245,7 @@ public class SwitchThreeCube extends AutonRoutine {
 
             intake.setIntake(0.3);
             intake.setClamp(intake.FREE);
+            Thread.sleep(500);
 
 
             waitFor("switchR5");
@@ -281,10 +281,8 @@ public class SwitchThreeCube extends AutonRoutine {
 
             pathR9.runUntilFinish();
 
-            /* Hold last cube change requested by 5406
             intake.setClamp(intake.FREE);
             intake.setIntake(0.3);
-            */
 
             Thread.sleep(1000);
 		}

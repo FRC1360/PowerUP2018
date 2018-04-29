@@ -41,7 +41,7 @@ public final class Elevator implements ElevatorProvider {
 				int target = ((TargetObject) context.getArg()).target;
 				double power = ((TargetObject) context.getArg()).power;
 
-				while(elevator.dampen(target, power, true)) Thread.sleep(10);;
+				while(elevator.dampen(target, power, true, false)) Thread.sleep(10);;
 				
 				context.nextState(HOLD);
 			}

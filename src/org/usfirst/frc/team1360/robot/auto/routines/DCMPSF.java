@@ -50,94 +50,94 @@ public class DCMPSF extends AutonRoutine {
             waitFor("Scale Path 1");
             Thread.sleep(200);
 
-                //2nd Cube
-                intake.setIntake(-1);
-                scalePathR2.runNow("Drive to Cube 2");
-                arm.goToPosition(arm.POS_BOTTOM);
-                while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
-                elevator.goToBottom();
+            //2nd Cube
+            intake.setIntake(-1);
+            scalePathR2.runNow("Drive to Cube 2");
+            arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToBottom();
 
-                waitFor("Drive to Cube 2");
+            waitFor("Drive to Cube 2");
 
-                //Wait for the intake
-                Thread.sleep(100);
+            //Wait for the intake
+            Thread.sleep(100);
 
-                //Stop the intake we have the cube
-                intake.setClamp(intake.CLOSED);
-                intake.setIntake(0);
+            //Stop the intake we have the cube
+            intake.setClamp(intake.CLOSED);
+            intake.setIntake(0);
 
-                //Drive to the scale to score cube
-                scalePathR3.runNow("Drive to Scale 2");
+            //Drive to the scale to score cube
+            scalePathR3.runNow("Drive to Scale 2");
 
-                //Put elevator and arm up
-                elevator.goToTarget(elevator.POS_TOP);
-                arm.goToPosition(arm.POS_TOP);
-                while (sensorInput.getElevatorEncoder() < elevator.POS_TOP - 100) Thread.sleep(10);
-                arm.goToPosition(arm.POS_BEHIND);
+            //Put elevator and arm up
+            elevator.goToTarget(elevator.POS_TOP);
+            arm.goToPosition(arm.POS_TOP);
+            while (sensorInput.getElevatorEncoder() < elevator.POS_TOP - 100) Thread.sleep(10);
+            arm.goToPosition(arm.POS_BEHIND);
 
-                //Wait for arm to go up
-                while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
+            //Wait for arm to go up
+            while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
 
-                //Yeet when ready
-                intake.setClamp(intake.FREE);
-                intake.setIntake(0.4, 0.3);
+            //Yeet when ready
+            intake.setClamp(intake.FREE);
+            intake.setIntake(0.4, 0.3);
 
-                //Wait for path
-                waitFor("Drive to Scale 2");
+            //Wait for path
+            waitFor("Drive to Scale 2");
 
-                //Sleep for outtake
-                Thread.sleep(200);
+            //Sleep for outtake
+            Thread.sleep(200);
 
 
-                //3rd Cube
-                intake.setIntake(-1);
+            //3rd Cube
+            intake.setIntake(-1);
 
-                //Start driving to the 3rd cube
-                scalePathR4.runNow("Drive to Cube 3");
+            //Start driving to the 3rd cube
+            scalePathR4.runNow("Drive to Cube 3");
 
-                //Move elevator and arm down
-                arm.goToPosition(arm.POS_BOTTOM);
-                while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
-                elevator.goToBottom();
-                waitFor("Drive to Cube 3");
+            //Move elevator and arm down
+            arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToBottom();
+            waitFor("Drive to Cube 3");
 
-                //Wait for the cube to intake
-                Thread.sleep(100);
+            //Wait for the cube to intake
+            Thread.sleep(100);
 
-                //Stop intake the cube is now in the bot
-                intake.setIntake(0);
-                intake.setClamp(intake.CLOSED);
+            //Stop intake the cube is now in the bot
+            intake.setIntake(0);
+            intake.setClamp(intake.CLOSED);
 
-                //Drive back to the scale
-                scalePathR5.runNow("Drive to Scale 3");
+            //Drive back to the scale
+            scalePathR5.runNow("Drive to Scale 3");
 
-                //Move arm and elevator up
-                arm.goToPosition(arm.POS_TOP);
-                elevator.goToTarget(elevator.POS_TOP);
-                while (sensorInput.getElevatorEncoder() < elevator.POS_TOP - 100) Thread.sleep(10);
-                arm.goToPosition(arm.POS_BEHIND);
+            //Move arm and elevator up
+            arm.goToPosition(arm.POS_TOP);
+            elevator.goToTarget(elevator.POS_TOP);
+            while (sensorInput.getElevatorEncoder() < elevator.POS_TOP - 100) Thread.sleep(10);
+            arm.goToPosition(arm.POS_BEHIND);
 
-                //Wait for arm to go back
-                while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
+            //Wait for arm to go back
+            while (sensorInput.getArmEncoder() > arm.POS_BEHIND + 50) Thread.sleep(10);
 
-                //Outtake when ready
-                intake.setIntake(0.3, 0.2);
-                intake.setClamp(intake.FREE);
+            //Outtake when ready
+            intake.setIntake(0.3, 0.2);
+            intake.setClamp(intake.FREE);
 
-                //Wait to reach the scale
-                waitFor("Drive to Scale 3");
+            //Wait to reach the scale
+            waitFor("Drive to Scale 3");
 
-                //Wait for intake
-                Thread.sleep(200);
+            //Wait for intake
+            Thread.sleep(200);
 
-                //Put arm and elevator down
-                arm.goToPosition(arm.POS_BOTTOM);
-                while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
-                elevator.goToBottom();
+            //Put arm and elevator down
+            arm.goToPosition(arm.POS_BOTTOM);
+            while (sensorInput.getArmEncoder() < arm.POS_TOP) Thread.sleep(10);
+            elevator.goToBottom();
 
-                //Turn the intake off
-                intake.setClamp(intake.CLOSED);
-                intake.setIntake(0);
+            //Turn the intake off
+            intake.setClamp(intake.CLOSED);
+            intake.setIntake(0);
 
 
             /**/

@@ -97,7 +97,7 @@ public class TeleopElevator implements TeleopComponent {
                 elevator.startManual();
 			}
 
-			elevator.setManualSpeed((speed > 0) ? speed * speed * speed * speed : -(speed * speed * speed * speed), overrideToggle);
+			elevator.setManualSpeed((speed > 0) ? speed * speed * speed : speed * speed * speed, overrideToggle);
 		}
 		lastSpeed = speed;
 	}	

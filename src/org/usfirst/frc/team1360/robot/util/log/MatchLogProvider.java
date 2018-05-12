@@ -4,7 +4,10 @@ import org.opencv.core.Mat;
 
 public interface MatchLogProvider {
 	void write(String msg);
-	void writeHead();
+
+    void stopWriting();
+
+    void writeHead();
 	void close();
 	void writeClean(String msg);
 }

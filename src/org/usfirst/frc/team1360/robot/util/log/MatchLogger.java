@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1360.robot.util.log;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,6 +21,8 @@ public class MatchLogger implements MatchLogProvider {
 //	private HumanInput humanInput = Singleton.get(HumanInput.class);
 	//private PrintStream tempFile;
 	private PrintStream tempFileComp;
+
+	private static boolean log = true;
 	
 	private int frameNumber = 0;
 	private boolean enabled = false;
@@ -28,24 +31,52 @@ public class MatchLogger implements MatchLogProvider {
 	private DriverStation ds = DriverStation.getInstance();
 	
 	public MatchLogger() throws IOException {
-		try {
-			file = new PrintStream("/U/" + ds.getMatchNumber() + "_1360.log"); 
-		}
-		catch(IOException e) {
-			file = new PrintStream("/tmp/Match1360.log"); 
-			file.println("-----------EXCEPTION: UNABLE TO WRITE TO USB DRIVE-------------");
-			file.flush();
-		}
+        File logFile = new File("/U", ds.getMatchNumber() + "_1360.log");
+        File tempFile = new File("/U", ds.getMatchNumber() + "_temp.log" );
 
-		try {
-			tempFileComp = new PrintStream("/U/" + ds.getMatchNumber() + "_temp.log"); 
-		}
-		catch(IOException e) {
-			tempFileComp = new PrintStream("/tmp/back1360.log"); 
-		}
+        if (canWrite(logFile)) {
+            file = new PrintStream(logFile);
+        } else {
+            file = new PrintStream("/tmp/Match1360.log");
+            file.println("-----------EXCEPTION: UNABLE TO WRITE TO USB DRIVE-------------");
+            file.flush();
+        }
+//		try {
+//			file = new PrintStream("/U/" + ds.getMatchNumber() + "_1360.log");
+//			file.
+//		}
+//		catch(IOException e) {
+//			file = new PrintStream("/tmp/Match1360.log");
+//			file.println("-----------EXCEPTION: UNABLE TO WRITE TO USB DRIVE-------------");
+//			file.flush();
+//		}
+
+        if(canWrite(logFile)) {
+            tempFileComp = new PrintStream(tempFile);
+        } else{
+            tempFileComp = new PrintStream("/tmp/back1360.log");
+        }
 		
 		//tempFile = new PrintStream("/tmp/1360.log");
 	}
+
+	private boolean canWrite(File file) {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                return false;
+            }
+        }
+
+        return file.exists() && file.canWrite();
+
+    }
+
+    @Override
+    public void stopWriting(){
+	    log = false;
+    }
 
 	@Override
 	public void writeHead() {
@@ -80,18 +111,26 @@ public class MatchLogger implements MatchLogProvider {
 
 	@Override
 	public void write(String msg) {
-		tempFileComp.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
-
-			tempFileComp.flush();
-		
+		if(log) {
+			try {
+				tempFileComp.println(String.format("[t = %d] %s", System.currentTimeMillis(), msg));
+			}
+			catch (RuntimeException e){
+				log = false;
+			}
+		}
 	}
 	
 	@Override
 	public void writeClean(String msg) {
-		file.println(String.format("[t = %f] %s", ds.getMatchTime(), msg));
-
-			file.flush();
-		
+		if(log) {
+			try {
+				file.println(String.format("[t = %f] %s", ds.getMatchTime(), msg));
+			}
+			catch (RuntimeException e){
+				log = false;
+			}
+		}
 	}
 	
 	@Override
@@ -111,6 +150,7 @@ public class MatchLogger implements MatchLogProvider {
 		file.println("PDP Temperature: " + PDPJNI.getPDPTemperature(0));
 		file.println("PDP Total Energy Drawn: " + PDPJNI.getPDPTotalEnergy(0));
 		file.flush();
+		tempFileComp.flush();
 		file.close();
 	}
 }

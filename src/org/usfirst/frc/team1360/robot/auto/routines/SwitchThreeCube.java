@@ -97,7 +97,7 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("Start Intake");
 
             intake.setClamp(intake.FREE);
-            robotOutput.setIntake(0.3);
+            robotOutput.setIntake(0.5);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -142,8 +142,9 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2");
 
-            intake.setIntake(0.3);
+            intake.setIntake(0.5);
             intake.setClamp(intake.FREE);
+            Thread.sleep(500);
 
 
             waitFor("switchL5");
@@ -172,19 +173,20 @@ public class SwitchThreeCube extends AutonRoutine {
             intake.setIntake(0);
             intake.setClamp(intake.CLOSED);
 
-            new FaceAngle(1500, -25, 5).setLowGear().runNow("spin4");
-            waitFor("spin4");
+            new FaceAngle(1500, -25, 5).setLowGear().runUntilFinish();
 
             elevator.goToTarget(elevator.ONE_FOOT*3);
 
-            pathL9.runUntilFinish();
+            robotOutput.tankDrive(1.0, 1.0);
+            Thread.sleep(750);
 
-            /* Hold the last Cube change requested by 5406
+            //pathL9.runUntilFinish();
+
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.3);
-            */
+            intake.setIntake(0.5);
+            robotOutput.tankDrive(0.75, 0.75);
 
-            Thread.sleep(1000);
+            Thread.sleep(500);
 
 		} else {
             matchLogger.writeClean("RIGHT SIDE SWITCH");
@@ -200,7 +202,7 @@ public class SwitchThreeCube extends AutonRoutine {
             waitFor("Start Intake");
 
             intake.setClamp(intake.FREE);
-            robotOutput.setIntake(0.3);
+            robotOutput.setIntake(0.5);
 
             waitFor("To Right Switch");
             intake.setIntake(0);
@@ -244,8 +246,9 @@ public class SwitchThreeCube extends AutonRoutine {
 
             waitFor("Early outtake 2");
 
-            intake.setIntake(0.3);
+            intake.setIntake(0.5);
             intake.setClamp(intake.FREE);
+            Thread.sleep(500);
 
 
             waitFor("switchR5");
@@ -279,12 +282,15 @@ public class SwitchThreeCube extends AutonRoutine {
 
             elevator.goToTarget(elevator.ONE_FOOT*3);
 
-            pathR9.runUntilFinish();
+            robotOutput.tankDrive(0.75, 0.75);
+            Thread.sleep(750);
 
-            /* Hold last cube change requested by 5406
+            //pathR9.runUntilFinish();
+
             intake.setClamp(intake.FREE);
-            intake.setIntake(0.3);
-            */
+            intake.setIntake(0.5);
+
+            robotOutput.tankDrive(0.1, 0.1);
 
             Thread.sleep(1000);
 		}

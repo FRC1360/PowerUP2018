@@ -1,4 +1,4 @@
-# <img src="http://1360.ca/wp-content/uploads/2017/02/cropped-1360-Logo-no-text-4.png" width="50"/> Power Up 2018
+helllo# <img src="http://1360.ca/wp-content/uploads/2017/02/cropped-1360-Logo-no-text-4.png" width="50"/> Power Up 2018
 
 ## Prerequisites
 
